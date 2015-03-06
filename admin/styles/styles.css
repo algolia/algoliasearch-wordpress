@@ -1,0 +1,34 @@
+#algolia-settings .wrapper
+{
+    margin: 20px;
+    background: white;
+    border: solid 1px #DDDDDD;
+}
+
+#algolia-settings .wrapper .content
+{
+    padding: 5px;
+}
+#algolia-settings .wrapper .content input
+{
+    margin: 5px;
+}
+
+#algolia-settings .wrapper .content input[type="text"]
+{
+    padding: 5px;
+    border-radius: 5px;
+    min-width: 400px;
+}
+
+#algolia-settings .wrapper .content .content-item
+{
+    padding: 5px;
+}
+
+#algolia-settings .wrapper .title
+{
+    text-align: center;
+    padding: 5px;
+    border-bottom: solid 1px #DDDDDD;
+}
