@@ -13,7 +13,9 @@ class Registry
         'admin_key',
         'index_name',
         'indexable_types',
-        'indexable_tax'
+        'indexable_tax',
+        'type_of_search',
+        'instant_jquery_selector'
     ];
 
     public static function getInstance()
@@ -28,7 +30,6 @@ class Registry
     {
         $import_options = get_option(static::$setting_key);
         $this->options = $import_options == false ? array() : $import_options;
-        //$options = wp_parse_args( $existingsOptions, $this->getOptions() );
     }
 
     public function __get($name)

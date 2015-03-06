@@ -81,8 +81,6 @@ class WordpressFetcher
 
     public function getTermObj($data)
     {
-
-
         $obj = new \stdClass();
 
         foreach ($this->termFieldsNames as $key => $value)

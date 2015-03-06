@@ -17,16 +17,22 @@ class Indexer
         $this->wordpress_fetcher    = new WordpressFetcher();
     }
 
-    public function index()
+    public function indexAlltax()
+    {
+        $this->removeTaxonomiesFromIndex();
+        $this->indexTaxonomies();
+    }
+
+    public function indexAllPosts()
     {
         global $wpdb;
 
         /* @TODO HANDLE BATCH */
 
-        $this->algolia_helper->cleanIndex($this->algolia_registry->index_name);
-
-        foreach ($this->algolia_registry->indexable_types as $type)
+        foreach (array_keys($this->algolia_registry->indexable_types) as $type)
         {
+            $this->algolia_helper->cleanIndex($this->algolia_registry->index_name.'_'.$type);
+
             $query = "SELECT COUNT(*) as count FROM " . $wpdb->posts . " WHERE post_status IN ('publish') AND post_type = '".$type."'";
             $result = $wpdb->get_results($query);
             $count = $result[0]->count;
@@ -35,10 +41,12 @@ class Indexer
             for ($i = 0; $i < ceil($count / $max); $i++)
                 $this->indexPostsTypePart($type, $max, $i * $max);
         }
+    }
 
-        $this->removeTaxonomiesFromIndex();
-
-        $this->indexTaxonomies();
+    public function index()
+    {
+        $this->indexAllPosts();
+        $this->indexAlltax();
     }
 
     private function getPosts($type, $limit)
@@ -79,7 +87,7 @@ class Indexer
 
     public function indexTaxonomies()
     {
-        $taxonomies_name = $this->algolia_registry->indexable_tax;
+        $taxonomies_name = array_keys($this->algolia_registry->indexable_tax);
 
         foreach ($taxonomies_name as $tax)
         {
@@ -88,7 +96,7 @@ class Indexer
             foreach (get_terms($tax) as $term)
                 $terms[] = $this->wordpress_fetcher->getTermObj($term);
 
-            $this->algolia_helper->pushObjects($this->algolia_registry->index_name."_".$tax, $terms);
+            $this->algolia_helper->pushObjects($this->algolia_registry->index_name.'_'.$tax, $terms);
         }
     }
 
@@ -96,12 +104,12 @@ class Indexer
     {
         $object = $this->wordpress_fetcher->getPostObj($post);
 
-        $this->algolia_helper->pushObject($this->algolia_registry->index_name, $object);
+        $this->algolia_helper->pushObject($this->algolia_registry->index_name.'_'.$post->post_type, $object);
     }
 
-    public function deletePost($post_id)
+    public function deletePost($post_id, $type)
     {
-        $this->algolia_helper->deleteObject($this->algolia_registry->index_name, $post_id);
+        $this->algolia_helper->deleteObject($this->algolia_registry->index_name.'_'.$type, $post_id);
     }
 
     public function indexTerm($term, $taxonomy)
@@ -120,6 +128,6 @@ class Indexer
     {
         $objects = $this->getPosts("AND post_type = '".$type."' ", "LIMIT ".$offset.",".$count);
 
-        $this->algolia_helper->pushObjects($this->algolia_registry->index_name, $objects);
+        $this->algolia_helper->pushObjects($this->algolia_registry->index_name.'_'.$type, $objects);
     }
 }

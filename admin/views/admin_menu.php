@@ -58,6 +58,44 @@
     #DEBUG
 
     <form action="/wp-admin/admin-post.php" method="post">
+        <input type="hidden" name="action" value="update_type_of_search" />
+        <div class="wrapper" id="type_of_search">
+            <div class="title"><?php esc_html_e('Type of search', $langDomain); ?></div>
+            <div class="content">
+                <div class="content-item">
+                    Autocomplete <input type="radio"
+                                        <?php checked($algolia_registry->type_of_search == 'autocomplete'); ?>
+                                        class="instant_radio"
+                                        name="TYPE_OF_SEARCH"
+                                        value="autocomplete" />
+                </div>
+                <div class="content-item">
+                    <div>
+                        Instant Search <input type="radio"
+                                              <?php checked($algolia_registry->type_of_search == 'instant'); ?>
+                                              class="instant_radio"
+                                              name="TYPE_OF_SEARCH"
+                                              value="instant" />
+                    </div>
+                    <div style="margin-left: 50px;">
+                        <div id="jquery_selector_wrapper" style="display: none">
+                            Jquery Selector <input type="text"
+                                                   id="jquery_selector"
+                                                   value="<?php echo $algolia_registry->instant_jquery_selector ?>"
+                                                   placeholder="#content"
+                                                   name="JQUERY_SELECTOR"
+                                                   value="" />
+                        </div>
+                    </div>
+                </div>
+                <div class="content-item">
+                    <input type="submit" name="submit" id="submit" class="button button-primary" value="Save Changes">
+                </div>
+            </div>
+        </div>
+    </form>
+
+    <form action="/wp-admin/admin-post.php" method="post">
         <input type="hidden" name="action" value="update_indexable_types">
         <div class="wrapper" id="customization">
             <div class="title"><?php esc_html_e('Types', $langDomain); ?></div>
@@ -66,11 +104,12 @@
                     <div class="content-item">
                         <div>
                             <input type="checkbox"
-                                   name="TYPES[]"
+                                   name="TYPES[<?php echo $type; ?>][SLUG]"
                                    value="<?php echo $type; ?>"
-                                   <?php checked(is_array($algolia_registry->indexable_types) && in_array($type, $algolia_registry->indexable_types)) ?>
+                                   <?php checked(is_array($algolia_registry->indexable_types) && in_array($type, array_keys($algolia_registry->indexable_types))) ?>
                                 >
                             <?php echo $type; ?>
+                            <input type="text" value="<?php echo (isset($algolia_registry->indexable_types[$type]) ? $algolia_registry->indexable_types[$type] : "") ?>" name="TYPES[<?php echo $type; ?>][NAME]">
                         </div>
                     </div>
                 <?php endforeach; ?>
@@ -89,11 +128,12 @@
                 <?php foreach (get_taxonomies() as $tax) : ?>
                 <div class="content-item">
                     <input type="checkbox"
-                           name="TAX[]"
+                           name="TAX[<?php echo $tax; ?>][SLUG]"
                            value="<?php echo $tax; ?>"
-                        <?php checked(is_array($algolia_registry->indexable_tax) && in_array($tax, $algolia_registry->indexable_tax)) ?>
+                        <?php checked(is_array($algolia_registry->indexable_tax) && in_array($tax, array_keys($algolia_registry->indexable_tax))) ?>
                         >
                     <?php echo $tax; ?>
+                    <input type="text" value="<?php echo (isset($algolia_registry->indexable_tax[$tax]) ? $algolia_registry->indexable_tax[$tax] : "") ?>" name="TAX[<?php echo $tax; ?>][NAME]">
                 </div>
                 <?php endforeach; ?>
                 <div class="content-item">

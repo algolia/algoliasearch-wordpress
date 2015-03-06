@@ -19,7 +19,7 @@ class AlgoliaPluginAuto
 
         if ($this->algolia_helper->validCredential())
         {
-            add_action('deleted_post',             array($this, 'postDeleted'));
+            add_action('before_delete_post',       array($this, 'postDeleted'));
             add_action('transition_post_status',   array($this, 'postUnpublished')      , 10, 3);
             add_action('save_post',                array($this, 'postUpdated')          , 11, 3);
             add_action('edited_term_taxonomy',     array($this, 'termTaxonomyUpdated')  , 10, 2);
@@ -31,14 +31,17 @@ class AlgoliaPluginAuto
     public function postDeleted($post_id)
     {
         if (! empty($post_id))
-            $this->indexer->deletePost($post_id);
+        {
+            $post = get_post($post_id);
+            $this->indexer->deletePost($post_id, $post->post_type);
+        }
     }
 
     public function postUnpublished($new_status, $old_status, $post)
     {
-        if (in_array($post->post_type, $this->algolia_registry->indexable_types))
+        if (in_array($post->post_type, array_keys($this->algolia_registry->indexable_types)))
             if ($old_status == 'publish' && $new_status != 'publish' && ! empty($post->ID))
-                $this->indexer->deletePost($post->ID);
+                $this->indexer->deletePost($post->ID, $post->post_type);
     }
 
     public function postUpdated($post_id, $post)
@@ -52,25 +55,25 @@ class AlgoliaPluginAuto
         if ($post->post_status != 'publish')
             return $post_id;
 
-        if (in_array($post->post_type, $this->algolia_registry->indexable_types))
+        if (in_array($post->post_type, array_keys($this->algolia_registry->indexable_types)))
             $this->indexer->indexPost($post);
     }
 
     public function termTaxonomyUpdated($term_id, $taxonomy)
     {
-        if ($term_id && in_array($taxonomy, $this->algolia_registry->indexable_tax))
+        if ($term_id && in_array($taxonomy, array_keys($this->algolia_registry->indexable_tax)))
             $this->indexer->indexTerm(get_term_by('term_taxonomy_id', $term_id, $taxonomy), $taxonomy);
     }
 
     public function termCreated($term_id, $tt_id, $taxonomy)
     {
-        if ($term_id && in_array($taxonomy, $this->algolia_registry->indexable_tax))
+        if ($term_id && in_array($taxonomy, array_keys($this->algolia_registry->indexable_tax)))
             $this->indexer->indexTerm(get_term($term_id, $taxonomy), $taxonomy);
     }
 
     public function termDeleted($term_id, $tt_id, $taxonomy, $deleted_term)
     {
-        if (! empty($tt_id) && in_array($taxonomy, $this->algolia_registry->indexable_tax))
+        if (! empty($tt_id) && in_array($taxonomy, array_keys($this->algolia_registry->indexable_tax)))
             $this->indexer->deleteTerm($term_id, $taxonomy);
     }
 }

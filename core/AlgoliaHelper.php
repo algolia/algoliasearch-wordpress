@@ -33,7 +33,6 @@ class AlgoliaHelper
 
     public function handleIndexCreation()
     {
-        $indexable_tax      = $this->algolia_registry->indexable_tax;
         $created_indexes    = $this->algolia_client->listIndexes();
 
         $index_name = $this->algolia_registry->index_name;
@@ -47,12 +46,21 @@ class AlgoliaHelper
             }, $created_indexes["items"]);
         }
 
-        foreach ($indexable_tax as $tax)
+        foreach (array_keys($this->algolia_registry->indexable_tax) as $tax)
         {
             if (in_array($index_name."_".$tax, $indexes) == false)
             {
                 $index = $this->algolia_client->initIndex($index_name."_".$tax);
-                $index->setSettings(array("attributesToRetrieve" => array("objectID")));
+                $index->setSettings(array("attributesToIndex" => array("title", "content")));
+            }
+        }
+
+        foreach (array_keys($this->algolia_registry->indexable_types) as $type)
+        {
+            if (in_array($index_name."_".$type, $indexes) == false)
+            {
+                $index = $this->algolia_client->initIndex($index_name."_".$type);
+                $index->setSettings(array("attributesToIndex" => array("title", "content")));
             }
         }
     }
