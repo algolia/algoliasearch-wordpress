@@ -101,3 +101,52 @@
 {
     width: 200px;
 }
+
+.hits
+{
+    float: left;
+    width: 80%;
+}
+
+/**
+ * Facets
+ */
+
+.facets
+{
+    float: left;
+    width: 20%;
+}
+.facet
+{
+    border: solid 1px #DDDDDD;
+}
+
+.facet:not(:first-child)
+{
+    margin-top: 10px;
+}
+
+.facet .name
+{
+    padding: 10px;
+    background-color: #F5F5F5;
+    text-align: center;
+    border-bottom: solid 1px #DDDDDD;
+}
+
+.facet .sub_facet
+{
+    padding: 10px;
+    cursor: pointer;
+}
+
+.facet .sub_facet.checked
+{
+    background-color: #E5E5E5;
+}
+
+.facet .sub_facet:not(:last-child)
+{
+    border-bottom: solid 1px #F5F5F5;
+}

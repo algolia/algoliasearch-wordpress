@@ -68,6 +68,7 @@ if (algoliaSettings.type_of_search == "instant")
         if ($(algoliaSettings.instant_jquery_selector).length == 1)
         {
             var template = Hogan.compile(
+                '<div class="hits">' +
                 '{{#hits}}' +
                     '<div class="result entry-header">' +
                         '<div>' +
@@ -85,30 +86,120 @@ if (algoliaSettings.type_of_search == "instant")
                             '</div>' +
                         '</div>' +
                     '</div>' +
-                '{{/hits}}'
+                '{{/hits}}' +
+                '</div>' +
+                '<div style="clear: both;"></div>'
             );
 
-            var articleTemplate = Hogan.compile(template);
+            var facetsTemplate = Hogan.compile(
+                '<div class="facets">' +
+                    '{{#facets}}' +
+                        '{{#count}}' +
+                        '<div class="facet">' +
+                            '<div class="name">' +
+                                '{{ facet_categorie_name }}' +
+                            '</div>' +
+                            '<div>' +
+                                '{{#sub_facets}}' +
+                                    '{{#conjunctive}}' +
+                                        '{{#checked}}' +
+                                        '<div class="checked sub_facet conjunctive">' +
+                                        '{{/checked}}' +
+                                        '{{^checked}}' +
+                                        '<div class="sub_facet conjunctive">' +
+                                        '{{/checked}}' +
+                                            '{{#checked}}' +
+                                                '<input style="display: none;" data-tax="{{tax}}" checked data-name="{{name}}" class="facet_value" type="checkbox" />' +
+                                            '{{/checked}}' +
+                                            '{{^checked}}' +
+                                                '<input style="display: none;" data-tax="{{tax}}" data-name="{{name}}" class="facet_value" type="checkbox" />' +
+                                            '{{/checked}}' +
+                                            ' {{name}} ({{count}})' +
+                                        '</div>' +
+                                    '{{/conjunctive}}' +
+                                    '{{#disjunctive}}' +
+                                        '{{#checked}}' +
+                                        '<div class="checked sub_facet disjunctive">' +
+                                        '{{/checked}}' +
+                                        '{{^checked}}' +
+                                        '<div class="sub_facet disjunctive">' +
+                                        '{{/checked}}' +
+                                            '{{#checked}}' +
+                                                '<input data-tax="{{tax}}" checked data-name="{{name}}" class="facet_value" type="checkbox" />' +
+                                            '{{/checked}}' +
+                                            '{{^checked}}' +
+                                                '<input data-tax="{{tax}}" data-name="{{name}}" class="facet_value" type="checkbox" />' +
+                                            '{{/checked}}' +
+                                            ' {{name}} ({{count}})' +
+                                        '</div>' +
+                                    '{{/disjunctive}}' +
+                                '{{/sub_facets}}' +
+                            '</div>' +
+                        '</div>' +
+                        '{{/count}}' +
+                    '{{/facets}}' +
+                '</div>'
+            );
 
-            function searchMultiCallback(success, content) {
+            var conjunctive_facets = [];
+            var disjunctive_facets = [];
+
+            for (var i = 0; i < algoliaSettings.facets.length; i++)
+                if (algoliaSettings.facets[i].type == "conjunctive")
+                    conjunctive_facets.push(algoliaSettings.facets[i].tax);
+                else
+                    disjunctive_facets.push(algoliaSettings.facets[i].tax);
+
+            var helper = new AlgoliaSearchHelper(algolia_client, algoliaSettings.index_name, {
+                facets: conjunctive_facets,
+                disjunctiveFacets: disjunctive_facets,
+                hitsPerPage: 3
+            });
+
+            function searchCallback(success, content) {
                 algolia_div.html("");
 
-                if (success) {
+                if (success)
+                {
                     console.log(content);
 
-                    algolia_div.append(template.render(content));
-
-                    for (var i = 0; i < content.results.length; i++)
+                    if (content.hits.length > 0)
                     {
-                        if (content.results[i].hits.length > 0)
-                        {
-                            algolia_div.append('<div>' + algoliaSettings.indexes[i].name + '</div>')
+                        var facets = [];
 
-                            for (var j = 0; j < content.results[i].hits.length; j++)
+                        for (var i = 0; i < algoliaSettings.facets.length; i++)
+                        {
+                            var sub_facets = [];
+
+                            if (algoliaSettings.facets[i].type == "conjunctive")
                             {
-                                algolia_div.append(template.render({ hits: content.results[i].hits[j] }));
+                                for (var key in content.facets[algoliaSettings.facets[i].tax])
+                                {
+                                    var checked = helper.isRefined(algoliaSettings.facets[i].tax, key);
+                                    sub_facets.push({
+                                        conjunctive: 1,
+                                        isjunctive: 0,
+                                        checked: checked,
+                                        name: key,
+                                        count: content.facets[algoliaSettings.facets[i].tax][key]
+                                    });
+                                }
                             }
+                            else
+                            {
+                                for (var key in content.disjunctiveFacets[algoliaSettings.facets[i].tax])
+                                {
+                                    var checked = helper.isRefined(algoliaSettings.facets[i].tax, key);
+                                    sub_facets.push({ conjunctive: 0, disjunctive: 1, checked: checked, name: key, count: content.disjunctiveFacets[algoliaSettings.facets[i].tax][key] });
+                                }
+                            }
+
+                            facets.push({count: sub_facets.length, tax: algoliaSettings.facets[i].tax, facet_categorie_name: algoliaSettings.facets[i].name, sub_facets: sub_facets });
                         }
+
+                        algolia_div.append(facetsTemplate.render({ facets: facets }));
+
+                        algolia_div.append(template.render({ hits: content.hits }));
                     }
                 }
             }
@@ -116,6 +207,15 @@ if (algoliaSettings.type_of_search == "instant")
             $(algoliaSettings.instant_jquery_selector).after("<div style='display: none; min-height: 600px;' id='" + algolia_div_id + "'></div>");
 
             var algolia_div = $("#" + algolia_div_id);
+
+            function performQueries()
+            {
+                helper.search(query, searchCallback);
+
+                algolia_div.show();
+            }
+
+            var query = "";
 
             $("input[name='s']").keyup(function (e) {
                 var keycode = e.keyCode;
@@ -141,17 +241,18 @@ if (algoliaSettings.type_of_search == "instant")
                 if (valid == false)
                     return;
 
-                algolia_client.startQueriesBatch();
+                query = $(this).val();
 
-                var query = $(this).val();
+                performQueries();
+            });
 
-                for (var i = 0; i < algoliaSettings.indexes.length; i++)
-                    algolia_client.addQueryInBatch(algoliaSettings.indexes[i].index_name, query, { facets: '*', hitsPerPage: 3 });
+            $("body").on("click", ".sub_facet", function () {
+               $(this).find("input[type='checkbox']").each(function (i) {
+                   $(this).prop("checked", ! $(this).prop("checked"));
+                   helper.toggleRefine($(this).attr("data-tax"), $(this).attr("data-name"));
+               });
 
-                algolia_client.sendQueriesBatch(searchMultiCallback);
-
-                algolia_div.show();
-
+                performQueries();
             });
         }
         else

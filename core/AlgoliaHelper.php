@@ -39,6 +39,10 @@ class AlgoliaHelper
 
         $indexes = array();
 
+        $facets = array();
+
+        $facets[] = "type";
+
         if (isset($indexes["items"]))
         {
             $indexes = array_map(function ($obj) {
@@ -52,8 +56,10 @@ class AlgoliaHelper
             {
                 $index = $this->algolia_client->initIndex($index_name."_".$tax);
                 $index->setSettings(array("attributesToIndex" => array("title", "content")));
+                $facets[] = $tax;
             }
         }
+
 
         foreach (array_keys($this->algolia_registry->indexable_types) as $type)
         {
@@ -63,6 +69,9 @@ class AlgoliaHelper
                 $index->setSettings(array("attributesToIndex" => array("title", "content")));
             }
         }
+
+        $index = $this->algolia_client->initIndex($index_name);
+        $index->setSettings(array("attributesToIndex" => array('title', 'content', 'type'), 'attributesForFaceting' => $facets));
     }
 
     public function validCredential()

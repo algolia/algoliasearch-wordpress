@@ -28,6 +28,13 @@ class AlgoliaPlugin
 
         add_action('admin_enqueue_scripts',                     array($this, 'admin_scripts'));
         add_action('wp_enqueue_scripts',                        array($this, 'scripts'));
+
+        $this->addExtras();
+    }
+
+    private function addExtras()
+    {
+        $this->algolia_registry->extras = array('type' => 'type');
     }
 
     public function add_admin_menu()
@@ -50,26 +57,34 @@ class AlgoliaPlugin
 
         $scripts = array('algoliasearch.min.js', 'hogan.js', 'typeahead.js');
 
-        foreach ($scripts as $script)
-        {
-            wp_register_script($script, plugin_dir_url(__FILE__) . 'front/'.$script, array());
+        foreach ($scripts as $script) {
+            wp_register_script($script, plugin_dir_url(__FILE__) . 'front/' . $script, array());
             wp_localize_script($script, 'settings', array());
         }
 
         $indexes = array();
+        $facets = array();
 
         foreach ($this->algolia_registry->indexable_types as $type => $name)
-            $indexes[] = array('index_name' => $this->algolia_registry->index_name.'_'.$type, 'name' => $name);
+            $indexes[] = array('index_name' => $this->algolia_registry->index_name . '_' . $type, 'name' => $name);
 
         foreach ($this->algolia_registry->indexable_tax as $tax => $name)
-            $indexes[] = array('index_name' => $this->algolia_registry->index_name.'_'.$tax, 'name' => $name);
+            $indexes[] = array('index_name' => $this->algolia_registry->index_name . '_' . $tax, 'name' => $name);
+
+        foreach ($this->algolia_registry->conjunctive_facets as $tax => $name)
+            $facets[] = array('tax' => $tax, 'name' => $name, 'type' => 'conjunctive');
+
+        foreach ($this->algolia_registry->disjunctive_facets as $tax => $name)
+            $facets[] = array('tax' => $tax, 'name' => $name, 'type' => 'disjunctive');
 
         $algoliaSettings = array(
             'app_id'                    => $this->algolia_registry->app_id,
             'search_key'                => $this->algolia_registry->search_key,
             'indexes'                   => $indexes,
+            'index_name'                => $this->algolia_registry->index_name,
             'type_of_search'            => $this->algolia_registry->type_of_search,
-            'instant_jquery_selector'   => $this->algolia_registry->instant_jquery_selector
+            'instant_jquery_selector'   => $this->algolia_registry->instant_jquery_selector,
+            'facets'                    => $facets
         );
 
         wp_register_script('algolia_main.js', plugin_dir_url(__FILE__) . 'front/main.js', array_merge(array('jquery'), $scripts));
@@ -114,20 +129,37 @@ class AlgoliaPlugin
         wp_redirect('admin.php?page=algolia-settings');
     }
 
+    /**
+     *
+     */
     public function admin_post_update_indexable_taxonomies()
     {
         $valid_tax = get_taxonomies();
 
         $taxonomies = [];
+        $conjunctive_facets = [];
+        $disjunctive_facets = [];
 
         if (isset($_POST['TAX']) && is_array($_POST['TAX']))
         {
             foreach ($_POST['TAX'] as $tax)
-                if (in_array($tax['SLUG'], $valid_tax))
+            {
+                if (in_array($tax['SLUG'], $valid_tax) || in_array($tax['SLUG'], array_keys($this->algolia_registry->extras)))
                     $taxonomies[$tax['SLUG']] = $tax['NAME'] == '' ? $tax['SLUG'] : $tax['NAME'];
+
+                if (isset($tax['FACET']))
+                {
+                    if ($tax['FACET_TYPE'] == 'conjunctive')
+                        $conjunctive_facets[$tax["SLUG"]] = $tax["NAME"];
+                    else
+                        $disjunctive_facets[$tax["SLUG"]] = $tax["NAME"];
+                }
+            }
         }
 
         $this->algolia_registry->indexable_tax = $taxonomies;
+        $this->algolia_registry->conjunctive_facets = $conjunctive_facets;
+        $this->algolia_registry->disjunctive_facets = $disjunctive_facets;
 
         $this->algolia_helper->handleIndexCreation();
 
@@ -169,6 +201,8 @@ class AlgoliaPlugin
 
     public function admin_post_reindex()
     {
+        $this->algolia_helper->handleIndexCreation();
+
         $this->indexer->index();
     }
 }

@@ -15,7 +15,10 @@ class Registry
         'indexable_types',
         'indexable_tax',
         'type_of_search',
-        'instant_jquery_selector'
+        'conjunctive_facets',
+        'disjunctive_facets',
+        'instant_jquery_selector',
+        'extras'
     ];
 
     public static function getInstance()

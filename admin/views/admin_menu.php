@@ -122,23 +122,72 @@
 
     <form action="/wp-admin/admin-post.php" method="post">
         <input type="hidden" name="action" value="update_indexable_taxonomies">
+            <div class="title"><?php esc_html_e('Facets & Taxonomies (categories, tags, ...)', $langDomain); ?></div>
         <div class="wrapper" id="customization">
-            <div class="title"><?php esc_html_e('Taxonomies (categories, tags, ...)', $langDomain); ?></div>
             <div class="content">
-                <?php foreach (get_taxonomies() as $tax) : ?>
+                <table style="text-align: center;">
+                    <tr>
+                        <th>Indexable</th>
+                        <th>Name</th>
+                        <th>Print Name</th>
+                        <th>Facetable</th>
+                        <th>Type of facet</th>
+                        <th>Order</th>
+                    </tr>
+
+                    <?php foreach (array_merge(array_keys($algolia_registry->extras), get_taxonomies()) as $tax) : ?>
+                    <tr>
+                        <td>
+                            <?php if (in_array($tax, $algolia_registry->extras) == false): ?>
+                            <input type="checkbox"
+                                   name="TAX[<?php echo $tax; ?>][SLUG]"
+                                   value="<?php echo $tax; ?>"
+                                <?php checked(is_array($algolia_registry->indexable_tax) && in_array($tax, array_keys($algolia_registry->indexable_tax))); ?>
+                                >
+                            <?php else: ?>
+                                <input type="hidden" name="TAX[<?php echo $tax; ?>][SLUG]" value="<?php echo $tax; ?>">
+                            <?php endif; ?>
+                        </td>
+                        <td>
+                            <?php echo $tax; ?>
+                        </td>
+                        <td>
+                            <input type="text" value="<?php echo (isset($algolia_registry->indexable_tax[$tax]) ? $algolia_registry->indexable_tax[$tax] : "") ?>" name="TAX[<?php echo $tax; ?>][NAME]">
+                        </td>
+                        <td>
+                            <input type="checkbox"
+                                   value="facetable"
+                                <?php checked((is_array($algolia_registry->conjunctive_facets) && in_array($tax, array_keys($algolia_registry->conjunctive_facets)))
+                                || (is_array($algolia_registry->disjunctive_facets) && in_array($tax, array_keys($algolia_registry->disjunctive_facets)))
+                                ) ?>
+                                   name="TAX[<?php echo $tax; ?>][FACET]">
+                        </td>
+                        <td>
+                            <select name="TAX[<?php echo $tax; ?>][FACET_TYPE]">
+                                    <option  value="conjunctive">Conjunctive</option>
+                                <?php if (is_array($algolia_registry->disjunctive_facets) && in_array($tax, array_keys($algolia_registry->disjunctive_facets))): ?>
+                                    <option selected="selected" value="disjunctive">Disjunctive</option>
+                                <?php else: ?>
+                                    <option value="disjunctive">Disjunctive</option>
+                                <?php endif; ?>
+                            </select>
+                        </td>
+                        <td>
+
+                        </td>
+                    </tr>
+                    <?php endforeach; ?>
+                </table>
+
                 <div class="content-item">
-                    <input type="checkbox"
-                           name="TAX[<?php echo $tax; ?>][SLUG]"
-                           value="<?php echo $tax; ?>"
-                        <?php checked(is_array($algolia_registry->indexable_tax) && in_array($tax, array_keys($algolia_registry->indexable_tax))) ?>
-                        >
-                    <?php echo $tax; ?>
-                    <input type="text" value="<?php echo (isset($algolia_registry->indexable_tax[$tax]) ? $algolia_registry->indexable_tax[$tax] : "") ?>" name="TAX[<?php echo $tax; ?>][NAME]">
+
+
+
                 </div>
-                <?php endforeach; ?>
                 <div class="content-item">
                     <input type="submit" name="submit" id="submit" class="button button-primary" value="Save Changes">
                 </div>
+                </table>
             </div>
         </div>
     </form>

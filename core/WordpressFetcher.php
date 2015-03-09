@@ -79,6 +79,15 @@ class WordpressFetcher
         return $image;
     }
 
+    function robins_get_the_excerpt($post_id) {
+        global $post;
+        $save_post = $post;
+        $post = get_post($post_id);
+        $output = get_the_excerpt();
+        $post = $save_post;
+        return $output;
+    }
+
     public function getTermObj($data)
     {
         $obj = new \stdClass();
@@ -105,13 +114,18 @@ class WordpressFetcher
         }
 
         $obj->author     = get_the_author_meta('display_name', $data->post_author);
-        $obj->permalink  = get_permalink( $data->ID );
+        $obj->permalink  = get_permalink($data->ID);
+        $obj->excerpt = $this->robins_get_the_excerpt($data->ID);
 
 
         $thumbnail_id = get_post_thumbnail_id($data->ID);
 
         if ($thumbnail_id)
             $obj->featureImage = $this->getImage($thumbnail_id);
+
+
+        //print_r(get_post_meta($data->ID));
+        //die();
 
         foreach (get_post_taxonomies($data->ID) as $tax)
         {

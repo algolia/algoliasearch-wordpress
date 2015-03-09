@@ -29,6 +29,8 @@ class Indexer
 
         /* @TODO HANDLE BATCH */
 
+        $this->algolia_helper->cleanIndex($this->algolia_registry->index_name);
+
         foreach (array_keys($this->algolia_registry->indexable_types) as $type)
         {
             $this->algolia_helper->cleanIndex($this->algolia_registry->index_name.'_'.$type);
@@ -105,11 +107,13 @@ class Indexer
         $object = $this->wordpress_fetcher->getPostObj($post);
 
         $this->algolia_helper->pushObject($this->algolia_registry->index_name.'_'.$post->post_type, $object);
+        $this->algolia_helper->pushObject($this->algolia_registry->index_name, $object);
     }
 
     public function deletePost($post_id, $type)
     {
         $this->algolia_helper->deleteObject($this->algolia_registry->index_name.'_'.$type, $post_id);
+        $this->algolia_helper->deleteObject($this->algolia_registry->index_name, $post_id);
     }
 
     public function indexTerm($term, $taxonomy)
@@ -129,5 +133,6 @@ class Indexer
         $objects = $this->getPosts("AND post_type = '".$type."' ", "LIMIT ".$offset.",".$count);
 
         $this->algolia_helper->pushObjects($this->algolia_registry->index_name.'_'.$type, $objects);
+        $this->algolia_helper->pushObjects($this->algolia_registry->index_name, $objects);
     }
 }
