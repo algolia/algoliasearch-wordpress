@@ -7,18 +7,22 @@ class Registry
     private static $setting_key = 'algolia';
 
     private $attributes = [
-        'isCredentialsValid',
-        'app_id',
-        'search_key',
-        'admin_key',
-        'index_name',
-        'indexable_types',
-        'indexable_tax',
-        'type_of_search',
-        'conjunctive_facets',
-        'disjunctive_facets',
-        'instant_jquery_selector',
-        'extras'
+        'validCredential'           => false,
+        'app_id'                    => '',
+        'search_key'                => '',
+        'admin_key'                 => '',
+        'index_name'                => '',
+        'indexable_types'           => [],
+        'indexable_tax'             => [],
+        'type_of_search'            => 'autocomplete',
+        'conjunctive_facets'        => [],
+        'disjunctive_facets'        => [],
+        'instant_jquery_selector'   => '#content',
+        'extras'                    => [],
+        'metas'                     => [],
+        'number_by_page'            => 3,
+        'number_by_type'            => 2,
+        'search_input_selector'     => "[name='s']"
     ];
 
     public static function getInstance()
@@ -37,12 +41,12 @@ class Registry
 
     public function __get($name)
     {
-        if (in_array($name, $this->attributes))
+        if (isset($this->attributes[$name]))
         {
             if (isset($this->options[$name]))
                 return $this->options[$name];
             else
-                return '';
+                return $this->attributes[$name];
         }
 
         throw new \Exception("Unknown attribute: ".$name);
@@ -50,7 +54,7 @@ class Registry
 
     public function __set($name, $value)
     {
-        if (in_array($name, $this->attributes))
+        if (isset($this->attributes[$name]))
         {
             $this->options[$name] = $value;
             $this->save();

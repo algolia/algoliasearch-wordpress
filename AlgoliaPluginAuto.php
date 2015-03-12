@@ -17,7 +17,7 @@ class AlgoliaPluginAuto
 
         $this->indexer = new \Algolia\Core\Indexer();
 
-        if ($this->algolia_helper->validCredential())
+        if ($this->algolia_registry->validCredential)
         {
             add_action('before_delete_post',       array($this, 'postDeleted'));
             add_action('transition_post_status',   array($this, 'postUnpublished')      , 10, 3);
@@ -39,6 +39,9 @@ class AlgoliaPluginAuto
 
     public function postUnpublished($new_status, $old_status, $post)
     {
+        if ($post->post_password != "")
+            return $post->ID;
+
         if (in_array($post->post_type, array_keys($this->algolia_registry->indexable_types)))
             if ($old_status == 'publish' && $new_status != 'publish' && ! empty($post->ID))
                 $this->indexer->deletePost($post->ID, $post->post_type);
@@ -53,6 +56,9 @@ class AlgoliaPluginAuto
             return $post_id;
 
         if ($post->post_status != 'publish')
+            return $post_id;
+
+        if ($post->post_password != "")
             return $post_id;
 
         if (in_array($post->post_type, array_keys($this->algolia_registry->indexable_types)))

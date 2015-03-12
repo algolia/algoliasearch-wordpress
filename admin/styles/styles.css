@@ -1,34 +1,85 @@
 #algolia-settings .wrapper
 {
     margin: 20px;
-    background: white;
-    border: solid 1px #DDDDDD;
 }
 
-#algolia-settings .wrapper .content
+#algolia-settings .content-wrapper .content
 {
-    padding: 5px;
+    background-color: white;
+    padding: 20px 5px;
+    border: solid 1px #DDDDDD;
+    border-top: none;
 }
-#algolia-settings .wrapper .content input
+#algolia-settings .content-wrapper .content input
 {
     margin: 5px;
 }
 
-#algolia-settings .wrapper .content input[type="text"]
+#algolia-settings .content-wrapper .content input[type="text"]
 {
     padding: 5px;
     border-radius: 5px;
-    min-width: 400px;
+    min-width: 200px;
 }
 
-#algolia-settings .wrapper .content .content-item
+#algolia-settings .content-wrapper .content .content-item
 {
     padding: 5px;
 }
 
-#algolia-settings .wrapper .title
+#algolia-settings .content-wrapper .title
 {
     text-align: center;
     padding: 5px;
     border-bottom: solid 1px #DDDDDD;
+}
+
+#algolia-settings .content-wrapper .show-hide
+{
+    margin-left: 50px;
+}
+
+#algolia-settings .tabs .title
+{
+    float: left;
+    display: inline;
+    padding: 10px 20px;
+    border-radius: 5px 5px 0 0;
+    background-color: transparent;
+    border: solid 1px #DDDDDD;
+    border-bottom: none;
+    margin-right: 2px;
+    cursor: pointer;
+}
+
+#algolia-settings .tabs .title.selected
+{
+    background-color: white;
+    border-bottom: solid 1px #f5f5f5;
+    margin-bottom: -1px;
+    padding-bottom: 11px;
+    cursor: auto;
+}
+
+#algolia-settings .tabs
+{
+    border-bottom: solid 1px #DDDDDD;
+}
+
+#algolia-settings #results-wrapper .content-item
+{
+    padding: 5px;
+}
+
+#algolia-settings #results-wrapper
+{
+    padding: 10px 5px;
+    border: solid 1px #DDDDDD;
+    background-color: white;
+    margin-top: 20px;
+}
+
+#algolia-settings #taxonomies tbody, #algolia-settings #extra-metas tbody
+{
+    cursor: move;
 }

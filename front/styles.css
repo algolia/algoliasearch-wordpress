@@ -4,6 +4,7 @@
 .twitter-typeahead
 {
     width: 100%;
+    color: #000000;
 }
 
 .twitter-typeahead .tt-input, .twitter-typeahead .tt-hint
@@ -34,6 +35,7 @@
 .twitter-typeahead .tt-dropdown-menu
 {
     width: 100%;
+    min-width: 200px;
     padding: 0;
     background-color: #fff;
     border-bottom: solid 1px #DDDDDD;
@@ -108,6 +110,15 @@
     width: 80%;
 }
 
+.hits .infos
+{
+    margin: 0 10px 10px 10px;
+    padding: 10px;
+    background-color: #F5F5F5;
+    text-align: center;
+    border: solid 1px #DDDDDD;
+}
+
 /**
  * Facets
  */
@@ -149,4 +160,50 @@
 .facet .sub_facet:not(:last-child)
 {
     border-bottom: solid 1px #F5F5F5;
+}
+
+.algolia-slider
+{
+    margin: 15px;
+}
+
+.algolia-slider-info
+{
+    margin: 10px 5px;
+}
+
+.pagination-wrapper
+{
+    width: 80%;
+    margin-left: 20%;
+}
+
+.pagination
+{
+    display: inline-block;
+}
+
+.pagination li
+{
+    float: left;
+    display: inline;
+    border: solid 1px #DDDDDD;
+    padding: 0px 10px;
+    margin: 0 5px;
+    line-height: 25px;
+}
+
+.pagination li.active
+{
+    background-color: #F5F5F5;
+}
+
+.pagination li.disabled
+{
+    display: none;
+}
+
+.text-center
+{
+    text-align: center;
 }

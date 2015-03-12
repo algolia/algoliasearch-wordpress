@@ -4,31 +4,40 @@ class AlgoliaHelper
 {
     private $algolia_client;
     private $algolia_registry;
-    private $validCredential;
+
+    private $app_id;
+    private $search_key;
+    private $admin_key;
 
     public function __construct($app_id, $search_key, $admin_key)
     {
+        $this->algolia_client = new \AlgoliaSearch\Client($app_id, $admin_key);
+        $this->algolia_registry = \Algolia\Core\Registry::getInstance();
+
+        $this->app_id = $app_id;
+        $this->admin_key = $admin_key;
+        $this->search_key = $search_key;
+    }
+
+    public function checkRights()
+    {
         try
         {
-            $this->algolia_client = new \AlgoliaSearch\Client($app_id, $admin_key);
-
             /* Check app_id && admin_key => Exception thrown if not working */
             $this->algolia_client->listIndexes();
 
             /* Check search_key_rights */
-            $keys_values = $this->algolia_client->getUserKeyACL($search_key);
+            $keys_values = $this->algolia_client->getUserKeyACL($this->search_key);
 
             if ( ! ($keys_values && isset($keys_values['acl']) && in_array('search', $keys_values['acl'])))
                 throw new \Exception("Search key does not have search right");
 
-            $this->validCredential = true;
+            $this->algolia_registry->validCredential = true;
         }
         catch(\Exception $e)
         {
-            $this->validCredential = false;
+            $this->algolia_registry->validCredential = false;
         }
-
-        $this->algolia_registry = \Algolia\Core\Registry::getInstance();
     }
 
     public function handleIndexCreation()
@@ -50,33 +59,51 @@ class AlgoliaHelper
             }, $created_indexes["items"]);
         }
 
-        foreach (array_keys($this->algolia_registry->indexable_tax) as $tax)
+        foreach (array_keys($this->algolia_registry->indexable_tax) as $name)
         {
-            if (in_array($index_name."_".$tax, $indexes) == false)
+            if (in_array($index_name."_".$name, $indexes) == false)
             {
-                $index = $this->algolia_client->initIndex($index_name."_".$tax);
-                $index->setSettings(array("attributesToIndex" => array("title", "content")));
-                $facets[] = $tax;
+                $index = $this->algolia_client->initIndex($index_name."_".$name);
+                $index->setSettings(array("attributesToIndex" => array("title", "unordered(content)")));
+
+                $index2 = $this->algolia_client->initIndex($index_name."_".$name."_temp");
+                $index2->setSettings(array("attributesToIndex" => array("title", "unordered(content)")));
+
+                $facets[] = $name;
             }
         }
 
-
-        foreach (array_keys($this->algolia_registry->indexable_types) as $type)
+        foreach (array_keys($this->algolia_registry->indexable_types) as $name)
         {
-            if (in_array($index_name."_".$type, $indexes) == false)
+            if (in_array($index_name."_".$name, $indexes) == false)
             {
-                $index = $this->algolia_client->initIndex($index_name."_".$type);
-                $index->setSettings(array("attributesToIndex" => array("title", "content")));
+                $index = $this->algolia_client->initIndex($index_name."_".$name);
+                $index2 = $this->algolia_client->initIndex($index_name."_".$name."_temp");
+
+                if (isset($this->algolia_registry->metas[$name]))
+                {
+                    foreach ($this->algolia_registry->metas[$name] as $key => $value)
+                    {
+                        if ($value['facetable'])
+                            $facets[] = $key;
+                    }
+                }
+
+                $index->setSettings(array("attributesToIndex" => array("title", "unordered(content)")));
+                $index2->setSettings(array("attributesToIndex" => array("title", "unordered(content)")));
             }
         }
 
         $index = $this->algolia_client->initIndex($index_name);
-        $index->setSettings(array("attributesToIndex" => array('title', 'content', 'type'), 'attributesForFaceting' => $facets));
+        $index->setSettings(array("attributesToIndex" => array('title', 'unordered(content)', 'type'), 'attributesForFaceting' => array_values(array_unique($facets))));
+
+        $index2 = $this->algolia_client->initIndex($index_name."_temp");
+        $index2->setSettings(array("attributesToIndex" => array('title', 'unordered(content)', 'type'), 'attributesForFaceting' => array_values(array_unique($facets))));
     }
 
-    public function validCredential()
+    public function move($temp_index_name, $index_name)
     {
-        return $this->validCredential;
+        $this->algolia_client->moveIndex($temp_index_name, $index_name);
     }
 
     public function pushObjects($index_name, $objects)
@@ -84,13 +111,6 @@ class AlgoliaHelper
         $index = $this->algolia_client->initIndex($index_name);
 
         $index->saveObjects($objects);
-    }
-
-    public function cleanIndex($index_name)
-    {
-        $index = $this->algolia_client->initIndex($index_name);
-
-        $index->clearIndex();
     }
 
     public function pushObject($index_name, $object)

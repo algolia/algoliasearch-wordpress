@@ -40,6 +40,17 @@ class WordpressFetcher
         return utf8_encode($value);
     }
 
+    private function try_cast($value)
+    {
+        if (is_numeric($value) && intval($value) == intval(floatval($value)))
+            return intval($value);
+
+        if (is_numeric($value))
+            return floatval($value);
+
+        return $value;
+    }
+
     public function getImage($id)
     {
         $image_fields = array("ID" => "ID", "guid" => "file", "post_mime_type" => "mime_type");
@@ -79,14 +90,7 @@ class WordpressFetcher
         return $image;
     }
 
-    function robins_get_the_excerpt($post_id) {
-        global $post;
-        $save_post = $post;
-        $post = get_post($post_id);
-        $output = get_the_excerpt();
-        $post = $save_post;
-        return $output;
-    }
+
 
     public function getTermObj($data)
     {
@@ -105,6 +109,8 @@ class WordpressFetcher
 
     public function getPostObj($data)
     {
+        $algolia_registry = \Algolia\Core\Registry::getInstance();
+
         $obj = new \stdClass();
 
         foreach ($this->contentFieldsNames as $key => $value)
@@ -115,8 +121,7 @@ class WordpressFetcher
 
         $obj->author     = get_the_author_meta('display_name', $data->post_author);
         $obj->permalink  = get_permalink($data->ID);
-        $obj->excerpt = $this->robins_get_the_excerpt($data->ID);
-
+        $obj->excerpt = my_excerpt($data->post_content, get_the_excerpt());
 
         $thumbnail_id = get_post_thumbnail_id($data->ID);
 
@@ -124,8 +129,11 @@ class WordpressFetcher
             $obj->featureImage = $this->getImage($thumbnail_id);
 
 
-        //print_r(get_post_meta($data->ID));
-        //die();
+        if ($algolia_registry->metas && isset($algolia_registry->metas[$data->post_type]) && is_array($algolia_registry->metas[$data->post_type]))
+            foreach (get_post_meta($data->ID) as $meta_key => $meta_value)
+                if (in_array($meta_key, array_keys($algolia_registry->metas[$data->post_type])))
+                    if ($algolia_registry->metas[$data->post_type][$meta_key]["indexable"])
+                        $obj->$meta_key = $this->try_cast($meta_value[0]);
 
         foreach (get_post_taxonomies($data->ID) as $tax)
         {
