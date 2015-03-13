@@ -79,7 +79,29 @@
     margin-top: 20px;
 }
 
-#algolia-settings #taxonomies tbody, #algolia-settings #extra-metas tbody
+#algolia-settings #taxonomies tbody,
+#algolia-settings #extra-metas tbody,
+#algolia-settings #indexable-types tbody,
+#algolia-settings #custom-ranking tbody
 {
     cursor: move;
+}
+
+#algolia-settings .no-screenshot
+{
+    height: 18px;
+    position: absolute;
+    width: 100%;
+    text-align: center;
+    top: 50%;
+}
+
+#algolia-settings .warning
+{
+    background-color: #c7deec;
+    padding: 10px;
+    margin-top: -20px;
+    margin-left: -5px;
+    margin-right: -5px;
+    margin-bottom: 10px;
 }

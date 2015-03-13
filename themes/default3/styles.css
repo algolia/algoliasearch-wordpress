@@ -1,0 +1,209 @@
+/**
+ * AutoComplete
+ */
+.twitter-typeahead
+{
+    width: 100%;
+    color: #000000;
+}
+
+.twitter-typeahead .tt-input, .twitter-typeahead .tt-hint
+{
+    width: 100%;
+    margin: 0px;
+    padding: 5px 5px;
+    outline: none;
+}
+
+.twitter-typeahead .tt-input:focus
+{
+    border: 2px solid #0097cf;
+}
+
+.twitter-typeahead .category
+{
+    background-color: #F5F5F5;
+    text-align: center;
+    border: 1px solid #dddddd;
+}
+
+.twitter-typeahead .tt-hint
+{
+    color: #999;
+}
+
+.twitter-typeahead .tt-dropdown-menu
+{
+    width: 100%;
+    min-width: 200px;
+    padding: 0;
+    background-color: #fff;
+    border-bottom: solid 1px #DDDDDD;
+}
+
+.twitter-typeahead .tt-dropdown-menu .tt-suggestion
+{
+    text-align: left;
+    padding: 3px 10px;
+    border-left: solid 1px #DDDDDD;
+    border-right: solid 1px #DDDDDD;
+}
+
+.twitter-typeahead .tt-dropdown-menu .tt-suggestion:not(:last-child)
+{
+    border-bottom: solid 1px #F5F5F5;
+}
+
+.twitter-typeahead .tt-dropdown-menu .tt-suggestion.tt-cursor
+{
+    color: #fff;
+    background-color: #0097cf;
+}
+
+.twitter-typeahead .tt-dropdown-menu .tt-suggestion p
+{
+    margin: 0;
+}
+.twitter-typeahead .tt-dropdown-menu .tt-suggestion a
+{
+    color: #000;
+    text-decoration: none;
+}
+.twitter-typeahead .tt-dropdown-menu .tt-suggestion em
+{
+    font-weight: bold;
+    font-style: normal;
+}
+
+/**
+ * Instant Search
+ */
+
+#algolia_instant_selector
+{
+    margin: 10px;
+}
+
+#algolia_instant_selector .category
+{
+
+}
+
+#algolia_instant_selector .result
+{
+    width: 50%;
+}
+
+#algolia_instant_selector .title
+{
+
+}
+
+#algolia_instant_selector .title img
+{
+    width: 200px;
+}
+
+.hits
+{
+    float: left;
+    width: 80%;
+}
+
+.hits .infos
+{
+    margin: 0 10px 10px 10px;
+    padding: 10px;
+    background-color: #F5F5F5;
+    text-align: center;
+    border: solid 1px #DDDDDD;
+}
+
+/**
+ * Facets
+ */
+
+.facets
+{
+    float: left;
+    width: 20%;
+}
+.facet
+{
+    border: solid 1px #DDDDDD;
+}
+
+.facet:not(:first-child)
+{
+    margin-top: 10px;
+}
+
+.facet .name
+{
+    padding: 10px;
+    background-color: #F5F5F5;
+    text-align: center;
+    border-bottom: solid 1px #DDDDDD;
+}
+
+.facet .sub_facet
+{
+    padding: 10px;
+    cursor: pointer;
+}
+
+.facet .sub_facet.checked
+{
+    background-color: #E5E5E5;
+}
+
+.facet .sub_facet:not(:last-child)
+{
+    border-bottom: solid 1px #F5F5F5;
+}
+
+.algolia-slider
+{
+    margin: 15px;
+}
+
+.algolia-slider-info
+{
+    margin: 10px 5px;
+}
+
+.pagination-wrapper
+{
+    width: 80%;
+    margin-left: 20%;
+}
+
+.pagination
+{
+    display: inline-block;
+}
+
+.pagination li
+{
+    float: left;
+    display: inline;
+    border: solid 1px #DDDDDD;
+    padding: 0px 10px;
+    margin: 0 5px;
+    line-height: 25px;
+}
+
+.pagination li.active
+{
+    background-color: #F5F5F5;
+}
+
+.pagination li.disabled
+{
+    display: none;
+}
+
+.text-center
+{
+    text-align: center;
+}

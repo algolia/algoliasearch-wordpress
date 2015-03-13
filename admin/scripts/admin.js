@@ -1,3 +1,5 @@
+var selectTab;
+
 jQuery(document).ready(function($) {
     /**
      * Handle display/hide of subcontent
@@ -16,7 +18,7 @@ jQuery(document).ready(function($) {
         });
     });
 
-    function selectTab(hash)
+    selectTab = function(hash)
     {
         $(".tab-content").hide();
         $(hash).show();
@@ -42,6 +44,15 @@ jQuery(document).ready(function($) {
     selectTab(hash);
 
     /**
+     * Handle Theme chooser
+     */
+
+    $('#algolia-settings .theme').click(function () {
+        $('#algolia-settings .theme').removeClass('active');
+        $(this).addClass('active');
+    });
+
+    /**
      * Handle Sorting
      */
 
@@ -52,7 +63,7 @@ jQuery(document).ready(function($) {
         return ui;
     };
 
-    $('#taxonomies tr, #extra-metas tr, #indexable-types tr').sort(function (a, b) {
+    $('#taxonomies tr, #extra-metas tr, #indexable-types tr, #custom-ranking tr').sort(function (a, b) {
         var contentA = parseInt($(a).attr('data-order'));
         var contentB = parseInt($(b).attr('data-order'));
 
@@ -61,7 +72,7 @@ jQuery(document).ready(function($) {
         $(container).parent().append(container);
     });;
 
-    $("#taxonomies tbody, #extra-metas tbody, #indexable-types tbody").sortable({
+    $("#taxonomies tbody, #extra-metas tbody, #indexable-types tbody, #custom-ranking tbody").sortable({
         containment: "parent",
         helper: fixHelper
     }).disableSelection();

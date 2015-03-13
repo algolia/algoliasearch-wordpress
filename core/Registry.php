@@ -22,7 +22,8 @@ class Registry
         'metas'                     => [],
         'number_by_page'            => 3,
         'number_by_type'            => 2,
-        'search_input_selector'     => "[name='s']"
+        'search_input_selector'     => "[name='s']",
+        'theme'                     => 'default'
     ];
 
     public static function getInstance()

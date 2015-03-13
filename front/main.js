@@ -296,6 +296,12 @@ if (algoliaSettings.type_of_search == "instant")
 
             $(algoliaSettings.search_input_selector).keyup(function (e) {
                 var keycode = e.keyCode;
+                var $this = $(this);
+
+                $(algoliaSettings.search_input_selector).each(function (i) {
+                    if ($(this)[0] != $this[0])
+                        $(this).val(query);
+                });
 
                 if ($(this).val().length == 0)
                 {
@@ -312,12 +318,6 @@ if (algoliaSettings.type_of_search == "instant")
 
                 query = $(this).val();
 
-                var $this = $(this);
-
-                $(algoliaSettings.search_input_selector).each(function (i) {
-                    if ($(this)[0] != $this[0])
-                        $(this).val(query);
-                });
 
                 performQueries();
             });

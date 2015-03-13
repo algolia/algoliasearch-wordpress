@@ -12,12 +12,13 @@
 
 defined( 'ABSPATH' ) or die( 'Not Allowed' );
 
-require_once(plugin_dir_path(__FILE__).'/lib/algoliasearch.php');
+require_once(plugin_dir_path(__FILE__).'/lib/algolia/algoliasearch.php');
 
 require_once(plugin_dir_path(__FILE__).'/core/Indexer.php');
 require_once(plugin_dir_path(__FILE__).'/core/AlgoliaHelper.php');
 require_once(plugin_dir_path(__FILE__).'/core/Registry.php');
 require_once(plugin_dir_path(__FILE__).'/core/WordpressFetcher.php');
+require_once(plugin_dir_path(__FILE__).'/core/ThemeHelper.php');
 
 require_once(plugin_dir_path(__FILE__).'/AlgoliaPlugin.php');
 require_once(plugin_dir_path(__FILE__).'/AlgoliaPluginAuto.php');

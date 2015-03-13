@@ -40,6 +40,12 @@ class AlgoliaHelper
         }
     }
 
+    public function setSettings($index_name, $settings)
+    {
+        $index = $this->algolia_client->initIndex($index_name);
+        $index->setSettings($settings);
+    }
+
     public function handleIndexCreation()
     {
         $created_indexes    = $this->algolia_client->listIndexes();
@@ -52,6 +58,17 @@ class AlgoliaHelper
 
         $facets[] = "type";
 
+        $attributesToIndex      = array("title", "unordered(content)");
+        $attributesToIndex2     = array("title", "unordered(content)", "type");
+        $attributesToHighlight  = array("title", "content", "type", "excerpt");
+
+        $customRankingTemp      = array();
+
+        $defaultSettings = array(
+            "attributesToIndex"     => $attributesToIndex,
+            "attributesToHighlight" => $attributesToHighlight
+        );
+
         if (isset($indexes["items"]))
         {
             $indexes = array_map(function ($obj) {
@@ -63,11 +80,8 @@ class AlgoliaHelper
         {
             if (in_array($index_name."_".$name, $indexes) == false)
             {
-                $index = $this->algolia_client->initIndex($index_name."_".$name);
-                $index->setSettings(array("attributesToIndex" => array("title", "unordered(content)")));
-
-                $index2 = $this->algolia_client->initIndex($index_name."_".$name."_temp");
-                $index2->setSettings(array("attributesToIndex" => array("title", "unordered(content)")));
+                $this->setSettings($index_name."_".$name, $defaultSettings);
+                $this->setSettings($index_name."_".$name."_temp", $defaultSettings);
 
                 $facets[] = $name;
             }
@@ -77,28 +91,46 @@ class AlgoliaHelper
         {
             if (in_array($index_name."_".$name, $indexes) == false)
             {
-                $index = $this->algolia_client->initIndex($index_name."_".$name);
-                $index2 = $this->algolia_client->initIndex($index_name."_".$name."_temp");
-
                 if (isset($this->algolia_registry->metas[$name]))
                 {
                     foreach ($this->algolia_registry->metas[$name] as $key => $value)
                     {
                         if ($value['facetable'])
                             $facets[] = $key;
+
+                        if ($value['custom_ranking'])
+                            $customRankingTemp[] = array('sort' => $value['custom_ranking_sort'], 'value' => $value['custom_ranking_order'].'('.$key.')');
                     }
                 }
 
-                $index->setSettings(array("attributesToIndex" => array("title", "unordered(content)")));
-                $index2->setSettings(array("attributesToIndex" => array("title", "unordered(content)")));
+                $this->setSettings($index_name."_".$name, $defaultSettings);
+                $this->setSettings($index_name."_".$name."_temp", $defaultSettings);
             }
         }
 
-        $index = $this->algolia_client->initIndex($index_name);
-        $index->setSettings(array("attributesToIndex" => array('title', 'unordered(content)', 'type'), 'attributesForFaceting' => array_values(array_unique($facets))));
+        usort($customRankingTemp, function ($a, $b) {
+            if ($a['sort'] < $b['sort'])
+                return -1;
+            if ($a['sort'] == $b['sort'])
+                return 0;
+            return -1;
+        });
 
-        $index2 = $this->algolia_client->initIndex($index_name."_temp");
-        $index2->setSettings(array("attributesToIndex" => array('title', 'unordered(content)', 'type'), 'attributesForFaceting' => array_values(array_unique($facets))));
+        $customRanking = array_map(function ($obj) {
+            return $obj['value'];
+        }, $customRankingTemp);
+
+        $customRanking[] = "desc(date)";
+
+        $settings = array(
+            'attributesToIndex'     => $attributesToIndex2,
+            'attributesForFaceting' => array_values(array_unique($facets)),
+            'attributesToHighlight' => $attributesToHighlight,
+            'customRanking'         => $customRanking
+        );
+
+        $this->setSettings($index_name, $settings);
+        $this->setSettings($index_name."_temp", $settings);
     }
 
     public function move($temp_index_name, $index_name)

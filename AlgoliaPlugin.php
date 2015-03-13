@@ -24,6 +24,7 @@ class AlgoliaPlugin
         add_action('admin_post_update_indexable_taxonomies',    array($this, 'admin_post_update_indexable_taxonomies'));
         add_action('admin_post_update_type_of_search',          array($this, 'admin_post_update_type_of_search'));
         add_action('admin_post_update_extra_meta',              array($this, 'admin_post_update_extra_meta'));
+        add_action('admin_post_custom_ranking',                 array($this, 'admin_post_custom_ranking'));
 
         add_action('admin_post_reindex',                        array($this, 'admin_post_reindex'));
 
@@ -57,7 +58,7 @@ class AlgoliaPlugin
 
     public function wp_footer()
     {
-        include __DIR__ . '/front/templates.php';
+        include __DIR__ . '/themes/' . $this->algolia_registry->theme . '/templates.php';
     }
 
     public function scripts()
@@ -65,13 +66,13 @@ class AlgoliaPlugin
         if (is_admin())
             return;
 
-        wp_enqueue_style('jquery-ui', plugin_dir_url(__FILE__) . '/front/jquery-ui.min.css');
-        wp_enqueue_style('algolia_styles', plugin_dir_url(__FILE__) . '/front/styles.css');
+        wp_enqueue_style('jquery-ui', plugin_dir_url(__FILE__) . '/lib/jquery/jquery-ui.min.css');
+        wp_enqueue_style('algolia_styles', plugin_dir_url(__FILE__) . 'themes/' . $this->algolia_registry->theme . '/styles.css');
 
-        $scripts = array('jquery-ui.js', 'algoliasearch.min.js', 'hogan.js', 'typeahead.js');
+        $scripts = array('jquery/jquery-ui.js', 'algolia/algoliasearch.min.js', 'hogan/hogan.js', 'typeahead/typeahead.js');
 
         foreach ($scripts as $script) {
-            wp_register_script($script, plugin_dir_url(__FILE__) . 'front/' . $script, array());
+            wp_register_script($script, plugin_dir_url(__FILE__) . 'lib/' . $script, array());
             wp_localize_script($script, 'settings', array());
         }
 
@@ -129,7 +130,7 @@ class AlgoliaPlugin
         foreach ($this->algolia_registry->indexable_types as $type => $obj)
             $algoliaAdminSettings["types"][] = array('type' => $type, 'name' => $obj['name'], 'count' => wp_count_posts($type)->publish);
 
-        wp_register_script('jquery-ui', plugin_dir_url(__FILE__) . 'front/jquery-ui.js', array_merge(array('jquery')));
+        wp_register_script('jquery-ui', plugin_dir_url(__FILE__) . 'lib/jquery/jquery-ui.js', array_merge(array('jquery')));
         wp_localize_script('jquery-ui', 'algoliaAdminSettings', $algoliaAdminSettings);
         wp_enqueue_script('jquery-ui');
 
@@ -137,7 +138,8 @@ class AlgoliaPlugin
         wp_localize_script('admin.js', 'algoliaAdminSettings', $algoliaAdminSettings);
         wp_enqueue_script('admin.js');
 
-        wp_enqueue_style('AlgoliaSettings', plugin_dir_url(__FILE__) . 'admin/styles/styles.css');
+        wp_enqueue_style('jquery-ui.min', plugin_dir_url(__FILE__) . 'admin/styles/font-awesome.min.css');
+        wp_enqueue_style('styles-admin', plugin_dir_url(__FILE__) . 'admin/styles/styles.css');
         wp_enqueue_style('jquery-ui', plugin_dir_url(__FILE__) . 'front/jquery-ui.min.css');
     }
 
@@ -162,9 +164,11 @@ class AlgoliaPlugin
     {
         $index_name             = !empty($_POST['INDEX_NAME']) ? sanitize_text_field($_POST['INDEX_NAME']) : '';
         $search_input_selector  = !empty($_POST['SEARCH_INPUT_SELECTOR']) ? $_POST['SEARCH_INPUT_SELECTOR'] : '';
+        $theme                  = !empty($_POST['THEME']) ? $_POST['THEME'] : 'default';
 
         $this->algolia_registry->index_name             = $index_name;
         $this->algolia_registry->search_input_selector  = str_replace('"', '\'', $search_input_selector);
+        $this->algolia_registry->theme                  = $theme;
 
         wp_redirect('admin.php?page=algolia-settings#general-settings');
     }
@@ -269,6 +273,45 @@ class AlgoliaPlugin
         wp_redirect('admin.php?page=algolia-settings#type-of-search');
     }
 
+    public function admin_post_custom_ranking()
+    {
+        $indexable_types = $this->algolia_registry->indexable_types;
+        $metas = $this->algolia_registry->metas;
+
+        if (isset($_POST['TYPES']) && is_array($_POST['TYPES']))
+        {
+            $i = 1;
+
+            foreach ($_POST['TYPES'] as $key => $value)
+            {
+                if (in_array($key, array_keys($indexable_types)) && isset($value["METAS"]) && is_array($value["METAS"]))
+                {
+                    foreach ($value["METAS"] as $meta_key => $meta_value)
+                    {
+                        if (isset($metas[$key][$meta_key]) && $metas[$key][$meta_key]['indexable'])
+                        {
+                            $metas[$key][$meta_key]['custom_ranking']       = isset($meta_value['CUSTOM_RANKING']) ? 1 : 0;
+                            $metas[$key][$meta_key]["custom_ranking_order"] = $meta_value["CUSTOM_RANKING_ORDER"];
+
+                            if ($metas[$key][$meta_key]['custom_ranking'])
+                                $metas[$key][$meta_key]["custom_ranking_sort"]  = $i;
+                            else
+                                $metas[$key][$meta_key]["custom_ranking_sort"]  = 10000;
+
+                            $i++;
+                        }
+                    }
+                }
+            }
+
+            $this->algolia_registry->metas = $metas;
+        }
+
+        $this->algolia_helper->handleIndexCreation();
+
+        wp_redirect('admin.php?page=algolia-settings#custom-ranking');
+    }
+
     public function admin_post_update_extra_meta()
     {
         $indexable_types = $this->algolia_registry->indexable_types;
@@ -290,11 +333,14 @@ class AlgoliaPlugin
                         if ((isset ($meta_value["NAME"]) && $meta_value["NAME"]) || isset($meta_value["INDEXABLE"]) || isset($meta_value["INDEXABLE"]))
                         {
                             $metas[$key][$meta_key] = array();
-                            $metas[$key][$meta_key]["name"] = $meta_value["NAME"];
-                            $metas[$key][$meta_key]["indexable"] = isset($meta_value["INDEXABLE"]) ? 1 : 0;
-                            $metas[$key][$meta_key]["facetable"] = $metas[$key][$meta_key]["indexable"] && isset($meta_value["FACETABLE"]) ? 1 : 0;
-                            $metas[$key][$meta_key]["type"] = $meta_value["TYPE"];
-                            $metas[$key][$meta_key]["order"] = $i;
+                            $metas[$key][$meta_key]["name"]                 = $meta_value["NAME"];
+                            $metas[$key][$meta_key]["indexable"]            = isset($meta_value["INDEXABLE"]) ? 1 : 0;
+                            $metas[$key][$meta_key]["facetable"]            = $metas[$key][$meta_key]["indexable"] && isset($meta_value["FACETABLE"]) ? 1 : 0;
+                            $metas[$key][$meta_key]["type"]                 = $meta_value["TYPE"];
+                            $metas[$key][$meta_key]["order"]                = $i;
+                            $metas[$key][$meta_key]["custom_ranking"]       = isset($meta_value["CUSTOM_RANKING"]) && $meta_value["CUSTOM_RANKING"] ? $meta_value["CUSTOM_RANKING"] : 0;
+                            $metas[$key][$meta_key]["custom_ranking_sort"]  = isset($meta_value["CUSTOM_RANKING_SORT"]) && $meta_value["CUSTOM_RANKING_SORT"] ? $meta_value["CUSTOM_RANKING_SORT"] : 10000;
+                            $metas[$key][$meta_key]["custom_ranking_order"] = isset($meta_value["CUSTOM_RANKING_ORDER"]) && $meta_value["CUSTOM_RANKING_ORDER"] ? $meta_value["CUSTOM_RANKING_ORDER"] : 'asc';
 
                             $i++;
                         }
