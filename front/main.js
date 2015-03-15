@@ -287,35 +287,32 @@ if (algoliaSettings.type_of_search == "instant")
                     html_content += template.render({ hits: content.hits, nbHits: content.nbHits, query: query, processingTimeMS: content.processingTimeMS  });
 
                     if (content.hits.length > 0)
-                    {
-
                         html_content += paginationTemplate.render({ pages: pages, prev_page: (content.page > 0 ? content.page : false), next_page: (content.page + 1 < content.nbPages ? content.page + 2 : false) });
-
-                        $(".algolia-slider").each(function (i) {
-                            var min = $(this).attr("data-min");
-                            var max = $(this).attr("data-max");
-
-                            var new_min = helper.getNumericsRefine($(this).attr("data-tax"), ">=");
-                            var new_max = helper.getNumericsRefine($(this).attr("data-tax"), "<=");
-
-                            if (new_min != undefined)
-                                min = new_min;
-
-                            if (new_max != undefined)
-                                max = new_max;
-
-                            $(this).slider({
-                                min: parseInt($(this).attr("data-min")),
-                                max: parseInt($(this).attr("data-max")),
-                                range: true,
-                                values: [min, max]
-                            });
-                        });
-                    }
 
                     html_content += "</div>";
 
                     $(algoliaSettings.instant_jquery_selector).html(html_content);
+
+                    $(".algolia-slider").each(function (i) {
+                        var min = $(this).attr("data-min");
+                        var max = $(this).attr("data-max");
+
+                        var new_min = helper.getNumericsRefine($(this).attr("data-tax"), ">=");
+                        var new_max = helper.getNumericsRefine($(this).attr("data-tax"), "<=");
+
+                        if (new_min != undefined)
+                            min = new_min;
+
+                        if (new_max != undefined)
+                            max = new_max;
+
+                        $(this).slider({
+                            min: parseInt($(this).attr("data-min")),
+                            max: parseInt($(this).attr("data-max")),
+                            range: true,
+                            values: [min, max]
+                        });
+                    });
                 }
             }
 
