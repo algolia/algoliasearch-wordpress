@@ -56,8 +56,7 @@
 
 .twitter-typeahead .tt-dropdown-menu .tt-suggestion.tt-cursor
 {
-    color: #fff;
-    background-color: #0097cf;
+    background-color: #E5E5E5;
 }
 
 .twitter-typeahead .tt-dropdown-menu .tt-suggestion p
@@ -71,8 +70,7 @@
 }
 .twitter-typeahead .tt-dropdown-menu .tt-suggestion em
 {
-    font-weight: bold;
-    font-style: normal;
+    background-color: #ffffe0;
 }
 
 /**
@@ -180,7 +178,7 @@
     margin-left: 20%;
 }
 
-#algolia_instant_selector .pagination
+#algolia_instant_selector .algolia-pagination
 {
     display: inline-block;
     background-color: transparent;
@@ -188,7 +186,7 @@
     box-shadow: none;
 }
 
-#algolia_instant_selector .pagination li
+#algolia_instant_selector .algolia-pagination li
 {
     float: left;
     display: inline;
@@ -199,12 +197,12 @@
     background-color: white;
 }
 
-#algolia_instant_selector .pagination li.active
+#algolia_instant_selector .algolia-pagination li.active
 {
     background-color: #F5F5F5;
 }
 
-#algolia_instant_selector .pagination li.disabled
+#algolia_instant_selector .algolia-pagination li.disabled
 {
     display: none;
 }

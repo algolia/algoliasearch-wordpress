@@ -121,7 +121,7 @@
 <script type="text/template" id="instant-pagination-template">
 <div class="pagination-wrapper">
     <div class="text-center">
-        <ul class="pagination">
+        <ul class="algolia-pagination">
             <li {{^prev_page}}class="disabled"{{/prev_page}}>
                 <a href="#" onclick="{{#prev_page}}gotoPage({{ prev_page }});{{/prev_page}} return false;">&laquo;</a>
             </li>
