@@ -51,18 +51,16 @@
             <div data-tab="#account" class="title">Account</div>
             <?php endif; ?>
 
-            <div data-tab="#general-settings" class="title">General Settings</div>
-
             <?php if ($algolia_registry->validCredential) : ?>
-            <div data-tab="#type-of-search" class="title selected">Type of search</div>
-            <?php else: ?>
-            <div data-tab="#type-of-search" class="title">Type of search</div>
-            <?php endif; ?>
 
+            <div data-tab="#general-settings" class="title">General Settings</div>
+            <div data-tab="#type-of-search" class="title selected">Type of search</div>
             <div data-tab="#indexable-types" class="title">Types</div>
             <div data-tab="#extra-metas" class="title">Extra attributes</div>
             <div data-tab="#custom-ranking" class="title">Custom Ranking</div>
             <div data-tab="#taxonomies" class="title">Taxonomies</div>
+
+            <?php endif; ?>
             <div style="clear:both"></div>
         </div>
 

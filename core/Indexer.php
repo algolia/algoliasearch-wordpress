@@ -9,11 +9,16 @@ class Indexer
     public function __construct()
     {
         $this->algolia_registry     = \Algolia\Core\Registry::getInstance();
-        $this->algolia_helper       = new \Algolia\Core\AlgoliaHelper(
-                                        $this->algolia_registry->app_id,
-                                        $this->algolia_registry->search_key,
-                                        $this->algolia_registry->admin_key
-                                      );
+
+        if ($this->algolia_registry->validCredential)
+        {
+            $this->algolia_helper = new \Algolia\Core\AlgoliaHelper(
+                $this->algolia_registry->app_id,
+                $this->algolia_registry->search_key,
+                $this->algolia_registry->admin_key
+            );
+        }
+
         $this->wordpress_fetcher    = new WordpressFetcher();
     }
 
@@ -21,15 +26,15 @@ class Indexer
     {
         global $wpdb;
 
-        foreach (array_keys($this->algolia_registry->indexable_types) as $obj)
+        foreach (array_keys($this->algolia_registry->indexable_types) as $type)
         {
-            $query = "SELECT COUNT(*) as count FROM " . $wpdb->posts . " WHERE post_status IN ('publish') AND post_type = '".$obj['name']."'";
+            $query = "SELECT COUNT(*) as count FROM " . $wpdb->posts . " WHERE post_status IN ('publish') AND post_type = '".$type."'";
             $result = $wpdb->get_results($query);
             $count = $result[0]->count;
             $max = 10000;
 
             for ($i = 0; $i < ceil($count / $max); $i++)
-                $this->indexPostsTypePart($obj['name'], $max, $i * $max);
+                $this->indexPostsTypePart($type, $max, $i * $max);
         }
     }
 
@@ -37,13 +42,11 @@ class Indexer
     {
         $this->algolia_helper->move($this->algolia_registry->index_name.'_temp', $this->algolia_registry->index_name);
 
-        $taxonomies_name = array_keys($this->algolia_registry->indexable_tax);
+        foreach (array_keys($this->algolia_registry->indexable_tax) as $tax)
+            $this->algolia_helper->move($this->algolia_registry->index_name.'_'.$tax.'_temp', $this->algolia_registry->index_name.'_'.$tax);
 
-        foreach ($taxonomies_name as $obj)
-            $this->algolia_helper->move($this->algolia_registry->index_name.'_'.$obj['name'].'_temp', $this->algolia_registry->index_name.'_'.$obj['name']);
-
-        foreach (array_keys($this->algolia_registry->indexable_types) as $obj)
-            $this->algolia_helper->move($this->algolia_registry->index_name.'_'.$obj['name'].'_temp', $this->algolia_registry->index_name.'_'.$obj['name']);
+        foreach (array_keys($this->algolia_registry->indexable_types) as $type)
+            $this->algolia_helper->move($this->algolia_registry->index_name.'_'.$type.'_temp', $this->algolia_registry->index_name.'_'.$type);
     }
 
     private function getPosts($type, $limit)
@@ -65,7 +68,7 @@ class Indexer
 
     public function indexTaxonomie($tax)
     {
-        $terms = [];
+        $terms = array();
 
         foreach (get_terms($tax) as $term)
             $terms[] = $this->wordpress_fetcher->getTermObj($term);
@@ -75,10 +78,8 @@ class Indexer
 
     public function indexTaxonomies()
     {
-        $taxonomies_name = array_keys($this->algolia_registry->indexable_tax);
-
-        foreach ($taxonomies_name as $obj)
-            $this->indexTaxonomie($obj['name']);
+        foreach (array_keys($this->algolia_registry->indexable_tax) as $tax)
+            $this->indexTaxonomie($tax);
     }
 
     public function indexPost($post)

@@ -3,28 +3,28 @@
 class Registry
 {
     private static $instance;
-    private $options = [];
+    private $options = array();
     private static $setting_key = 'algolia';
 
-    private $attributes = [
+    private $attributes = array(
         'validCredential'           => false,
         'app_id'                    => '',
         'search_key'                => '',
         'admin_key'                 => '',
         'index_name'                => '',
-        'indexable_types'           => [],
-        'indexable_tax'             => [],
+        'indexable_types'           => array(),
+        'indexable_tax'             => array(),
         'type_of_search'            => 'autocomplete',
-        'conjunctive_facets'        => [],
-        'disjunctive_facets'        => [],
+        'conjunctive_facets'        => array(),
+        'disjunctive_facets'        => array(),
         'instant_jquery_selector'   => '#content',
-        'extras'                    => [],
-        'metas'                     => [],
+        'extras'                    => array(),
+        'metas'                     => array(),
         'number_by_page'            => 3,
         'number_by_type'            => 2,
         'search_input_selector'     => "[name='s']",
         'theme'                     => 'default'
-    ];
+    );
 
     public static function getInstance()
     {

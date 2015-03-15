@@ -9,11 +9,16 @@ class AlgoliaPluginAuto
     public function __construct()
     {
         $this->algolia_registry = \Algolia\Core\Registry::getInstance();
+
+        if ($this->algolia_registry->validCredential == false)
+            return;
+
         $this->algolia_helper   = new \Algolia\Core\AlgoliaHelper(
             $this->algolia_registry->app_id,
             $this->algolia_registry->search_key,
             $this->algolia_registry->admin_key
         );
+
 
         $this->indexer = new \Algolia\Core\Indexer();
 

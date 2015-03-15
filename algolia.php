@@ -31,7 +31,7 @@ new AlgoliaPluginAuto();
  * Variables Definition
  */
 
-$batch_count = 2;
+$batch_count = 50;
 
 /**
  * Functions definitions

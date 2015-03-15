@@ -9,11 +9,16 @@ class AlgoliaPlugin
     public function __construct()
     {
         $this->algolia_registry = \Algolia\Core\Registry::getInstance();
-        $this->algolia_helper   = new \Algolia\Core\AlgoliaHelper(
-            $this->algolia_registry->app_id,
-            $this->algolia_registry->search_key,
-            $this->algolia_registry->admin_key
-        );
+
+        if ($this->algolia_registry->validCredential)
+        {
+            $this->algolia_helper   = new \Algolia\Core\AlgoliaHelper(
+                $this->algolia_registry->app_id,
+                $this->algolia_registry->search_key,
+                $this->algolia_registry->admin_key
+            );
+        }
+
         $this->indexer = new \Algolia\Core\Indexer();
 
         add_action('admin_menu',                                array($this, 'add_admin_menu'));
@@ -48,7 +53,7 @@ class AlgoliaPlugin
     public function add_admin_menu()
     {
         $icon_url = plugin_dir_url(__FILE__) . '/admin/imgs/icon.png';
-        add_menu_page('Algolia Settings', 'Algolia', 'manage_options', 'algolia-settings', [$this, 'admin_view'], $icon_url);
+        add_menu_page('Algolia Settings', 'Algolia', 'manage_options', 'algolia-settings', array($this, 'admin_view'), $icon_url);
     }
 
     public function admin_view()
@@ -180,9 +185,9 @@ class AlgoliaPlugin
     {
         $valid_tax = get_taxonomies();
 
-        $taxonomies = [];
-        $conjunctive_facets = [];
-        $disjunctive_facets = [];
+        $taxonomies = array();
+        $conjunctive_facets = array();
+        $disjunctive_facets = array();
 
         $i = 0;
         $j = 0;
@@ -229,7 +234,7 @@ class AlgoliaPlugin
     {
         $valid_types = get_post_types();
 
-        $types = [];
+        $types = array();
 
         if (isset($_POST['TYPES']) && is_array($_POST['TYPES']))
         {

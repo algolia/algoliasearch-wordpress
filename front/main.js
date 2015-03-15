@@ -123,7 +123,7 @@ if (algoliaSettings.type_of_search == "instant")
                                     var checked = helper.isRefined(algoliaSettings.facets[i].tax, key);
                                     sub_facets.push({
                                         conjunctive: 1,
-                                        isjunctive: 0,
+                                        disjunctive: 0,
                                         slider: 0,
                                         checked: checked,
                                         name: key,
