@@ -106,7 +106,7 @@ if (algoliaSettings.type_of_search == "instant")
                 facets: conjunctive_facets,
                 disjunctiveFacets: disjunctive_facets,
                 hitsPerPage: algoliaSettings.number_by_page
-            })
+            });
 
             /**
              * Functions

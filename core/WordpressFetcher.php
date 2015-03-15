@@ -37,7 +37,7 @@ class WordpressFetcher
         if ($type == 'datetime')
             return strtotime($value, current_time('timestamp'));
 
-        return utf8_encode($value);
+        return $value; //utf8_encode ?
     }
 
     private function try_cast($value)
