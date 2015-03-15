@@ -43,7 +43,6 @@ if (algoliaSettings.type_of_search == "autocomplete")
                 templates: {
                     header: '<div class="category">' + algoliaSettings.indexes[i].name + '</div>',
                     suggestion: function (hit) {
-                        console.log(hit);
                         return $autocompleteTemplate.render(hit);
                     }
                 }
@@ -64,28 +63,36 @@ if (algoliaSettings.type_of_search == "autocomplete")
  * Instant Search
  */
 
-var algolia_div_id = "algolia_instant_selector";
-
 if (algoliaSettings.type_of_search == "instant")
 {
     jQuery(document).ready(function ($) {
 
         if ($(algoliaSettings.instant_jquery_selector).length == 1)
         {
-            var template = Hogan.compile($('#instant-content-template').text());
-            var facetsTemplate = Hogan.compile($('#instant-facets-template').text());
-            var paginationTemplate = Hogan.compile($('#instant-pagination-template').text());
+            /**
+             * Variables Initialization
+             */
 
-            var conjunctive_facets = [];
-            var disjunctive_facets = [];
-            var slider_facets = [];
+            var old_content         = $(algoliaSettings.instant_jquery_selector).html();
+
+            var query               = "";
+
+            var template            = Hogan.compile($('#instant-content-template').text());
+            var facetsTemplate      = Hogan.compile($('#instant-facets-template').text());
+            var paginationTemplate  = Hogan.compile($('#instant-pagination-template').text());
+
+            var conjunctive_facets  = [];
+            var disjunctive_facets  = [];
+            var slider_facets       = [];
 
             for (var i = 0; i < algoliaSettings.facets.length; i++)
             {
                 if (algoliaSettings.facets[i].type == "conjunctive")
                     conjunctive_facets.push(algoliaSettings.facets[i].tax);
+
                 if (algoliaSettings.facets[i].type == "disjunctive")
                     disjunctive_facets.push(algoliaSettings.facets[i].tax);
+
                 if (algoliaSettings.facets[i].type == "slider")
                 {
                     disjunctive_facets.push(algoliaSettings.facets[i].tax);
@@ -99,13 +106,103 @@ if (algoliaSettings.type_of_search == "instant")
                 facets: conjunctive_facets,
                 disjunctiveFacets: disjunctive_facets,
                 hitsPerPage: algoliaSettings.number_by_page
-            });
+            })
+
+            /**
+             * Functions
+             */
+            function updateUrl()
+            {
+                var refinements = [];
+
+                for (var refine in helper.refinements)
+                {
+                    if (helper.refinements[refine])
+                    {
+                        var i = refine.indexOf(':');
+                        var r = {};
+
+                        r[refine.slice(0, i)] = refine.slice(i + 1);
+
+                        refinements.push(r);
+                    }
+                }
+
+                for (var refine in helper.disjunctiveRefinements)
+                {
+                    for (var value in helper.disjunctiveRefinements[refine])
+                    {
+                        if (helper.disjunctiveRefinements[refine][value])
+                        {
+                            var r = {};
+
+                            r[refine] = value;
+
+                            refinements.push(r);
+                        }
+                    }
+                }
+
+                location.replace('#q=' + encodeURIComponent(query) + '&page=' + helper.page + '&refinements=' + encodeURIComponent(JSON.stringify(refinements)) + '&numerics_refinements=' + encodeURIComponent(JSON.stringify(helper.numericsRefinements)));
+            }
+
+            function getRefinementsFromUrl()
+            {
+                if (location.hash && location.hash.indexOf('#q=') === 0)
+                {
+                    var params                          = location.hash.substring(3);
+                    var pageParamOffset                 = params.indexOf('&page=');
+                    var refinementsParamOffset          = params.indexOf('&refinements=');
+                    var numericsRefinementsParamOffset  = params.indexOf('&numerics_refinements=');
+
+                    var q                               = decodeURIComponent(params.substring(0, pageParamOffset));
+                    var page                            = parseInt(params.substring(pageParamOffset + 6, refinementsParamOffset));
+                    var refinements                     = JSON.parse(decodeURIComponent(params.substring(refinementsParamOffset + 13, numericsRefinementsParamOffset)));
+                    var numericsRefinements             = JSON.parse(decodeURIComponent(params.substring(numericsRefinementsParamOffset + 22)));
+
+                    query = q;
+
+                    for (var i = 0; i < refinements.length; ++i) {
+                        for (var refine in refinements[i]) {
+                            helper.toggleRefine(refine, refinements[i][refine]);
+                        }
+                    }
+
+                    helper.numericsRefinements = numericsRefinements;
+
+                    helper.setPage(page);
+
+                    $(algoliaSettings.search_input_selector).val(query);
+
+                    performQueries();
+
+                }
+            }
+
+            function performQueries()
+            {
+                helper.search(query, searchCallback);
+
+                updateUrl();
+            }
+
+            function updateSlideInfos(ui)
+            {
+                var infos = $(ui.handle).closest(".algolia-slider").nextAll(".algolia-slider-info");
+
+                infos.find(".min").html(ui.values[0]);
+                infos.find(".max").html(ui.values[1]);
+            }
 
             function searchCallback(success, content) {
-                algolia_div.html("");
+
 
                 if (success)
                 {
+                    var html_content = "";
+
+                    html_content += "<div id='algolia_instant_selector'>";
+
                     console.log(content);
 
                     if (content.hits.length > 0)
@@ -184,15 +281,15 @@ if (algoliaSettings.type_of_search == "instant")
                             pages.push({ current: false, number: content.nbPages });
                         }
 
-                        algolia_div.append(facetsTemplate.render({ facets: facets }));
+                        html_content += facetsTemplate.render({ facets: facets });
                     }
 
-                    algolia_div.append(template.render({ hits: content.hits, nbHits: content.nbHits, query: query, processingTimeMS: content.processingTimeMS  }));
+                    html_content += template.render({ hits: content.hits, nbHits: content.nbHits, query: query, processingTimeMS: content.processingTimeMS  });
 
                     if (content.hits.length > 0)
                     {
 
-                        algolia_div.append(paginationTemplate.render({ pages: pages, prev_page: (content.page > 0 ? content.page : false), next_page: (content.page + 1 < content.nbPages ? content.page + 2 : false) }));
+                        html_content += paginationTemplate.render({ pages: pages, prev_page: (content.page > 0 ? content.page : false), next_page: (content.page + 1 < content.nbPages ? content.page + 2 : false) });
 
                         $(".algolia-slider").each(function (i) {
                             var min = $(this).attr("data-min");
@@ -215,114 +312,26 @@ if (algoliaSettings.type_of_search == "instant")
                             });
                         });
                     }
+
+                    html_content += "</div>";
+
+                    $(algoliaSettings.instant_jquery_selector).html(html_content);
                 }
             }
 
-            $(algoliaSettings.instant_jquery_selector).after("<div style='display: none; min-height: 600px;' id='" + algolia_div_id + "'></div>");
+            window.gotoPage = function(page) {
+                helper.gotoPage(+page - 1);
+            };
 
-            var algolia_div = $("#" + algolia_div_id);
-
-
-            function updateUrl()
-            {
-                var refinements = [];
-                for (var refine in helper.refinements) {
-                    if (helper.refinements[refine]) {
-                        var i = refine.indexOf(':');
-                        var r = {};
-                        r[refine.slice(0, i)] = refine.slice(i + 1);
-                        refinements.push(r);
-                    }
-                }
-                for (var refine in helper.disjunctiveRefinements) {
-                    for (var value in helper.disjunctiveRefinements[refine]) {
-                        if (helper.disjunctiveRefinements[refine][value]) {
-                            var r = {};
-                            r[refine] = value;
-                            refinements.push(r);
-                        }
-                    }
-                }
-
-                location.replace('#q=' + encodeURIComponent(query) + '&page=' + helper.page + '&refinements=' + encodeURIComponent(JSON.stringify(refinements)) + '&numerics_refinements=' + encodeURIComponent(JSON.stringify(helper.numericsRefinements)));
-            }
-
-            function getRefinementsFromUrl()
-            {
-                if (location.hash && location.hash.indexOf('#q=') === 0)
-                {
-                    $(algoliaSettings.instant_jquery_selector).hide();
-                    algolia_div.show();
-
-                    var params = location.hash.substring(3);
-                    var pageParamOffset = params.indexOf('&page=');
-                    var refinementsParamOffset = params.indexOf('&refinements=');
-                    var numericsRefinementsParamOffset = params.indexOf('&numerics_refinements=');
-
-                    var q = decodeURIComponent(params.substring(0, pageParamOffset));
-                    var page = parseInt(params.substring(pageParamOffset + 6, refinementsParamOffset));
-                    var refinements = JSON.parse(decodeURIComponent(params.substring(refinementsParamOffset + 13, numericsRefinementsParamOffset)));
-                    var numericsRefinements = JSON.parse(decodeURIComponent(params.substring(numericsRefinementsParamOffset + 22)));
-
-                    query = q;
-
-                    for (var i = 0; i < refinements.length; ++i) {
-                        for (var refine in refinements[i]) {
-                            helper.toggleRefine(refine, refinements[i][refine]);
-                        }
-                    }
-
-                    helper.numericsRefinements = numericsRefinements;
-
-                    helper.setPage(page);
-
-                    $(algoliaSettings.search_input_selector).val(query);
-
-                    performQueries();
-
-                }
-            }
-
-            function performQueries()
-            {
-                helper.search(query, searchCallback);
-
-                updateUrl();
-
-                algolia_div.show();
-            }
-
-            var query = "";
-
-            $(algoliaSettings.search_input_selector).keyup(function (e) {
-                var keycode = e.keyCode;
-                var $this = $(this);
-
-                $(algoliaSettings.search_input_selector).each(function (i) {
-                    if ($(this)[0] != $this[0])
-                        $(this).val(query);
-                });
-
-                if ($(this).val().length == 0)
-                {
-                    location.replace('#');
-                    $(algoliaSettings.instant_jquery_selector).show();
-                    algolia_div.hide();
-                    return;
-                }
-
-                $(algoliaSettings.instant_jquery_selector).hide();
-
-                helper.clearRefinements();
-                helper.clearNumericRefinements();
-
-                query = $(this).val();
-
-
-                performQueries();
-            });
+            /**
+             * Initialization
+             */
 
             getRefinementsFromUrl();
+
+            /**
+             * Bindings
+             */
 
             $("body").on("click", ".sub_facet", function () {
                $(this).find("input[type='checkbox']").each(function (i) {
@@ -333,13 +342,7 @@ if (algoliaSettings.type_of_search == "instant")
                 performQueries();
             });
 
-            function updateSlideInfos(ui)
-            {
-                var infos = $(ui.handle).closest(".algolia-slider").nextAll(".algolia-slider-info");
 
-                infos.find(".min").html(ui.values[0]);
-                infos.find(".max").html(ui.values[1]);
-            }
 
             $("body").on("slide", "", function(event, ui) {
                 updateSlideInfos(ui);
@@ -366,9 +369,30 @@ if (algoliaSettings.type_of_search == "instant")
                 performQueries();
             });
 
-            window.gotoPage = function(page) {
-                helper.gotoPage(+page - 1);
-            };
+            $(algoliaSettings.search_input_selector).keyup(function (e) {
+                var $this = $(this);
+
+                $(algoliaSettings.search_input_selector).each(function (i) {
+                    if ($(this)[0] != $this[0])
+                        $(this).val(query);
+                });
+
+                if ($(this).val().length == 0)
+                {
+                    location.replace('#');
+
+                    $(algoliaSettings.instant_jquery_selector).html(old_content);
+
+                    return;
+                }
+
+                helper.clearRefinements();
+                helper.clearNumericRefinements();
+
+                query = $(this).val();
+
+                performQueries();
+            });
         }
         else
         {
