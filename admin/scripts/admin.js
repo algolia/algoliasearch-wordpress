@@ -152,6 +152,7 @@ jQuery(document).ready(function($) {
         $("body").on("click", ".close-results", function () {
             $("#results-wrapper").hide();
             $(this).hide();
+            $("#algolia_reindex").show();
         });
 
         $("#algolia_reindex").click(function (e) {
@@ -161,6 +162,8 @@ jQuery(document).ready(function($) {
 
             $("#results-wrapper").show();
             $("#reindex-log").html("");
+
+            $(this).hide();
 
             actions.push({ subaction: "handle_index_creation", name: "Handle index creation", sup: "" });
 
