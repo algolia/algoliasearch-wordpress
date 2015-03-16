@@ -15,7 +15,7 @@
     margin: 5px;
 }
 
-#algolia-settings .content-wrapper .content input[type="text"]
+#algolia-settings .content-wrapper .content input[type="text"], #algolia-settings .content-wrapper .content input[type="password"]
 {
     padding: 5px;
     border-radius: 5px;

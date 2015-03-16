@@ -82,7 +82,7 @@
                         </div>
                         <div class="content-item">
                             <div>Admin API Key</div>
-                            <div><input type="text" value="<?php echo $algolia_registry->admin_key ?>" name="ADMIN_KEY"></div>
+                            <div><input type="password" value="<?php echo $algolia_registry->admin_key ?>" name="ADMIN_KEY"></div>
                         </div>
                         <div class="content-item">
                             <input type="submit" name="submit" id="submit" class="button button-primary" value="Save Changes">
