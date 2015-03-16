@@ -58,29 +58,26 @@ jQuery(document).ready(function($) {
         $(div + " tr:not(:first)").each(function (i) {
             var tds = $(this).find("td");
 
-            if ($(tds[1]).find('input[type="checkbox"]').prop('checked') == false)
+            if ($(tds[0]).find('input[type="checkbox"]').prop('checked') == false)
             {
                 $(this).find("td").find("input,select").slice(1).prop('disabled', true);
             }
         });
     }
 
-    disableInput('#taxonomies');
-    disableInput('#extra-metas');
-    disableInput('#indexable-types');
+    var disabelable = ['#indexable-types', '#taxonomies', '#extra-metas', '#indexable-types'];
 
-    $("#extra-metas input").click(function () {
-       disableInput('#extra-metas');
-    });
+    for (var i = 0; i < disabelable.length; i++)
+    {
+        (function (i) {
+            disableInput(disabelable[i]);
 
-    $("#taxonomies input").click(function () {
-        disableInput('#taxonomies');
-    });
+            $(disabelable[i] + " input").click(function () {
+                disableInput(disabelable[i]);
+            });
+        })(i);
 
-    $("#indexable-types input").click(function () {
-        disableInput('#indexable-types');
-    });
-
+    }
 
     /**
      * Handle Theme chooser

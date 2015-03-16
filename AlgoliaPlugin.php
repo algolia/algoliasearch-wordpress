@@ -178,7 +178,7 @@ class AlgoliaPlugin
 
         $algolia_helper->checkRights();
 
-        wp_redirect('admin.php?page=algolia-settings#account');
+        wp_redirect('admin.php?page=algolia-settings#credentials');
     }
 
     /**
@@ -284,7 +284,7 @@ class AlgoliaPlugin
         $this->algolia_registry->search_input_selector  = str_replace('"', '\'', $search_input_selector);
         $this->algolia_registry->theme                  = $theme;
 
-        wp_redirect('admin.php?page=algolia-settings#search-ui-ux');
+        wp_redirect('admin.php?page=algolia-settings#configuration');
     }
 
     public function admin_post_custom_ranking()
