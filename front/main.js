@@ -355,7 +355,7 @@ if (algoliaSettings.type_of_search == "instant")
         }
         else
         {
-            console.log("Bad selector for instant search");
+            throw '[Algolia] Invalid instant-search selector: ' + algoliaSettings.instant_jquery_selector;
         }
     });
 }
