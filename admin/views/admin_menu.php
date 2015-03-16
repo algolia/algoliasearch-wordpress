@@ -68,7 +68,7 @@
 
 
         <div class="tab-content" id="account">
-            <form action="/wp-admin/admin-post.php" method="post">
+            <form action="<?php echo site_url(); ?>/wp-admin/admin-post.php" method="post">
                 <input type="hidden" name="action" value="update_account_info">
                 <div class="content-wrapper" id="account">
                     <div class="content">
