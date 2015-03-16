@@ -56,6 +56,8 @@ class AlgoliaHelper
 
         $facets = array();
 
+        $customRankingTemp = array();
+
         $facets[] = "type";
 
         global $attributesToIndex;
@@ -63,7 +65,6 @@ class AlgoliaHelper
         global $attributesToHighlight;
         global $attributesToSnippet;
 
-        global $customRankingTemp;
 
         $defaultSettings = array(
             "attributesToIndex"     => $attributesToIndex,
