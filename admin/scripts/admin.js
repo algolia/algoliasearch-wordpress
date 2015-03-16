@@ -43,6 +43,40 @@ jQuery(document).ready(function($) {
 
     selectTab(hash);
 
+    if ($("#custom-ranking tr").length > 1)
+        $('#custom-ranking .warning').hide();
+    else
+        $('#custom-ranking .content-item').hide();
+
+    /**
+     * Handle disabling
+     */
+
+    function disableInput(div)
+    {
+        $(div + " input, #extra-metas select").prop('disabled', false);
+        $(div + " tr:not(:first)").each(function (i) {
+            var tds = $(this).find("td");
+
+            if ($(tds[1]).find('input[type="checkbox"]').prop('checked') == false)
+            {
+                $(this).find("td").find("input,select").slice(1).prop('disabled', true);
+            }
+        });
+    }
+
+    disableInput('#taxonomies');
+    disableInput('#extra-metas');
+
+    $("#extra-metas input").click(function () {
+       disableInput('#extra-metas');
+    });
+
+    $("#taxonomies input").click(function () {
+        disableInput('#taxonomies');
+    });
+
+
     /**
      * Handle Theme chooser
      */

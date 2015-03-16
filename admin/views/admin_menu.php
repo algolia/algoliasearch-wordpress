@@ -230,7 +230,7 @@
                                 <tr data-order="<?php echo (10000 + $i); $i++ ?>">
                             <?php endif; ?>
                                 <td>
-                                    <i class="fa fa-arrows"></i>
+                                    <img width="10" src="<?php echo plugin_dir_url(__FILE__); ?>../imgs/move.png">
                                 </td>
                                 <td>
                                     <input type="checkbox"
@@ -288,7 +288,7 @@
                                         <?php else: ?>
                                             <tr data-order="<?php echo (10000 + $i); $i++ ?>">
                                         <?php endif; ?>
-                                            <td><i class="fa fa-arrows"></i></td>
+                                            <td><img width="10" src="<?php echo plugin_dir_url(__FILE__); ?>../imgs/move.png"></td>
                                             <td>
                                                 <!-- PREVENT FROM ERASING CUSTOM RANKING -->
                                                 <?php $customs = array('custom_ranking' => 'CUSTOM_RANKING', 'custom_ranking_order' => 'CUSTOM_RANKING_ORDER', 'custom_ranking_sort' => 'CUSTOM_RANKING_SORT'); ?>
@@ -388,7 +388,7 @@
                                             <?php else: ?>
                                                 <tr data-order="<?php echo (10000 + $i); $i++ ?>">
                                             <?php endif; ?>
-                                            <td><i class="fa fa-arrows"></i></td>
+                                            <td><img width="10" src="<?php echo plugin_dir_url(__FILE__); ?>../imgs/move.png"></td>
                                             <td><?php echo $type; ?></td>
                                             <td><?php echo $meta_key; ?></td>
                                             <td>
@@ -459,7 +459,7 @@
                                 <tr data-order="<?php echo (10000 + $i); $i++; ?>">
                                 <?php endif; ?>
                                     <td>
-                                        <i class="fa fa-arrows"></i>
+                                        <img width="10" src="<?php echo plugin_dir_url(__FILE__); ?>../imgs/move.png">
                                     </td>
                                     <td>
                                         <?php if (in_array($tax, $algolia_registry->extras) == false): ?>

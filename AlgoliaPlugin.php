@@ -52,7 +52,7 @@ class AlgoliaPlugin
 
     public function add_admin_menu()
     {
-        $icon_url = plugin_dir_url(__FILE__) . '/admin/imgs/icon.png';
+        $icon_url = plugin_dir_url(__FILE__) . 'admin/imgs/icon.png';
         add_menu_page('Algolia Settings', 'Algolia', 'manage_options', 'algolia-settings', array($this, 'admin_view'), $icon_url);
     }
 
@@ -71,7 +71,7 @@ class AlgoliaPlugin
         if (is_admin())
             return;
 
-        wp_enqueue_style('jquery-ui', plugin_dir_url(__FILE__) . '/lib/jquery/jquery-ui.min.css');
+        wp_enqueue_style('jquery-ui', plugin_dir_url(__FILE__) . 'lib/jquery/jquery-ui.min.css');
         wp_enqueue_style('algolia_styles', plugin_dir_url(__FILE__) . 'themes/' . $this->algolia_registry->theme . '/styles.css');
 
         $scripts = array(
@@ -155,7 +155,6 @@ class AlgoliaPlugin
         wp_localize_script('admin.js', 'algoliaAdminSettings', $algoliaAdminSettings);
         wp_enqueue_script('admin.js');
 
-        wp_enqueue_style('jquery-ui.min', plugin_dir_url(__FILE__) . 'admin/styles/font-awesome.min.css');
         wp_enqueue_style('styles-admin', plugin_dir_url(__FILE__) . 'admin/styles/styles.css');
         wp_enqueue_style('jquery-ui', plugin_dir_url(__FILE__) . 'lib/jquery/jquery-ui.min.css');
     }
