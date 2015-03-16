@@ -43,7 +43,7 @@ $attributesToIndex      = array("title", "unordered(content)", "author");
  */
 $attributesToIndex2     = array("title", "unordered(content)", "author", "type");
 $attributesToHighlight  = array("title", "content", "author", "type");
-$attributesToSnippet    = array("content:600");
+$attributesToSnippet    = array("content:100");
 
 
 /**
