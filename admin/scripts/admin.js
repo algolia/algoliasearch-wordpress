@@ -169,10 +169,6 @@ jQuery(document).ready(function($) {
 
             render(actions, -1);
             setTimeout(call, 1);
-
-            console.log(actions);
-            console.log(algoliaAdminSettings);
-
         });
     });
 });

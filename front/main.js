@@ -207,8 +207,6 @@ if (algoliaSettings.type_of_search == "instant")
 
                         html_content += "<div id='algolia_instant_selector'>";
 
-                        console.log(content);
-
                         if (content.hits.length > 0)
                         {
                             var facets = [];
