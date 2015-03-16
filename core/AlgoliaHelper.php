@@ -80,10 +80,10 @@ class AlgoliaHelper
 
         foreach (array_keys($this->algolia_registry->indexable_tax) as $name)
         {
-            if (in_array($index_name."_".$name, $indexes) == false)
+            if (in_array($index_name.$name, $indexes) == false)
             {
-                $this->setSettings($index_name."_".$name, $defaultSettings);
-                $this->setSettings($index_name."_".$name."_temp", $defaultSettings);
+                $this->setSettings($index_name.$name, $defaultSettings);
+                $this->setSettings($index_name.$name."_temp", $defaultSettings);
 
                 $facets[] = $name;
             }
@@ -105,8 +105,8 @@ class AlgoliaHelper
                     }
                 }
 
-                $this->setSettings($index_name."_".$name, $defaultSettings);
-                $this->setSettings($index_name."_".$name."_temp", $defaultSettings);
+                $this->setSettings($index_name.$name, $defaultSettings);
+                $this->setSettings($index_name.$name."_temp", $defaultSettings);
             }
         }
 
@@ -132,7 +132,7 @@ class AlgoliaHelper
             'customRanking'         => $customRanking
         );
 
-        $this->setSettings($index_name, $settings);
+        $this->setSettings($index_name.'all', $settings);
         $this->setSettings($index_name."_temp", $settings);
     }
 

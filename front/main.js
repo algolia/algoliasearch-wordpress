@@ -105,7 +105,7 @@ if (algoliaSettings.type_of_search == "instant")
 
                 algoliaSettings.facets = algoliaSettings.facets.sort(myCompare);
 
-                this.helper = new AlgoliaSearchHelper(algolia_client, algoliaSettings.index_name, {
+                this.helper = new AlgoliaSearchHelper(algolia_client, algoliaSettings.index_name + 'all', {
                     facets: this.conjunctive_facets,
                     disjunctiveFacets: this.disjunctive_facets,
                     hitsPerPage: algoliaSettings.number_by_page

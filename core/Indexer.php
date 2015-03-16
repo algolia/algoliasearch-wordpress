@@ -40,13 +40,13 @@ class Indexer
 
     public function moveTempIndexes()
     {
-        $this->algolia_helper->move($this->algolia_registry->index_name.'_temp', $this->algolia_registry->index_name);
+        $this->algolia_helper->move($this->algolia_registry->index_name.'all_temp', $this->algolia_registry->index_name.'all');
 
         foreach (array_keys($this->algolia_registry->indexable_tax) as $tax)
-            $this->algolia_helper->move($this->algolia_registry->index_name.'_'.$tax.'_temp', $this->algolia_registry->index_name.'_'.$tax);
+            $this->algolia_helper->move($this->algolia_registry->index_name.$tax.'_temp', $this->algolia_registry->index_name.$tax);
 
         foreach (array_keys($this->algolia_registry->indexable_types) as $type)
-            $this->algolia_helper->move($this->algolia_registry->index_name.'_'.$type.'_temp', $this->algolia_registry->index_name.'_'.$type);
+            $this->algolia_helper->move($this->algolia_registry->index_name.$type.'_temp', $this->algolia_registry->index_name.$type);
     }
 
     private function getPosts($type, $limit)
@@ -73,7 +73,7 @@ class Indexer
         foreach (get_terms($tax) as $term)
             $terms[] = $this->wordpress_fetcher->getTermObj($term);
 
-        $this->algolia_helper->pushObjects($this->algolia_registry->index_name.'_'.$tax.'_temp', $terms);
+        $this->algolia_helper->pushObjects($this->algolia_registry->index_name.$tax.'_temp', $terms);
     }
 
     public function indexTaxonomies()
@@ -86,33 +86,33 @@ class Indexer
     {
         $object = $this->wordpress_fetcher->getPostObj($post);
 
-        $this->algolia_helper->pushObject($this->algolia_registry->index_name.'_'.$post->post_type, $object);
-        $this->algolia_helper->pushObject($this->algolia_registry->index_name, $object);
+        $this->algolia_helper->pushObject($this->algolia_registry->index_name.$post->post_type, $object);
+        $this->algolia_helper->pushObject($this->algolia_registry->index_name.'all', $object);
     }
 
     public function deletePost($post_id, $type)
     {
-        $this->algolia_helper->deleteObject($this->algolia_registry->index_name.'_'.$type, $post_id);
-        $this->algolia_helper->deleteObject($this->algolia_registry->index_name, $post_id);
+        $this->algolia_helper->deleteObject($this->algolia_registry->index_name.$type, $post_id);
+        $this->algolia_helper->deleteObject($this->algolia_registry->index_name.'all', $post_id);
     }
 
     public function indexTerm($term, $taxonomy)
     {
         $object = $this->wordpress_fetcher->getTermObj($term);
 
-        $this->algolia_helper->pushObject($this->algolia_registry->index_name.'_'.$taxonomy, $object);
+        $this->algolia_helper->pushObject($this->algolia_registry->index_name.$taxonomy, $object);
     }
 
     public function deleteTerm($term_id, $taxonomy)
     {
-        $this->algolia_helper->deleteObject($this->algolia_registry->index_name.'_'.$taxonomy, $term_id);
+        $this->algolia_helper->deleteObject($this->algolia_registry->index_name.$taxonomy, $term_id);
     }
 
     public function indexPostsTypePart($type, $count, $offset)
     {
         $objects = $this->getPosts("AND post_type = '".$type."' ", "LIMIT ".($offset * $count).",".$count);
 
-        $this->algolia_helper->pushObjects($this->algolia_registry->index_name.'_'.$type.'_temp', $objects);
-        $this->algolia_helper->pushObjects($this->algolia_registry->index_name.'_temp', $objects);
+        $this->algolia_helper->pushObjects($this->algolia_registry->index_name.$type.'_temp', $objects);
+        $this->algolia_helper->pushObjects($this->algolia_registry->index_name.'all_temp', $objects);
     }
 }

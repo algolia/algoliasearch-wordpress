@@ -91,7 +91,7 @@ class AlgoliaPlugin
 
         foreach ($this->algolia_registry->indexable_types as $type => $obj)
         {
-            $indexes[] = array('index_name' => $this->algolia_registry->index_name . '_' . $type, 'name' => $obj['name'], 'order1' => 0, 'order2' => $obj['order']);
+            $indexes[] = array('index_name' => $this->algolia_registry->index_name . $type, 'name' => $obj['name'], 'order1' => 0, 'order2' => $obj['order']);
 
             if (isset($this->algolia_registry->metas[$type]))
                 foreach ($this->algolia_registry->metas[$type] as $meta_key => $meta_value)
@@ -100,7 +100,7 @@ class AlgoliaPlugin
         }
 
         foreach ($this->algolia_registry->indexable_tax as $tax => $obj)
-            $indexes[] = array('index_name' => $this->algolia_registry->index_name . '_' . $tax, 'name' => $obj['name'], 'order1' => 1, 'order2' => $obj['order']);
+            $indexes[] = array('index_name' => $this->algolia_registry->index_name . $tax, 'name' => $obj['name'], 'order1' => 1, 'order2' => $obj['order']);
 
         foreach ($this->algolia_registry->conjunctive_facets as $tax => $obj)
             $facets[] = array('tax' => $tax, 'name' => $obj['name'], 'order1' => 0,'order2' => $obj['order'], 'type' => 'conjunctive');
