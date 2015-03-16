@@ -164,29 +164,18 @@ class AlgoliaPlugin
         $app_id     = !empty($_POST['APP_ID'])      ? sanitize_text_field($_POST['APP_ID']) : '';
         $search_key = !empty($_POST['SEARCH_KEY'])  ? sanitize_text_field($_POST['SEARCH_KEY']) : '';
         $admin_key  = !empty($_POST['ADMIN_KEY'])   ? sanitize_text_field($_POST['ADMIN_KEY']) : '';
+        $index_name = !empty($_POST['INDEX_NAME']) ? sanitize_text_field($_POST['INDEX_NAME']) : '';
 
         $algolia_helper = new \Algolia\Core\AlgoliaHelper($app_id, $search_key, $admin_key);
 
         $this->algolia_registry->app_id     = $app_id;
         $this->algolia_registry->search_key = $search_key;
         $this->algolia_registry->admin_key  = $admin_key;
+        $this->algolia_registry->index_name = $index_name;
 
         $algolia_helper->checkRights();
 
         wp_redirect('admin.php?page=algolia-settings#account');
-    }
-
-    public function admin_post_update_index_name()
-    {
-        $index_name             = !empty($_POST['INDEX_NAME']) ? sanitize_text_field($_POST['INDEX_NAME']) : '';
-        $search_input_selector  = !empty($_POST['SEARCH_INPUT_SELECTOR']) ? $_POST['SEARCH_INPUT_SELECTOR'] : '';
-        $theme                  = !empty($_POST['THEME']) ? $_POST['THEME'] : 'default';
-
-        $this->algolia_registry->index_name             = $index_name;
-        $this->algolia_registry->search_input_selector  = str_replace('"', '\'', $search_input_selector);
-        $this->algolia_registry->theme                  = $theme;
-
-        wp_redirect('admin.php?page=algolia-settings#general-settings');
     }
 
     /**
@@ -286,7 +275,13 @@ class AlgoliaPlugin
         if (isset($_POST['NUMBER_BY_TYPE']) && is_numeric($_POST['NUMBER_BY_TYPE']))
             $this->algolia_registry->number_by_type = $_POST['NUMBER_BY_TYPE'];
 
-        wp_redirect('admin.php?page=algolia-settings#type-of-search');
+        $search_input_selector  = !empty($_POST['SEARCH_INPUT_SELECTOR']) ? $_POST['SEARCH_INPUT_SELECTOR'] : '';
+        $theme                  = !empty($_POST['THEME']) ? $_POST['THEME'] : 'default';
+
+        $this->algolia_registry->search_input_selector  = str_replace('"', '\'', $search_input_selector);
+        $this->algolia_registry->theme                  = $theme;
+
+        wp_redirect('admin.php?page=algolia-settings#search-ui-ux');
     }
 
     public function admin_post_custom_ranking()

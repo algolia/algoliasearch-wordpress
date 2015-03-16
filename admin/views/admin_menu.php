@@ -56,7 +56,6 @@
 
             <?php if ($algolia_registry->validCredential) : ?>
 
-            <div data-tab="#configuration" class="title">Configuration</div>
             <div data-tab="#search-ui-ux" class="title selected">Search UI/UX</div>
             <div data-tab="#indexable-types" class="title">Types</div>
             <div data-tab="#extra-metas" class="title">Extra attributes</div>
@@ -86,6 +85,14 @@
                             <div><input type="password" value="<?php echo $algolia_registry->admin_key ?>" name="ADMIN_KEY"></div>
                         </div>
                         <div class="content-item">
+                            <div>Indexes prefix</div>
+                            <div>
+                                <div>
+                                    <input type="text" value="<?php echo $algolia_registry->index_name; ?>" name="INDEX_NAME">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="content-item">
                             <input type="submit" name="submit" id="submit" class="button button-primary" value="Save Changes">
                         </div>
                     </div>
@@ -95,74 +102,18 @@
         </div>
 
         <?php if ($algolia_registry->validCredential) : ?>
-        <div class="tab-content" id="configuration">
-            <form action="<?php echo site_url(); ?>/wp-admin/admin-post.php" method="post">
-                <input type="hidden" name="action" value="update_index_name">
-                <div class="content-wrapper" id="customization">
-                    <div class="content">
-                        <div class="content-item">
-                            <div>Index name</div>
-                            <div>
-                                <div>
-                                    <input type="text" value="<?php echo $algolia_registry->index_name; ?>" name="INDEX_NAME">
-                                </div>
-                            </div>
-                        </div>
-                        <div class="content-item">
-                            <div>Search input jquery selector</div>
-                            <div>
-                                <input type="text" value="<?php echo str_replace("\\", "",$algolia_registry->search_input_selector); ?>" name="SEARCH_INPUT_SELECTOR">
-                            </div>
-                        </div>
-                        <div class="content-item">
-                            <div>Theme</div>
-                            <div class="theme-browser">
-                                <div class="themes">
-                                    <?php foreach ($theme_helper->available_themes() as $theme): ?>
-                                        <?php if ($theme->dir == $algolia_registry->theme): ?>
-                                            <div class="theme active">
-                                        <?php else: ?>
-                                            <div class="theme">
-                                        <?php endif; ?>
-                                                <label for="<?php echo $theme->dir; ?>">
-                                                    <div class="theme-screenshot">
-                                                        <?php if ($theme->screenshot): ?>
-                                                        <img src="<?php echo $theme->screenshot; ?>">
-                                                        <?php else: ?>
-                                                            <div class="no-screenshot">No screenshot</div>
-                                                        <?php endif; ?>
-                                                    </div>
-                                                    <div class="theme-name">
-                                                        <?php echo $theme->name; ?>
-                                                        <input type="radio"
-                                                               id="<?php echo $theme->dir; ?>"
-                                                               <?php checked($theme->dir == $algolia_registry->theme); ?>
-                                                               name='THEME'
-                                                               value="<?php echo $theme->dir; ?>"/>
-                                                    </div>
-                                                    <div><?php echo $theme->description; ?></div>
-                                                </label>
-                                            </div>
-                                    <?php endforeach; ?>
-                                </div>
-                            </div>
-                            <div style="clear: both"></div>
-                        </div>
-                        <div class="content-item">
-                            <input type="submit" name="submit" id="submit" class="button button-primary" value="Save Changes">
-                        </div>
-                    </div>
-                </div>
-            </form>
-        </div>
-
-
 
         <div class="tab-content" id="search-ui-ux">
             <form action="<?php echo site_url(); ?>/wp-admin/admin-post.php" method="post">
                 <input type="hidden" name="action" value="update_type_of_search" />
                 <div class="content-wrapper" id="type_of_search">
                     <div class="content">
+                        <div class="content-item">
+                            <div>Search input jquery selector</div>
+                            <div>
+                                <input type="text" value="<?php echo str_replace("\\", "",$algolia_registry->search_input_selector); ?>" name="SEARCH_INPUT_SELECTOR">
+                            </div>
+                        </div>
                         <div class="has-extra-content content-item">
                             <div>
                                 Autocomplete <input type="radio"
@@ -201,6 +152,40 @@
                                 </div>
                             </div>
                         </div>
+                        <div class="content-item">
+                            <div>Theme</div>
+                            <div class="theme-browser">
+                                <div class="themes">
+                                    <?php foreach ($theme_helper->available_themes() as $theme): ?>
+                                    <?php if ($theme->dir == $algolia_registry->theme): ?>
+                                    <div class="theme active">
+                                        <?php else: ?>
+                                        <div class="theme">
+                                            <?php endif; ?>
+                                            <label for="<?php echo $theme->dir; ?>">
+                                                <div class="theme-screenshot">
+                                                    <?php if ($theme->screenshot): ?>
+                                                        <img src="<?php echo $theme->screenshot; ?>">
+                                                    <?php else: ?>
+                                                        <div class="no-screenshot">No screenshot</div>
+                                                    <?php endif; ?>
+                                                </div>
+                                                <div class="theme-name">
+                                                    <?php echo $theme->name; ?>
+                                                    <input type="radio"
+                                                           id="<?php echo $theme->dir; ?>"
+                                                        <?php checked($theme->dir == $algolia_registry->theme); ?>
+                                                           name='THEME'
+                                                           value="<?php echo $theme->dir; ?>"/>
+                                                </div>
+                                                <div><?php echo $theme->description; ?></div>
+                                            </label>
+                                        </div>
+                                        <?php endforeach; ?>
+                                    </div>
+                                </div>
+                                <div style="clear: both"></div>
+                            </div>
                         <div class="content-item">
                             <input type="submit" name="submit" id="submit" class="button button-primary" value="Save Changes">
                         </div>

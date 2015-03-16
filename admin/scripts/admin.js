@@ -67,6 +67,7 @@ jQuery(document).ready(function($) {
 
     disableInput('#taxonomies');
     disableInput('#extra-metas');
+    disableInput('#indexable-types');
 
     $("#extra-metas input").click(function () {
        disableInput('#extra-metas');
@@ -74,6 +75,10 @@ jQuery(document).ready(function($) {
 
     $("#taxonomies input").click(function () {
         disableInput('#taxonomies');
+    });
+
+    $("#indexable-types input").click(function () {
+        disableInput('#indexable-types');
     });
 
 
