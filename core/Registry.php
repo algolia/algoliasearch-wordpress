@@ -12,7 +12,7 @@ class Registry
         'search_key'                => '',
         'admin_key'                 => '',
         'index_name'                => '',
-        'indexable_types'           => array(),
+        'indexable_types'           => array('post' => array('name' => 'Articles','order' => 0),'page' => array('name' => 'Pages','order' => 1)),
         'indexable_tax'             => array(),
         'type_of_search'            => 'autocomplete',
         'conjunctive_facets'        => array(),
