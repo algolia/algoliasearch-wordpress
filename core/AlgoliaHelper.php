@@ -58,15 +58,17 @@ class AlgoliaHelper
 
         $facets[] = "type";
 
-        $attributesToIndex      = array("title", "unordered(content)");
-        $attributesToIndex2     = array("title", "unordered(content)", "type");
-        $attributesToHighlight  = array("title", "content", "type", "excerpt");
+        global $attributesToIndex;
+        global $attributesToIndex2;
+        global $attributesToHighlight;
+        global $attributesToSnippet;
 
-        $customRankingTemp      = array();
+        global $customRankingTemp;
 
         $defaultSettings = array(
             "attributesToIndex"     => $attributesToIndex,
-            "attributesToHighlight" => $attributesToHighlight
+            "attributesToHighlight" => $attributesToHighlight,
+            "attributesToSnippet"   => $attributesToSnippet
         );
 
         if (isset($indexes["items"]))
@@ -126,6 +128,7 @@ class AlgoliaHelper
             'attributesToIndex'     => $attributesToIndex2,
             'attributesForFaceting' => array_values(array_unique($facets)),
             'attributesToHighlight' => $attributesToHighlight,
+            'attributesToSnippet'   => $attributesToSnippet,
             'customRanking'         => $customRanking
         );
 

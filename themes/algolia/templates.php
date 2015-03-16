@@ -22,12 +22,12 @@
                 <div class="media-body text-muted">
                     Posted on
                     {{#getDate}}{{date}}{{/getDate}}<br>
-                    Written by <strong>{{author_login}}</strong>
+                    Written by <strong>{{{_highlightResult.author.value}}}</strong>
                 </div>
             </div>
 
             <div class="entry">
-                <p>{{{ _highlightResult.excerpt.value }}}</p>
+                <p>{{{ _snippetResult.content.value }}}</p>
                 <a href="{{permalink}}" class="more-link">Continue reading…</a>
             </div>
         </div>
