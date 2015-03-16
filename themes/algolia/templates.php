@@ -11,30 +11,26 @@
 
 <script type="text/template" id="instant-content-template">
     <div class="hits">
-        {{#hits.length}}
-        <div class="infos">
-            {{nbHits}} results found matching "{{query}}" in {{processingTimeMS}} ms
-        </div>
-        {{/hits.length}}
-
         {{#hits}}
-        <div class="result entry-header">
-            <div>
-                {{#featureImage}}
-                <div class="entry-thumbnail">
-                    <img src="{{{ featureImage.file }}}" />
-                    </div>
-                {{/featureImage}}
-                <div>
-                    <h1 class="entry-title">
-                        <a href="{{permalink}}">
-                            {{{ _highlightResult.title.value }}}
-                            </a>
-                        </h1>
-                    </div>
-                {{ excerpt }}
+        <div class="post">
+            <h1><a href="{{permalink}}">{{{ _highlightResult.title.value }}}</a></h1>
+
+            <div class="media postmetadata">
+                <a href="" class="pull-left">
+                    <img class="author" src="//d3ibatyzauff7b.cloudfront.net/assets/about-{{author}}.jpg">
+                </a>
+                <div class="media-body text-muted">
+                    Posted on
+                    {{#getDate}}{{date}}{{/getDate}}<br>
+                    Written by <strong>{{author_login}}</strong>
                 </div>
             </div>
+
+            <div class="entry">
+                <p>{{{ _highlightResult.excerpt.value }}}</p>
+                <a href="{{permalink}}" class="more-link">Continue reading…</a>
+            </div>
+        </div>
         {{/hits}}
         {{^hits.length}}
         <div>

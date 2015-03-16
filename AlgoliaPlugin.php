@@ -74,10 +74,16 @@ class AlgoliaPlugin
         wp_enqueue_style('jquery-ui', plugin_dir_url(__FILE__) . '/lib/jquery/jquery-ui.min.css');
         wp_enqueue_style('algolia_styles', plugin_dir_url(__FILE__) . 'themes/' . $this->algolia_registry->theme . '/styles.css');
 
-        $scripts = array('jquery/jquery-ui.js', 'algolia/algoliasearch.min.js', 'hogan/hogan.js', 'typeahead/typeahead.js');
+        $scripts = array(
+            'themes/' . $this->algolia_registry->theme . '/theme.js',
+            'lib/jquery/jquery-ui.js',
+            'lib/algolia/algoliasearch.min.js',
+            'lib/hogan/hogan.js',
+            'lib/typeahead/typeahead.js'
+        );
 
         foreach ($scripts as $script) {
-            wp_register_script($script, plugin_dir_url(__FILE__) . 'lib/' . $script, array());
+            wp_register_script($script, plugin_dir_url(__FILE__) . $script, array());
             wp_localize_script($script, 'settings', array());
         }
 
