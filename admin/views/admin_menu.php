@@ -73,6 +73,7 @@
                 <div class="content-wrapper" id="account">
                     <div class="content">
                         <h3>Algolia account</h3>
+                        <p class="help-block">Configure here your <a href="https://www.algolia.com">Algolia</a> credentials. You can find them in the "<a href="https://www.algolia.com/licensing">Credentials</a>" section of your dashboard.</p>
                         <div class="content-item">
                             <label for="algolia_app_id">Application ID</label>
                             <div><input type="text" value="<?php echo $algolia_registry->app_id ?>" name="APP_ID" id="algolia_app_id"></div>
