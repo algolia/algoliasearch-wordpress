@@ -1,5 +1,3 @@
-console.log(algoliaSettings);
-
 /**
  * Common stuff
  */
