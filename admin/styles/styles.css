@@ -105,3 +105,13 @@
     margin-right: -5px;
     margin-bottom: 10px;
 }
+
+#algolia_reindex
+{
+    float: right;
+}
+
+#algolia_reindex i
+{
+    vertical-align: middle;
+}

@@ -9,8 +9,9 @@
 
     <div class="wrapper">
         <?php if ($algolia_registry->validCredential) : ?>
-        <button style="vertical-align: middle;" type="button" class="button button-secondary" id="algolia_reindex" name="algolia_reindex">
-            Re-index everything
+        <button type="button" class="button button-secondary" id="algolia_reindex" name="algolia_reindex">
+            <i class="dashicons dashicons-upload"></i>
+            Reindex data
         </button>
         <?php endif; ?>
 
