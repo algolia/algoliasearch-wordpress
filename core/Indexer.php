@@ -110,7 +110,7 @@ class Indexer
 
     public function indexPostsTypePart($type, $count, $offset)
     {
-        $objects = $this->getPosts("AND post_type = '".$type."' ", "LIMIT ".$offset.",".($count * $offset));
+        $objects = $this->getPosts("AND post_type = '".$type."' ", "LIMIT ".($offset * $count).",".$count);
 
         $this->algolia_helper->pushObjects($this->algolia_registry->index_name.'_'.$type.'_temp', $objects);
         $this->algolia_helper->pushObjects($this->algolia_registry->index_name.'_temp', $objects);
