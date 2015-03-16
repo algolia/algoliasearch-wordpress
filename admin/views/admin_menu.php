@@ -49,16 +49,16 @@
         <div class="tabs myclearfix">
 
             <?php if (! $algolia_registry->validCredential) : ?>
-            <div data-tab="#account" class="title selected">Credentials</div>
+            <div data-tab="#credentials" class="title selected">Credentials</div>
             <?php else: ?>
-            <div data-tab="#account" class="title">Credentials</div>
+            <div data-tab="#credentials" class="title">Credentials</div>
             <?php endif; ?>
 
             <?php if ($algolia_registry->validCredential) : ?>
 
-            <div data-tab="#search-ui-ux" class="title selected">Search UI/UX</div>
-            <div data-tab="#indexable-types" class="title">Types</div>
-            <div data-tab="#extra-metas" class="title">Extra attributes</div>
+            <div data-tab="#configuration" class="title selected">Configuration</div>
+            <div data-tab="#indexable-types" class="title">Indices</div>
+            <div data-tab="#extra-metas" class="title">Additional attributes</div>
             <div data-tab="#custom-ranking" class="title">Custom Ranking</div>
             <div data-tab="#taxonomies" class="title">Taxonomies</div>
 
@@ -67,30 +67,28 @@
         </div>
 
 
-        <div class="tab-content" id="account">
+        <div class="tab-content" id="credentials">
             <form action="<?php echo site_url(); ?>/wp-admin/admin-post.php" method="post">
                 <input type="hidden" name="action" value="update_account_info">
                 <div class="content-wrapper" id="account">
                     <div class="content">
+                        <h3>Algolia account</h3>
                         <div class="content-item">
-                            <div>Application ID</div>
-                            <div><input type="text" value="<?php echo $algolia_registry->app_id ?>" name="APP_ID"></div>
+                            <label for="algolia_app_id">Application ID</label>
+                            <div><input type="text" value="<?php echo $algolia_registry->app_id ?>" name="APP_ID" id="algolia_app_id"></div>
                         </div>
                         <div class="content-item">
-                            <div>Search-Only API Key</div>
-                            <div><input type="text" value="<?php echo $algolia_registry->search_key ?>" name="SEARCH_KEY"></div>
+                            <label for="algolia_search_api_key">Search-Only API Key</label>
+                            <div><input type="text" value="<?php echo $algolia_registry->search_key ?>" name="SEARCH_KEY" id="algolia_search_api_key"></div>
                         </div>
                         <div class="content-item">
-                            <div>Admin API Key</div>
-                            <div><input type="password" value="<?php echo $algolia_registry->admin_key ?>" name="ADMIN_KEY"></div>
+                            <label for="algolia_api_key">Admin API Key</label>
+                            <div><input type="password" value="<?php echo $algolia_registry->admin_key ?>" name="ADMIN_KEY" id="algolia_api_key"></div>
                         </div>
                         <div class="content-item">
-                            <div>Indexes prefix</div>
-                            <div>
-                                <div>
-                                    <input type="text" value="<?php echo $algolia_registry->index_name; ?>" name="INDEX_NAME">
-                                </div>
-                            </div>
+                            <label for="algolia_index_name">Index names prefix</label>
+                            <div><input type="text" value="<?php echo $algolia_registry->index_name; ?>" name="INDEX_NAME" id="algolia_index_name" placeholder="wordpress_"></div>
+                            <p class="description">This value will prepend all the index names.</p>
                         </div>
                         <div class="content-item">
                             <input type="submit" name="submit" id="submit" class="button button-primary" value="Save Changes">
@@ -103,57 +101,64 @@
 
         <?php if ($algolia_registry->validCredential) : ?>
 
-        <div class="tab-content" id="search-ui-ux">
+        <div class="tab-content" id="configuration">
             <form action="<?php echo site_url(); ?>/wp-admin/admin-post.php" method="post">
                 <input type="hidden" name="action" value="update_type_of_search" />
                 <div class="content-wrapper" id="type_of_search">
                     <div class="content">
+                        <h3>Search bar</h3>
                         <div class="content-item">
-                            <div>Search input jquery selector</div>
+                            <label for="search-input-selector">Search input jQuery selector</label>
                             <div>
-                                <input type="text" value="<?php echo str_replace("\\", "",$algolia_registry->search_input_selector); ?>" name="SEARCH_INPUT_SELECTOR">
+                                <input type="text" value="<?php echo str_replace("\\", "",$algolia_registry->search_input_selector); ?>" name="SEARCH_INPUT_SELECTOR" id="search-input-selector">
                             </div>
                         </div>
+                        <h3>Search experience</h3>
                         <div class="has-extra-content content-item">
                             <div>
-                                Autocomplete <input type="radio"
+                                <label for="instant_radio_autocomplete">Autocomplete</label>
+                                <input type="radio"
                                                 <?php checked($algolia_registry->type_of_search == 'autocomplete'); ?>
                                                 class="instant_radio"
                                                 name="TYPE_OF_SEARCH"
-                                                value="autocomplete" />
+                                                value="autocomplete"
+                                                id="instant_radio_autocomplete" />
                             </div>
                             <div class="show-hide" style="display: none;">
                                 <div>
-                                    Number of results by category
-                                    <input type="number" min="0" value="<?php echo $algolia_registry->number_by_type; ?>" name="NUMBER_BY_TYPE">
+                                    <label for="instant_radio_autocomplete_nb_results">Number of results by category</label>
+                                    <input type="number" min="0" value="<?php echo $algolia_registry->number_by_type; ?>" name="NUMBER_BY_TYPE" id="instant_radio_autocomplete_nb_results">
                                 </div>
                             </div>
                         </div>
                         <div class="has-extra-content content-item">
                             <div>
-                                Instant Search <input type="radio"
+                                <label for="instant_radio_instant">Instant-search results page</label>
+                                <input type="radio"
                                                       <?php checked($algolia_registry->type_of_search == 'instant'); ?>
                                                       class="instant_radio"
                                                       name="TYPE_OF_SEARCH"
-                                                      value="instant" />
+                                                      value="instant"
+                                                      id="instant_radio_instant" />
                             </div>
                             <div class="show-hide" style="display: none;">
                                 <div>
-                                    Jquery Selector <input type="text"
-                                                           id="jquery_selector"
-                                                           value="<?php echo str_replace("\\", "", $algolia_registry->instant_jquery_selector); ?>"
-                                                           placeholder="#content"
-                                                           name="JQUERY_SELECTOR"
-                                                           value="" />
+                                    <label for="instant_radio_instant_jquery_selector">jQuery Selector</label>
+                                    <input type="text"
+                                           id="instant_radio_instant_jquery_selector"
+                                           value="<?php echo str_replace("\\", "", $algolia_registry->instant_jquery_selector); ?>"
+                                           placeholder="#content"
+                                           name="JQUERY_SELECTOR"
+                                           value="" />
                                 </div>
                                 <div>
-                                    Number of results by page
-                                    <input type="number" min="0" value="<?php echo $algolia_registry->number_by_page; ?>" name="NUMBER_BY_PAGE">
+                                    <label for="instant_radio_instant_nb_results">Number of results by page</label>
+                                    <input type="number" min="0" value="<?php echo $algolia_registry->number_by_page; ?>" name="NUMBER_BY_PAGE" id="instant_radio_instant_nb_results">
                                 </div>
                             </div>
                         </div>
+                        <h3>Theme</h3>
                         <div class="content-item">
-                            <div>Theme</div>
                             <div class="theme-browser">
                                 <div class="themes">
                                     <?php foreach ($theme_helper->available_themes() as $theme): ?>
@@ -199,12 +204,11 @@
                 <input type="hidden" name="action" value="update_indexable_types">
                 <div class="content-wrapper" id="customization">
                     <div class="content">
-                        <table style="text-align: center; width: 100%;">
+                        <table>
                             <tr data-order="-1">
-                                <th></th>
-                                <th>Indexable</th>
+                                <th>Enabled</th>
                                 <th>Name</th>
-                                <th>Label</th>
+                                <th>Auto-completion menu label &amp; ordering</th>
                             </tr>
                         <?php foreach (get_post_types() as $type) : ?>
                             <?php
@@ -218,9 +222,6 @@
                                 <tr data-order="<?php echo (10000 + $i); $i++ ?>">
                             <?php endif; ?>
                                 <td>
-                                    <img width="10" src="<?php echo plugin_dir_url(__FILE__); ?>../imgs/move.png">
-                                </td>
-                                <td>
                                     <input type="checkbox"
                                            name="TYPES[<?php echo $type; ?>][SLUG]"
                                            value="<?php echo $type; ?>"
@@ -232,8 +233,8 @@
                                 </td>
                                 <td>
                                     <input type="text" value="<?php echo (isset($algolia_registry->indexable_types[$type]) ? $algolia_registry->indexable_types[$type]['name'] : "") ?>" name="TYPES[<?php echo $type; ?>][NAME]">
+                                    <img width="10" src="<?php echo plugin_dir_url(__FILE__); ?>../imgs/move.png">
                                 </td>
-
                             </tr>
                         <?php endforeach; ?>
                         </table>
@@ -253,13 +254,12 @@
                     <div class="content">
                         <table style="text-align: center; width: 100%;">
                             <tr data-order="-1">
-                                <th></th>
-                                <th>Indexable</th>
-                                <th>Facetable</th>
+                                <th>Enabled</th>
                                 <th>Name</th>
                                 <th>Meta key</th>
-                                <th>Label</th>
-                                <th>Type of facet</th>
+                                <th>Facetable</th>
+                                <th>Facet type</th>
+                                <th>Facet label &amp; ordering</th>
                             </tr>
                             <?php $i = 0; ?>
                             <?php foreach (get_post_types() as $type) : ?>
@@ -276,7 +276,6 @@
                                         <?php else: ?>
                                             <tr data-order="<?php echo (10000 + $i); $i++ ?>">
                                         <?php endif; ?>
-                                            <td><img width="10" src="<?php echo plugin_dir_url(__FILE__); ?>../imgs/move.png"></td>
                                             <td>
                                                 <!-- PREVENT FROM ERASING CUSTOM RANKING -->
                                                 <?php $customs = array('custom_ranking' => 'CUSTOM_RANKING', 'custom_ranking_order' => 'CUSTOM_RANKING_ORDER', 'custom_ranking_sort' => 'CUSTOM_RANKING_SORT'); ?>
@@ -300,6 +299,8 @@
                                                         && $algolia_registry->metas[$type][$meta_key]["indexable"]); ?>
                                                     >
                                             </td>
+                                            <td><?php echo $type; ?></td>
+                                            <td><?php echo $meta_key; ?></td>
                                             <td>
                                                 <input type="checkbox"
                                                        name="TYPES[<?php echo $type; ?>][METAS][<?php echo $meta_key; ?>][FACETABLE]"
@@ -308,12 +309,6 @@
                                                         && in_array($meta_key, array_keys($algolia_registry->metas[$type]))
                                                         && $algolia_registry->metas[$type][$meta_key]["facetable"]); ?>
                                                     >
-                                            </td>
-                                            <td><?php echo $type; ?></td>
-                                            <td><?php echo $meta_key; ?></td>
-                                            <td>
-                                                <input type="text"
-                                                       value="<?php echo (isset($algolia_registry->metas[$type][$meta_key]) ? $algolia_registry->metas[$type][$meta_key]["name"] : "") ?>" name="TYPES[<?php echo $type; ?>][METAS][<?php echo $meta_key; ?>][NAME]">
                                             </td>
                                             <td>
                                                 <select name="TYPES[<?php echo $type; ?>][METAS][<?php echo $meta_key; ?>][TYPE]">
@@ -327,6 +322,11 @@
                                                         <?php endif; ?>
                                                     <?php endforeach; ?>
                                                 </select>
+                                            </td>
+                                            <td>
+                                                <input type="text"
+                                                       value="<?php echo (isset($algolia_registry->metas[$type][$meta_key]) ? $algolia_registry->metas[$type][$meta_key]["name"] : "") ?>" name="TYPES[<?php echo $type; ?>][METAS][<?php echo $meta_key; ?>][NAME]">
+                                                <img width="10" src="<?php echo plugin_dir_url(__FILE__); ?>../imgs/move.png">
                                             </td>
                                         </tr>
                                     <?php endif; ?>
@@ -346,9 +346,6 @@
                 <input type="hidden" name="action" value="custom_ranking">
                 <div class="content-wrapper" id="customization">
                     <div class="content">
-                        <div class="warning">
-                            <div>You have to put extra-attributes as indexable first <span onclick="selectTab('#extra-metas');" style="vertical-align: inherit;" class="button button-secondary">Click here to do it</span></div>
-                        </div>
                         <table style="text-align: center; width: 100%;">
                             <tr data-order="-1">
                                 <th></th>
@@ -358,7 +355,7 @@
                                 <th>Custom Ranking Sort</th>
                             </tr>
 
-                            <?php $i = 0; ?>
+                            <?php $i = 0; $n = 0; ?>
                             <?php foreach (get_post_types() as $type) : ?>
                                 <?php foreach (get_meta_key_list($type) as $meta_key) : ?>
                                     <?php if (is_array($algolia_registry->indexable_types) && in_array($type, array_keys($algolia_registry->indexable_types))) : ?>
@@ -368,6 +365,7 @@
 
                                             <?php
                                             $order = -1;
+                                            ++$n;
                                             if (isset($algolia_registry->metas[$type]) && in_array($meta_key, array_keys($algolia_registry->metas[$type])))
                                                 $order = $algolia_registry->metas[$type][$meta_key]['custom_ranking_sort'];
                                             ?>
@@ -405,6 +403,11 @@
                                     <?php endif; ?>
                                 <?php endforeach; ?>
                             <?php endforeach; ?>
+                            <?php if ($n == 0): ?>
+                                <tr>
+                                    <td colspan="5" style="text-align: center">You first need to define additional attributes. <span onclick="selectTab('#extra-metas');" style="vertical-align: inherit;" class="button button-secondary">Click here to do it</span></td>
+                                </tr>
+                            <?php endif; ?>
                         </table>
                         <div class="content-item">
                             <input type="submit" name="submit" id="submit" class="button button-primary" value="Save Changes">
@@ -421,12 +424,11 @@
                     <div class="content">
                         <table style="text-align: center; width: 100%;">
                             <tr data-order="-1">
-                                <th></th>
-                                <th>Indexable</th>
-                                <th>Facetable</th>
+                                <th>Enabled</th>
                                 <th>Name</th>
-                                <th>Print Name</th>
-                                <th>Type of facet</th>
+                                <th>Facetable</th>
+                                <th>Facet type</th>
+                                <th>Facet label &amp; ordering</th>
                             </tr>
 
                             <?php $i = 0; ?>
@@ -447,9 +449,6 @@
                                 <tr data-order="<?php echo (10000 + $i); $i++; ?>">
                                 <?php endif; ?>
                                     <td>
-                                        <img width="10" src="<?php echo plugin_dir_url(__FILE__); ?>../imgs/move.png">
-                                    </td>
-                                    <td>
                                         <?php if (in_array($tax, $algolia_registry->extras) == false): ?>
                                         <input type="checkbox"
                                                name="TAX[<?php echo $tax; ?>][SLUG]"
@@ -457,8 +456,12 @@
                                             <?php checked(is_array($algolia_registry->indexable_tax) && in_array($tax, array_keys($algolia_registry->indexable_tax))); ?>
                                             >
                                         <?php else: ?>
+                                            <i class="dashicons dashicons-yes"></i>
                                             <input type="hidden" name="TAX[<?php echo $tax; ?>][SLUG]" value="<?php echo $tax; ?>">
                                         <?php endif; ?>
+                                    </td>
+                                    <td>
+                                        <?php echo $tax; ?>
                                     </td>
                                     <td>
                                         <input type="checkbox"
@@ -469,12 +472,6 @@
                                                name="TAX[<?php echo $tax; ?>][FACET]">
                                     </td>
                                     <td>
-                                        <?php echo $tax; ?>
-                                    </td>
-                                    <td>
-                                        <input type="text" value="<?php echo (isset($algolia_registry->indexable_tax[$tax]) ? $algolia_registry->indexable_tax[$tax]['name'] : "") ?>" name="TAX[<?php echo $tax; ?>][NAME]">
-                                    </td>
-                                    <td>
                                         <select name="TAX[<?php echo $tax; ?>][FACET_TYPE]">
                                                 <option  value="conjunctive">Conjunctive</option>
                                             <?php if (is_array($algolia_registry->disjunctive_facets) && in_array($tax, array_keys($algolia_registry->disjunctive_facets))): ?>
@@ -483,6 +480,10 @@
                                                 <option value="disjunctive">Disjunctive</option>
                                             <?php endif; ?>
                                         </select>
+                                    </td>
+                                    <td>
+                                        <input type="text" value="<?php echo (isset($algolia_registry->indexable_tax[$tax]) ? $algolia_registry->indexable_tax[$tax]['name'] : "") ?>" name="TAX[<?php echo $tax; ?>][NAME]">
+                                        <img width="10" src="<?php echo plugin_dir_url(__FILE__); ?>../imgs/move.png">
                                     </td>
                                 </tr>
                                 <?php endif; ?>
