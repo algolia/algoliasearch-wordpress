@@ -39,6 +39,8 @@ jQuery(document).ready(function ($) {
     });
 
     $(algoliaSettings.search_input_selector).keyup(function (e) {
+        e.preventDefault();
+
         var $this = $(this);
 
         $(algoliaSettings.search_input_selector).each(function (i) {
@@ -60,6 +62,8 @@ jQuery(document).ready(function ($) {
         engine.query = $(this).val();
 
         engine.performQueries();
+
+        return false;
     });
 
     window.finishRenderingResults = function()

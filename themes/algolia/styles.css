@@ -200,3 +200,8 @@
 #algolia_instant_selector .ui-widget-header {
     background-color: #bcbcbc;
 }
+
+#algolia_instant_selector .no-result
+{
+    padding: 20px;
+}

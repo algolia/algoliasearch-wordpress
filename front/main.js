@@ -31,8 +31,6 @@ if (algoliaSettings.type_of_search == "autocomplete")
 
         hogan_objs = [];
 
-        console.log(algoliaSettings);
-
         algoliaSettings.indexes.sort(myCompare);
 
         for (var i = 0; i < algoliaSettings.indexes.length; i++)
@@ -355,6 +353,7 @@ if (algoliaSettings.type_of_search == "instant")
                  * Initialization
                  */
 
+                $(algoliaSettings.search_input_selector).attr('autocomplete', 'off');
                 this.getRefinementsFromUrl();
             }
         }

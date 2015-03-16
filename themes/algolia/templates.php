@@ -17,7 +17,7 @@
 
             <div class="media postmetadata">
                 <a href="" class="pull-left">
-                    <img class="author" src="//d3ibatyzauff7b.cloudfront.net/assets/about-{{author}}.jpg">
+                    <img class="author" src="//d3ibatyzauff7b.cloudfront.net/assets/about-{{author_login}}.jpg">
                 </a>
                 <div class="media-body text-muted">
                     Posted on
@@ -33,7 +33,7 @@
         </div>
         {{/hits}}
         {{^hits.length}}
-        <div>
+        <div class="no-result">
             No results
         </div>
         {{/hits.length}}

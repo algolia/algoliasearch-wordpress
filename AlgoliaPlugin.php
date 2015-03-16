@@ -75,7 +75,6 @@ class AlgoliaPlugin
         wp_enqueue_style('algolia_styles', plugin_dir_url(__FILE__) . 'themes/' . $this->algolia_registry->theme . '/styles.css');
 
         $scripts = array(
-            'themes/' . $this->algolia_registry->theme . '/theme.js',
             'lib/jquery/jquery-ui.js',
             'lib/algolia/algoliasearch.min.js',
             'lib/hogan/hogan.js',
@@ -122,10 +121,17 @@ class AlgoliaPlugin
             'search_input_selector'     => str_replace("\\", "", $this->algolia_registry->search_input_selector)
         );
 
+
+
         wp_register_script('algolia_main.js', plugin_dir_url(__FILE__) . 'front/main.js', array_merge(array('jquery'), $scripts));
         wp_localize_script('algolia_main.js', 'algoliaSettings', $algoliaSettings);
 
         wp_enqueue_script('algolia_main.js');
+
+        wp_register_script('theme.js',  plugin_dir_url(__FILE__) . 'themes/' . $this->algolia_registry->theme . '/theme.js', array(), array());
+        wp_localize_script('theme.js', 'themesSettings', array());
+
+        wp_enqueue_script('theme.js');
 
     }
 
@@ -151,7 +157,7 @@ class AlgoliaPlugin
 
         wp_enqueue_style('jquery-ui.min', plugin_dir_url(__FILE__) . 'admin/styles/font-awesome.min.css');
         wp_enqueue_style('styles-admin', plugin_dir_url(__FILE__) . 'admin/styles/styles.css');
-        wp_enqueue_style('jquery-ui', plugin_dir_url(__FILE__) . 'front/jquery-ui.min.css');
+        wp_enqueue_style('jquery-ui', plugin_dir_url(__FILE__) . 'lib/jquery/jquery-ui.min.css');
     }
 
     public function admin_post_update_account_info()
