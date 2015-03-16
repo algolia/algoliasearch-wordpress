@@ -8,9 +8,11 @@
     <h2>Algolia Settings</h2>
 
     <div class="wrapper">
+        <?php if ($algolia_registry->validCredential) : ?>
         <button style="vertical-align: middle;" type="button" class="button button-secondary" id="algolia_reindex" name="algolia_reindex">
             Re-index everything
         </button>
+        <?php endif; ?>
 
         <div id="results-wrapper" style="display: none;">
             <div class="content">
