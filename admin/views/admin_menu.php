@@ -56,8 +56,8 @@
 
             <?php if ($algolia_registry->validCredential) : ?>
 
-            <div data-tab="#general-settings" class="title">General Settings</div>
-            <div data-tab="#type-of-search" class="title selected">Type of search</div>
+            <div data-tab="#configuration" class="title">Configuration</div>
+            <div data-tab="#search-ui-ux" class="title selected">Search UI/UX</div>
             <div data-tab="#indexable-types" class="title">Types</div>
             <div data-tab="#extra-metas" class="title">Extra attributes</div>
             <div data-tab="#custom-ranking" class="title">Custom Ranking</div>
@@ -95,7 +95,7 @@
         </div>
 
         <?php if ($algolia_registry->validCredential) : ?>
-        <div class="tab-content" id="general-settings">
+        <div class="tab-content" id="configuration">
             <form action="<?php echo site_url(); ?>/wp-admin/admin-post.php" method="post">
                 <input type="hidden" name="action" value="update_index_name">
                 <div class="content-wrapper" id="customization">
@@ -158,7 +158,7 @@
 
 
 
-        <div class="tab-content" id="type-of-search">
+        <div class="tab-content" id="search-ui-ux">
             <form action="<?php echo site_url(); ?>/wp-admin/admin-post.php" method="post">
                 <input type="hidden" name="action" value="update_type_of_search" />
                 <div class="content-wrapper" id="type_of_search">
