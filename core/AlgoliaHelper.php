@@ -133,7 +133,7 @@ class AlgoliaHelper
         );
 
         $this->setSettings($index_name.'all', $settings);
-        $this->setSettings($index_name."_temp", $settings);
+        $this->setSettings($index_name.'all_temp', $settings);
     }
 
     public function move($temp_index_name, $index_name)
