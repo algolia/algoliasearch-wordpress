@@ -96,7 +96,7 @@
 
         <?php if ($algolia_registry->validCredential) : ?>
         <div class="tab-content" id="general-settings">
-            <form action="/wp-admin/admin-post.php" method="post">
+            <form action="<?php echo site_url(); ?>/wp-admin/admin-post.php" method="post">
                 <input type="hidden" name="action" value="update_index_name">
                 <div class="content-wrapper" id="customization">
                     <div class="content">
@@ -159,7 +159,7 @@
 
 
         <div class="tab-content" id="type-of-search">
-            <form action="/wp-admin/admin-post.php" method="post">
+            <form action="<?php echo site_url(); ?>/wp-admin/admin-post.php" method="post">
                 <input type="hidden" name="action" value="update_type_of_search" />
                 <div class="content-wrapper" id="type_of_search">
                     <div class="content">
@@ -210,7 +210,7 @@
         </div>
 
         <div class="tab-content" id="indexable-types">
-            <form action="/wp-admin/admin-post.php" method="post">
+            <form action="<?php echo site_url(); ?>/wp-admin/admin-post.php" method="post">
                 <input type="hidden" name="action" value="update_indexable_types">
                 <div class="content-wrapper" id="customization">
                     <div class="content">
@@ -262,7 +262,7 @@
 
 
         <div class="tab-content" id="extra-metas">
-            <form action="/wp-admin/admin-post.php" method="post">
+            <form action="<?php echo site_url(); ?>/wp-admin/admin-post.php" method="post">
                 <input type="hidden" name="action" value="update_extra_meta">
                 <div class="content-wrapper" id="customization">
                     <div class="content">
@@ -357,7 +357,7 @@
         </div>
 
         <div class="tab-content" id="custom-ranking">
-            <form action="/wp-admin/admin-post.php" method="post">
+            <form action="<?php echo site_url(); ?>/wp-admin/admin-post.php" method="post">
                 <input type="hidden" name="action" value="custom_ranking">
                 <div class="content-wrapper" id="customization">
                     <div class="content">
@@ -430,7 +430,7 @@
             </div>
 
         <div class="tab-content" id="taxonomies">
-            <form action="/wp-admin/admin-post.php" method="post">
+            <form action="<?php echo site_url(); ?>/wp-admin/admin-post.php" method="post">
                 <input type="hidden" name="action" value="update_indexable_taxonomies">
                 <div class="content-wrapper" id="customization">
                     <div class="content">
