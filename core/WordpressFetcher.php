@@ -4,28 +4,28 @@
 class WordpressFetcher
 {
     private $termFieldsNames = array(
-        'term_taxonomy_id'	=> array ( 'label' => "objectID", 'type' => 'integer' ),
-        'term_id'			=> array ( 'label' => "termId", 'type' => 'integer' ),
-        'name'				=> array ( 'label' => "title", 'type' => 'string' ),
-        'slug'				=> array ( 'label' => "slug", 'type' => 'string' ),
-        'description'		=> array ( 'label' => "content", 'type' => 'string' ),
-        'parent'			=> array ( 'label' => "parent", 'type' => 'integer' ),
-        'count'				=> array ( 'label' => "postsRelated", 'type' => 'integer' ),
-        'taxonomy'			=> array ( 'label' => "taxonomy", 'type' => 'string' ),
+        'term_taxonomy_id'	=> array ('label' => "objectID",        'type' => 'integer'),
+        'term_id'			=> array ('label' => "termId",          'type' => 'integer'),
+        'name'				=> array ('label' => "title",           'type' => 'string'),
+        'slug'				=> array ('label' => "slug",            'type' => 'string'),
+        'description'		=> array ('label' => "content",         'type' => 'string'),
+        'parent'			=> array ('label' => "parent",          'type' => 'integer'),
+        'count'				=> array ('label' => "postsRelated",    'type' => 'integer'),
+        'taxonomy'			=> array ('label' => "taxonomy",        'type' => 'string'),
     );
 
     private $contentFieldsNames = array (
-        'ID'			=> array ( 'label' => "objectID",   'type' => 'integer' ),
-        'post_author'	=> array ( 'label' => "authorId",   'type' => 'integer' ),
-        'post_date'		=> array ( 'label' => "date",       'type' => 'datetime' ),
-        'post_content'	=> array ( 'label' => "content",    'type' => 'string' ),
-        'post_title'	=> array ( 'label' => "title",      'type' => 'string' ),
-        'post_excerpt'	=> array ( 'label' => "excerpt",    'type' => 'string' ),
-        'post_name'		=> array ( 'label' => "slug",       'type' => 'string' ),
-        'post_modified' => array ( 'label' => "modified",   'type' => 'datetime' ),
-        'post_parent'	=> array ( 'label' => "parent",     'type' => 'integer' ),
-        'menu_order'	=> array ( 'label' => "menu_order", 'type' => 'integer' ),
-        'post_type'		=> array ( 'label' => "type",       'type' => 'string' )
+        'ID'			=> array ('label' => "objectID",   'type' => 'integer'),
+        'post_author'	=> array ('label' => "authorId",   'type' => 'integer'),
+        'post_date'		=> array ('label' => "date",       'type' => 'datetime'),
+        'post_content'	=> array ('label' => "content",    'type' => 'string'),
+        'post_title'	=> array ('label' => "title",      'type' => 'string'),
+        'post_excerpt'	=> array ('label' => "excerpt",    'type' => 'string'),
+        'post_name'		=> array ('label' => "slug",       'type' => 'string'),
+        'post_modified' => array ('label' => "modified",   'type' => 'datetime'),
+        'post_parent'	=> array ('label' => "parent",     'type' => 'integer'),
+        'menu_order'	=> array ('label' => "menu_order", 'type' => 'integer'),
+        'post_type'		=> array ('label' => "type",       'type' => 'string')
     );
 
     private function cast($value, $type)
