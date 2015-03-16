@@ -5,7 +5,10 @@
 ?>
 
 <div id="algolia-settings" class="wrap">
-    <h2>Algolia Settings</h2>
+    <h2>
+        Algolia Search
+        <a href="https://www.algolia.com/dashboard" title="Go to the Algolia dashboard" style="text-decoration: none" target="_blank"><i class="dashicons dashicons-admin-links"></i></a>
+    </h2>
 
     <div class="wrapper">
         <?php if ($algolia_registry->validCredential) : ?>
@@ -56,7 +59,7 @@
 
             <?php if ($algolia_registry->validCredential) : ?>
 
-            <div data-tab="#configuration" class="title selected">Configuration</div>
+            <div data-tab="#configuration" class="title selected">UI Configuration</div>
             <div data-tab="#indexable-types" class="title">Indices</div>
             <div data-tab="#extra-metas" class="title">Additional attributes</div>
             <div data-tab="#custom-ranking" class="title">Custom Ranking</div>
@@ -108,23 +111,25 @@
                 <div class="content-wrapper" id="type_of_search">
                     <div class="content">
                         <h3>Search bar</h3>
+                        <p class="help-block">Configure here your search bar behavior.</p>
                         <div class="content-item">
-                            <label for="search-input-selector">Search input jQuery selector</label>
+                            <label for="search-input-selector">jQuery selector</label>
                             <div>
                                 <input type="text" value="<?php echo str_replace("\\", "",$algolia_registry->search_input_selector); ?>" name="SEARCH_INPUT_SELECTOR" id="search-input-selector">
+                                <p class="description">The DOM selector used to select your search bar.</p>
                             </div>
                         </div>
-                        <h3>Search experience</h3>
                         <div class="has-extra-content content-item">
+                            <label>Search experience</label>
                             <div>
-                                <label for="instant_radio_autocomplete">Autocomplete</label>
                                 <input type="radio"
                                                 <?php checked($algolia_registry->type_of_search == 'autocomplete'); ?>
                                                 class="instant_radio"
                                                 name="TYPE_OF_SEARCH"
                                                 value="autocomplete"
                                                 id="instant_radio_autocomplete" />
-                            </div>
+                                 <label for="instant_radio_autocomplete">Autocomplete</label>
+                           </div>
                             <div class="show-hide" style="display: none;">
                                 <div>
                                     <label for="instant_radio_autocomplete_nb_results">Number of results by category</label>
@@ -134,13 +139,13 @@
                         </div>
                         <div class="has-extra-content content-item">
                             <div>
-                                <label for="instant_radio_instant">Instant-search results page</label>
                                 <input type="radio"
                                                       <?php checked($algolia_registry->type_of_search == 'instant'); ?>
                                                       class="instant_radio"
                                                       name="TYPE_OF_SEARCH"
                                                       value="instant"
                                                       id="instant_radio_instant" />
+                                <label for="instant_radio_instant">Instant-search results page</label>
                             </div>
                             <div class="show-hide" style="display: none;">
                                 <div>
@@ -159,6 +164,7 @@
                             </div>
                         </div>
                         <h3>Theme</h3>
+                        <p class="help-block">Configure here the theme of your search results.</p>
                         <div class="content-item">
                             <div class="theme-browser">
                                 <div class="themes">
@@ -205,6 +211,7 @@
                 <input type="hidden" name="action" value="update_indexable_types">
                 <div class="content-wrapper" id="customization">
                     <div class="content">
+                        <p class="help-block">Configure here the indices you want create.</p>
                         <table>
                             <tr data-order="-1">
                                 <th>Enabled</th>
@@ -253,7 +260,8 @@
                 <input type="hidden" name="action" value="update_extra_meta">
                 <div class="content-wrapper" id="customization">
                     <div class="content">
-                        <table style="text-align: center; width: 100%;">
+                        <p class="help-block">Configure here the additional attributes you want to include in your Algolia records.</p>
+                        <table>
                             <tr data-order="-1">
                                 <th>Enabled</th>
                                 <th>Name</th>
@@ -347,7 +355,8 @@
                 <input type="hidden" name="action" value="custom_ranking">
                 <div class="content-wrapper" id="customization">
                     <div class="content">
-                        <table style="text-align: center; width: 100%;">
+                        <p class="help-block">Configure here the <strong>customRanking</strong> setting your your Algolia indices.</p>
+                        <table>
                             <tr data-order="-1">
                                 <th></th>
                                 <th>Name</th>
@@ -423,7 +432,8 @@
                 <input type="hidden" name="action" value="update_indexable_taxonomies">
                 <div class="content-wrapper" id="customization">
                     <div class="content">
-                        <table style="text-align: center; width: 100%;">
+                        <p class="help-block">Configure here the taxonomies you want to include in your Algolia records.</p>
+                        <table>
                             <tr data-order="-1">
                                 <th>Enabled</th>
                                 <th>Name</th>
