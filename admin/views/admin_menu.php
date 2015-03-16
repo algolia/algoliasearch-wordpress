@@ -49,9 +49,9 @@
         <div class="tabs myclearfix">
 
             <?php if (! $algolia_registry->validCredential) : ?>
-            <div data-tab="#account" class="title selected">Account</div>
+            <div data-tab="#account" class="title selected">Credentials</div>
             <?php else: ?>
-            <div data-tab="#account" class="title">Account</div>
+            <div data-tab="#account" class="title">Credentials</div>
             <?php endif; ?>
 
             <?php if ($algolia_registry->validCredential) : ?>
