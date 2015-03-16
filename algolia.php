@@ -33,18 +33,19 @@ new AlgoliaPluginAuto();
 
 $batch_count = 50;
 
-/**
- * Attribute to Index For Autocomplete
- */
+/* Attribute to Index For Autocomplete */
 $attributesToIndex      = array("title", "unordered(content)", "author");
 
-/**
- * Attribute to Instant search
- */
+/* Attribute to Instant search */
 $attributesToIndex2     = array("title", "unordered(content)", "author", "type");
+
 $attributesToHighlight  = array("title", "content", "author", "type");
 $attributesToSnippet    = array("content:100");
 
+$facetsLabels = array(
+    'post'      => 'Article',
+    'page'      => 'Page'
+);
 
 /**
  * Functions definitions

@@ -218,12 +218,15 @@ if (algoliaSettings.type_of_search == "instant")
                                     for (var key in content.facets[algoliaSettings.facets[i].tax])
                                     {
                                         var checked = $this.helper.isRefined(algoliaSettings.facets[i].tax, key);
+
+                                        var name = algoliaSettings.facetsLabels[key] != undefined ? algoliaSettings.facetsLabels[key] : key;
+
                                         sub_facets.push({
                                             conjunctive: 1,
                                             disjunctive: 0,
                                             slider: 0,
                                             checked: checked,
-                                            name: key,
+                                            name: name,
                                             count: content.facets[algoliaSettings.facets[i].tax][key]
                                         });
                                     }
@@ -245,7 +248,9 @@ if (algoliaSettings.type_of_search == "instant")
                                         if (current_max == undefined)
                                             current_max = max;
 
-                                        sub_facets.push({ current_min: current_min, current_max: current_max, count: min == max ? 0 : 1,slider: 1, conjunctive: 0, disjunctive: 0, name: key, min: min, max: max });
+                                        var name = algoliaSettings.facetsLabels[key] != undefined ? algoliaSettings.facetsLabels[key] : key;
+
+                                        sub_facets.push({ current_min: current_min, current_max: current_max, count: min == max ? 0 : 1,slider: 1, conjunctive: 0, disjunctive: 0, name: name, min: min, max: max });
                                     }
                                 }
 
@@ -254,7 +259,9 @@ if (algoliaSettings.type_of_search == "instant")
                                     for (var key in content.disjunctiveFacets[algoliaSettings.facets[i].tax])
                                     {
                                         var checked = $this.helper.isRefined(algoliaSettings.facets[i].tax, key);
-                                        sub_facets.push({ slider: 0, conjunctive: 0, disjunctive: 1, checked: checked, name: key, count: content.disjunctiveFacets[algoliaSettings.facets[i].tax][key] });
+                                        var name = algoliaSettings.facetsLabels[key] != undefined ? algoliaSettings.facetsLabels[key] : key;
+
+                                        sub_facets.push({ slider: 0, conjunctive: 0, disjunctive: 1, checked: checked, name: name, count: content.disjunctiveFacets[algoliaSettings.facets[i].tax][key] });
                                     }
                                 }
 

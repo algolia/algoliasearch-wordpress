@@ -108,6 +108,8 @@ class AlgoliaPlugin
         foreach ($this->algolia_registry->disjunctive_facets as $tax => $obj)
             $facets[] = array('tax' => $tax, 'name' => $obj['name'], 'order1' => 0,'order2' => $obj['order'], 'type' => 'disjunctive');
 
+        global $facetsLabels;
+
         $algoliaSettings = array(
             'app_id'                    => $this->algolia_registry->app_id,
             'search_key'                => $this->algolia_registry->search_key,
@@ -118,7 +120,8 @@ class AlgoliaPlugin
             'facets'                    => $facets,
             'number_by_type'            => $this->algolia_registry->number_by_type,
             'number_by_page'            => $this->algolia_registry->number_by_page,
-            'search_input_selector'     => str_replace("\\", "", $this->algolia_registry->search_input_selector)
+            'search_input_selector'     => str_replace("\\", "", $this->algolia_registry->search_input_selector),
+            'facetsLabels'              => $facetsLabels
         );
 
 
