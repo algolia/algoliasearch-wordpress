@@ -8,9 +8,11 @@
     <h2>Algolia Settings</h2>
 
     <div class="wrapper">
+        <?php if ($algolia_registry->validCredential) : ?>
         <button style="vertical-align: middle;" type="button" class="button button-secondary" id="algolia_reindex" name="algolia_reindex">
             Re-index everything
         </button>
+        <?php endif; ?>
 
         <div id="results-wrapper" style="display: none;">
             <div class="content">
@@ -66,7 +68,7 @@
 
 
         <div class="tab-content" id="account">
-            <form action="/wp-admin/admin-post.php" method="post">
+            <form action="<?php echo site_url(); ?>/wp-admin/admin-post.php" method="post">
                 <input type="hidden" name="action" value="update_account_info">
                 <div class="content-wrapper" id="account">
                     <div class="content">
@@ -80,7 +82,7 @@
                         </div>
                         <div class="content-item">
                             <div>Admin API Key</div>
-                            <div><input type="text" value="<?php echo $algolia_registry->admin_key ?>" name="ADMIN_KEY"></div>
+                            <div><input type="password" value="<?php echo $algolia_registry->admin_key ?>" name="ADMIN_KEY"></div>
                         </div>
                         <div class="content-item">
                             <input type="submit" name="submit" id="submit" class="button button-primary" value="Save Changes">

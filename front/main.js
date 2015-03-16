@@ -1,5 +1,3 @@
-console.log(algoliaSettings);
-
 /**
  * Common stuff
  */
@@ -329,7 +327,7 @@ if (algoliaSettings.type_of_search == "instant")
                             date.getSeconds(),
                         ];
 
-                        var days = ["Sunday", "Monday", "Tuesday", "Wenesday", "Thursday", "Friday", "Saturday"];
+                        var days = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
                         var months = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
 
                         var day = date.getDate();
@@ -357,7 +355,7 @@ if (algoliaSettings.type_of_search == "instant")
         }
         else
         {
-            console.log("Bad selector for instant search");
+            throw '[Algolia] Invalid instant-search selector: ' + algoliaSettings.instant_jquery_selector;
         }
     });
 }
