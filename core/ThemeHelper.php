@@ -30,7 +30,7 @@ class ThemeHelper
                 $theme->screenshot  = isset($configs['screenshot']) ? $configs['screenshot'] : 'screenshot.png';
 
                 if (file_exists($this->themes_dir.$dir.'/'.$theme->screenshot))
-                    $theme->screenshot = plugins_url().'/algolia/themes/'.$dir.'/'.$theme->screenshot;
+                    $theme->screenshot = plugin_dir_url(__FILE__).'../themes/'.$dir.'/'.$theme->screenshot;
                 else
                     $theme->screenshot = null;
 
