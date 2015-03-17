@@ -42,8 +42,8 @@
         </div>
         {{/hits}}
         {{^hits.length}}
-        <div>
-            No results
+        <div class="infos">
+            No results found matching "<strong>{{query}}</strong>".
         </div>
         {{/hits.length}}
     </div>
