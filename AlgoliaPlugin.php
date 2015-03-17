@@ -145,6 +145,7 @@ class AlgoliaPlugin
         $algoliaAdminSettings = array(
             "types" => array(),
             "batch_count" => $batch_count,
+            "site_url" => site_url()
         );
 
         foreach ($this->algolia_registry->indexable_types as $type => $obj)

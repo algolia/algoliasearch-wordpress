@@ -153,7 +153,7 @@ jQuery(document).ready(function($) {
         });
 
         $("#algolia_reindex").click(function (e) {
-            var base_url    = '/wp-admin/admin-post.php';
+            var base_url    = algoliaAdminSettings.site_url + '/wp-admin/admin-post.php';
             var actions     = [];
             var batch_count = algoliaAdminSettings.batch_count;
 

@@ -359,20 +359,20 @@
                         <table>
                             <tr data-order="-1">
                                 <th></th>
+                                <th>Enabled</th>
                                 <th>Meta key</th>
-                                <th>Enable Custom Ranking</th>
                                 <th>Custom Ranking Sort</th>
                             </tr>
 
                             <tr data-order="<?php echo $algolia_registry->date_custom_ranking['sort']; ?>">
                                 <td><img width="10" src="<?php echo plugin_dir_url(__FILE__); ?>../imgs/move.png"></td>
-                                <td>Date</td>
                                 <td>
                                     <input type="checkbox"
                                            name="TYPES[date][METAS][date][CUSTOM_RANKING]"
                                         <?php checked($algolia_registry->date_custom_ranking['enabled']); ?>
                                         />
                                 </td>
+                                <td>date</td>
                                 <td>
                                     <select name="TYPES[date][METAS][date][CUSTOM_RANKING_ORDER]">
                                         <?php foreach (array('asc' => 'ASC', 'desc' => 'DESC') as $key => $value): ?>
@@ -405,7 +405,6 @@
                                                 <tr data-order="<?php echo (10000 + $i); $i++ ?>">
                                             <?php endif; ?>
                                             <td><img width="10" src="<?php echo plugin_dir_url(__FILE__); ?>../imgs/move.png"></td>
-                                            <td data-type="<?php echo $type; ?>"><?php echo $meta_key; ?></td>
                                             <td>
                                                 <input type="checkbox"
                                                        name="TYPES[<?php echo $type; ?>][METAS][<?php echo $meta_key; ?>][CUSTOM_RANKING]"
@@ -414,6 +413,7 @@
                                                         && $algolia_registry->metas[$type][$meta_key]["custom_ranking"]); ?>
                                                     />
                                             </td>
+                                            <td data-type="<?php echo $type; ?>"><?php echo $meta_key; ?></td>
                                             <td>
                                                 <select name="TYPES[<?php echo $type; ?>][METAS][<?php echo $meta_key; ?>][CUSTOM_RANKING_ORDER]">
                                                     <?php foreach (array('asc' => 'ASC', 'desc' => 'DESC') as $key => $value): ?>
