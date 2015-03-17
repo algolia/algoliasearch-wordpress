@@ -40,7 +40,8 @@ if (algoliaSettings.type_of_search == "autocomplete")
                     header: '<div class="category">' + algoliaSettings.indexes[i].name + '</div>',
                     suggestion: function (hit) {
                         return $autocompleteTemplate.render(hit);
-                    }
+                    },
+                    footer: '<div class="footer">powered by <img src="' + algoliaSettings.plugin_url + '/front/algolia-logo.png"></div>'
                 }
             });
         }

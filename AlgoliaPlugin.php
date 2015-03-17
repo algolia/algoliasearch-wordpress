@@ -121,7 +121,8 @@ class AlgoliaPlugin
             'number_by_type'            => $this->algolia_registry->number_by_type,
             'number_by_page'            => $this->algolia_registry->number_by_page,
             'search_input_selector'     => str_replace("\\", "", $this->algolia_registry->search_input_selector),
-            'facetsLabels'              => $facetsLabels
+            'facetsLabels'              => $facetsLabels,
+            "plugin_url"                => plugin_dir_url(__FILE__)
         );
 
 
@@ -143,9 +144,9 @@ class AlgoliaPlugin
         global $batch_count;
 
         $algoliaAdminSettings = array(
-            "types" => array(),
-            "batch_count" => $batch_count,
-            "site_url" => site_url()
+            "types"         => array(),
+            "batch_count"   => $batch_count,
+            "site_url"      => site_url()
         );
 
         foreach ($this->algolia_registry->indexable_types as $type => $obj)

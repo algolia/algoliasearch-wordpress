@@ -73,6 +73,16 @@
     background-color: #ffffe0;
 }
 
+.twitter-typeahead .footer:not(:last-child)
+{
+    display: none;
+}
+
+.twitter-typeahead .footer
+{
+    font-size: 10px;
+}
+
 /**
  * Instant Search
  */
