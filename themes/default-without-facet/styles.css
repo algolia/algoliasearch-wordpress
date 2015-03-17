@@ -71,6 +71,7 @@
 .twitter-typeahead .tt-dropdown-menu .tt-suggestion em
 {
     background-color: #ffffe0;
+    font-style: normal;
 }
 
 /**
@@ -211,6 +212,7 @@
 #algolia_instant_selector em
 {
     background-color: #ffffe0;
+    font-style: normal;
 }
 
 #algolia_instant_selector h1

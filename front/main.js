@@ -292,7 +292,16 @@ if (algoliaSettings.type_of_search == "instant")
                             html_content += $this.facetsTemplate.render({ facets: facets });
                         }
 
-                        html_content += $this.template.render({ getDate: getDate, hits: content.hits, nbHits: content.nbHits, query: $this.query, processingTimeMS: content.processingTimeMS  });
+                        html_content += $this.template.render({
+                            getDate: getDate,
+                            hits: content.hits,
+                            nbHits: content.nbHits,
+                            nbHits_zero: (content.nbHits === 0),
+                            nbHits_one: (content.nbHits === 1),
+                            nbHits_many: (content.nbHits > 1),
+                            query: $this.query,
+                            processingTimeMS: content.processingTimeMS
+                        });
 
                         if (content.hits.length > 0)
                             html_content += $this.paginationTemplate.render({ pages: pages, prev_page: (content.page > 0 ? content.page : false), next_page: (content.page + 1 < content.nbPages ? content.page + 2 : false) });

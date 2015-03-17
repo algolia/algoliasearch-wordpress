@@ -14,7 +14,7 @@
         {{#hits.length}}
         <div class="infos">
             <div style="float: left">
-                {{nbHits}} results found matching "{{query}}" in {{processingTimeMS}} ms
+                {{nbHits}} result{{^nbHits_one}}s{{/nbHits_one}} found matching "<strong>{{query}}</strong>" in {{processingTimeMS}} ms
             </div>
             <div style="float: right;">
                 powered by <img src="<?php echo plugin_dir_url(__FILE__); ?>../../front/algolia-logo.png">
@@ -48,8 +48,8 @@
         </div>
         {{/hits}}
         {{^hits.length}}
-        <div>
-            No results
+        <div class="infos">
+            No results found matching "<strong>{{query}}</strong>".
         </div>
         {{/hits.length}}
     </div>
