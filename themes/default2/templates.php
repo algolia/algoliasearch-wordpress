@@ -13,7 +13,7 @@
     <div class="hits">
         {{#hits.length}}
         <div class="infos">
-            {{nbHits}} results found matching "{{query}}" in {{processingTimeMS}} ms
+            {{nbHits}} result{{^nbHits_one}}s{{/nbHits_one}} found matching "<strong>{{query}}</strong>" in {{processingTimeMS}} ms
         </div>
         {{/hits.length}}
 
