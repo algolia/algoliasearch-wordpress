@@ -23,7 +23,8 @@ class Registry
         'number_by_page'            => 3,
         'number_by_type'            => 2,
         'search_input_selector'     => "[name='s']",
-        'theme'                     => 'default'
+        'theme'                     => 'default',
+        'date_custom_ranking'       => array('order' => 10000, 'enabled' => true, 'sort' => 'desc')
     );
 
     public static function getInstance()

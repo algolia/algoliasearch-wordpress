@@ -289,8 +289,9 @@ class AlgoliaPlugin
 
     public function admin_post_custom_ranking()
     {
-        $indexable_types = $this->algolia_registry->indexable_types;
-        $metas = $this->algolia_registry->metas;
+        $indexable_types        = $this->algolia_registry->indexable_types;
+        $metas                  = $this->algolia_registry->metas;
+        $date_custom_ranking    = array();
 
         if (isset($_POST['TYPES']) && is_array($_POST['TYPES']))
         {
@@ -298,11 +299,11 @@ class AlgoliaPlugin
 
             foreach ($_POST['TYPES'] as $key => $value)
             {
-                if (in_array($key, array_keys($indexable_types)) && isset($value["METAS"]) && is_array($value["METAS"]))
+                if ($key == 'date' || (in_array($key, array_keys($indexable_types)) && isset($value["METAS"]) && is_array($value["METAS"])))
                 {
                     foreach ($value["METAS"] as $meta_key => $meta_value)
                     {
-                        if (isset($metas[$key][$meta_key]) && $metas[$key][$meta_key]['indexable'])
+                        if ($meta_key != "date" && isset($metas[$key][$meta_key]) && $metas[$key][$meta_key]['indexable'])
                         {
                             $metas[$key][$meta_key]['custom_ranking']       = isset($meta_value['CUSTOM_RANKING']) ? 1 : 0;
                             $metas[$key][$meta_key]["custom_ranking_order"] = $meta_value["CUSTOM_RANKING_ORDER"];
@@ -314,10 +315,24 @@ class AlgoliaPlugin
 
                             $i++;
                         }
+
+                        if ($meta_key == "date")
+                        {
+                            $date_custom_ranking['enabled'] = isset($meta_value['CUSTOM_RANKING']) ? 1 : 0;
+                            $date_custom_ranking['order'] = $meta_value["CUSTOM_RANKING_ORDER"];
+
+                            if ($date_custom_ranking['enabled'])
+                                $date_custom_ranking["sort"]  = $i;
+                            else
+                                $date_custom_ranking["sort"]  = 10000;
+
+                            $i++;
+                        }
                     }
                 }
             }
 
+            $this->algolia_registry->date_custom_ranking = $date_custom_ranking;
             $this->algolia_registry->metas = $metas;
         }
 

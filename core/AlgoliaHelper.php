@@ -111,19 +111,22 @@ class AlgoliaHelper
             }
         }
 
+        $date_custom_ranking = $this->algolia_registry->date_custom_ranking;
+        if ($date_custom_ranking['enabled'])
+            $customRankingTemp[] = array('sort' => $date_custom_ranking['sort'], 'value' => $date_custom_ranking['order'].'(date)');
+
         usort($customRankingTemp, function ($a, $b) {
             if ($a['sort'] < $b['sort'])
                 return -1;
             if ($a['sort'] == $b['sort'])
                 return 0;
-            return -1;
+            return 1;
         });
+
 
         $customRanking = array_map(function ($obj) {
             return $obj['value'];
         }, $customRankingTemp);
-
-        $customRanking[] = "desc(date)";
 
         $settings = array(
             'attributesToIndex'     => $attributesToIndex2,

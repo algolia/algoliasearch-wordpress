@@ -359,12 +359,32 @@
                         <table>
                             <tr data-order="-1">
                                 <th></th>
-                                <th>Name</th>
                                 <th>Meta key</th>
                                 <th>Enable Custom Ranking</th>
                                 <th>Custom Ranking Sort</th>
                             </tr>
 
+                            <tr data-order="<?php echo $algolia_registry->date_custom_ranking['sort']; ?>">
+                                <td><img width="10" src="<?php echo plugin_dir_url(__FILE__); ?>../imgs/move.png"></td>
+                                <td>Date</td>
+                                <td>
+                                    <input type="checkbox"
+                                           name="TYPES[date][METAS][date][CUSTOM_RANKING]"
+                                        <?php checked($algolia_registry->date_custom_ranking['enabled']); ?>
+                                        />
+                                </td>
+                                <td>
+                                    <select name="TYPES[date][METAS][date][CUSTOM_RANKING_ORDER]">
+                                        <?php foreach (array('asc' => 'ASC', 'desc' => 'DESC') as $key => $value): ?>
+                                            <?php if ($algolia_registry->date_custom_ranking['order'] == $key): ?>
+                                                <option selected value=<?php echo $key; ?>><?php echo $value; ?></option>
+                                            <?php else : ?>
+                                                <option value=<?php echo $key; ?>><?php echo $value; ?></option>
+                                            <?php endif; ?>
+                                        <?php endforeach; ?>
+                                    </select>
+                                </td>
+                            </tr>
                             <?php $i = 0; $n = 0; ?>
                             <?php foreach (get_post_types() as $type) : ?>
                                 <?php foreach (get_meta_key_list($type) as $meta_key) : ?>
@@ -385,8 +405,7 @@
                                                 <tr data-order="<?php echo (10000 + $i); $i++ ?>">
                                             <?php endif; ?>
                                             <td><img width="10" src="<?php echo plugin_dir_url(__FILE__); ?>../imgs/move.png"></td>
-                                            <td><?php echo $type; ?></td>
-                                            <td><?php echo $meta_key; ?></td>
+                                            <td data-type="<?php echo $type; ?>"><?php echo $meta_key; ?></td>
                                             <td>
                                                 <input type="checkbox"
                                                        name="TYPES[<?php echo $type; ?>][METAS][<?php echo $meta_key; ?>][CUSTOM_RANKING]"
