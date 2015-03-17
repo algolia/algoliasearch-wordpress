@@ -13,7 +13,13 @@
     <div class="hits">
         {{#hits.length}}
         <div class="infos">
-            {{nbHits}} results found matching "{{query}}" in {{processingTimeMS}} ms
+            <div style="float: left">
+                {{nbHits}} results found matching "{{query}}" in {{processingTimeMS}} ms
+            </div>
+            <div style="float: right;">
+                powered by <img src="<?php echo plugin_dir_url(__FILE__); ?>../../front/algolia-logo.png">
+            </div>
+            <div style="clear: both;"></div>
         </div>
         {{/hits.length}}
 
@@ -51,74 +57,6 @@
 </script>
 
 <script type="text/template" id="instant-facets-template">
-<div class="facets">
-    {{#facets}}
-    {{#count}}
-    <div class="facet">
-        <div class="name">
-            {{ facet_categorie_name }}
-            </div>
-        <div>
-            {{#sub_facets}}
-
-                {{#conjunctive}}
-
-                    {{#checked}}
-                        <div class="checked sub_facet conjunctive">
-                    {{/checked}}
-
-                    {{^checked}}
-                        <div class="sub_facet conjunctive">
-                    {{/checked}}
-
-                    {{#checked}}
-                            <input style="display: none;" data-tax="{{tax}}" checked data-name="{{name}}" class="facet_value" type="checkbox" />
-                    {{/checked}}
-
-                    {{^checked}}
-                            <input style="display: none;" data-tax="{{tax}}" data-name="{{name}}" class="facet_value" type="checkbox" />
-                    {{/checked}}
-
-                            {{name}} ({{count}})
-                        </div>
-                {{/conjunctive}}
-
-                {{#slider}}
-                <div class="algolia-slider" data-tax="{{tax}}" data-min="{{min}}" data-max="{{max}}"></div>
-                <div class="algolia-slider-info">
-                    <div class="min" style="float: left;">{{current_min}}</div>
-                    <div class="max" style="float: right;">{{current_max}}</div>
-                    <div style="clear: both"></div>
-                    </div>
-                {{/slider}}
-
-                {{#disjunctive}}
-
-                    {{#checked}}
-                        <div class="checked sub_facet disjunctive">
-                    {{/checked}}
-
-                    {{^checked}}
-                        <div class="sub_facet disjunctive">
-                    {{/checked}}
-
-                    {{#checked}}
-                            <input data-tax="{{tax}}" checked data-name="{{name}}" class="facet_value" type="checkbox" />
-                    {{/checked}}
-
-                    {{^checked}}
-                            <input data-tax="{{tax}}" data-name="{{name}}" class="facet_value" type="checkbox" />
-                    {{/checked}}
-
-                         {{name}} ({{count}})
-                        </div>
-                {{/disjunctive}}
-            {{/sub_facets}}
-        </div>
-    </div>
-    {{/count}}
-    {{/facets}}
-</div>
 </script>
 
 <script type="text/template" id="instant-pagination-template">

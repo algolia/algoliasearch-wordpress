@@ -13,7 +13,13 @@
     <div class="hits">
         {{#hits.length}}
         <div class="infos">
-            {{nbHits}} results found matching "{{query}}" in {{processingTimeMS}} ms
+            <div style="float: left">
+                {{nbHits}} results found matching "{{query}}" in {{processingTimeMS}} ms
+            </div>
+            <div style="float: right;">
+                powered by <img src="<?php echo plugin_dir_url(__FILE__); ?>../../front/algolia-logo.png">
+            </div>
+            <div style="clear: both;"></div>
         </div>
         {{/hits.length}}
 
