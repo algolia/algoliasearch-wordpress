@@ -359,9 +359,9 @@
                         <table>
                             <tr data-order="-1">
                                 <th></th>
+                                <th>Enabled</th>
                                 <th>Name</th>
                                 <th>Meta key</th>
-                                <th>Enable Custom Ranking</th>
                                 <th>Custom Ranking Sort</th>
                             </tr>
 
@@ -385,8 +385,6 @@
                                                 <tr data-order="<?php echo (10000 + $i); $i++ ?>">
                                             <?php endif; ?>
                                             <td><img width="10" src="<?php echo plugin_dir_url(__FILE__); ?>../imgs/move.png"></td>
-                                            <td><?php echo $type; ?></td>
-                                            <td><?php echo $meta_key; ?></td>
                                             <td>
                                                 <input type="checkbox"
                                                        name="TYPES[<?php echo $type; ?>][METAS][<?php echo $meta_key; ?>][CUSTOM_RANKING]"
@@ -395,6 +393,8 @@
                                                         && $algolia_registry->metas[$type][$meta_key]["custom_ranking"]); ?>
                                                     />
                                             </td>
+                                            <td><?php echo $type; ?></td>
+                                            <td><?php echo $meta_key; ?></td>
                                             <td>
                                                 <select name="TYPES[<?php echo $type; ?>][METAS][<?php echo $meta_key; ?>][CUSTOM_RANKING_ORDER]">
                                                     <?php foreach (array('asc' => 'ASC', 'desc' => 'DESC') as $key => $value): ?>
