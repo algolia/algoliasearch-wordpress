@@ -10,13 +10,13 @@
 </script>
 
 <script type="text/template" id="instant-content-template">
-    <div class="hits">
+    <div class="hits{{#facets_count}} with_facets{{/facets_count}}">
         {{#hits.length}}
         <div class="infos">
             <div style="float: left">
                 {{nbHits}} result{{^nbHits_one}}s{{/nbHits_one}} found matching "<strong>{{query}}</strong>" in {{processingTimeMS}} ms
             </div>
-            <div style="float: right;">
+            <div class="logo" style="float: right;">
                 powered by <img src="<?php echo plugin_dir_url(__FILE__); ?>../../front/algolia-logo.png">
             </div>
             <div style="clear: both;"></div>
@@ -57,7 +57,7 @@
 </script>
 
 <script type="text/template" id="instant-facets-template">
-<div class="facets">
+<div class="facets{{#count}} with_facets{{/count}}">
     {{#facets}}
     {{#count}}
     <div class="facet">

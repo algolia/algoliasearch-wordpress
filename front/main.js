@@ -206,9 +206,10 @@ if (algoliaSettings.type_of_search == "instant")
 
                         html_content += "<div id='algolia_instant_selector'>";
 
+                        var facets = [];
+
                         if (content.hits.length > 0)
                         {
-                            var facets = [];
 
                             for (var i = 0; i < algoliaSettings.facets.length; i++)
                             {
@@ -289,10 +290,11 @@ if (algoliaSettings.type_of_search == "instant")
                                 pages.push({ current: false, number: content.nbPages });
                             }
 
-                            html_content += $this.facetsTemplate.render({ facets: facets });
+                            html_content += $this.facetsTemplate.render({ facets: facets, count: facets.length });
                         }
 
                         html_content += $this.template.render({
+                            facets_count: facets.length,
                             getDate: getDate,
                             hits: content.hits,
                             nbHits: content.nbHits,

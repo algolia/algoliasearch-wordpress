@@ -113,7 +113,7 @@
     width: 200px;
 }
 
-#algolia_instant_selector .hits
+#algolia_instant_selector .hits.with_facets
 {
     float: left;
     width: 80%;
@@ -132,7 +132,13 @@
  * Facets
  */
 
-#algolia_instant_selector .facets
+#algolia_instant_selector .infos .logo
+{
+    font-size: 10px;
+    line-height: 28px;
+}
+
+#algolia_instant_selector .facets.with_facets
 {
     float: left;
     width: 20%;
