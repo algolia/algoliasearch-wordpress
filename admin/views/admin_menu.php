@@ -69,13 +69,13 @@
 
             <?php if ($algolia_registry->validCredential) : ?>
 
-            <div data-tab="#configuration"          class="title selected">UI Configuration</div>
+            <div data-tab="#configuration"          class="title selected">UI</div>
             <div data-tab="#indexable-types"        class="title">Indices</div>
-            <div data-tab="#searchable_attributes"  class="title">Searchable Attibutes</div>
-            <div data-tab="#sortable_attributes"    class="title">Sorting Attributes</div>
-            <div data-tab="#extra-metas"            class="title">Additional attributes</div>
-            <div data-tab="#custom-ranking"         class="title">Custom Ranking</div>
             <div data-tab="#taxonomies"             class="title">Taxonomies</div>
+            <div data-tab="#extra-metas"            class="title">Attributes</div>
+            <div data-tab="#searchable_attributes"  class="title">Search Configuration</div>
+            <div data-tab="#custom-ranking"         class="title">Ranking</div>
+            <div data-tab="#sortable_attributes"    class="title">Sorting</div>
 
             <?php endif; ?>
             <div style="clear:both"></div>
@@ -225,7 +225,7 @@
                 <input type="hidden" name="action" value="update_indexable_types">
                 <div class="content-wrapper" id="customization">
                     <div class="content">
-                        <p class="help-block">Configure here the indices you want create.</p>
+                        <p class="help-block">Configure here indices you want create.</p>
                         <table>
                             <tr data-order="-1">
                                 <th>Enabled</th>
@@ -273,7 +273,7 @@
                 <input type="hidden" name="action" value="update_searchable_attributes">
                 <div class="content-wrapper" id="customization">
                     <div class="content">
-                        <p class="help-block">Configure here the attribute you want to be able to search in.</p>
+                        <p class="help-block">Configure here attributes you want to be able to search in.</p>
                         <table>
                             <tr data-order="-1">
                                 <th>Enabled</th>
@@ -350,7 +350,7 @@
                 <input type="hidden" name="action" value="update_sortable_attributes">
                 <div class="content-wrapper" id="customization">
                     <div class="content">
-                        <p class="help-block">Configure here the attribute you want to be able to sort on.</p>
+                        <p class="help-block">Configure here attributes you want to be able to sort on.</p>
                         <table>
                             <tr data-order="-1">
                                 <th>Enabled</th>
