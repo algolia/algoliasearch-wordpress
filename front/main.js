@@ -80,6 +80,7 @@ if (algoliaSettings.type_of_search == "autocomplete")
 if (algoliaSettings.type_of_search == "instant")
 {
     var engine;
+    var history_timeout;
 
     jQuery(document).ready(function ($) {
 
@@ -166,7 +167,15 @@ if (algoliaSettings.type_of_search == "instant")
 
                     var url = '#q=' + encodeURIComponent(this.query) + '&page=' + this.helper.page + '&refinements=' + encodeURIComponent(JSON.stringify(refinements)) + '&numerics_refinements=' + encodeURIComponent(JSON.stringify(this.helper.numericsRefinements)) + '&in=' + encodeURIComponent(JSON.stringify(this.helper.getIndex()));
 
-                    history.pushState(url, null, url);
+                    if (push_state)
+                        history.pushState(url, null, url);
+                    else
+                    {
+                        clearTimeout(history_timeout);
+                        history_timeout = setTimeout(function () {
+                            history.pushState(url, null, url);
+                        }, 1000);
+                    }
                 };
 
                 this.getRefinementsFromUrl = function()
