@@ -60,11 +60,16 @@ class AlgoliaHelper
 
         $facets[] = "type";
 
-        global $attributesToIndex;
-        global $attributesToIndex2;
         global $attributesToHighlight;
         global $attributesToSnippet;
 
+        $attributesToIndex = array();
+
+        foreach ($this->algolia_registry->searchable as $key => $value)
+            if ($value['ordered'] == 'unordered')
+                $attributesToIndex[] = $value['ordered'].'('.$key.')';
+            else
+                $attributesToIndex[] = $key;
 
         $defaultSettings = array(
             "attributesToIndex"     => $attributesToIndex,
@@ -129,7 +134,7 @@ class AlgoliaHelper
         }, $customRankingTemp);
 
         $settings = array(
-            'attributesToIndex'     => $attributesToIndex2,
+            'attributesToIndex'     => $attributesToIndex,
             'attributesForFaceting' => array_values(array_unique($facets)),
             'attributesToHighlight' => $attributesToHighlight,
             'attributesToSnippet'   => $attributesToSnippet,

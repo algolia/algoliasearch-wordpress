@@ -109,6 +109,8 @@ class WordpressFetcher
 
     public function getPostObj($data)
     {
+        global $external_attrs;
+
         $algolia_registry = \Algolia\Core\Registry::getInstance();
 
         $obj = new \stdClass();
@@ -126,15 +128,28 @@ class WordpressFetcher
 
         $thumbnail_id = get_post_thumbnail_id($data->ID);
 
+        $extra_attrs = array();
+
+        if (isset($external_attrs[$data->post_type]))
+            $extra_attrs = $external_attrs[$data->post_type]($data);
+
+
         if ($thumbnail_id)
             $obj->featureImage = $this->getImage($thumbnail_id);
 
-
         if ($algolia_registry->metas && isset($algolia_registry->metas[$data->post_type]) && is_array($algolia_registry->metas[$data->post_type]))
+        {
             foreach (get_post_meta($data->ID) as $meta_key => $meta_value)
                 if (in_array($meta_key, array_keys($algolia_registry->metas[$data->post_type])))
                     if ($algolia_registry->metas[$data->post_type][$meta_key]["indexable"])
                         $obj->$meta_key = $this->try_cast($meta_value[0]);
+
+            foreach ($extra_attrs as $meta_key => $meta_value)
+                if (in_array($meta_key, array_keys($algolia_registry->metas[$data->post_type])))
+                    if ($algolia_registry->metas[$data->post_type][$meta_key]["indexable"])
+                        $obj->$meta_key = $this->try_cast($meta_value);
+        }
+
 
         foreach (get_post_taxonomies($data->ID) as $tax)
         {

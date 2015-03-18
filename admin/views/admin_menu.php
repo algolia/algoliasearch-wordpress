@@ -2,6 +2,9 @@
     $langDomain = "algolia";
     $algolia_registry = \Algolia\Core\Registry::getInstance();
     $theme_helper = new Algolia\Core\ThemeHelper();
+
+    global $external_attrs;
+    global $attributesToIndex;
 ?>
 
 <div id="algolia-settings" class="wrap">
@@ -16,6 +19,7 @@
             <i class="dashicons dashicons-upload"></i>
             Reindex data
         </button>
+        <div style="clear: both;"</div>
         <?php endif; ?>
 
         <div id="results-wrapper" style="display: none;">
@@ -59,11 +63,12 @@
 
             <?php if ($algolia_registry->validCredential) : ?>
 
-            <div data-tab="#configuration" class="title selected">UI Configuration</div>
-            <div data-tab="#indexable-types" class="title">Indices</div>
-            <div data-tab="#extra-metas" class="title">Additional attributes</div>
-            <div data-tab="#custom-ranking" class="title">Custom Ranking</div>
-            <div data-tab="#taxonomies" class="title">Taxonomies</div>
+            <div data-tab="#configuration"          class="title selected">UI Configuration</div>
+            <div data-tab="#indexable-types"        class="title">Indices</div>
+            <div data-tab="#searchable_attributes"  class="title">Searchable</div>
+            <div data-tab="#extra-metas"            class="title">Additional attributes</div>
+            <div data-tab="#custom-ranking"         class="title">Custom Ranking</div>
+            <div data-tab="#taxonomies"             class="title">Taxonomies</div>
 
             <?php endif; ?>
             <div style="clear:both"></div>
@@ -206,6 +211,8 @@
             </form>
         </div>
 
+
+
         <div class="tab-content" id="indexable-types">
             <form action="<?php echo site_url(); ?>/wp-admin/admin-post.php" method="post">
                 <input type="hidden" name="action" value="update_indexable_types">
@@ -254,6 +261,82 @@
             </form>
         </div>
 
+        <div class="tab-content" id="searchable_attributes">
+            <form action="<?php echo site_url(); ?>/wp-admin/admin-post.php" method="post">
+                <input type="hidden" name="action" value="update_searchable_attributes">
+                <div class="content-wrapper" id="customization">
+                    <div class="content">
+                        <p class="help-block">Configure here the indices you want create.</p>
+                        <table>
+                            <tr data-order="-1">
+                                <th>Enabled</th>
+                                <th>Name</th>
+                                <th>Ordered/Unordered</th>
+                            </tr>
+                            <?php
+                            $searchable = $attributesToIndex;
+
+                            foreach (array_keys($algolia_registry->indexable_tax) as $tax)
+                                if ($tax != 'type')
+                                    $searchable[] = $tax;
+
+                            foreach (get_post_types() as $type)
+                            {
+                                $metas = get_meta_key_list($type);
+
+                                if (isset($external_attrs[$type.'_attrs']))
+                                    $metas = array_merge(get_meta_key_list($type), $external_attrs[$type.'_attrs']);
+
+
+                                foreach ($metas as $meta_key)
+                                    if (is_array($algolia_registry->indexable_types) && in_array($type, array_keys($algolia_registry->indexable_types)))
+                                        if (isset($algolia_registry->metas[$type])
+                                            && in_array($meta_key, array_keys($algolia_registry->metas[$type]))
+                                            && $algolia_registry->metas[$type][$meta_key]["indexable"])
+                                            $searchable[] = $meta_key;
+                            }
+
+                            if (isset($algolia_registry->date_custom_ranking['enabled']) && $algolia_registry->date_custom_ranking['enabled'])
+                                $searchable[] = 'date';
+
+                            ?>
+                            <?php foreach ($searchable as $searchItem): ?>
+                            <?php
+                            $order = -1;
+                            if (isset($algolia_registry->searchable[$searchItem]))
+                                $order = $algolia_registry->searchable[$searchItem]['order'];
+                            ?>
+                            <?php if ($order != -1): ?>
+                                <tr data-order="<?php echo $order; ?>">
+                            <?php else: ?>
+                                <tr data-order="<?php echo (10000 + $i); $i++ ?>">
+                            <?php endif; ?>
+                                <td><input <?php checked(isset($algolia_registry->searchable[$searchItem])); ?> type="checkbox" name="ATTRIBUTES[<?php echo $searchItem; ?>][SEARCHABLE]"></td>
+                                <td>
+                                    <?php echo $searchItem; ?>
+                                </td>
+                                <td>
+                                    <select name="ATTRIBUTES[<?php echo $searchItem; ?>][ORDERED]">
+                                    <?php foreach (array("ordered" => "Ordered", "unordered" => "Unordered") as $key => $value): ?>
+                                        <?php if (isset($algolia_registry->searchable[$searchItem]) && $algolia_registry->searchable[$searchItem]['ordered'] == $key): ?>
+                                            <option selected value="<?php echo $key; ?>"><?php echo $value; ?></option>
+                                        <?php else: ?>
+                                            <option value="<?php echo $key; ?>"><?php echo $value; ?></option>
+                                        <?php endif; ?>
+                                    <?php endforeach; ?>
+                                    </select>
+                                    <img width="10" src="<?php echo plugin_dir_url(__FILE__); ?>../imgs/move.png">
+                                </td>
+                            </tr>
+                            <?php endforeach; ?>
+                        </table>
+                        <div class="content-item">
+                            <input type="submit" name="submit" id="submit" class="button button-primary" value="Save Changes">
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
 
         <div class="tab-content" id="extra-metas">
             <form action="<?php echo site_url(); ?>/wp-admin/admin-post.php" method="post">
@@ -272,9 +355,14 @@
                             </tr>
                             <?php $i = 0; ?>
                             <?php foreach (get_post_types() as $type) : ?>
-                                <?php foreach (get_meta_key_list($type) as $meta_key) : ?>
-                                    <?php if (is_array($algolia_registry->indexable_types) && in_array($type, array_keys($algolia_registry->indexable_types))) : ?>
+                                <?php if (is_array($algolia_registry->indexable_types) && in_array($type, array_keys($algolia_registry->indexable_types))) : ?>
+                                    <?php
+                                    $metas = get_meta_key_list($type);
 
+                                    if (isset($external_attrs[$type.'_attrs']))
+                                        $metas = array_merge(get_meta_key_list($type), $external_attrs[$type.'_attrs']);
+                                ?>
+                                    <?php foreach ($metas as $meta_key) : ?>
                                         <?php
                                         $order = -1;
                                         if (isset($algolia_registry->metas[$type]) && in_array($meta_key, array_keys($algolia_registry->metas[$type])))
@@ -338,8 +426,9 @@
                                                 <img width="10" src="<?php echo plugin_dir_url(__FILE__); ?>../imgs/move.png">
                                             </td>
                                         </tr>
-                                    <?php endif; ?>
-                                <?php endforeach; ?>
+                                    <?php endforeach; ?>
+                                <?php endif; ?>
+
                             <?php endforeach; ?>
                         </table>
                         <div class="content-item">
@@ -387,7 +476,13 @@
                             </tr>
                             <?php $i = 0; $n = 0; ?>
                             <?php foreach (get_post_types() as $type) : ?>
-                                <?php foreach (get_meta_key_list($type) as $meta_key) : ?>
+                                <?php
+                                    $metas = get_meta_key_list($type);
+
+                                    if (isset($external_attrs[$type.'_attrs']))
+                                        $metas = array_merge(get_meta_key_list($type), $external_attrs[$type.'_attrs']);
+                                ?>
+                                <?php foreach ($metas as $meta_key) : ?>
                                     <?php if (is_array($algolia_registry->indexable_types) && in_array($type, array_keys($algolia_registry->indexable_types))) : ?>
                                         <?php if (isset($algolia_registry->metas[$type])
                                             && in_array($meta_key, array_keys($algolia_registry->metas[$type]))

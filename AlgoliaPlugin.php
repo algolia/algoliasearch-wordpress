@@ -30,6 +30,7 @@ class AlgoliaPlugin
         add_action('admin_post_update_type_of_search',          array($this, 'admin_post_update_type_of_search'));
         add_action('admin_post_update_extra_meta',              array($this, 'admin_post_update_extra_meta'));
         add_action('admin_post_custom_ranking',                 array($this, 'admin_post_custom_ranking'));
+        add_action('admin_post_update_searchable_attributes',   array($this, 'admin_post_update_searchable_attributes'));
 
         add_action('admin_post_reindex',                        array($this, 'admin_post_reindex'));
 
@@ -210,7 +211,6 @@ class AlgoliaPlugin
                     $i++;
                 }
 
-
                 if (isset($tax['FACET']))
                 {
                     if ($tax['FACET_TYPE'] == 'conjunctive')
@@ -264,6 +264,34 @@ class AlgoliaPlugin
         $this->algolia_helper->handleIndexCreation();
 
         wp_redirect('admin.php?page=algolia-settings#indexable-types');
+    }
+
+    public function admin_post_update_searchable_attributes()
+    {
+        if (isset($_POST['ATTRIBUTES']) && is_array($_POST['ATTRIBUTES']))
+        {
+            $searchable = array();
+
+            $i = 0;
+
+            foreach ($_POST['ATTRIBUTES'] as $key => $values)
+            {
+                if (isset($values['SEARCHABLE']))
+                {
+                    $searchable[$key] = array();
+
+                    $searchable[$key]["ordered"] = $values['ORDERED'];
+                    $searchable[$key]["order"] = $i;
+
+                    $i++;
+                }
+            }
+            $this->algolia_registry->searchable = $searchable;
+
+            $this->algolia_helper->handleIndexCreation();
+        }
+
+        wp_redirect('admin.php?page=algolia-settings#searchable_attributes');
     }
 
     public function admin_post_update_type_of_search()

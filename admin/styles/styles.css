@@ -125,7 +125,8 @@
 #algolia-settings #taxonomies tbody,
 #algolia-settings #extra-metas tbody,
 #algolia-settings #indexable-types tbody,
-#algolia-settings #custom-ranking tbody
+#algolia-settings #custom-ranking tbody,
+#algolia-settings #searchable_attributes tbody
 {
     cursor: move;
 }
@@ -152,6 +153,7 @@
 #algolia_reindex
 {
     float: right;
+    margin-right: 20px;
 }
 
 #algolia_reindex i

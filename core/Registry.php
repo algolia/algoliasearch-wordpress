@@ -14,6 +14,7 @@ class Registry
         'index_name'                => '',
         'indexable_types'           => array('post' => array('name' => 'Articles','order' => 0),'page' => array('name' => 'Pages','order' => 1)),
         'indexable_tax'             => array(),
+        'searchable'                => array(),
         'type_of_search'            => 'autocomplete',
         'conjunctive_facets'        => array(),
         'disjunctive_facets'        => array(),

@@ -54,7 +54,7 @@ jQuery(document).ready(function($) {
 
     function disableInput(div)
     {
-        $(div + " input, #extra-metas select").prop('disabled', false);
+        $(div + " input, " + div + " select").prop('disabled', false);
         $(div + " tr:not(:first)").each(function (i) {
             var tds = $(this).find("td");
 
@@ -99,7 +99,7 @@ jQuery(document).ready(function($) {
         return ui;
     };
 
-    $('#taxonomies tr, #extra-metas tr, #indexable-types tr, #custom-ranking tr').sort(function (a, b) {
+    $('#taxonomies tr, #extra-metas tr, #indexable-types tr, #custom-ranking tr, #searchable_attributes tr').sort(function (a, b) {
         var contentA = parseInt($(a).attr('data-order'));
         var contentB = parseInt($(b).attr('data-order'));
 
@@ -108,7 +108,7 @@ jQuery(document).ready(function($) {
         $(container).parent().append(container);
     });;
 
-    $("#taxonomies tbody, #extra-metas tbody, #indexable-types tbody, #custom-ranking tbody").sortable({
+    $("#taxonomies tbody, #extra-metas tbody, #indexable-types tbody, #custom-ranking tbody, #searchable_attributes tbody").sortable({
         containment: "parent",
         helper: fixHelper
     }).disableSelection();
