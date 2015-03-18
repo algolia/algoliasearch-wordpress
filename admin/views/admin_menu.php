@@ -421,7 +421,11 @@
                 <input type="hidden" name="action" value="update_extra_meta">
                 <div class="content-wrapper" id="customization">
                     <div class="content">
-                        <p class="help-block">Configure here the additional attributes you want to include in your Algolia records.</p>
+                        <p class="help-block">
+                            Configure here the additional attributes you want to include in your Algolia records.
+                            <br>
+                            Default attributes : objectID, authorId, date, content, title, excerpt, slug, modified, parent, menu_order, type
+                        </p>
                         <table>
                             <tr data-order="-1">
                                 <th>Enabled</th>
