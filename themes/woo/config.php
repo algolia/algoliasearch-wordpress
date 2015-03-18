@@ -1,6 +1,6 @@
 <?php
 
 return array(
-    'name'          => 'Default',
+    'name'          => 'WooCommerce Default',
     'screenshot'    => 'screenshot.png'
 );
