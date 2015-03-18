@@ -69,6 +69,9 @@ jQuery(document).ready(function ($) {
             });
 
             if ($(this).val().length == 0) {
+
+                clearTimeout(history_timeout);
+
                 location.replace('#');
 
                 $(algoliaSettings.instant_jquery_selector).html(engine.old_content);
