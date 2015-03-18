@@ -23,7 +23,7 @@ jQuery(document).ready(function ($) {
                 engine.helper.toggleRefine($(this).attr("data-tax"), $(this).attr("data-name"));
             });
 
-            engine.performQueries();
+            engine.performQueries(true);
         });
 
 
@@ -34,7 +34,7 @@ jQuery(document).ready(function ($) {
         $("body").on("change", "#index_to_use", function () {
             engine.helper.setIndex($(this).val());
 
-            engine.performQueries();
+            engine.performQueries(true);
         });
 
         $("body").on("slidechange", ".algolia-slider-true", function (event, ui) {
@@ -55,7 +55,7 @@ jQuery(document).ready(function ($) {
                 engine.helper.removeNumericRefine(slide_dom.attr("data-tax"), "<=");
 
             updateSlideInfos(ui);
-            engine.performQueries();
+            engine.performQueries(true);
         });
 
         $(algoliaSettings.search_input_selector).keyup(function (e) {
@@ -81,7 +81,7 @@ jQuery(document).ready(function ($) {
 
             engine.query = $(this).val();
 
-            engine.performQueries();
+            engine.performQueries(false);
 
             return false;
         });

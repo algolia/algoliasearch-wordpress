@@ -132,7 +132,7 @@ if (algoliaSettings.type_of_search == "instant")
                 /**
                  * Functions
                  */
-                this.updateUrl = function ()
+                this.updateUrl = function (push_state)
                 {
                     var refinements = [];
 
@@ -164,7 +164,9 @@ if (algoliaSettings.type_of_search == "instant")
                         }
                     }
 
-                    location.replace('#q=' + encodeURIComponent(this.query) + '&page=' + this.helper.page + '&refinements=' + encodeURIComponent(JSON.stringify(refinements)) + '&numerics_refinements=' + encodeURIComponent(JSON.stringify(this.helper.numericsRefinements)) + '&in=' + encodeURIComponent(JSON.stringify(this.helper.getIndex())));
+                    var url = '#q=' + encodeURIComponent(this.query) + '&page=' + this.helper.page + '&refinements=' + encodeURIComponent(JSON.stringify(refinements)) + '&numerics_refinements=' + encodeURIComponent(JSON.stringify(this.helper.numericsRefinements)) + '&in=' + encodeURIComponent(JSON.stringify(this.helper.getIndex()));
+
+                    history.pushState(url, null, url);
                 };
 
                 this.getRefinementsFromUrl = function()
@@ -185,6 +187,8 @@ if (algoliaSettings.type_of_search == "instant")
 
                         this.query = q;
 
+                        this.helper.clearRefinements();
+
                         for (var i = 0; i < refinements.length; ++i) {
                             for (var refine in refinements[i]) {
                                 this.helper.toggleRefine(refine, refinements[i][refine]);
@@ -198,16 +202,17 @@ if (algoliaSettings.type_of_search == "instant")
 
                         $(algoliaSettings.search_input_selector).val(this.query);
 
-                        this.performQueries();
+                        this.helper.search(this.query, this.searchCallback);
 
                     }
                 };
 
-                this.performQueries = function ()
+                this.performQueries = function (push_state)
                 {
                     this.helper.search(this.query, this.searchCallback);
 
-                    this.updateUrl();
+                    this.updateUrl(push_state);
+
                 };
 
                 this.searchCallback = function(success, content) {
@@ -398,6 +403,10 @@ if (algoliaSettings.type_of_search == "instant")
                         return days[date.getDay()] + ", " + months[date.getMonth()] + " " + day + ", " + date.getFullYear();
                     }
                 };
+
+                window.addEventListener("popstate", function(e) {
+                    engine.getRefinementsFromUrl();
+                });
 
                 /**
                  * Initialization
