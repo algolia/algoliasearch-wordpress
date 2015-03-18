@@ -31,6 +31,7 @@ class AlgoliaPlugin
         add_action('admin_post_update_extra_meta',              array($this, 'admin_post_update_extra_meta'));
         add_action('admin_post_custom_ranking',                 array($this, 'admin_post_custom_ranking'));
         add_action('admin_post_update_searchable_attributes',   array($this, 'admin_post_update_searchable_attributes'));
+        add_action('admin_post_update_sortable_attributes',     array($this, 'admin_post_update_sortable_attributes'));
 
         add_action('admin_post_reindex',                        array($this, 'admin_post_reindex'));
 
@@ -109,12 +110,21 @@ class AlgoliaPlugin
         foreach ($this->algolia_registry->disjunctive_facets as $tax => $obj)
             $facets[] = array('tax' => $tax, 'name' => $obj['name'], 'order1' => 0,'order2' => $obj['order'], 'type' => 'disjunctive');
 
+        $sorting_indexes = array();
+
+        foreach ($this->algolia_registry->sortable as $values)
+            $sorting_indexes[] = array(
+                'index_name' => $this->algolia_registry->index_name.'all_'.$values['name'].'_'.$values['sort'],
+                'label'      => $values['label']
+            );
+
         global $facetsLabels;
 
         $algoliaSettings = array(
             'app_id'                    => $this->algolia_registry->app_id,
             'search_key'                => $this->algolia_registry->search_key,
             'indexes'                   => $indexes,
+            'sorting_indexes'           => $sorting_indexes,
             'index_name'                => $this->algolia_registry->index_name,
             'type_of_search'            => $this->algolia_registry->type_of_search,
             'instant_jquery_selector'   => str_replace("\\", "", $this->algolia_registry->instant_jquery_selector),
@@ -280,8 +290,8 @@ class AlgoliaPlugin
                 {
                     $searchable[$key] = array();
 
-                    $searchable[$key]["ordered"] = $values['ORDERED'];
-                    $searchable[$key]["order"] = $i;
+                    $searchable[$key]["ordered"]    = $values['ORDERED'];
+                    $searchable[$key]["order"]      = $i;
 
                     $i++;
                 }
@@ -292,6 +302,30 @@ class AlgoliaPlugin
         }
 
         wp_redirect('admin.php?page=algolia-settings#searchable_attributes');
+    }
+
+    public function admin_post_update_sortable_attributes()
+    {
+        if (isset($_POST['ATTRIBUTES']) && is_array($_POST['ATTRIBUTES']))
+        {
+
+            $sortable = array();
+
+            foreach ($_POST['ATTRIBUTES'] as $key => $values)
+            {
+                if (isset($values['asc']))
+                    $sortable[$key.'_asc'] = array('name' => $key, 'sort' => 'asc', 'label' => $values['LABEL_asc']);
+
+                if (isset($values['desc']))
+                    $sortable[$key.'_desc'] = array('name' => $key, 'sort' => 'desc', 'label' => $values['LABEL_desc']);
+            }
+
+            $this->algolia_registry->sortable = $sortable;
+
+            $this->algolia_helper->handleIndexCreation();
+        }
+
+        wp_redirect('admin.php?page=algolia-settings#sortable_attributes');
     }
 
     public function admin_post_update_type_of_search()

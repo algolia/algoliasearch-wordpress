@@ -49,16 +49,12 @@ class AlgoliaHelper
     public function handleIndexCreation()
     {
         $created_indexes    = $this->algolia_client->listIndexes();
+        $index_name         = $this->algolia_registry->index_name;
+        $indexes            = array();
+        $facets             = array();
+        $customRankingTemp  = array();
 
-        $index_name = $this->algolia_registry->index_name;
-
-        $indexes = array();
-
-        $facets = array();
-
-        $customRankingTemp = array();
-
-        $facets[] = "type";
+        $facets[]           = "type";
 
         global $attributesToHighlight;
         global $attributesToSnippet;
@@ -143,6 +139,26 @@ class AlgoliaHelper
 
         $this->setSettings($index_name.'all', $settings);
         $this->setSettings($index_name.'all_temp', $settings);
+
+        /**
+         * Handle Slaves
+         */
+
+        $slaves = array();
+
+        foreach ($this->algolia_registry->sortable as $values)
+            $slaves[] = $index_name.'all_'.$values['name'].'_'.$values['sort'];
+
+        $this->setSettings($index_name.'all', array('slaves' => $slaves));
+
+        foreach ($this->algolia_registry->sortable as $values)
+        {
+            $settings = array(
+                'ranking' => array($values['sort'].'('.$values['name'].')', 'typo', 'geo', 'words', 'proximity', 'attribute', 'exact', 'custom')
+            );
+
+            $this->setSettings($index_name.'all_'.$values['name'].'_'.$values['sort'], $settings);
+        }
     }
 
     public function move($temp_index_name, $index_name)

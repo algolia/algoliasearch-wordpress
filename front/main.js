@@ -52,8 +52,6 @@ if (algoliaSettings.type_of_search == "autocomplete")
             }
         }
 
-        console.log(matcher());
-
         hogan_objs.push({
             source: matcher(),
             displayKey: 'title',
@@ -166,7 +164,7 @@ if (algoliaSettings.type_of_search == "instant")
                         }
                     }
 
-                    location.replace('#q=' + encodeURIComponent(this.query) + '&page=' + this.helper.page + '&refinements=' + encodeURIComponent(JSON.stringify(refinements)) + '&numerics_refinements=' + encodeURIComponent(JSON.stringify(this.helper.numericsRefinements)));
+                    location.replace('#q=' + encodeURIComponent(this.query) + '&page=' + this.helper.page + '&refinements=' + encodeURIComponent(JSON.stringify(refinements)) + '&numerics_refinements=' + encodeURIComponent(JSON.stringify(this.helper.numericsRefinements)) + '&in=' + encodeURIComponent(JSON.stringify(this.helper.getIndex())));
                 };
 
                 this.getRefinementsFromUrl = function()
@@ -177,11 +175,13 @@ if (algoliaSettings.type_of_search == "instant")
                         var pageParamOffset                 = params.indexOf('&page=');
                         var refinementsParamOffset          = params.indexOf('&refinements=');
                         var numericsRefinementsParamOffset  = params.indexOf('&numerics_refinements=');
+                        var indexNameOffset                 = params.indexOf('&in=');
 
                         var q                               = decodeURIComponent(params.substring(0, pageParamOffset));
                         var page                            = parseInt(params.substring(pageParamOffset + 6, refinementsParamOffset));
                         var refinements                     = JSON.parse(decodeURIComponent(params.substring(refinementsParamOffset + 13, numericsRefinementsParamOffset)));
-                        var numericsRefinements             = JSON.parse(decodeURIComponent(params.substring(numericsRefinementsParamOffset + 22)));
+                        var numericsRefinements             = JSON.parse(decodeURIComponent(params.substring(numericsRefinementsParamOffset + 22, indexNameOffset)));
+                        var indexName                       = JSON.parse(decodeURIComponent(params.substring(indexNameOffset + 4)));
 
                         this.query = q;
 
@@ -194,6 +194,7 @@ if (algoliaSettings.type_of_search == "instant")
                         this.helper.numericsRefinements = numericsRefinements;
 
                         this.helper.setPage(page);
+                        this.helper.setIndex(indexName);
 
                         $(algoliaSettings.search_input_selector).val(this.query);
 
@@ -207,14 +208,6 @@ if (algoliaSettings.type_of_search == "instant")
                     this.helper.search(this.query, this.searchCallback);
 
                     this.updateUrl();
-                };
-
-                this.updateSlideInfos = function(ui)
-                {
-                    var infos = $(ui.handle).closest(".algolia-slider").nextAll(".algolia-slider-info");
-
-                    infos.find(".min").html(ui.values[0]);
-                    infos.find(".max").html(ui.values[1]);
                 };
 
                 this.searchCallback = function(success, content) {
@@ -315,6 +308,9 @@ if (algoliaSettings.type_of_search == "instant")
                         html_content += $this.template.render({
                             facets_count: facets.length,
                             getDate: getDate,
+                            sortSelected: sortSelected,
+                            relevance_index_name: algoliaSettings.index_name + 'all',
+                            sorting_indexes: algoliaSettings.sorting_indexes,
                             hits: content.hits,
                             nbHits: content.nbHits,
                             nbHits_zero: (content.nbHits === 0),
@@ -334,6 +330,26 @@ if (algoliaSettings.type_of_search == "instant")
                         finishRenderingResults();
                     }
                 };
+
+                window.sortSelected = function () {
+                    return function (val) {
+                        var template = Hogan.compile(val);
+
+                        var renderer = function(context) {
+                            return function(text) {
+                                return template.c.compile(text, template.options).render(context);
+                            };
+                        };
+
+                        var render = renderer(this);
+
+                        var index_name = render(val);
+
+                        if (index_name == engine.helper.getIndex())
+                            return "selected";
+                        return "";
+                    }
+                }
 
                 window.gotoPage = function(page) {
                     engine.helper.gotoPage(+page - 1);

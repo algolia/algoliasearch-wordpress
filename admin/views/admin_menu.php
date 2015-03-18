@@ -15,10 +15,16 @@
 
     <div class="wrapper">
         <?php if ($algolia_registry->validCredential) : ?>
-        <button type="button" class="button button-secondary" id="algolia_reindex" name="algolia_reindex">
+        <button type="button" class="button button-secondary header-button" id="algolia_reindex" name="algolia_reindex">
             <i class="dashicons dashicons-upload"></i>
             Reindex data
         </button>
+
+        <a target="_blank" href="//algolia.com/dashboard">
+            <button type="button" class="button button-secondary header-button" id="dashboard-link">
+                Algolia Dashboard
+            </button>
+        </a>
         <div style="clear: both;"</div>
         <?php endif; ?>
 
@@ -65,7 +71,8 @@
 
             <div data-tab="#configuration"          class="title selected">UI Configuration</div>
             <div data-tab="#indexable-types"        class="title">Indices</div>
-            <div data-tab="#searchable_attributes"  class="title">Searchable</div>
+            <div data-tab="#searchable_attributes"  class="title">Searchable Attibutes</div>
+            <div data-tab="#sortable_attributes"    class="title">Sorting Attributes</div>
             <div data-tab="#extra-metas"            class="title">Additional attributes</div>
             <div data-tab="#custom-ranking"         class="title">Custom Ranking</div>
             <div data-tab="#taxonomies"             class="title">Taxonomies</div>
@@ -266,7 +273,7 @@
                 <input type="hidden" name="action" value="update_searchable_attributes">
                 <div class="content-wrapper" id="customization">
                     <div class="content">
-                        <p class="help-block">Configure here the indices you want create.</p>
+                        <p class="help-block">Configure here the attribute you want to be able to search in.</p>
                         <table>
                             <tr data-order="-1">
                                 <th>Enabled</th>
@@ -328,6 +335,74 @@
                                     <img width="10" src="<?php echo plugin_dir_url(__FILE__); ?>../imgs/move.png">
                                 </td>
                             </tr>
+                            <?php endforeach; ?>
+                        </table>
+                        <div class="content-item">
+                            <input type="submit" name="submit" id="submit" class="button button-primary" value="Save Changes">
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+
+        <div class="tab-content" id="sortable_attributes">
+            <form action="<?php echo site_url(); ?>/wp-admin/admin-post.php" method="post">
+                <input type="hidden" name="action" value="update_sortable_attributes">
+                <div class="content-wrapper" id="customization">
+                    <div class="content">
+                        <p class="help-block">Configure here the attribute you want to be able to sort on.</p>
+                        <table>
+                            <tr data-order="-1">
+                                <th>Enabled</th>
+                                <th>Name</th>
+                                <th>Sort</th>
+                                <th>Label</th>
+                            </tr>
+                            <?php
+                            $sortable = array();
+
+                            foreach (array_keys($algolia_registry->indexable_tax) as $tax)
+                                if ($tax != 'type')
+                                    $sortable[] = $tax;
+
+                            foreach (get_post_types() as $type)
+                            {
+                                $metas = get_meta_key_list($type);
+
+                                if (isset($external_attrs[$type.'_attrs']))
+                                    $metas = array_merge(get_meta_key_list($type), $external_attrs[$type.'_attrs']);
+
+
+                                foreach ($metas as $meta_key)
+                                    if (is_array($algolia_registry->indexable_types) && in_array($type, array_keys($algolia_registry->indexable_types)))
+                                        if (isset($algolia_registry->metas[$type])
+                                            && in_array($meta_key, array_keys($algolia_registry->metas[$type]))
+                                            && $algolia_registry->metas[$type][$meta_key]["indexable"])
+                                            $sortable[] = $meta_key;
+                            }
+
+                            if (isset($algolia_registry->date_custom_ranking['enabled']) && $algolia_registry->date_custom_ranking['enabled'])
+                                $sortable[] = 'date';
+
+                            ?>
+                            <?php foreach ($sortable as $sortItem): ?>
+                                <?php foreach (array('asc', 'desc') as $sort): ?>
+                                <tr>
+                                    <td>
+                                        <input <?php checked(isset($algolia_registry->sortable[$sortItem.'_'.$sort])); ?> type="checkbox" name="ATTRIBUTES[<?php echo $sortItem; ?>][<?php echo $sort; ?>]">
+                                    </td>
+                                    <td>
+                                        <?php echo $sortItem; ?>
+                                    </td>
+                                    <td>
+                                        <?php echo $sort; ?>
+                                    </td>
+                                    <td>
+                                        <input type="text"
+                                               value="<?php echo (isset($algolia_registry->sortable[$sortItem.'_'.$sort]) ? $algolia_registry->sortable[$sortItem.'_'.$sort]["label"] : "") ?>" name="ATTRIBUTES[<?php echo $sortItem; ?>][LABEL_<?php echo $sort; ?>]">
+                                    </td>
+                                </tr>
+                                <?php endforeach; ?>
                             <?php endforeach; ?>
                         </table>
                         <div class="content-item">

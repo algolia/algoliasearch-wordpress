@@ -90,7 +90,7 @@
                 {{/conjunctive}}
 
                 {{#slider}}
-                <div class="algolia-slider" data-tax="{{tax}}" data-min="{{min}}" data-max="{{max}}"></div>
+                <div class="algolia-slider algolia-slider-true" data-tax="{{tax}}" data-min="{{min}}" data-max="{{max}}"></div>
                 <div class="algolia-slider-info">
                     <div class="min" style="float: left;">{{current_min}}</div>
                     <div class="max" style="float: right;">{{current_max}}</div>

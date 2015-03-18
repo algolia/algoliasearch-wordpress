@@ -2,6 +2,18 @@ jQuery(document).ready(function ($) {
     if (algoliaSettings.type_of_search == "instant")
     {
         /**
+         * Functions
+         */
+
+        function updateSlideInfos(ui)
+        {
+            var infos = $(ui.handle).closest(".algolia-slider").nextAll(".algolia-slider-info");
+
+            infos.find(".min").html(ui.values[0]);
+            infos.find(".max").html(ui.values[1]);
+        }
+
+        /**
          * Bindings
          */
 
@@ -16,10 +28,16 @@ jQuery(document).ready(function ($) {
 
 
         $("body").on("slide", "", function (event, ui) {
-            engine.updateSlideInfos(ui);
+            updateSlideInfos(ui);
         });
 
-        $("body").on("slidechange", "", function (event, ui) {
+        $("body").on("change", "#index_to_use", function () {
+            engine.helper.setIndex($(this).val());
+
+            engine.performQueries();
+        });
+
+        $("body").on("slidechange", ".algolia-slider-true", function (event, ui) {
 
             var slide_dom = $(ui.handle).closest(".algolia-slider");
             var min = slide_dom.slider("values")[0];
@@ -36,7 +54,7 @@ jQuery(document).ready(function ($) {
             if (parseInt(max) == parseInt(slide_dom.attr("data-max")))
                 engine.helper.removeNumericRefine(slide_dom.attr("data-tax"), "<=");
 
-            engine.updateSlideInfos(ui);
+            updateSlideInfos(ui);
             engine.performQueries();
         });
 
@@ -70,7 +88,7 @@ jQuery(document).ready(function ($) {
 
         window.finishRenderingResults = function()
         {
-            $(".algolia-slider").each(function (i) {
+            $(".algolia-slider-true").each(function (i) {
                 var min = $(this).attr("data-min");
                 var max = $(this).attr("data-max");
 

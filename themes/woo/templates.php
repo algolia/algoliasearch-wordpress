@@ -19,6 +19,17 @@
             <div class="logo" style="float: right;">
                 powered by <img src="<?php echo plugin_dir_url(__FILE__); ?>../../front/algolia-logo.png">
             </div>
+            {{#sorting_indexes.length}}
+            <div style="float: right; margin-right: 10px;">
+                Order by
+                <select id="index_to_use">
+                    <option {{#sortSelected}}{{relevance_index_name}}{{/sortSelected}} value="{{relevance_index_name}}">relevance</option>
+                    {{#sorting_indexes}}
+                    <option {{#sortSelected}}{{index_name}}{{/sortSelected}} value="{{index_name}}">{{label}}</option>
+                    {{/sorting_indexes}}
+                </select>
+            </div>
+            {{/sorting_indexes.length}}
             <div style="clear: both;"></div>
         </div>
         {{/hits.length}}
@@ -34,11 +45,14 @@
                             </h1>
                         </div>
                         <div class="result-sub-content">
-                            {{#featureImage}}
                             <div class="result-thumbnail">
-                                <img src="{{{ featureImage.file }}}" />
-                            </div>
+                            {{#featureImage}}
+                                <img height="216" src="{{{ featureImage.file }}}" />
                             {{/featureImage}}
+                            {{^featureImage}}
+                            <div style="height: 216px;"></div>
+                            {{/featureImage}}
+                            </div>
                             <div class="result-excerpt">
                                 <div class="price">Price : {{_price}}€</div>
                                 <div class="rating">Rating : {{average_rating}}/5</div>
@@ -92,7 +106,7 @@
                 {{/conjunctive}}
 
                 {{#slider}}
-                <div class="algolia-slider" data-tax="{{tax}}" data-min="{{min}}" data-max="{{max}}"></div>
+                <div class="algolia-slider algolia-slider-true" data-tax="{{tax}}" data-min="{{min}}" data-max="{{max}}"></div>
                 <div class="algolia-slider-info">
                     <div class="min" style="float: left;">{{current_min}}</div>
                     <div class="max" style="float: right;">{{current_max}}</div>

@@ -47,6 +47,8 @@ class Indexer
 
         foreach (array_keys($this->algolia_registry->indexable_types) as $type)
             $this->algolia_helper->move($this->algolia_registry->index_name.$type.'_temp', $this->algolia_registry->index_name.$type);
+
+        $this->algolia_helper->handleIndexCreation();
     }
 
     private function getPosts($type, $limit)
