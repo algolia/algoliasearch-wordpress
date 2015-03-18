@@ -57,7 +57,6 @@ if (algoliaSettings.type_of_search == "autocomplete")
             displayKey: 'title',
             templates: {
                 suggestion: function (hit) {
-                    console.log("ookokojo");
                     return '<div class="footer">powered by <img src="' + algoliaSettings.plugin_url + '/front/algolia-logo.png"></div>';
                 }
             }
@@ -237,6 +236,9 @@ if (algoliaSettings.type_of_search == "instant")
                         if (content.hits.length > 0)
                         {
 
+                            /**
+                             * Handle Facets
+                             */
                             for (var i = 0; i < algoliaSettings.facets.length; i++)
                             {
                                 var sub_facets = [];
@@ -296,6 +298,9 @@ if (algoliaSettings.type_of_search == "instant")
                                 facets.push({count: sub_facets.length, tax: algoliaSettings.facets[i].tax, facet_categorie_name: algoliaSettings.facets[i].name, sub_facets: sub_facets });
                             }
 
+                            /**
+                             * Handle Pagination
+                             */
                             var pages = [];
                             if (content.page > 5)
                             {
@@ -316,9 +321,11 @@ if (algoliaSettings.type_of_search == "instant")
                                 pages.push({ current: false, number: content.nbPages });
                             }
 
+                            /** Render Facet **/
                             html_content += $this.facetsTemplate.render({ facets: facets, count: facets.length });
                         }
 
+                        /** Render results **/
                         html_content += $this.template.render({
                             facets_count: facets.length,
                             getDate: getDate,
@@ -334,6 +341,7 @@ if (algoliaSettings.type_of_search == "instant")
                             processingTimeMS: content.processingTimeMS
                         });
 
+                        /** Render pagination **/
                         if (content.hits.length > 0)
                             html_content += $this.paginationTemplate.render({ pages: pages, prev_page: (content.page > 0 ? content.page : false), next_page: (content.page + 1 < content.nbPages ? content.page + 2 : false) });
 
@@ -341,6 +349,8 @@ if (algoliaSettings.type_of_search == "instant")
 
                         $(algoliaSettings.instant_jquery_selector).html(html_content);
 
+
+                        /** Call this function that should be define in the template **/
                         finishRenderingResults();
                     }
                 };

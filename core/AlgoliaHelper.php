@@ -11,12 +11,12 @@ class AlgoliaHelper
 
     public function __construct($app_id, $search_key, $admin_key)
     {
-        $this->algolia_client = new \AlgoliaSearch\Client($app_id, $admin_key);
+        $this->algolia_client   = new \AlgoliaSearch\Client($app_id, $admin_key);
         $this->algolia_registry = \Algolia\Core\Registry::getInstance();
 
-        $this->app_id = $app_id;
-        $this->admin_key = $admin_key;
-        $this->search_key = $search_key;
+        $this->app_id           = $app_id;
+        $this->admin_key        = $admin_key;
+        $this->search_key       = $search_key;
     }
 
     public function checkRights()
@@ -80,6 +80,9 @@ class AlgoliaHelper
             }, $created_indexes["items"]);
         }
 
+        /**
+         * Handle Autocomplete Taxonomies
+         */
         foreach (array_keys($this->algolia_registry->indexable_tax) as $name)
         {
             if (in_array($index_name.$name, $indexes) == false)
@@ -91,6 +94,9 @@ class AlgoliaHelper
             }
         }
 
+        /**
+         * Handle Autocomplete Types
+         */
         foreach (array_keys($this->algolia_registry->indexable_types) as $name)
         {
             if (in_array($index_name."_".$name, $indexes) == false)
@@ -112,6 +118,10 @@ class AlgoliaHelper
             }
         }
 
+        /**
+         * Prepare Settings
+         */
+
         $date_custom_ranking = $this->algolia_registry->date_custom_ranking;
         if ($date_custom_ranking['enabled'])
             $customRankingTemp[] = array('sort' => $date_custom_ranking['sort'], 'value' => $date_custom_ranking['order'].'(date)');
@@ -124,7 +134,6 @@ class AlgoliaHelper
             return 1;
         });
 
-
         $customRanking = array_map(function ($obj) {
             return $obj['value'];
         }, $customRankingTemp);
@@ -136,6 +145,10 @@ class AlgoliaHelper
             'attributesToSnippet'   => $attributesToSnippet,
             'customRanking'         => $customRanking
         );
+
+        /**
+         * Handle Instant Search Indexes
+         */
 
         $this->setSettings($index_name.'all', $settings);
         $this->setSettings($index_name.'all_temp', $settings);
