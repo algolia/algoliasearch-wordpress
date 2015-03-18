@@ -424,7 +424,7 @@
                         <p class="help-block">
                             Configure here the additional attributes you want to include in your Algolia records.
                             <br>
-                            Default attributes : objectID, authorId, date, content, title, excerpt, slug, modified, parent, menu_order, type
+                            Default attributes : objectID, authorId, author, author_login, permalink, date, content, title, excerpt, slug, modified, parent, menu_order, type
                         </p>
                         <table>
                             <tr data-order="-1">
