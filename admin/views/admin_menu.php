@@ -8,6 +8,12 @@
 ?>
 
 <div id="algolia-settings" class="wrap">
+    <button type="button" class="button button-secondary header-button" id="algolia_reindex" name="algolia_reindex">
+        <i class="dashicons dashicons-upload"></i>
+        Reindex data
+    </button>
+    <a target="_blank" href="//algolia.com/dashboard" class="header-button" id="dashboard-link">Go to Algolia dashboard</a>
+
     <h2>
         Algolia Search
         <a href="https://www.algolia.com/dashboard" title="Go to the Algolia dashboard" style="text-decoration: none" target="_blank"><i class="dashicons dashicons-admin-links"></i></a>
@@ -15,16 +21,6 @@
 
     <div class="wrapper">
         <?php if ($algolia_registry->validCredential) : ?>
-        <button type="button" class="button button-secondary header-button" id="algolia_reindex" name="algolia_reindex">
-            <i class="dashicons dashicons-upload"></i>
-            Reindex data
-        </button>
-
-        <a target="_blank" href="//algolia.com/dashboard">
-            <button type="button" class="button button-secondary header-button" id="dashboard-link">
-                Algolia Dashboard
-            </button>
-        </a>
         <div style="clear: both;"</div>
         <?php endif; ?>
 
@@ -70,11 +66,11 @@
             <?php if ($algolia_registry->validCredential) : ?>
 
             <div data-tab="#configuration"          class="title selected">UI</div>
-            <div data-tab="#indexable-types"        class="title">Indices</div>
-            <div data-tab="#taxonomies"             class="title">Taxonomies</div>
+            <div data-tab="#indexable-types"        class="title">Types</div>
             <div data-tab="#extra-metas"            class="title">Attributes</div>
+            <div data-tab="#taxonomies"             class="title">Taxonomies</div>
             <div data-tab="#searchable_attributes"  class="title">Search Configuration</div>
-            <div data-tab="#custom-ranking"         class="title">Ranking</div>
+            <div data-tab="#custom-ranking"         class="title">Results Ranking</div>
             <div data-tab="#sortable_attributes"    class="title">Sorting</div>
 
             <?php endif; ?>
@@ -123,12 +119,12 @@
                 <div class="content-wrapper" id="type_of_search">
                     <div class="content">
                         <h3>Search bar</h3>
-                        <p class="help-block">Configure here your search bar behavior.</p>
+                        <p class="help-block">Configure here your search input field.</p>
                         <div class="content-item">
-                            <label for="search-input-selector">jQuery selector</label>
+                            <label for="search-input-selector">DOM selector</label>
                             <div>
                                 <input type="text" value="<?php echo str_replace("\\", "",$algolia_registry->search_input_selector); ?>" name="SEARCH_INPUT_SELECTOR" id="search-input-selector">
-                                <p class="description">The DOM selector used to select your search bar.</p>
+                                <p class="description">The jQuery selector used to select your search bar.</p>
                             </div>
                         </div>
                         <div class="has-extra-content content-item">
@@ -141,11 +137,13 @@
                                                 value="autocomplete"
                                                 id="instant_radio_autocomplete" />
                                  <label for="instant_radio_autocomplete">Autocomplete</label>
+                                 <p class="description">Add an auto-completion menu to your search bar.</p>
                            </div>
                             <div class="show-hide" style="display: none;">
                                 <div>
-                                    <label for="instant_radio_autocomplete_nb_results">Number of results by category</label>
+                                    <label for="instant_radio_autocomplete_nb_results">Results by section</label>
                                     <input type="number" min="0" value="<?php echo $algolia_registry->number_by_type; ?>" name="NUMBER_BY_TYPE" id="instant_radio_autocomplete_nb_results">
+                                    <p class="description">The number of results per section in the dropdown menu.</p>
                                 </div>
                             </div>
                         </div>
@@ -158,20 +156,23 @@
                                                       value="instant"
                                                       id="instant_radio_instant" />
                                 <label for="instant_radio_instant">Instant-search results page</label>
+                                <p class="description">Refresh the whole results page as you type.</p>
                             </div>
                             <div class="show-hide" style="display: none;">
                                 <div>
-                                    <label for="instant_radio_instant_jquery_selector">jQuery Selector</label>
+                                    <label for="instant_radio_instant_jquery_selector">DOM selector</label>
                                     <input type="text"
                                            id="instant_radio_instant_jquery_selector"
                                            value="<?php echo str_replace("\\", "", $algolia_registry->instant_jquery_selector); ?>"
                                            placeholder="#content"
                                            name="JQUERY_SELECTOR"
                                            value="" />
+                                    <p class="description">The jQuery selector used to inject the search results.</p>
                                 </div>
                                 <div>
                                     <label for="instant_radio_instant_nb_results">Number of results by page</label>
                                     <input type="number" min="0" value="<?php echo $algolia_registry->number_by_page; ?>" name="NUMBER_BY_PAGE" id="instant_radio_instant_nb_results">
+                                    <p class="description">The number of results to display on a results page.</p>
                                 </div>
                             </div>
                         </div>
@@ -225,7 +226,7 @@
                 <input type="hidden" name="action" value="update_indexable_types">
                 <div class="content-wrapper" id="customization">
                     <div class="content">
-                        <p class="help-block">Configure here indices you want create.</p>
+                        <p class="help-block">Configure here the types you want index.</p>
                         <table>
                             <tr data-order="-1">
                                 <th>Enabled</th>
@@ -273,12 +274,13 @@
                 <input type="hidden" name="action" value="update_searchable_attributes">
                 <div class="content-wrapper" id="customization">
                     <div class="content">
-                        <p class="help-block">Configure here attributes you want to be able to search in.</p>
+                        <p class="help-block">Configure here the attributes you want to be able to search in.</p>
                         <table>
                             <tr data-order="-1">
+                                <th></th>
                                 <th>Enabled</th>
                                 <th>Name</th>
-                                <th>Ordered/Unordered</th>
+                                <th>Attribute ordering</th>
                             </tr>
                             <?php
                             $searchable = $attributesToIndex;
@@ -318,6 +320,7 @@
                             <?php else: ?>
                                 <tr data-order="<?php echo (10000 + $i); $i++ ?>">
                             <?php endif; ?>
+                                <td><img width="10" src="<?php echo plugin_dir_url(__FILE__); ?>../imgs/move.png"></td>
                                 <td><input <?php checked(isset($algolia_registry->searchable[$searchItem])); ?> type="checkbox" name="ATTRIBUTES[<?php echo $searchItem; ?>][SEARCHABLE]"></td>
                                 <td>
                                     <?php echo $searchItem; ?>
@@ -332,7 +335,6 @@
                                         <?php endif; ?>
                                     <?php endforeach; ?>
                                     </select>
-                                    <img width="10" src="<?php echo plugin_dir_url(__FILE__); ?>../imgs/move.png">
                                 </td>
                             </tr>
                             <?php endforeach; ?>
@@ -350,7 +352,7 @@
                 <input type="hidden" name="action" value="update_sortable_attributes">
                 <div class="content-wrapper" id="customization">
                     <div class="content">
-                        <p class="help-block">Configure here attributes you want to be able to sort on.</p>
+                        <p class="help-block">By default results are sorted by text relevance &amp; your ranking criteria. Configure here the attributes you want to use for the additional sorts (by price, by date, etc...).</p>
                         <table>
                             <tr data-order="-1">
                                 <th>Enabled</th>
@@ -395,7 +397,8 @@
                                         <?php echo $sortItem; ?>
                                     </td>
                                     <td>
-                                        <?php echo $sort; ?>
+                                        <span class="dashicons dashicons-arrow-<?php echo($sort == 'asc' ? 'up' : 'down'); ?>-alt"></span>
+                                        <?php echo($sort == 'asc' ? 'Ascending' : 'Descending'); ?>
                                     </td>
                                     <td>
                                         <input type="text"
@@ -519,13 +522,13 @@
                 <input type="hidden" name="action" value="custom_ranking">
                 <div class="content-wrapper" id="customization">
                     <div class="content">
-                        <p class="help-block">Configure here the <strong>customRanking</strong> setting your your Algolia indices.</p>
+                        <p class="help-block">Configure here the attributes used to reflect the popularity of your records (number of likes, number of views, number of sales...).</p>
                         <table>
                             <tr data-order="-1">
                                 <th></th>
                                 <th>Enabled</th>
                                 <th>Meta key</th>
-                                <th>Custom Ranking Sort</th>
+                                <th>Sort order</th>
                             </tr>
 
                             <tr data-order="<?php echo $algolia_registry->date_custom_ranking['sort']; ?>">
@@ -539,7 +542,7 @@
                                 <td>date</td>
                                 <td>
                                     <select name="TYPES[date][METAS][date][CUSTOM_RANKING_ORDER]">
-                                        <?php foreach (array('asc' => 'ASC', 'desc' => 'DESC') as $key => $value): ?>
+                                        <?php foreach (array('asc' => 'Ascending', 'desc' => 'Descending') as $key => $value): ?>
                                             <?php if ($algolia_registry->date_custom_ranking['order'] == $key): ?>
                                                 <option selected value=<?php echo $key; ?>><?php echo $value; ?></option>
                                             <?php else : ?>
@@ -602,11 +605,6 @@
                                     <?php endif; ?>
                                 <?php endforeach; ?>
                             <?php endforeach; ?>
-                            <?php if ($n == 0): ?>
-                                <tr>
-                                    <td colspan="5" style="text-align: center">You first need to define additional attributes. <span onclick="selectTab('#extra-metas');" style="vertical-align: inherit;" class="button button-secondary">Click here to do it</span></td>
-                                </tr>
-                            <?php endif; ?>
                         </table>
                         <div class="content-item">
                             <input type="submit" name="submit" id="submit" class="button button-primary" value="Save Changes">
