@@ -17,10 +17,19 @@
 }
 #algolia-settings .content-wrapper .content .help-block {
     border-left: 5px solid #DDD;
-    background: #F1F1F1;
+    background-color: #F1F1F1;
     padding: 10px;
     margin-left: 5px;
 }
+
+#algolia-settings .content-wrapper .content .warning {
+    border-left: 5px solid #DDD;
+    background-color: #f1cc6d;
+    padding: 10px;
+    margin: 5px;
+    margin-right: 0px;
+}
+
 #algolia-settings .content-wrapper .content .help-block a {
     text-decoration: none;
     font-weight: bold;

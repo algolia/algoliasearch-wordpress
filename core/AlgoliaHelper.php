@@ -123,6 +123,7 @@ class AlgoliaHelper
          */
 
         $date_custom_ranking = $this->algolia_registry->date_custom_ranking;
+
         if ($date_custom_ranking['enabled'])
             $customRankingTemp[] = array('sort' => $date_custom_ranking['sort'], 'value' => $date_custom_ranking['order'].'(date)');
 
@@ -157,20 +158,23 @@ class AlgoliaHelper
          * Handle Slaves
          */
 
-        $slaves = array();
-
-        foreach ($this->algolia_registry->sortable as $values)
-            $slaves[] = $index_name.'all_'.$values['name'].'_'.$values['sort'];
-
-        $this->setSettings($index_name.'all', array('slaves' => $slaves));
-
-        foreach ($this->algolia_registry->sortable as $values)
+        if (count($this->algolia_registry->sortable) > 0)
         {
-            $settings = array(
-                'ranking' => array($values['sort'].'('.$values['name'].')', 'typo', 'geo', 'words', 'proximity', 'attribute', 'exact', 'custom')
-            );
+            $slaves = array();
 
-            $this->setSettings($index_name.'all_'.$values['name'].'_'.$values['sort'], $settings);
+            foreach ($this->algolia_registry->sortable as $values)
+                $slaves[] = $index_name.'all_'.$values['name'].'_'.$values['sort'];
+
+            $this->setSettings($index_name.'all', array('slaves' => $slaves));
+
+            foreach ($this->algolia_registry->sortable as $values)
+            {
+                $settings = array(
+                    'ranking' => array($values['sort'].'('.$values['name'].')', 'typo', 'geo', 'words', 'proximity', 'attribute', 'exact', 'custom')
+                );
+
+                $this->setSettings($index_name.'all_'.$values['name'].'_'.$values['sort'], $settings);
+            }
         }
     }
 

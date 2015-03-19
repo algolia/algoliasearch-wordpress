@@ -8,15 +8,15 @@
 ?>
 
 <div id="algolia-settings" class="wrap">
-    <button type="button" class="button button-secondary header-button" id="algolia_reindex" name="algolia_reindex">
-        <i class="dashicons dashicons-upload"></i>
-        Reindex data
-    </button>
+
     <a target="_blank" href="//algolia.com/dashboard" class="header-button" id="dashboard-link">Go to Algolia dashboard</a>
 
     <h2>
         Algolia Search
-        <a href="https://www.algolia.com/dashboard" title="Go to the Algolia dashboard" style="text-decoration: none" target="_blank"><i class="dashicons dashicons-admin-links"></i></a>
+        <button type="button" class="button button-primary " id="algolia_reindex" name="algolia_reindex">
+            <i class="dashicons dashicons-upload"></i>
+            Reindex data
+        </button>
     </h2>
 
     <div class="wrapper">
@@ -85,6 +85,9 @@
                     <div class="content">
                         <h3>Algolia account</h3>
                         <p class="help-block">Configure here your <a href="https://www.algolia.com">Algolia</a> credentials. You can find them in the "<a href="https://www.algolia.com/licensing">Credentials</a>" section of your dashboard. Don't have one? <a href="http://www.algolia.com/users/sign_up" target="_blank">Create one here</a>.</p>
+                        <?php if ($algolia_registry->validCredential == false && ($algolia_registry->app_id || $algolia_registry->search_key || $algolia_registry->admin_key)) : ?>
+                            <p class="warning">Your credentials are not valid</p>
+                        <?php endif; ?>
                         <div class="content-item">
                             <label for="algolia_app_id">Application ID</label>
                             <div><input type="text" value="<?php echo $algolia_registry->app_id ?>" name="APP_ID" id="algolia_app_id"></div>
