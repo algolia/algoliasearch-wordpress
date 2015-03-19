@@ -46,6 +46,40 @@ class AlgoliaHelper
         $index->setSettings($settings);
     }
 
+    public function getSettings($index_name)
+    {
+        $index = $this->algolia_client->initIndex($index_name);
+
+        try
+        {
+            $settings = $index->getSettings();
+
+            return $settings;
+        }
+        catch (\Exception $e)
+        {
+
+        }
+
+        return array();
+    }
+
+    public function mergeSettings($index_name, $settings)
+    {
+        $onlineSettings = $this->getSettings($index_name);
+
+        $removes = array('slaves');
+
+        foreach ($removes as $remove)
+            if (isset($onlineSettings[$remove]))
+                unset($onlineSettings[$remove]);
+
+        foreach ($settings as $key => $value)
+            $onlineSettings[$key] = $value;
+
+        return $onlineSettings;
+    }
+
     public function handleIndexCreation()
     {
         $created_indexes    = $this->algolia_client->listIndexes();
@@ -59,7 +93,7 @@ class AlgoliaHelper
         global $attributesToHighlight;
         global $attributesToSnippet;
 
-        $attributesToIndex = array();
+        $attributesToIndex  = array();
 
         foreach ($this->algolia_registry->searchable as $key => $value)
             if ($value['ordered'] == 'unordered')
@@ -87,8 +121,10 @@ class AlgoliaHelper
         {
             if (in_array($index_name.$name, $indexes) == false)
             {
-                $this->setSettings($index_name.$name, $defaultSettings);
-                $this->setSettings($index_name.$name."_temp", $defaultSettings);
+                $mergeSettings = $this->mergeSettings($index_name.$name, $defaultSettings);
+
+                $this->setSettings($index_name.$name, $mergeSettings);
+                $this->setSettings($index_name.$name."_temp", $mergeSettings);
 
                 $facets[] = $name;
             }
@@ -113,8 +149,10 @@ class AlgoliaHelper
                     }
                 }
 
-                $this->setSettings($index_name.$name, $defaultSettings);
-                $this->setSettings($index_name.$name."_temp", $defaultSettings);
+                $mergeSettings = $this->mergeSettings($index_name.$name, $defaultSettings);
+
+                $this->setSettings($index_name.$name, $mergeSettings);
+                $this->setSettings($index_name.$name."_temp", $mergeSettings);
             }
         }
 
@@ -151,8 +189,10 @@ class AlgoliaHelper
          * Handle Instant Search Indexes
          */
 
-        $this->setSettings($index_name.'all', $settings);
-        $this->setSettings($index_name.'all_temp', $settings);
+        $mergeSettings = $this->mergeSettings($index_name.'all', $settings);
+
+        $this->setSettings($index_name.'all', $mergeSettings);
+        $this->setSettings($index_name.'all_temp', $mergeSettings);
 
         /**
          * Handle Slaves

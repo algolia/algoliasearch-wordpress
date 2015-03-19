@@ -456,10 +456,10 @@
                                         <?php if ($order != -1): ?>
                                             <tr data-order="<?php echo $order; ?>">
                                         <?php else: ?>
-                                            <tr data-order="<?php echo (10000 + $i); $i++ ?>">
+                                      <tr data-order="<?php echo (10000 + $i); $i++ ?>">
                                         <?php endif; ?>
                                             <td>
-                                                <!-- PREVENT FROM ERASING CUSTOM RANKING -->
+                                                      <!-- PREVENT FROM ERASING CUSTOM RANKING -->
                                                 <?php $customs = array('custom_ranking' => 'CUSTOM_RANKING', 'custom_ranking_order' => 'CUSTOM_RANKING_ORDER', 'custom_ranking_sort' => 'CUSTOM_RANKING_SORT'); ?>
                                                 <?php foreach($customs as $custom_key => $custom_value): ?>
                                                     <?php if (isset($algolia_registry->metas[$type])
