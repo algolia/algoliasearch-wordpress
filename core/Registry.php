@@ -7,26 +7,27 @@ class Registry
     private static $setting_key = 'algolia';
 
     private $attributes = array(
-        'validCredential'           => false,
-        'app_id'                    => '',
-        'search_key'                => '',
-        'admin_key'                 => '',
-        'index_name'                => '',
-        'indexable_types'           => array('post' => array('name' => 'Articles','order' => 0),'page' => array('name' => 'Pages','order' => 1)),
-        'indexable_tax'             => array(),
-        'searchable'                => array(),
-        'sortable'                  => array(),
-        'type_of_search'            => 'autocomplete',
-        'conjunctive_facets'        => array(),
-        'disjunctive_facets'        => array(),
-        'instant_jquery_selector'   => '#content',
-        'extras'                    => array(),
-        'metas'                     => array(),
-        'number_by_page'            => 3,
-        'number_by_type'            => 2,
-        'search_input_selector'     => "[name='s']",
-        'theme'                     => 'default',
-        'date_custom_ranking'       => array('order' => 10000, 'enabled' => true, 'sort' => 'desc')
+        'validCredential'               => false,
+        'app_id'                        => '',
+        'search_key'                    => '',
+        'admin_key'                     => '',
+        'index_name'                    => '',
+        'indexable_types'               => array('post' => array('name' => 'Articles','order' => 0),'page' => array('name' => 'Pages','order' => 1)),
+        'indexable_tax'                 => array(),
+        'searchable'                    => array(),
+        'sortable'                      => array(),
+        'type_of_search'                => 'autocomplete',
+        'conjunctive_facets'            => array(),
+        'disjunctive_facets'            => array(),
+        'instant_jquery_selector'       => '#content',
+        'extras'                        => array(),
+        'metas'                         => array(),
+        'number_by_page'                => 3,
+        'number_by_type'                => 2,
+        'number_of_word_for_content'    => 100,
+        'search_input_selector'         => "[name='s']",
+        'theme'                         => 'default',
+        'date_custom_ranking'           => array('order' => 10000, 'enabled' => true, 'sort' => 'desc')
     );
 
     public static function getInstance()

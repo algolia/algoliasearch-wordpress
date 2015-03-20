@@ -339,6 +339,9 @@ class AlgoliaPlugin
         if (isset($_POST['NUMBER_BY_PAGE']) && is_numeric($_POST['NUMBER_BY_PAGE']))
             $this->algolia_registry->number_by_page = $_POST['NUMBER_BY_PAGE'];
 
+        if (isset($_POST['NUMBER_OF_WORD_FOR_CONTENT']) && is_numeric($_POST['NUMBER_OF_WORD_FOR_CONTENT']))
+            $this->algolia_registry->number_of_word_for_content = $_POST['NUMBER_OF_WORD_FOR_CONTENT'];
+
         if (isset($_POST['NUMBER_BY_TYPE']) && is_numeric($_POST['NUMBER_BY_TYPE']))
             $this->algolia_registry->number_by_type = $_POST['NUMBER_BY_TYPE'];
 
@@ -347,6 +350,8 @@ class AlgoliaPlugin
 
         $this->algolia_registry->search_input_selector  = str_replace('"', '\'', $search_input_selector);
         $this->algolia_registry->theme                  = $theme;
+
+        $this->algolia_helper->handleIndexCreation();
 
         wp_redirect('admin.php?page=algolia-settings#configuration');
     }
