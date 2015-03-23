@@ -11,6 +11,7 @@
 
     <a target="_blank" href="//algolia.com/dashboard" class="header-button" id="dashboard-link">Go to Algolia dashboard</a>
 
+    <?php if ($algolia_registry->validCredential) : ?>
     <h2>
         Algolia Search
         <button type="button" class="button button-primary " id="algolia_reindex" name="algolia_reindex">
@@ -53,6 +54,7 @@
             </div>
         </div>
     </div>
+    <?php endif; ?>
 
     <div class="wrapper">
         <div class="tabs myclearfix">

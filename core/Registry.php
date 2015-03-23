@@ -22,12 +22,12 @@ class Registry
         'instant_jquery_selector'       => '#content',
         'extras'                        => array(),
         'metas'                         => array(),
-        'number_by_page'                => 3,
-        'number_by_type'                => 2,
-        'number_of_word_for_content'    => 100,
+        'number_by_page'                => 10,
+        'number_by_type'                => 3,
+        'number_of_word_for_content'    => 30,
         'search_input_selector'         => "[name='s']",
         'theme'                         => 'default',
-        'date_custom_ranking'           => array('order' => 10000, 'enabled' => true, 'sort' => 'desc')
+        'date_custom_ranking'           => array('sort' => 10000, 'enabled' => true, 'order' => 'desc')
     );
 
     public static function getInstance()
