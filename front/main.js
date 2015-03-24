@@ -332,7 +332,7 @@ if (algoliaSettings.type_of_search == "instant")
                                 count: facets.length,
                                 sorting_indexes: algoliaSettings.sorting_indexes,
                                 getDate: getDate,
-                                sortSelected: sortSelected,
+                                sortSelected: sortSelected
                             });
                         }
 
