@@ -128,6 +128,7 @@ jQuery(document).ready(function($) {
 
     $("#taxonomies tbody, #extra-metas tbody, #indexable-types tbody, #custom-ranking tbody, #searchable_attributes tbody").sortable({
         containment: "parent",
+        items: 'tr:not(:first)',
         helper: fixHelper
     }).disableSelection();
 
