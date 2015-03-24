@@ -160,6 +160,7 @@ class AlgoliaPlugin
             "site_url"      => site_url()
         );
 
+
         foreach ($this->algolia_registry->indexable_types as $type => $obj)
             $algoliaAdminSettings["types"][] = array('type' => $type, 'name' => $obj['name'], 'count' => wp_count_posts($type)->publish);
 
@@ -474,6 +475,7 @@ class AlgoliaPlugin
 
             if (count($subaction) == 3)
             {
+                $this->algolia_registry->last_update = time();
                 if ($subaction[0] == 'type' && in_array($subaction[1], array_keys($this->algolia_registry->indexable_types)) && is_numeric($subaction[2]))
                     $this->indexer->indexPostsTypePart($subaction[1], $batch_count, $subaction[2]);
             }

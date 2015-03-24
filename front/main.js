@@ -57,7 +57,7 @@ if (algoliaSettings.type_of_search == "autocomplete")
             displayKey: 'title',
             templates: {
                 suggestion: function (hit) {
-                    return '<div class="footer">powered by <img src="' + algoliaSettings.plugin_url + '/front/algolia-logo.png"></div>';
+                    return '<div class="footer">powered by <img width="45" src="' + algoliaSettings.plugin_url + '/front/algolia-logo.png"></div>';
                 }
             }
         });

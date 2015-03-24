@@ -34,6 +34,13 @@ class ThemeHelper
                 else
                     $theme->screenshot = null;
 
+                $theme->screenshot_autocomplete  = isset($configs['screenshot-autocomplete']) ? $configs['screenshot-autocomplete'] : 'screenshot-autocomplete.png';
+
+                if (file_exists($this->themes_dir.$dir.'/'.$theme->screenshot_autocomplete))
+                    $theme->screenshot_autocomplete = plugin_dir_url(__FILE__).'../themes/'.$dir.'/'.$theme->screenshot_autocomplete;
+                else
+                    $theme->screenshot_autocomplete = null;
+
                 $theme->description = isset($configs['description']) ? $configs['description'] : '';
 
                 $themes[] = $theme;

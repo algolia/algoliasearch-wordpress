@@ -9,6 +9,22 @@ jQuery(document).ready(function($) {
                 $(this).closest(".has-extra-content").find(".show-hide").show();
     });
 
+    function handleScreenshot()
+    {
+        if ($('input[name="TYPE_OF_SEARCH"]:checked').val() == 'autocomplete')
+        {
+            $('.screenshot.autocomplete').show();
+            $('.screenshot.instant').hide();
+        }
+        else
+        {
+            $('.screenshot.autocomplete').hide();
+            $('.screenshot.instant').show();
+        }
+    }
+
+    handleScreenshot();
+
     $(".has-extra-content input[type='radio']").change(function (e) {
         $(".has-extra-content input[type='radio']").each(function () {
             if ($(this).is(':checked'))
@@ -16,6 +32,8 @@ jQuery(document).ready(function($) {
             else
                 $(this).closest(".has-extra-content").find(".show-hide").hide();
         });
+
+        handleScreenshot();
     });
 
     selectTab = function(hash)

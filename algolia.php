@@ -1,9 +1,9 @@
 <?php
 
 /*
-  Plugin Name: Algolia
+  Plugin Name: Algolia Realtime Search
   Plugin URI:
-  Description: replace wordpress search with Algolia Api
+  Description: The Algolia Realtime Search plugin turns the standards WordPress search (including WooCommerce) into a friendly Find-as-you-type autocomplete or an InstantSearch faceted result page. Both allow your users to find what they are looking for with just a few keystrokes, in seconds. Fully customizable via the plugin and the Algolia dashboard.
   Version: 0.1
   Author: Algolia
   Author URI: http://www.algolia.com
@@ -95,7 +95,6 @@ $external_attrs['product'] = function ($data) {
 
         return array();
     };
-
 /**
  * Functions definitions
  */

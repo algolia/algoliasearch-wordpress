@@ -18,6 +18,14 @@
             <i class="dashicons dashicons-upload"></i>
             Reindex data
         </button>
+        <span style="color: #444;font-family: 'Open Sans',sans-serif;font-size: 13px;line-height: 1.4em;">
+        Last update :
+            <?php if ($algolia_registry->last_update): ?>
+                <?php echo date('Y-m-d H:i:s', $algolia_registry->last_update); ?>
+            <?php else: ?>
+                Data never been indexed
+            <?php endif; ?>
+        </span>
     </h2>
 
     <div class="wrapper">
@@ -67,7 +75,7 @@
 
             <?php if ($algolia_registry->validCredential) : ?>
 
-            <div data-tab="#configuration"          class="title selected">UI</div>
+            <div data-tab="#configuration"          class="title selected">UI Integration</div>
             <div data-tab="#indexable-types"        class="title">Types</div>
             <div data-tab="#extra-metas"            class="title">Attributes</div>
             <div data-tab="#taxonomies"             class="title">Taxonomies</div>
@@ -85,33 +93,67 @@
                 <input type="hidden" name="action" value="update_account_info">
                 <div class="content-wrapper" id="account">
                     <div class="content">
-                        <h3>Algolia account</h3>
-                        <p class="help-block">Configure here your <a href="https://www.algolia.com">Algolia</a> credentials. You can find them in the "<a href="https://www.algolia.com/licensing">Credentials</a>" section of your dashboard. Don't have one? <a href="http://www.algolia.com/users/sign_up" target="_blank">Create one here</a>.</p>
-                        <?php if ($algolia_registry->validCredential == false && ($algolia_registry->app_id || $algolia_registry->search_key || $algolia_registry->admin_key)) : ?>
-                            <p class="warning">Your credentials are not valid</p>
-                        <?php endif; ?>
-                        <div class="content-item">
-                            <label for="algolia_app_id">Application ID</label>
-                            <div><input type="text" value="<?php echo $algolia_registry->app_id ?>" name="APP_ID" id="algolia_app_id"></div>
+                        <div style="float: left; width: 50%;">
+                            <div style="padding: 0px 10px;">
+                                <h3>Algolia account</h3>
+                                <p class="help-block">Configure here your <a href="https://www.algolia.com">Algolia</a> credentials. You can find them in the "<a href="https://www.algolia.com/licensing">Credentials</a>" section of your dashboard. Don't have one? <a href="http://www.algolia.com/users/sign_up" target="_blank">Create one here</a>.</p>
+                                <?php if ($algolia_registry->validCredential == false && ($algolia_registry->app_id || $algolia_registry->search_key || $algolia_registry->admin_key)) : ?>
+                                    <p class="warning">Your credentials are not valid</p>
+                                <?php endif; ?>
+                                <div class="content-item">
+                                    <label for="algolia_app_id">Application ID</label>
+                                    <div><input type="text" value="<?php echo $algolia_registry->app_id ?>" name="APP_ID" id="algolia_app_id"></div>
+                                </div>
+                                <div class="content-item">
+                                    <label for="algolia_search_api_key">Search-Only API Key</label>
+                                    <div><input type="text" value="<?php echo $algolia_registry->search_key ?>" name="SEARCH_KEY" id="algolia_search_api_key"></div>
+                                </div>
+                                <div class="content-item">
+                                    <label for="algolia_api_key">Admin API Key</label>
+                                    <div><input type="password" value="<?php echo $algolia_registry->admin_key ?>" name="ADMIN_KEY" id="algolia_api_key"></div>
+                                </div>
+                                <div class="content-item">
+                                    <label for="algolia_index_name">Index names prefix</label>
+                                    <div><input type="text" value="<?php echo $algolia_registry->index_name; ?>" name="INDEX_NAME" id="algolia_index_name" placeholder="wordpress_"></div>
+                                    <p class="description">This value will prepend all the index names.</p>
+                                </div>
+                                <div class="content-item">
+                                    <input type="submit" name="submit" id="submit" class="button button-primary" value="Save Changes">
+                                </div>
+                            </div>
                         </div>
-                        <div class="content-item">
-                            <label for="algolia_search_api_key">Search-Only API Key</label>
-                            <div><input type="text" value="<?php echo $algolia_registry->search_key ?>" name="SEARCH_KEY" id="algolia_search_api_key"></div>
-                        </div>
-                        <div class="content-item">
-                            <label for="algolia_api_key">Admin API Key</label>
-                            <div><input type="password" value="<?php echo $algolia_registry->admin_key ?>" name="ADMIN_KEY" id="algolia_api_key"></div>
-                        </div>
-                        <div class="content-item">
-                            <label for="algolia_index_name">Index names prefix</label>
-                            <div><input type="text" value="<?php echo $algolia_registry->index_name; ?>" name="INDEX_NAME" id="algolia_index_name" placeholder="wordpress_"></div>
-                            <p class="description">This value will prepend all the index names.</p>
-                        </div>
-                        <div class="content-item">
-                            <input type="submit" name="submit" id="submit" class="button button-primary" value="Save Changes">
-                        </div>
-                    </div>
+                        <div style="float: left; width: 50%; box-sizing:border-box; border-left: solid 1px #DDDDDD">
+                            <div style="padding: 0px 10px;">
+                                <h3>How to configure and customize your search</h3>
+                                <div>
+                                    <iframe style="width: 100%;" height="315" src="https://www.youtube.com/embed/8OBfr46Y0cQ" frameborder="0" allowfullscreen></iframe>
+                                </div>
+                                <h3>Add-on ressources</h3>
+                                <div>
+                                    <div>
+                                        <div><b>Tutorials</b></div>
+                                        <div>
+                                            <ul>
+                                                <li><a href="#">How to customize the autocomplete result box</a></li>
+                                                <li><a href="#">How to create a custom Search result page</a></li>
+                                                <li><a href="#">Show more</a></li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                    <div style="margin-top: 20px;">
+                                        <div><b>Documentation (for Developers)</b></div>
+                                        <div>
+                                            <ul>
+                                                <li><a href="#">http://www.algolia.com/doc</a></li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
 
+                        </div>
+                        <div style="clear: both;"></div>
+                    </div>
                 </div>
             </form>
         </div>
@@ -123,17 +165,16 @@
                 <input type="hidden" name="action" value="update_type_of_search" />
                 <div class="content-wrapper" id="type_of_search">
                     <div class="content">
-                        <h3>Search bar</h3>
-                        <p class="help-block">Configure here your search input field.</p>
+                        <h3>Configure your Search experience</h3>
                         <div class="content-item">
-                            <label for="search-input-selector">DOM selector</label>
+                            <label for="search-input-selector">1 - Select the search input used</label>
                             <div>
                                 <input type="text" value="<?php echo str_replace("\\", "",$algolia_registry->search_input_selector); ?>" name="SEARCH_INPUT_SELECTOR" id="search-input-selector">
                                 <p class="description">The jQuery selector used to select your search bar.</p>
                             </div>
                         </div>
                         <div class="has-extra-content content-item">
-                            <label>Search experience</label>
+                            <label>2 - Select your search experience</label>
                             <div>
                                 <input type="radio"
                                                 <?php checked($algolia_registry->type_of_search == 'autocomplete'); ?>
@@ -187,7 +228,11 @@
                             </div>
                         </div>
                         <h3>Theme</h3>
-                        <p class="help-block">Configure here the theme of your search results.</p>
+                        <!--<p class="help-block">Configure here the theme of your search results.</p>-->
+                        <div style="padding-left: 5px; padding-bottom: 10px;">
+                            Select the theme you want to use to display the search results.<br>
+                            You can either use one of the 2 samples themes, or display results in your own build. <a href="#">Learn how to build a theme</a>
+                        </div>
                         <div class="content-item">
                             <div class="theme-browser">
                                 <div class="themes">
@@ -200,9 +245,14 @@
                                             <label for="<?php echo $theme->dir; ?>">
                                                 <div class="theme-screenshot">
                                                     <?php if ($theme->screenshot): ?>
-                                                        <img src="<?php echo $theme->screenshot; ?>">
+                                                        <img class="screenshot instant" src="<?php echo $theme->screenshot; ?>">
                                                     <?php else: ?>
-                                                        <div class="no-screenshot">No screenshot</div>
+                                                        <div class="no-screenshot screenshot instant">No screenshot</div>
+                                                    <?php endif; ?>
+                                                    <?php if ($theme->screenshot_autocomplete): ?>
+                                                        <img class="screenshot autocomplete" src="<?php echo $theme->screenshot_autocomplete; ?>">
+                                                    <?php else: ?>
+                                                        <div class="no-screenshot autocomplete instant">No screenshot</div>
                                                     <?php endif; ?>
                                                 </div>
                                                 <div class="theme-name">
