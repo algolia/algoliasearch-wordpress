@@ -121,7 +121,8 @@ class AlgoliaHelper
         /**
          * Handle Autocomplete Taxonomies
          */
-        foreach (array_keys($this->algolia_registry->indexable_tax) as $name)
+
+        foreach ($this->algolia_registry->indexable_tax as $name => $value)
         {
             if (in_array($index_name.$name, $indexes) == false)
             {
@@ -130,7 +131,8 @@ class AlgoliaHelper
                 $this->setSettings($index_name.$name, $mergeSettings);
                 $this->setSettings($index_name.$name."_temp", $mergeSettings);
 
-                $facets[] = $name;
+                if (isset($this->algolia_registry->conjunctive_facets[$name]) || isset($this->algolia_registry->disjunctive_facets[$name]))
+                    $facets[] = $name;
             }
         }
 
@@ -213,11 +215,9 @@ class AlgoliaHelper
 
             foreach ($this->algolia_registry->sortable as $values)
             {
-                $settings = array(
-                    'ranking' => array($values['sort'].'('.$values['name'].')', 'typo', 'geo', 'words', 'proximity', 'attribute', 'exact', 'custom')
-                );
+                $mergeSettings['ranking'] = array($values['sort'].'('.$values['name'].')', 'typo', 'geo', 'words', 'proximity', 'attribute', 'exact', 'custom');
 
-                $this->setSettings($index_name.'all_'.$values['name'].'_'.$values['sort'], $settings);
+                $this->setSettings($index_name.'all_'.$values['name'].'_'.$values['sort'], $mergeSettings);
             }
         }
     }
