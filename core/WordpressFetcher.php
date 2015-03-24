@@ -54,7 +54,8 @@ class WordpressFetcher
     public function getImage($id)
     {
         $image_fields = array("ID" => "ID", "guid" => "file", "post_mime_type" => "mime_type");
-        $indexable_image_size = array('thumbnail', 'medium', 'large');
+
+        $indexable_image_size = get_intermediate_image_sizes();
 
         $uploadDir = wp_upload_dir();
         $uploadBaseUrl = $uploadDir['baseurl'];
