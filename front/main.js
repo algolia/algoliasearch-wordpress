@@ -215,6 +215,11 @@ if (algoliaSettings.type_of_search == "instant")
                     }
                 };
 
+                this.performQueriesWithoutUpdatingUrl = function()
+                {
+                    this.helper.search(this.query, this.searchCallback);
+                };
+
                 this.performQueries = function (push_state)
                 {
                     this.helper.search(this.query, this.searchCallback);
@@ -322,7 +327,13 @@ if (algoliaSettings.type_of_search == "instant")
                             }
 
                             /** Render Facet **/
-                            html_content += $this.facetsTemplate.render({ facets: facets, count: facets.length });
+                            html_content += $this.facetsTemplate.render({
+                                facets: facets,
+                                count: facets.length,
+                                sorting_indexes: algoliaSettings.sorting_indexes,
+                                getDate: getDate,
+                                sortSelected: sortSelected,
+                            });
                         }
 
                         /** Render results **/
