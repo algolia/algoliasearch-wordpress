@@ -588,14 +588,12 @@
                         <p class="help-block">Configure here the attributes used to reflect the popularity of your records (number of likes, number of views, number of sales...).</p>
                         <table>
                             <tr data-order="-1">
-                                <th></th>
                                 <th>Enabled</th>
                                 <th>Meta key</th>
                                 <th>Sort order</th>
                             </tr>
 
                             <tr data-order="<?php echo $algolia_registry->date_custom_ranking['sort']; ?>">
-                                <td><img width="10" src="<?php echo plugin_dir_url(__FILE__); ?>../imgs/move.png"></td>
                                 <td>
                                     <input type="checkbox"
                                            name="TYPES[date][METAS][date][CUSTOM_RANKING]"
@@ -605,14 +603,14 @@
                                 <td>date</td>
                                 <td>
                                     <select name="TYPES[date][METAS][date][CUSTOM_RANKING_ORDER]">
-                                        <?php foreach (array('asc' => 'Ascending', 'desc' => 'Descending') as $key => $value): ?>
+                                        <?php foreach (array('asc' => 'ASC', 'desc' => 'DESC') as $key => $value): ?>
                                             <?php if ($algolia_registry->date_custom_ranking['order'] == $key): ?>
                                                 <option selected value=<?php echo $key; ?>><?php echo $value; ?></option>
                                             <?php else : ?>
                                                 <option value=<?php echo $key; ?>><?php echo $value; ?></option>
                                             <?php endif; ?>
                                         <?php endforeach; ?>
-                                    </select>
+                                    </select><img width="10" src="<?php echo plugin_dir_url(__FILE__); ?>../imgs/move.png">
                                 </td>
                             </tr>
                             <?php $i = 0; $n = 0; ?>
@@ -640,7 +638,6 @@
                                             <?php else: ?>
                                                 <tr data-order="<?php echo (10000 + $i); $i++ ?>">
                                             <?php endif; ?>
-                                            <td><img width="10" src="<?php echo plugin_dir_url(__FILE__); ?>../imgs/move.png"></td>
                                             <td>
                                                 <input type="checkbox"
                                                        name="TYPES[<?php echo $type; ?>][METAS][<?php echo $meta_key; ?>][CUSTOM_RANKING]"
@@ -661,7 +658,7 @@
                                                             <option value=<?php echo $key; ?>><?php echo $value; ?></option>
                                                         <?php endif; ?>
                                                     <?php endforeach; ?>
-                                                </select>
+                                                </select><img width="10" src="<?php echo plugin_dir_url(__FILE__); ?>../imgs/move.png">
                                             </td>
                                             </tr>
                                         <?php endif; ?>

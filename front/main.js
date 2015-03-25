@@ -228,6 +228,13 @@ if (algoliaSettings.type_of_search == "instant")
 
                 };
 
+                this.performQueriesWithCustomSearchCallback = function (push_state, searchCallback)
+                {
+                    this.helper.search(this.query, searchCallback);
+
+                    this.updateUrl();
+                };
+
                 this.searchCallback = function(success, content) {
 
                     if (success)
