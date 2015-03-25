@@ -83,7 +83,7 @@ jQuery(document).ready(function($) {
         });
     }
 
-    var disabelable = ['#indexable-types', '#taxonomies', '#extra-metas', '#indexable-types'];
+    var disabelable = ['#indexable-types', '#taxonomies', '#extra-metas', '#indexable-types', '#searchable_attributes'];
 
     for (var i = 0; i < disabelable.length; i++)
     {

@@ -337,7 +337,6 @@
                         <p class="help-block">Configure here the attributes you want to be able to search in.</p>
                         <table>
                             <tr data-order="-1">
-                                <th></th>
                                 <th>Enabled</th>
                                 <th>Name</th>
                                 <th>Attribute ordering</th>
@@ -380,7 +379,6 @@
                             <?php else: ?>
                                 <tr data-order="<?php echo (10000 + $i); $i++ ?>">
                             <?php endif; ?>
-                                <td><img width="10" src="<?php echo plugin_dir_url(__FILE__); ?>../imgs/move.png"></td>
                                 <td><input <?php checked(isset($algolia_registry->searchable[$searchItem])); ?> type="checkbox" name="ATTRIBUTES[<?php echo $searchItem; ?>][SEARCHABLE]"></td>
                                 <td>
                                     <?php echo $searchItem; ?>
@@ -395,6 +393,7 @@
                                         <?php endif; ?>
                                     <?php endforeach; ?>
                                     </select>
+                                    <img width="10" src="<?php echo plugin_dir_url(__FILE__); ?>../imgs/move.png">
                                 </td>
                             </tr>
                             <?php endforeach; ?>
