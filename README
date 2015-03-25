@@ -1,0 +1,192 @@
+# Algolia Wordpress Plugin
+
+## Installation
+
+1. Go to [https://www.algolia.com/users/sign_up](https://www.algolia.com/users/sign_up) and signup
+2. After logging into Algolia Dashboard, go to the credential section and get your api keys
+3. Install Algolia Wordpress Plugin in your Wordpress dashboard
+4. Activate the plugin through the Plugins menu in Wordpress
+5. Go to the Algolia Wordpress Plugin configuration page and fill the your api Keys
+6. You can now configure every aspect of the search experience. See the [Configuration]() section for more information
+
+## Configuration
+
+### Credentials
+
+In this section you configure two things :
+
+   1. Your api keys
+
+   You need to choose which api keys to use. You can go [https://www.algolia.com/licensing](https://www.algolia.com/licensing)
+   
+   2. Your indexes prefix
+
+   The plugin will create several indexes :
+   
+    * 1 index for the instant search
+    * 1 index for each section of the autocomplete
+    * 1 index for each sort you enable
+   
+   You choose to prefix them to be able to find them easily in your dashboard or you can leave the field empty.
+   
+### UI Integration
+
+#### Search Exprerience Configuration
+
+   1. Search Input used
+
+   To be able to integrate the search experience on you site you need to incate where the plugin is supposed to find the search input. You do that by specifing the JQuery selector.
+   
+   In the wordpress default theme : [name='s']
+
+   2. Search Experience
+
+   The plugin let you choose between two differents experience, an autocomplete one and an instant search one.
+   
+     * Autocomplete
+      
+      This will add an autocompletion menu to your search. In this menu you will have a section for every type you enable like page and post, and one section for every taxonomie you enable like categories or tag
+      
+      You need to specify the max number of result you want to be display in each section. If you choose 2 you will have for each section the two most revelevant results for your query
+      
+      ```
+      The types section will be shown before the taxonomies one,
+      but you can order them separately
+      ```
+     
+     * Instant search
+
+     This will refresh the whole results page as you type. For each query this will display your results of each type you enabled, your facets in you enable any and a pagination bar.
+     
+     You need to indicate a Jquery dom selector to specify where the plugin is supposed to put your results, when you type a query it will save the current content of this element and restore it if the query is erased
+     
+     You can also choose the number of result you want by page and the number of word on the content snippet. 
+
+#### Themes
+
+The plugin embedded a theme support, which allow you to choose the way your results are displayed. You can choose one of the 2 samples themes or build your own [Build your theme]().
+
+The theme is **completely independent** from the Wordpress Theme 
+
+Each theme handle both Autocomplete **AND** Instant Search
+
+### Types
+
+You can choose the Wordpress type you want to index, by default post and page. If one of your extension (Woo commerce for example) create new types you will see them in this panel and can also choose to index them as well. You can order them to change the order of the section in the autocomplete menu.
+Foreach type you can specify a label which we be the name of the section on the autocomplete.
+
+```
+Order and label of types will have no impact on Instant Search
+```
+
+### Attributes
+
+You can choose extra attribute you want to index. If you use Wordpress as a blog you should not have to change anything. At the contrary when using Wordpress with plugin as WooCommerce this should be very useful as you probaly want to index the price or the total_sales attributes.
+
+When you enable an attribute, the plugin will add this attribute in the record but **will not be searchable**.
+
+When you make an attribute facetable **AND your are in Instant Search mode** you will see a facet bloc appears in which you can filter your results easily.
+
+There is three facet type : 
+
+  1. Conjunctive
+
+     Conjunctive facet
+     
+  2. Disjunctive
+
+     Disjunctive facet
+  
+  3. Slider
+
+      The slider facet is a Disjunctive facet but will have an different look.
+      Be careful when using this type, your attribute **MUST be an numeric attribute**
+      
+You can had a label to each enabled facet, and it will appear on the Facet bloc title
+ 
+You can also order the facet blocs
+
+```
+Note: Your taxonomies facets will always appears before
+```
+
+### Taxonomies
+
+
+
+### Search Configuration
+
+### Result Ranking
+
+## Build your theme
+
+A theme is composed of Hogan templates, a stylesheet and a js file. The theme is responsible for the way the results are displayed but also for the event handling
+
+## Handle a non supported plugin
+
+## FAQ
+
+### What happens if I modify a setting from the dashboard ?
+
+The plugin will try to merge the settings that have been modified from the dashboard.
+
+In every case the following settings will be erased: 
+
+1. For the autocomplete
+  * attributesToIndex
+  * attributesToHighlight
+  * attributesToSnippet
+
+2. For the Instant Search
+  * attributesToIndex
+  * attributesForFaceting
+  * attributesToHighlight
+  * attributesToSnippet
+  * customRanking
+  * slaves
+  * ranking (only for the sorting indexes)
+
+### Are my other plugin compatible ?
+
+It depends. The plugin handle every plugin that integrate in the post table and the meta table of wordpress, if a plugin create its own table the plugin will not work but you can always add support for it see [Handle a non supported plugin]()
+
+### I want to change a facet item name for example the "Types" facet, How should I do ?
+
+In the algolia.php file in the root directory of the plugin you want to add those attribute to this line
+
+```php
+$facetsLabels = array(
+    'post'      => 'Article',
+    'page'      => 'Page'
+);
+```
+
+For example if you want to replace "product" by "Products" in facets elements, it will look like this
+
+```php
+$facetsLabels = array(
+    'post'      => 'Article',
+    'page'      => 'Page',
+    'product'   => 'Product'
+);
+```
+
+This works for any other Facets, but the Type one is the most likely to have non wanted formats
+
+###I want to make a custom attribute searchable, How should I do ?
+
+In the algolia.php file in the root directory of the plugin you want to add those attribute to this line
+
+```php
+$attributesToIndex = array("title", "content", "author", "type");
+```
+
+For example if you want to index an attribute called "texture", it will look like this
+
+```php
+$attributesToIndex = array("title", "content", "author", "type", "texture");
+```
+
+###I save my configuration but, I do not see any change on my results ?
+
+When you change an setting that impact the index you may want to use the Re-index data, so that you be able to see the changes

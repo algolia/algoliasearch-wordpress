@@ -60,6 +60,8 @@ $external_attrs['product'] = function ($data) {
             $factory = new WC_Product_Factory();
             $product = $factory->get_product($data->ID);
 
+
+
             $product_attrs = array(
                 'virtual'            => $product->is_virtual(),
                 'sku'                => $product->get_sku(),
@@ -89,6 +91,9 @@ $external_attrs['product'] = function ($data) {
                 'download_type'      => $product->download_type,
                 'purchase_note'      => wpautop(do_shortcode(wp_kses_post($product->purchase_note))),
             );
+
+            foreach ($product->get_attributes() as $attribute)
+                $product_attrs[$attribute['name']] = $attribute['value'];
 
             return $product_attrs;
         }
