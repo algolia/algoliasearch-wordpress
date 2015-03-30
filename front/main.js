@@ -369,7 +369,9 @@ if (algoliaSettings.type_of_search == "instant")
 
 
                         /** Call this function that should be define in the template **/
-                        finishRenderingResults();
+
+                        if (window.finishRenderingResults != undefined)
+                            window.finishRenderingResults();
                     }
                 };
 
