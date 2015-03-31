@@ -94,11 +94,11 @@
                     {{/checked}}
 
                     {{#checked}}
-                            <input style="display: none;" data-tax="{{tax}}" checked data-name="{{name}}" class="facet_value" type="checkbox" />
+                            <input style="display: none;" data-tax="{{tax}}" checked data-name="{{nameattr}}" class="facet_value" type="checkbox" />
                     {{/checked}}
 
                     {{^checked}}
-                            <input style="display: none;" data-tax="{{tax}}" data-name="{{name}}" class="facet_value" type="checkbox" />
+                            <input style="display: none;" data-tax="{{tax}}" data-name="{{nameattr}}" class="facet_value" type="checkbox" />
                     {{/checked}}
 
                             {{name}} ({{count}})
@@ -125,11 +125,11 @@
                     {{/checked}}
 
                     {{#checked}}
-                            <input data-tax="{{tax}}" checked data-name="{{name}}" class="facet_value" type="checkbox" />
+                            <input data-tax="{{tax}}" checked data-name="{{nameattr}}" class="facet_value" type="checkbox" />
                     {{/checked}}
 
                     {{^checked}}
-                            <input data-tax="{{tax}}" data-name="{{name}}" class="facet_value" type="checkbox" />
+                            <input data-tax="{{tax}}" data-name="{{nameattr}}" class="facet_value" type="checkbox" />
                     {{/checked}}
 
                          {{name}} ({{count}})
