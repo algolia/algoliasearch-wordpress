@@ -118,47 +118,51 @@ class AlgoliaHelper
             }, $created_indexes["items"]);
         }
 
-        /**
-         * Handle Autocomplete Taxonomies
-         */
 
-        foreach ($this->algolia_registry->indexable_tax as $name => $value)
+        if ($this->algolia_registry->type_of_search == 'autocomplete')
         {
-            if (in_array($index_name.$name, $indexes) == false)
+            /**
+             * Handle Autocomplete Taxonomies
+             */
+
+            foreach ($this->algolia_registry->indexable_tax as $name => $value)
             {
-                $mergeSettings = $this->mergeSettings($index_name.$name, $defaultSettings);
-
-                $this->setSettings($index_name.$name, $mergeSettings);
-                $this->setSettings($index_name.$name."_temp", $mergeSettings);
-
-                if (isset($this->algolia_registry->conjunctive_facets[$name]) || isset($this->algolia_registry->disjunctive_facets[$name]))
-                    $facets[] = $name;
-            }
-        }
-
-        /**
-         * Handle Autocomplete Types
-         */
-        foreach (array_keys($this->algolia_registry->indexable_types) as $name)
-        {
-            if (in_array($index_name."_".$name, $indexes) == false)
-            {
-                if (isset($this->algolia_registry->metas[$name]))
+                if (in_array($index_name . $name, $indexes) == false)
                 {
-                    foreach ($this->algolia_registry->metas[$name] as $key => $value)
-                    {
-                        if ($value['facetable'])
-                            $facets[] = $key;
+                    $mergeSettings = $this->mergeSettings($index_name . $name, $defaultSettings);
 
-                        if ($value['custom_ranking'])
-                            $customRankingTemp[] = array('sort' => $value['custom_ranking_sort'], 'value' => $value['custom_ranking_order'].'('.$key.')');
-                    }
+                    $this->setSettings($index_name . $name, $mergeSettings);
+                    $this->setSettings($index_name . $name . "_temp", $mergeSettings);
+
+                    if (isset($this->algolia_registry->conjunctive_facets[$name]) || isset($this->algolia_registry->disjunctive_facets[$name]))
+                        $facets[] = $name;
                 }
+            }
 
-                $mergeSettings = $this->mergeSettings($index_name.$name, $defaultSettings);
+            /**
+             * Handle Autocomplete Types
+             */
+            foreach (array_keys($this->algolia_registry->indexable_types) as $name)
+            {
+                if (in_array($index_name . "_" . $name, $indexes) == false)
+                {
+                    if (isset($this->algolia_registry->metas[$name]))
+                    {
+                        foreach ($this->algolia_registry->metas[$name] as $key => $value)
+                        {
+                            if ($value['facetable'])
+                                $facets[] = $key;
 
-                $this->setSettings($index_name.$name, $mergeSettings);
-                $this->setSettings($index_name.$name."_temp", $mergeSettings);
+                            if ($value['custom_ranking'])
+                                $customRankingTemp[] = array('sort' => $value['custom_ranking_sort'], 'value' => $value['custom_ranking_order'] . '(' . $key . ')');
+                        }
+                    }
+
+                    $mergeSettings = $this->mergeSettings($index_name . $name, $defaultSettings);
+
+                    $this->setSettings($index_name . $name, $mergeSettings);
+                    $this->setSettings($index_name . $name . "_temp", $mergeSettings);
+                }
             }
         }
 
@@ -196,6 +200,9 @@ class AlgoliaHelper
          */
 
         $mergeSettings = $this->mergeSettings($index_name.'all', $settings);
+
+        if ($this->algolia_registry->type_of_search == 'autocomplete')
+            return;
 
         $this->setSettings($index_name.'all', $mergeSettings);
         $this->setSettings($index_name.'all_temp', $mergeSettings);
