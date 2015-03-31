@@ -292,7 +292,8 @@
                                 <th>Auto-completion menu label &amp; ordering</th>
                             </tr>
                         <?php foreach (get_post_types() as $type) : ?>
-                            <?php if (in_array($type, array())) { continue; } ?>
+                            <?php $count = wp_count_posts($type)->publish; ?>
+                            <?php if ($count == 0 || in_array($type, array('revision', 'nav_menu_item', 'acf', 'product_variation', 'shop_order', 'shop_order_refund', 'shop_coupon', 'shop_webhook', 'wooframework'))) { continue; } ?>
                             <?php
                             $order = -1;
                             if (is_array($algolia_registry->indexable_types) && in_array($type, array_keys($algolia_registry->indexable_types)))
@@ -311,7 +312,7 @@
                                         >
                                 </td>
                                 <td>
-                                    <?php echo $type; ?>
+                                    <?php echo $type; ?> (<?php echo $count; ?>)
                                 </td>
                                 <td>
                                     <input type="text" value="<?php echo (isset($algolia_registry->indexable_types[$type]) ? $algolia_registry->indexable_types[$type]['name'] : "") ?>" name="TYPES[<?php echo $type; ?>][NAME]">
