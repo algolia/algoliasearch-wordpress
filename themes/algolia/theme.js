@@ -63,6 +63,8 @@ jQuery(document).ready(function ($) {
 
             var $this = $(this);
 
+            engine.query = $(this).val();
+
             $(algoliaSettings.search_input_selector).each(function (i) {
                 if ($(this)[0] != $this[0])
                     $(this).val(engine.query);
@@ -82,7 +84,6 @@ jQuery(document).ready(function ($) {
             engine.helper.clearRefinements();
             engine.helper.clearNumericRefinements();
 
-            engine.query = $(this).val();
 
             engine.performQueries(false);
 
