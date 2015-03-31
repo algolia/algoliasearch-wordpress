@@ -98,17 +98,17 @@ class AlgoliaPlugin
             if (isset($this->algolia_registry->metas[$type]))
                 foreach ($this->algolia_registry->metas[$type] as $meta_key => $meta_value)
                     if ($meta_value['facetable'])
-                        $facets[] = array('order1' => 1, 'order2' => $meta_value['order'], 'tax' => $meta_key, 'name' => $meta_value['name'] ? $meta_value['name'] : $meta_key, 'type' => $meta_value['type']);
+                        $facets[] = array('order' => $meta_value['order'], 'tax' => $meta_key, 'name' => $meta_value['name'] ? $meta_value['name'] : $meta_key, 'type' => $meta_value['type']);
         }
 
         foreach ($this->algolia_registry->indexable_tax as $tax => $obj)
             $indexes[] = array('index_name' => $this->algolia_registry->index_name . $tax, 'name' => $obj['name'], 'order1' => 1, 'order2' => $obj['order']);
 
         foreach ($this->algolia_registry->conjunctive_facets as $tax => $obj)
-            $facets[] = array('tax' => $tax, 'name' => $obj['name'], 'order1' => 0,'order2' => $obj['order'], 'type' => 'conjunctive');
+            $facets[] = array('tax' => $tax, 'name' => $obj['name'], 'order' => $obj['order'], 'type' => 'conjunctive');
 
         foreach ($this->algolia_registry->disjunctive_facets as $tax => $obj)
-            $facets[] = array('tax' => $tax, 'name' => $obj['name'], 'order1' => 0,'order2' => $obj['order'], 'type' => 'disjunctive');
+            $facets[] = array('tax' => $tax, 'name' => $obj['name'], 'order' => $obj['order'], 'type' => 'disjunctive');
 
         $sorting_indexes = array();
 
@@ -193,57 +193,6 @@ class AlgoliaPlugin
         $algolia_helper->checkRights();
 
         wp_redirect('admin.php?page=algolia-settings#credentials');
-    }
-
-    /**
-     *
-     */
-    public function admin_post_update_indexable_taxonomies()
-    {
-        $valid_tax = get_taxonomies();
-
-        $taxonomies = array();
-        $conjunctive_facets = array();
-        $disjunctive_facets = array();
-
-        $i = 0;
-        $j = 0;
-
-        if (isset($_POST['TAX']) && is_array($_POST['TAX']))
-        {
-            foreach ($_POST['TAX'] as $tax)
-            {
-                if (in_array($tax['SLUG'], $valid_tax) || in_array($tax['SLUG'], array_keys($this->algolia_registry->extras)))
-                {
-                    $taxonomies[$tax['SLUG']] = array(
-                        'name' => $tax['NAME'] == '' ? $tax['SLUG'] : $tax['NAME'],
-                        'order' => $i
-                    );
-                    $i++;
-                }
-
-                if (isset($tax['FACET']))
-                {
-                    if ($tax['FACET_TYPE'] == 'conjunctive')
-                        $conjunctive_facets[$tax["SLUG"]] = array('order' => $j, 'name' => $tax["NAME"]);
-                    else
-                        $disjunctive_facets[$tax["SLUG"]] = array('order' => $j, 'name' => $tax["NAME"]);
-
-                    $j++;
-                }
-            }
-        }
-
-
-        $this->algolia_registry->indexable_tax = $taxonomies;
-        $this->algolia_registry->conjunctive_facets = $conjunctive_facets;
-        $this->algolia_registry->disjunctive_facets = $disjunctive_facets;
-
-        $this->algolia_helper->handleIndexCreation();
-
-        $this->indexer->indexTaxonomies();
-
-        wp_redirect('admin.php?page=algolia-settings#taxonomies');
     }
 
     public function admin_post_update_indexable_types()
@@ -413,13 +362,14 @@ class AlgoliaPlugin
 
     public function admin_post_update_extra_meta()
     {
+        /**
+         * Handle Extra Metas
+         */
         $indexable_types = $this->algolia_registry->indexable_types;
 
         if (isset($_POST['TYPES']) && is_array($_POST['TYPES']))
         {
             $metas = array();
-
-            $i = 0;
 
             foreach ($_POST['TYPES'] as $key => $value)
             {
@@ -436,12 +386,12 @@ class AlgoliaPlugin
                             $metas[$key][$meta_key]["indexable"]            = isset($meta_value["INDEXABLE"]) ? 1 : 0;
                             $metas[$key][$meta_key]["facetable"]            = $metas[$key][$meta_key]["indexable"] && isset($meta_value["FACETABLE"]) ? 1 : 0;
                             $metas[$key][$meta_key]["type"]                 = $meta_value["TYPE"];
-                            $metas[$key][$meta_key]["order"]                = $i;
+                            $metas[$key][$meta_key]["order"]                = $meta_value["ORDER"];
                             $metas[$key][$meta_key]["custom_ranking"]       = isset($meta_value["CUSTOM_RANKING"]) && $meta_value["CUSTOM_RANKING"] ? $meta_value["CUSTOM_RANKING"] : 0;
                             $metas[$key][$meta_key]["custom_ranking_sort"]  = isset($meta_value["CUSTOM_RANKING_SORT"]) && $meta_value["CUSTOM_RANKING_SORT"] ? $meta_value["CUSTOM_RANKING_SORT"] : 10000;
                             $metas[$key][$meta_key]["custom_ranking_order"] = isset($meta_value["CUSTOM_RANKING_ORDER"]) && $meta_value["CUSTOM_RANKING_ORDER"] ? $meta_value["CUSTOM_RANKING_ORDER"] : 'asc';
 
-                            $i++;
+                            $j++;
                         }
                     }
                 }
@@ -450,7 +400,49 @@ class AlgoliaPlugin
             $this->algolia_registry->metas = $metas;
         }
 
+        /**
+         * Handle Taxonomies
+         */
+
+        $valid_tax = get_taxonomies();
+
+        $taxonomies = array();
+        $conjunctive_facets = array();
+        $disjunctive_facets = array();
+
+        $i = 0;
+
+        if (isset($_POST['TAX']) && is_array($_POST['TAX']))
+        {
+            foreach ($_POST['TAX'] as $tax)
+            {
+                if (in_array($tax['SLUG'], $valid_tax) || in_array($tax['SLUG'], array_keys($this->algolia_registry->extras)))
+                {
+                    $taxonomies[$tax['SLUG']] = array(
+                        'name' => $tax['NAME'] == '' ? $tax['SLUG'] : $tax['NAME'],
+                        'order' => $i
+                    );
+                    $i++;
+                }
+
+                if (isset($tax['FACET']))
+                {
+                    if ($tax['FACET_TYPE'] == 'conjunctive')
+                        $conjunctive_facets[$tax["SLUG"]] = array('order' => $tax['ORDER'], 'name' => $tax["NAME"]);
+                    else
+                        $disjunctive_facets[$tax["SLUG"]] = array('order' => $tax['ORDER'], 'name' => $tax["NAME"]);
+                }
+            }
+        }
+
+
+        $this->algolia_registry->indexable_tax = $taxonomies;
+        $this->algolia_registry->conjunctive_facets = $conjunctive_facets;
+        $this->algolia_registry->disjunctive_facets = $disjunctive_facets;
+
         $this->algolia_helper->handleIndexCreation();
+
+        $this->indexer->indexTaxonomies();
 
         wp_redirect('admin.php?page=algolia-settings#extra-metas');
     }

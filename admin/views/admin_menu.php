@@ -78,7 +78,6 @@
             <div data-tab="#configuration"          class="title selected">UI Integration</div>
             <div data-tab="#indexable-types"        class="title">Types</div>
             <div data-tab="#extra-metas"            class="title">Attributes</div>
-            <div data-tab="#taxonomies"             class="title">Taxonomies</div>
             <div data-tab="#searchable_attributes"  class="title">Search Configuration</div>
             <div data-tab="#custom-ranking"         class="title">Results Ranking</div>
             <div data-tab="#sortable_attributes"    class="title">Sorting</div>
@@ -228,7 +227,6 @@
                             </div>
                         </div>
                         <h3>Theme</h3>
-                        <!--<p class="help-block">Configure here the theme of your search results.</p>-->
                         <div style="padding-left: 5px; padding-bottom: 10px;">
                             Select the theme you want to use to display the search results.<br>
                             You can either use one of the 2 samples themes, or display results in your own build. <a href="#">Learn how to build a theme</a>
@@ -294,6 +292,7 @@
                                 <th>Auto-completion menu label &amp; ordering</th>
                             </tr>
                         <?php foreach (get_post_types() as $type) : ?>
+                            <?php if (in_array($type, array())) { continue; } ?>
                             <?php
                             $order = -1;
                             if (is_array($algolia_registry->indexable_types) && in_array($type, array_keys($algolia_registry->indexable_types)))
@@ -476,7 +475,7 @@
         </div>
 
         <div class="tab-content" id="extra-metas">
-            <form action="<?php echo site_url(); ?>/wp-admin/admin-post.php" method="post">
+            <form id="extra-metas-form" action="<?php echo site_url(); ?>/wp-admin/admin-post.php" method="post">
                 <input type="hidden" name="action" value="update_extra_meta">
                 <div class="content-wrapper" id="customization">
                     <div class="content">
@@ -485,93 +484,185 @@
                             <br>
                             Default attributes : objectID, authorId, author, author_login, permalink, date, content, title, excerpt, slug, modified, parent, menu_order, type
                         </p>
-                        <table>
+
+                        <table id="extra-meta-and-taxonomies">
                             <tr data-order="-1">
                                 <th>Enabled</th>
+                                <th>Type</th>
                                 <th>Name</th>
-                                <th>Meta key</th>
                                 <th>Facetable</th>
                                 <th>Facet type</th>
                                 <th>Facet label &amp; ordering</th>
                             </tr>
-                            <?php $i = 0; ?>
-                            <?php foreach (get_post_types() as $type) : ?>
-                                <?php if (is_array($algolia_registry->indexable_types) && in_array($type, array_keys($algolia_registry->indexable_types))) : ?>
-                                    <?php
-                                    $metas = get_meta_key_list($type);
+                        </table>
 
-                                    if (isset($external_attrs[$type.'_attrs']))
-                                        $metas = array_merge(get_meta_key_list($type), $external_attrs[$type.'_attrs']);
-                                ?>
-                                    <?php foreach ($metas as $meta_key) : ?>
+                        <div>
+                            <div data-tab="#extra-metas-attributes" class="title selected">Extra Attributes</div>
+                            <div data-tab="#taxonomies"             class="title">Taxonomies</div>
+                        </div>
+
+                        <div class="sub-tab-content" id="extra-metas-attributes">
+                            <table>
+                                <tr data-order="-1">
+                                    <th>Enabled</th>
+                                    <th>Type</th>
+                                    <th>Meta key</th>
+                                    <th>Facetable</th>
+                                    <th>Facet type</th>
+                                    <th>Facet label &amp; ordering</th>
+                                </tr>
+                                <?php $i = 0; ?>
+                                <?php foreach (get_post_types() as $type) : ?>
+                                    <?php if (is_array($algolia_registry->indexable_types) && in_array($type, array_keys($algolia_registry->indexable_types))) : ?>
                                         <?php
-                                        $order = -1;
-                                        if (isset($algolia_registry->metas[$type]) && in_array($meta_key, array_keys($algolia_registry->metas[$type])))
-                                            $order = $algolia_registry->metas[$type][$meta_key]['order'];
-                                        ?>
-                                        <?php if ($order != -1): ?>
-                                            <tr data-order="<?php echo $order; ?>">
-                                        <?php else: ?>
-                                      <tr data-order="<?php echo (10000 + $i); $i++ ?>">
-                                        <?php endif; ?>
-                                            <td>
-                                                      <!-- PREVENT FROM ERASING CUSTOM RANKING -->
-                                                <?php $customs = array('custom_ranking' => 'CUSTOM_RANKING', 'custom_ranking_order' => 'CUSTOM_RANKING_ORDER', 'custom_ranking_sort' => 'CUSTOM_RANKING_SORT'); ?>
-                                                <?php foreach($customs as $custom_key => $custom_value): ?>
-                                                    <?php if (isset($algolia_registry->metas[$type])
-                                                        && in_array($meta_key, array_keys($algolia_registry->metas[$type]))
-                                                        && $algolia_registry->metas[$type][$meta_key][$custom_key]): ?>
-                                                    <input type="hidden"
-                                                           name="TYPES[<?php echo $type; ?>][METAS][<?php echo $meta_key; ?>][<?php echo $custom_value; ?>]"
-                                                           value="<?php echo $algolia_registry->metas[$type][$meta_key][$custom_key]; ?>"
-                                                        >
-                                                    <?php endif; ?>
-                                                <?php endforeach; ?>
-                                                <!-- /////// PREVENT FROM ERASING CUSTOM RANKING -->
+                                        $metas = get_meta_key_list($type);
 
-                                                <input type="checkbox"
-                                                       name="TYPES[<?php echo $type; ?>][METAS][<?php echo $meta_key; ?>][INDEXABLE]"
-                                                       value="<?php echo $type; ?>"
-                                                    <?php checked(isset($algolia_registry->metas[$type])
-                                                        && in_array($meta_key, array_keys($algolia_registry->metas[$type]))
-                                                        && $algolia_registry->metas[$type][$meta_key]["indexable"]); ?>
-                                                    >
-                                            </td>
-                                            <td><?php echo $type; ?></td>
-                                            <td><?php echo $meta_key; ?></td>
-                                            <td>
-                                                <input type="checkbox"
-                                                       name="TYPES[<?php echo $type; ?>][METAS][<?php echo $meta_key; ?>][FACETABLE]"
-                                                       value="1"
-                                                    <?php checked(isset($algolia_registry->metas[$type])
-                                                        && in_array($meta_key, array_keys($algolia_registry->metas[$type]))
-                                                        && $algolia_registry->metas[$type][$meta_key]["facetable"]); ?>
-                                                    >
-                                            </td>
-                                            <td>
-                                                <select name="TYPES[<?php echo $type; ?>][METAS][<?php echo $meta_key; ?>][TYPE]">
-                                                    <?php foreach (array("conjunctive" => "Conjunctive", "disjunctive" => "Disjunctive", "slider" => "Slider") as $key => $value): ?>
-                                                        <?php if (checked(isset($algolia_registry->metas[$type])
+                                        if (isset($external_attrs[$type.'_attrs']))
+                                            $metas = array_merge(get_meta_key_list($type), $external_attrs[$type.'_attrs']);
+                                    ?>
+                                        <?php foreach ($metas as $meta_key) : ?>
+                                            <?php
+                                            $order = -1;
+                                            if (isset($algolia_registry->metas[$type]) && in_array($meta_key, array_keys($algolia_registry->metas[$type])))
+                                                $order = $algolia_registry->metas[$type][$meta_key]['order'];
+                                            ?>
+                                            <?php if ($order != -1): ?>
+                                                <tr data-type="extra-meta" data-order="<?php echo $order; ?>">
+                                            <?php else: ?>
+                                          <tr data-type="extra-meta" data-order="<?php echo (10000 + $i); $i++ ?>">
+                                            <?php endif; ?>
+                                                <td>
+                                                    <!-- PREVENT FROM ERASING CUSTOM RANKING -->
+                                                    <?php $customs = array('custom_ranking' => 'CUSTOM_RANKING', 'custom_ranking_order' => 'CUSTOM_RANKING_ORDER', 'custom_ranking_sort' => 'CUSTOM_RANKING_SORT'); ?>
+                                                    <?php foreach($customs as $custom_key => $custom_value): ?>
+                                                        <?php if (isset($algolia_registry->metas[$type])
                                                             && in_array($meta_key, array_keys($algolia_registry->metas[$type]))
-                                                            && $algolia_registry->metas[$type][$meta_key]["type"] == $key)) : ?>
-                                                        <option selected="selected" value="<?php echo $key ?>"><?php echo $value; ?></option>
-                                                        <?php else : ?>
-                                                        <option value="<?php echo $key ?>"><?php echo $value; ?></option>
+                                                            && $algolia_registry->metas[$type][$meta_key][$custom_key]): ?>
+                                                        <input type="hidden"
+                                                               name="TYPES[<?php echo $type; ?>][METAS][<?php echo $meta_key; ?>][<?php echo $custom_value; ?>]"
+                                                               value="<?php echo $algolia_registry->metas[$type][$meta_key][$custom_key]; ?>"
+                                                            >
                                                         <?php endif; ?>
                                                     <?php endforeach; ?>
-                                                </select>
-                                            </td>
-                                            <td>
-                                                <input type="text"
-                                                       value="<?php echo (isset($algolia_registry->metas[$type][$meta_key]) ? $algolia_registry->metas[$type][$meta_key]["name"] : "") ?>" name="TYPES[<?php echo $type; ?>][METAS][<?php echo $meta_key; ?>][NAME]">
-                                                <img width="10" src="<?php echo plugin_dir_url(__FILE__); ?>../imgs/move.png">
-                                            </td>
-                                        </tr>
-                                    <?php endforeach; ?>
-                                <?php endif; ?>
+                                                    <!-- /////// PREVENT FROM ERASING CUSTOM RANKING -->
 
-                            <?php endforeach; ?>
-                        </table>
+                                                    <input type="checkbox"
+                                                           name="TYPES[<?php echo $type; ?>][METAS][<?php echo $meta_key; ?>][INDEXABLE]"
+                                                           value="<?php echo $type; ?>"
+                                                        <?php checked(isset($algolia_registry->metas[$type])
+                                                            && in_array($meta_key, array_keys($algolia_registry->metas[$type]))
+                                                            && $algolia_registry->metas[$type][$meta_key]["indexable"]); ?>
+                                                        >
+                                                </td>
+                                                <td><?php echo $type; ?></td>
+                                                <td><?php echo $meta_key; ?></td>
+                                                <td>
+                                                    <input type="checkbox"
+                                                           name="TYPES[<?php echo $type; ?>][METAS][<?php echo $meta_key; ?>][FACETABLE]"
+                                                           value="1"
+                                                        <?php checked(isset($algolia_registry->metas[$type])
+                                                            && in_array($meta_key, array_keys($algolia_registry->metas[$type]))
+                                                            && $algolia_registry->metas[$type][$meta_key]["facetable"]); ?>
+                                                        >
+                                                </td>
+                                                <td>
+                                                    <select name="TYPES[<?php echo $type; ?>][METAS][<?php echo $meta_key; ?>][TYPE]">
+                                                        <?php foreach (array("conjunctive" => "Conjunctive", "disjunctive" => "Disjunctive", "slider" => "Slider") as $key => $value): ?>
+                                                            <?php if (checked(isset($algolia_registry->metas[$type])
+                                                                && in_array($meta_key, array_keys($algolia_registry->metas[$type]))
+                                                                && $algolia_registry->metas[$type][$meta_key]["type"] == $key)) : ?>
+                                                            <option selected="selected" value="<?php echo $key ?>"><?php echo $value; ?></option>
+                                                            <?php else : ?>
+                                                            <option value="<?php echo $key ?>"><?php echo $value; ?></option>
+                                                            <?php endif; ?>
+                                                        <?php endforeach; ?>
+                                                    </select>
+                                                </td>
+                                                <td>
+                                                    <input type="text"
+                                                           value="<?php echo (isset($algolia_registry->metas[$type][$meta_key]) ? $algolia_registry->metas[$type][$meta_key]["name"] : "") ?>" name="TYPES[<?php echo $type; ?>][METAS][<?php echo $meta_key; ?>][NAME]">
+                                                    <img width="10" src="<?php echo plugin_dir_url(__FILE__); ?>../imgs/move.png">
+                                                </td>
+                                                <input type="hidden" name="TYPES[<?php echo $type; ?>][METAS][<?php echo $meta_key; ?>][ORDER]" class="order" />
+                                            </tr>
+                                        <?php endforeach; ?>
+                                    <?php endif; ?>
+
+                                <?php endforeach; ?>
+                            </table>
+                        </div>
+                        <div class="sub-tab-content" id="taxonomies">
+                            <table>
+                                <tr data-order="-1">
+                                    <th>Enabled</th>
+                                    <th></th>
+                                    <th>Name</th>
+                                    <th>Facetable</th>
+                                    <th>Facet type</th>
+                                    <th>Facet label &amp; ordering</th>
+                                </tr>
+
+                                <?php $i = 0; ?>
+                                <?php foreach (array_merge($algolia_registry->extras, get_taxonomies()) as $tax) : ?>
+                                    <?php $count = wp_count_terms($tax, array('hide_empty' => false)); ?>
+                                    <?php if (in_array($tax, $algolia_registry->extras) || (is_numeric($count) && intval($count) > 0)): ?>
+
+                                        <?php
+                                        $order = -1;
+                                        if (is_array($algolia_registry->conjunctive_facets) && in_array($tax, array_keys($algolia_registry->conjunctive_facets)))
+                                            $order = $algolia_registry->conjunctive_facets[$tax]['order'];
+                                        if (is_array($algolia_registry->disjunctive_facets) && in_array($tax, array_keys($algolia_registry->disjunctive_facets)))
+                                            $order = $algolia_registry->disjunctive_facets[$tax]['order'];
+                                        ?>
+                                        <?php if ($order != -1): ?>
+                                            <tr data-type="taxonomy" data-order="<?php echo $order; ?>">
+                                        <?php else: ?>
+                                            <tr data-type="taxonomy" data-order="<?php echo (10000 + $i); $i++; ?>">
+                                        <?php endif; ?>
+                                        <td>
+                                            <?php if (in_array($tax, $algolia_registry->extras) == false): ?>
+                                                <input type="checkbox"
+                                                       name="TAX[<?php echo $tax; ?>][SLUG]"
+                                                       value="<?php echo $tax; ?>"
+                                                    <?php checked(is_array($algolia_registry->indexable_tax) && in_array($tax, array_keys($algolia_registry->indexable_tax))); ?>
+                                                    >
+                                            <?php else: ?>
+                                                <i class="dashicons dashicons-yes"></i>
+                                                <input type="hidden" name="TAX[<?php echo $tax; ?>][SLUG]" value="<?php echo $tax; ?>">
+                                            <?php endif; ?>
+                                        </td>
+                                        <td></td>
+                                        <td>
+                                            <?php echo $tax; ?>
+                                        </td>
+                                        <td>
+                                            <input type="checkbox"
+                                                   value="facetable"
+                                                <?php checked((is_array($algolia_registry->conjunctive_facets) && in_array($tax, array_keys($algolia_registry->conjunctive_facets)))
+                                                    || (is_array($algolia_registry->disjunctive_facets) && in_array($tax, array_keys($algolia_registry->disjunctive_facets)))
+                                                ) ?>
+                                                   name="TAX[<?php echo $tax; ?>][FACET]">
+                                        </td>
+                                        <td>
+                                            <select name="TAX[<?php echo $tax; ?>][FACET_TYPE]">
+                                                <option  value="conjunctive">Conjunctive</option>
+                                                <?php if (is_array($algolia_registry->disjunctive_facets) && in_array($tax, array_keys($algolia_registry->disjunctive_facets))): ?>
+                                                    <option selected="selected" value="disjunctive">Disjunctive</option>
+                                                <?php else: ?>
+                                                    <option value="disjunctive">Disjunctive</option>
+                                                <?php endif; ?>
+                                            </select>
+                                        </td>
+                                        <td>
+                                            <input type="text" value="<?php echo (isset($algolia_registry->indexable_tax[$tax]) ? $algolia_registry->indexable_tax[$tax]['name'] : "") ?>" name="TAX[<?php echo $tax; ?>][NAME]">
+                                            <img width="10" src="<?php echo plugin_dir_url(__FILE__); ?>../imgs/move.png">
+                                        </td>
+                                        <input type="hidden" name="TAX[<?php echo $tax; ?>][ORDER]" class="order" />
+                                        </tr>
+                                    <?php endif; ?>
+                                <?php endforeach; ?>
+                            </table>
+                        </div>
                         <div class="content-item">
                             <input type="submit" name="submit" id="submit" class="button button-primary" value="Save Changes">
                         </div>
@@ -673,89 +764,6 @@
                 </div>
             </form>
             </div>
-
-        <div class="tab-content" id="taxonomies">
-            <form action="<?php echo site_url(); ?>/wp-admin/admin-post.php" method="post">
-                <input type="hidden" name="action" value="update_indexable_taxonomies">
-                <div class="content-wrapper" id="customization">
-                    <div class="content">
-                        <p class="help-block">Configure here the taxonomies you want to include in your Algolia records.</p>
-                        <table>
-                            <tr data-order="-1">
-                                <th>Enabled</th>
-                                <th>Name</th>
-                                <th>Facetable</th>
-                                <th>Facet type</th>
-                                <th>Facet label &amp; ordering</th>
-                            </tr>
-
-                            <?php $i = 0; ?>
-                            <?php foreach (array_merge($algolia_registry->extras, get_taxonomies()) as $tax) : ?>
-                                <?php $count = wp_count_terms($tax, array('hide_empty' => false)); ?>
-                                <?php if (in_array($tax, $algolia_registry->extras) || (is_numeric($count) && intval($count) > 0)): ?>
-
-                                <?php
-                                    $order = -1;
-                                    if (is_array($algolia_registry->conjunctive_facets) && in_array($tax, array_keys($algolia_registry->conjunctive_facets)))
-                                        $order = $algolia_registry->conjunctive_facets[$tax]['order'];
-                                    if (is_array($algolia_registry->disjunctive_facets) && in_array($tax, array_keys($algolia_registry->disjunctive_facets)))
-                                        $order = $algolia_registry->disjunctive_facets[$tax]['order'];
-                                ?>
-                                <?php if ($order != -1): ?>
-                                <tr data-order="<?php echo $order; ?>">
-                                <?php else: ?>
-                                <tr data-order="<?php echo (10000 + $i); $i++; ?>">
-                                <?php endif; ?>
-                                    <td>
-                                        <?php if (in_array($tax, $algolia_registry->extras) == false): ?>
-                                        <input type="checkbox"
-                                               name="TAX[<?php echo $tax; ?>][SLUG]"
-                                               value="<?php echo $tax; ?>"
-                                            <?php checked(is_array($algolia_registry->indexable_tax) && in_array($tax, array_keys($algolia_registry->indexable_tax))); ?>
-                                            >
-                                        <?php else: ?>
-                                            <i class="dashicons dashicons-yes"></i>
-                                            <input type="hidden" name="TAX[<?php echo $tax; ?>][SLUG]" value="<?php echo $tax; ?>">
-                                        <?php endif; ?>
-                                    </td>
-                                    <td>
-                                        <?php echo $tax; ?>
-                                    </td>
-                                    <td>
-                                        <input type="checkbox"
-                                               value="facetable"
-                                            <?php checked((is_array($algolia_registry->conjunctive_facets) && in_array($tax, array_keys($algolia_registry->conjunctive_facets)))
-                                                || (is_array($algolia_registry->disjunctive_facets) && in_array($tax, array_keys($algolia_registry->disjunctive_facets)))
-                                            ) ?>
-                                               name="TAX[<?php echo $tax; ?>][FACET]">
-                                    </td>
-                                    <td>
-                                        <select name="TAX[<?php echo $tax; ?>][FACET_TYPE]">
-                                                <option  value="conjunctive">Conjunctive</option>
-                                            <?php if (is_array($algolia_registry->disjunctive_facets) && in_array($tax, array_keys($algolia_registry->disjunctive_facets))): ?>
-                                                <option selected="selected" value="disjunctive">Disjunctive</option>
-                                            <?php else: ?>
-                                                <option value="disjunctive">Disjunctive</option>
-                                            <?php endif; ?>
-                                        </select>
-                                    </td>
-                                    <td>
-                                        <input type="text" value="<?php echo (isset($algolia_registry->indexable_tax[$tax]) ? $algolia_registry->indexable_tax[$tax]['name'] : "") ?>" name="TAX[<?php echo $tax; ?>][NAME]">
-                                        <img width="10" src="<?php echo plugin_dir_url(__FILE__); ?>../imgs/move.png">
-                                    </td>
-                                </tr>
-                                <?php endif; ?>
-                            <?php endforeach; ?>
-                        </table>
-
-                        <div class="content-item">
-                            <input type="submit" name="submit" id="submit" class="button button-primary" value="Save Changes">
-                        </div>
-                        </table>
-                    </div>
-                </div>
-            </form>
-        </div>
     <?php endif; ?>
     </div>
 </div>

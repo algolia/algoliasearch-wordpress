@@ -36,6 +36,14 @@ jQuery(document).ready(function($) {
         handleScreenshot();
     });
 
+    if ($("#custom-ranking tr").length > 1)
+        $('#custom-ranking .warning').hide();
+    else
+        $('#custom-ranking .content-item').hide();
+
+    /**
+     * Handle Tab
+     */
     selectTab = function(hash)
     {
         $(".tab-content").hide();
@@ -61,10 +69,60 @@ jQuery(document).ready(function($) {
 
     selectTab(hash);
 
-    if ($("#custom-ranking tr").length > 1)
-        $('#custom-ranking .warning').hide();
-    else
-        $('#custom-ranking .content-item').hide();
+    /**
+     * Handle sub Tab
+     */
+
+    selectSubTab = function(hash)
+    {
+        $(".sub-tab-content").hide();
+        $(hash).show();
+        $("#extra-metas .title").removeClass("selected");
+        $("[data-tab='"+ hash +"']").addClass("selected");
+
+        $(window).scrollTop(0);
+    };
+
+    $("#extra-metas .title").click(function () {
+        var hash = $(this).attr("data-tab");
+
+        selectSubTab(hash);
+    });
+
+    selectSubTab('#extra-metas-attributes');
+
+    function reorderMetas()
+    {
+        $('#extra-metas tr').each(function (i) {
+            if ($(this).find('td:first input[type="checkbox"]').prop('checked') || $(this).find('td:first i').length > 0)
+            {
+                $('#extra-meta-and-taxonomies').append($(this));
+            }
+        });
+
+        $('#extra-meta-and-taxonomies tr').each(function (i) {
+            if ($(this).find('td:first input[type="checkbox"]').prop('checked') == false && $(this).find('td:first i').length <= 0)
+            {
+                if ($(this).attr('data-type') == 'taxonomy')
+                    $('#taxonomies table tr:first').after($(this));
+                else
+                    $('#extra-metas-attributes table tr:first').after($(this));
+            }
+        });
+    }
+
+    $('#extra-metas tr td:first-child input').click(function (e) {
+        console.log('ok');
+        reorderMetas();
+    });
+
+    reorderMetas();
+
+    $('#extra-metas-form').submit(function (e) {
+        $('#extra-metas tr').each(function (i) {
+           $(this).find('.order').val(i);
+        });
+    });
 
     /**
      * Handle disabling
@@ -83,7 +141,7 @@ jQuery(document).ready(function($) {
         });
     }
 
-    var disabelable = ['#indexable-types', '#taxonomies', '#extra-metas', '#indexable-types', '#searchable_attributes', '#custom-ranking', '#sortable_attributes'];
+    var disabelable = ['#indexable-types', '#extra-metas', '#indexable-types', '#searchable_attributes', '#custom-ranking', '#sortable_attributes'];
 
     for (var i = 0; i < disabelable.length; i++)
     {

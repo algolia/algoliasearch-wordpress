@@ -17,6 +17,16 @@ var myCompare = function (a, b) {
     return 1;
 }
 
+var myCompare2 = function (a, b) {
+    if (a.order < b.order)
+        return -1;
+
+    if (a.order == b.order)
+        return -1;
+
+    return 1;
+}
+
 /**
  * Autocomplete
  */
@@ -121,7 +131,7 @@ if (algoliaSettings.type_of_search == "instant")
                     }
                 }
 
-                algoliaSettings.facets = algoliaSettings.facets.sort(myCompare);
+                algoliaSettings.facets = algoliaSettings.facets.sort(myCompare2);
 
                 this.helper = new AlgoliaSearchHelper(algolia_client, algoliaSettings.index_name + 'all', {
                     facets: this.conjunctive_facets,

@@ -104,6 +104,41 @@
     cursor: pointer;
 }
 
+#algolia-settings #extra-metas-attributes tr td:nth-child(n+4),
+#algolia-settings #extra-metas-attributes tr th:nth-child(n+4),
+#algolia-settings #taxonomies tr td:nth-child(n+4),
+#algolia-settings #taxonomies tr th:nth-child(n+4)
+{
+    display: none;
+}
+
+#algolia-settings #extra-meta-and-taxonomies
+{
+    margin-bottom: 20px;
+}
+
+#algolia-settings #extra-metas .title.selected
+{
+    background-color: white;
+    border-bottom: solid 1px #f5f5f5;
+    margin-bottom: -1px;
+    padding-bottom: 11px;
+    cursor: auto;
+}
+
+#algolia-settings #extra-metas .title
+{
+    float: left;
+    display: inline;
+    padding: 10px 20px;
+    border-radius: 5px 5px 0 0;
+    background-color: rgba(241, 241, 241, 1);
+    border: solid 1px #DDDDDD;
+    border-bottom: none;
+    margin-right: 2px;
+    cursor: pointer;
+}
+
 #algolia-settings .tabs .title.selected
 {
     background-color: white;
