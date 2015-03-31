@@ -289,7 +289,9 @@
                             <tr data-order="-1">
                                 <th>Enabled</th>
                                 <th>Name</th>
+                                <?php if ($algolia_registry->type_of_search == 'autocomplete'): ?>
                                 <th>Auto-completion menu label &amp; ordering</th>
+                                <?php endif; ?>
                             </tr>
                         <?php foreach (get_post_types() as $type) : ?>
                             <?php $count = wp_count_posts($type)->publish; ?>
@@ -314,10 +316,12 @@
                                 <td>
                                     <?php echo $type; ?> (<?php echo $count; ?>)
                                 </td>
+                                <?php if ($algolia_registry->type_of_search == 'autocomplete'): ?>
                                 <td>
                                     <input type="text" value="<?php echo (isset($algolia_registry->indexable_types[$type]) ? $algolia_registry->indexable_types[$type]['name'] : "") ?>" name="TYPES[<?php echo $type; ?>][NAME]">
                                     <img width="10" src="<?php echo plugin_dir_url(__FILE__); ?>../imgs/move.png">
                                 </td>
+                                <?php endif; ?>
                             </tr>
                         <?php endforeach; ?>
                         </table>
@@ -671,6 +675,16 @@
                 </div>
             </form>
         </div>
+
+        <?php if ($algolia_registry->type_of_search == 'autocomplete') : ?>
+            <style>
+                #algolia-settings #extra-meta-and-taxonomies tr td:nth-child(n+4),
+                #algolia-settings #extra-meta-and-taxonomies tr th:nth-child(n+4)
+                {
+                    display: none;
+                }
+            </style>
+        <?php endif; ?>
 
         <div class="tab-content" id="custom-ranking">
             <form action="<?php echo site_url(); ?>/wp-admin/admin-post.php" method="post">
