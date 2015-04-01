@@ -119,45 +119,48 @@ class AlgoliaHelper
         }
 
 
-        if ($this->algolia_registry->type_of_search == 'autocomplete')
-        {
-            /**
-             * Handle Autocomplete Taxonomies
-             */
 
-            foreach ($this->algolia_registry->indexable_tax as $name => $value)
+        /**
+         * Handle Autocomplete Taxonomies
+         */
+
+        foreach ($this->algolia_registry->indexable_tax as $name => $value)
+        {
+            if (in_array($index_name . $name, $indexes) == false)
             {
-                if (in_array($index_name . $name, $indexes) == false)
+                if ($this->algolia_registry->type_of_search == 'autocomplete')
                 {
                     $mergeSettings = $this->mergeSettings($index_name . $name, $defaultSettings);
-
                     $this->setSettings($index_name . $name, $mergeSettings);
                     $this->setSettings($index_name . $name . "_temp", $mergeSettings);
-
-                    if (isset($this->algolia_registry->conjunctive_facets[$name]) || isset($this->algolia_registry->disjunctive_facets[$name]))
-                        $facets[] = $name;
                 }
+
+                if (isset($this->algolia_registry->conjunctive_facets[$name]) || isset($this->algolia_registry->disjunctive_facets[$name]))
+                    $facets[] = $name;
             }
+        }
 
-            /**
-             * Handle Autocomplete Types
-             */
-            foreach (array_keys($this->algolia_registry->indexable_types) as $name)
+        /**
+         * Handle Autocomplete Types
+         */
+        foreach (array_keys($this->algolia_registry->indexable_types) as $name)
+        {
+            if (in_array($index_name . "_" . $name, $indexes) == false)
             {
-                if (in_array($index_name . "_" . $name, $indexes) == false)
+                if (isset($this->algolia_registry->metas[$name]))
                 {
-                    if (isset($this->algolia_registry->metas[$name]))
+                    foreach ($this->algolia_registry->metas[$name] as $key => $value)
                     {
-                        foreach ($this->algolia_registry->metas[$name] as $key => $value)
-                        {
-                            if ($value['facetable'])
-                                $facets[] = $key;
+                        if ($value['facetable'])
+                            $facets[] = $key;
 
-                            if ($value['custom_ranking'])
-                                $customRankingTemp[] = array('sort' => $value['custom_ranking_sort'], 'value' => $value['custom_ranking_order'] . '(' . $key . ')');
-                        }
+                        if ($value['custom_ranking'])
+                            $customRankingTemp[] = array('sort' => $value['custom_ranking_sort'], 'value' => $value['custom_ranking_order'] . '(' . $key . ')');
                     }
+                }
 
+                if ($this->algolia_registry->type_of_search == 'autocomplete')
+                {
                     $mergeSettings = $this->mergeSettings($index_name . $name, $defaultSettings);
 
                     $this->setSettings($index_name . $name, $mergeSettings);

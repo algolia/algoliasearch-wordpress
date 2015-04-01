@@ -52,58 +52,28 @@
         <div>
             {{#sub_facets}}
 
-                {{#conjunctive}}
+            {{#conjunctive}}
+            <div class="{{#checked}}checked {{/checked}}sub_facet conjunctive">
+                <input style="display: none;" data-tax="{{tax}}" {{#checked}}checked{{/checked}} data-name="{{nameattr}}" class="facet_value" type="checkbox" />
+                {{name}} ({{count}})
+            </div>
+            {{/conjunctive}}
 
-                    {{#checked}}
-                        <div class="checked sub_facet conjunctive">
-                    {{/checked}}
+            {{#slider}}
+            <div class="algolia-slider algolia-slider-true" data-tax="{{tax}}" data-min="{{min}}" data-max="{{max}}"></div>
+            <div class="algolia-slider-info">
+                <div class="min" style="float: left;">{{current_min}}</div>
+                <div class="max" style="float: right;">{{current_max}}</div>
+                <div style="clear: both"></div>
+            </div>
+            {{/slider}}
 
-                    {{^checked}}
-                        <div class="sub_facet conjunctive">
-                    {{/checked}}
-
-                    {{#checked}}
-                            <input style="display: none;" data-tax="{{tax}}" checked data-name="{{nameattr}}" class="facet_value" type="checkbox" />
-                    {{/checked}}
-
-                    {{^checked}}
-                            <input style="display: none;" data-tax="{{tax}}" data-name="{{nameattr}}" class="facet_value" type="checkbox" />
-                    {{/checked}}
-
-                            {{name}} ({{count}})
-                        </div>
-                {{/conjunctive}}
-
-                {{#slider}}
-                <div class="algolia-slider algolia-slider-true" data-tax="{{tax}}" data-min="{{min}}" data-max="{{max}}"></div>
-                <div class="algolia-slider-info">
-                    <div class="min" style="float: left;">{{current_min}}</div>
-                    <div class="max" style="float: right;">{{current_max}}</div>
-                    <div style="clear: both"></div>
-                    </div>
-                {{/slider}}
-
-                {{#disjunctive}}
-
-                    {{#checked}}
-                        <div class="checked sub_facet disjunctive">
-                    {{/checked}}
-
-                    {{^checked}}
-                        <div class="sub_facet disjunctive">
-                    {{/checked}}
-
-                    {{#checked}}
-                            <input data-tax="{{tax}}" checked data-name="{{nameattr}}" class="facet_value" type="checkbox" />
-                    {{/checked}}
-
-                    {{^checked}}
-                            <input data-tax="{{tax}}" data-name="{{nameattr}}" class="facet_value" type="checkbox" />
-                    {{/checked}}
-
-                         {{name}} ({{count}})
-                        </div>
-                {{/disjunctive}}
+            {{#disjunctive}}
+            <div class="{{#checked}}checked {{/checked}}sub_facet disjunctive">
+                <input data-tax="{{tax}}" {{#checked}}checked{{/checked}} data-name="{{nameattr}}" class="facet_value" type="checkbox" />
+                {{name}} ({{count}})
+            </div>
+            {{/disjunctive}}
             {{/sub_facets}}
         </div>
     </div>
