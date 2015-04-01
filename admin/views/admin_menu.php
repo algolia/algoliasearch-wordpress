@@ -18,7 +18,7 @@
             <i class="dashicons dashicons-upload"></i>
             Reindex data
         </button>
-        <span style="color: #444;font-family: 'Open Sans',sans-serif;font-size: 13px;line-height: 1.4em;">
+        <span id='last-update' style="color: #444;font-family: 'Open Sans',sans-serif;font-size: 13px;line-height: 1.4em;">
         Last update :
             <?php if ($algolia_registry->last_update): ?>
                 <?php echo date('Y-m-d H:i:s', $algolia_registry->last_update); ?>
