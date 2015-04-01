@@ -13,7 +13,7 @@
 
     <?php if ($algolia_registry->validCredential) : ?>
     <h2>
-        Algolia Search
+        Algolia Realtime Search
         <button type="button" class="button button-primary " id="algolia_reindex" name="algolia_reindex">
             <i class="dashicons dashicons-upload"></i>
             Reindex data
@@ -62,15 +62,19 @@
             </div>
         </div>
     </div>
+    <?php else: ?>
+    <h2>
+        Algolia Realtime Search
+    </h2>
     <?php endif; ?>
 
     <div class="wrapper">
         <div class="tabs myclearfix">
 
             <?php if (! $algolia_registry->validCredential) : ?>
-            <div data-tab="#credentials" class="title selected">Credentials</div>
+            <div data-tab="#credentials" class="title selected">Credentials & Get Started</div>
             <?php else: ?>
-            <div data-tab="#credentials" class="title">Credentials</div>
+            <div data-tab="#credentials" class="title">Credentials & Get Started</div>
             <?php endif; ?>
 
             <?php if ($algolia_registry->validCredential) : ?>
@@ -121,7 +125,7 @@
                                 </div>
                             </div>
                         </div>
-                        <div style="float: left; width: 50%; box-sizing:border-box; border-left: solid 1px #DDDDDD">
+                        <!--<div style="float: left; width: 50%; box-sizing:border-box; border-left: solid 1px #DDDDDD">
                             <div style="padding: 0px 10px;">
                                 <h3>How to configure and customize your search</h3>
                                 <div>
@@ -150,7 +154,7 @@
                                 </div>
                             </div>
 
-                        </div>
+                        </div>-->
                         <div style="clear: both;"></div>
                     </div>
                 </div>

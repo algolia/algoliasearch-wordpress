@@ -205,9 +205,9 @@ jQuery(document).ready(function($) {
                 "<div style='float: left; margin-left: 20px'>" + percent + "%</div>"
         }
 
-        function render(actions, i)
+        function render(action, i, n)
         {
-            var percentage = Math.ceil(i * 100 / actions.length);
+            var percentage = Math.ceil(i * 100 / n);
             if (i == -1)
                 percentage = 0;
 
@@ -218,7 +218,7 @@ jQuery(document).ready(function($) {
 
             $("#reindex-log").append(
                 "<tr>" +
-                "<td>" + actions[i].name + " " + actions[i].sup + "<td>" +
+                "<td>" + action.name + " " + action.sup + "<td>" +
                 "<td>[OK]</td>" +
                 "</tr>");
         }
@@ -258,33 +258,31 @@ jQuery(document).ready(function($) {
 
             actions.push({ subaction: "move_indexes", name: "Move all temp indexes", sup: "" });
 
-            var i = 0;
-            var call = function () {
 
+            console.log(actions);
+            var call = function (i, n) {
                 $.ajax({
                     method: "POST",
                     url: base_url,
-                    data: { action: "reindex", subaction: actions[i].subaction },
+                    data: { action: "reindex", subaction: actions[0].subaction },
                     success: function (result) {
-                        render(actions, i);
-                    },
-                    async: false
-                });
+                        render(actions[0], i, n);
 
-                if (i < actions.length - 1)
-                {
-                    i = i + 1;
-                    setTimeout(call, 1);
-                }
-                else
-                {
-                    $("#reindex-percentage").html(renderPercentage(100));
-                    $(".close-results").show();
-                }
+                        actions = actions.slice(1);
+
+                        if (actions.length > 0)
+                            call(i + 1, n);
+                        else
+                        {
+                            $("#reindex-percentage").html(renderPercentage(100));
+                            $(".close-results").show();
+                        }
+                    }
+                });
             };
 
-            render(actions, -1);
-            setTimeout(call, 1);
+            render(null, -1, actions.length);
+            call(0, actions.length);
         });
     });
 });

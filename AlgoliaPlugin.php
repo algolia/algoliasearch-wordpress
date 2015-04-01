@@ -55,7 +55,7 @@ class AlgoliaPlugin
     public function add_admin_menu()
     {
         $icon_url = plugin_dir_url(__FILE__) . 'admin/imgs/icon.png';
-        add_menu_page('Algolia Settings', 'Algolia', 'manage_options', 'algolia-settings', array($this, 'admin_view'), $icon_url);
+        add_menu_page('Algolia Settings', 'Algolia Search', 'manage_options', 'algolia-settings', array($this, 'admin_view'), $icon_url);
     }
 
     public function admin_view()
