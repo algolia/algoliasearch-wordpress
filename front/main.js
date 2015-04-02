@@ -7,7 +7,7 @@ var indexes = [];
 for (var i = 0; i < algoliaSettings.indexes.length; i++)
     indexes.push(algolia_client.initIndex(algoliaSettings.indexes[i].index_name));
 
-var myCompare = function (a, b) {
+window.myCompare = function (a, b) {
     if (a.order1 < b.order1)
         return -1;
 
@@ -15,9 +15,9 @@ var myCompare = function (a, b) {
         return -1;
 
     return 1;
-}
+};
 
-var myCompare2 = function (a, b) {
+window.myCompare2 = function (a, b) {
     if (a.order < b.order)
         return -1;
 
@@ -25,7 +25,7 @@ var myCompare2 = function (a, b) {
         return -1;
 
     return 1;
-}
+};
 
 /**
  * Autocomplete
@@ -33,53 +33,11 @@ var myCompare2 = function (a, b) {
 
 if (algoliaSettings.type_of_search == "autocomplete")
 {
-    jQuery(document).ready(function ($)
-    {
-        var $autocompleteTemplate = Hogan.compile($('#autocomplete-template').text());
-
-        hogan_objs = [];
-
-        algoliaSettings.indexes.sort(myCompare);
-
-        for (var i = 0; i < algoliaSettings.indexes.length; i++)
-        {
-            hogan_objs.push({
-                source: indexes[i].ttAdapter({hitsPerPage: algoliaSettings.number_by_type}),
-                displayKey: 'title',
-                templates: {
-                    header: '<div class="category">' + algoliaSettings.indexes[i].name + '</div>',
-                    suggestion: function (hit) {
-                        return $autocompleteTemplate.render(hit);
-                    }
-                }
-            });
-
+    window.matcher = function () {
+        return function findMatches(q, cb) {
+            return cb(["algolia-branding"]);
         }
-
-        function matcher () {
-            return function findMatches(q, cb) {
-                return cb(["algolia-branding"]);
-            }
-        }
-
-        hogan_objs.push({
-            source: matcher(),
-            displayKey: 'title',
-            templates: {
-                suggestion: function (hit) {
-                    return '<div class="footer">powered by <img width="45" src="' + algoliaSettings.plugin_url + '/front/algolia-logo.png"></div>';
-                }
-            }
-        });
-
-        $(algoliaSettings.search_input_selector).each(function (i) {
-            $(this).typeahead({hint: false}, hogan_objs);
-
-            $(this).on('typeahead:selected', function (e, item) {
-                window.location.href = item.permalink;
-            });
-        });
-    });
+    };
 }
 
 /**
@@ -98,50 +56,16 @@ if (algoliaSettings.type_of_search == "instant")
 
             engine = new function () {
 
-                /**
-                 * Variables Initialization
-                 */
+                var query = undefined;
 
-                this.old_content         = $(algoliaSettings.instant_jquery_selector).html();
+                this.helper = undefined;
 
-                this.query               = "";
-
-                this.template            = Hogan.compile($('#instant-content-template').text());
-                this.facetsTemplate      = Hogan.compile($('#instant-facets-template').text());
-                this.paginationTemplate  = Hogan.compile($('#instant-pagination-template').text());
-
-                this.conjunctive_facets  = [];
-                this.disjunctive_facets  = [];
-                this.slider_facets       = [];
+                this.setHelper = function (helper) {
+                  this.helper = helper;
+                };
 
                 var $this = this;
 
-                for (var i = 0; i < algoliaSettings.facets.length; i++)
-                {
-                    if (algoliaSettings.facets[i].type == "conjunctive")
-                        this.conjunctive_facets.push(algoliaSettings.facets[i].tax);
-
-                    if (algoliaSettings.facets[i].type == "disjunctive")
-                        this.disjunctive_facets.push(algoliaSettings.facets[i].tax);
-
-                    if (algoliaSettings.facets[i].type == "slider")
-                    {
-                        this.disjunctive_facets.push(algoliaSettings.facets[i].tax);
-                        this.slider_facets.push(algoliaSettings.facets[i].tax);
-                    }
-                }
-
-                algoliaSettings.facets = algoliaSettings.facets.sort(myCompare2);
-
-                this.helper = new AlgoliaSearchHelper(algolia_client, algoliaSettings.index_name + 'all', {
-                    facets: this.conjunctive_facets,
-                    disjunctiveFacets: this.disjunctive_facets,
-                    hitsPerPage: algoliaSettings.number_by_page
-                });
-
-                /**
-                 * Functions
-                 */
                 this.updateUrl = function (push_state)
                 {
                     var refinements = [];
@@ -187,7 +111,7 @@ if (algoliaSettings.type_of_search == "instant")
                     }
                 };
 
-                this.getRefinementsFromUrl = function()
+                this.getRefinementsFromUrl = function(searchCallback)
                 {
                     if (location.hash && location.hash.indexOf('#q=') === 0)
                     {
@@ -220,176 +144,156 @@ if (algoliaSettings.type_of_search == "instant")
 
                         $(algoliaSettings.search_input_selector).val(this.query);
 
-                        this.helper.search(this.query, this.searchCallback);
+                        this.helper.search(this.query, searchCallback);
 
                     }
                 };
 
-                this.performQueriesWithoutUpdatingUrl = function()
-                {
-                    this.helper.search(this.query, this.searchCallback);
-                };
+                this.getFacets = function (content) {
 
-                this.performQueries = function (push_state)
-                {
-                    this.helper.search(this.query, this.searchCallback);
+                    var facets = [];
 
-                    this.updateUrl(push_state);
-
-                };
-
-                this.performQueriesWithCustomSearchCallback = function (push_state, searchCallback)
-                {
-                    this.helper.search(this.query, searchCallback);
-
-                    this.updateUrl();
-                };
-
-                this.searchCallback = function(success, content) {
-
-                    if (success)
+                    for (var i = 0; i < algoliaSettings.facets.length; i++)
                     {
-                        var html_content = "";
+                        var sub_facets = [];
 
-                        html_content += "<div id='algolia_instant_selector'>";
-
-                        var facets = [];
-
-                        if (content.hits.length > 0)
+                        if (algoliaSettings.facets[i].type == "conjunctive")
                         {
-
-                            /**
-                             * Handle Facets
-                             */
-                            for (var i = 0; i < algoliaSettings.facets.length; i++)
+                            for (var key in content.facets[algoliaSettings.facets[i].tax])
                             {
-                                var sub_facets = [];
+                                var checked = $this.helper.isRefined(algoliaSettings.facets[i].tax, key);
 
-                                if (algoliaSettings.facets[i].type == "conjunctive")
-                                {
-                                    for (var key in content.facets[algoliaSettings.facets[i].tax])
-                                    {
-                                        var checked = $this.helper.isRefined(algoliaSettings.facets[i].tax, key);
+                                var name = algoliaSettings.facetsLabels[key] != undefined ? algoliaSettings.facetsLabels[key] : key;
+                                var nameattr = key;
 
-                                        var name = algoliaSettings.facetsLabels[key] != undefined ? algoliaSettings.facetsLabels[key] : key;
-                                        var nameattr = key;
-
-                                        sub_facets.push({
-                                            conjunctive: 1,
-                                            disjunctive: 0,
-                                            slider: 0,
-                                            checked: checked,
-                                            nameattr: nameattr,
-                                            name: name,
-                                            count: content.facets[algoliaSettings.facets[i].tax][key]
-                                        });
-                                    }
-                                }
-
-                                if (algoliaSettings.facets[i].type == "slider")
-                                {
-                                    if (content.facets_stats[algoliaSettings.facets[i].tax] != undefined)
-                                    {
-                                        var min = content.facets_stats[algoliaSettings.facets[i].tax].min;
-                                        var max = content.facets_stats[algoliaSettings.facets[i].tax].max;
-
-                                        var current_min = $this.helper.getNumericsRefine(algoliaSettings.facets[i].tax, ">=");
-                                        var current_max = $this.helper.getNumericsRefine(algoliaSettings.facets[i].tax, "<=");
-
-                                        if (current_min == undefined)
-                                            current_min = min;
-
-                                        if (current_max == undefined)
-                                            current_max = max;
-
-                                        var name = algoliaSettings.facetsLabels[key] != undefined ? algoliaSettings.facetsLabels[key] : key;
-                                        var nameattr = key;
-
-                                        sub_facets.push({ current_min: current_min, current_max: current_max, count: min == max ? 0 : 1,slider: 1, conjunctive: 0, disjunctive: 0, nameattr: nameattr, name: name, min: min, max: max });
-                                    }
-                                }
-
-                                if (algoliaSettings.facets[i].type == "disjunctive")
-                                {
-                                    for (var key in content.disjunctiveFacets[algoliaSettings.facets[i].tax])
-                                    {
-                                        var checked = $this.helper.isRefined(algoliaSettings.facets[i].tax, key);
-                                        var name = algoliaSettings.facetsLabels[key] != undefined ? algoliaSettings.facetsLabels[key] : key;
-                                        var nameattr = key;
-
-                                        sub_facets.push({ slider: 0, conjunctive: 0, disjunctive: 1, checked: checked, nameattr: nameattr, name: name, count: content.disjunctiveFacets[algoliaSettings.facets[i].tax][key] });
-                                    }
-                                }
-
-                                facets.push({count: sub_facets.length, tax: algoliaSettings.facets[i].tax, facet_categorie_name: algoliaSettings.facets[i].name, sub_facets: sub_facets });
+                                sub_facets.push({
+                                    conjunctive: 1,
+                                    disjunctive: 0,
+                                    slider: 0,
+                                    checked: checked,
+                                    nameattr: nameattr,
+                                    name: name,
+                                    count: content.facets[algoliaSettings.facets[i].tax][key]
+                                });
                             }
-
-                            /**
-                             * Handle Pagination
-                             */
-                            var pages = [];
-                            if (content.page > 5)
-                            {
-                                pages.push({ current: false, number: 1 });
-                                pages.push({ current: false, number: '...', disabled: true });
-                            }
-
-                            for (var p = content.page - 5; p < content.page + 5; ++p)
-                            {
-                                if (p < 0 || p >= content.nbPages)
-                                    continue;
-
-                                pages.push({ current: content.page == p, number: (p + 1) });
-                            }
-                            if (content.page + 5 < content.nbPages)
-                            {
-                                pages.push({ current: false, number: '...', disabled: true });
-                                pages.push({ current: false, number: content.nbPages });
-                            }
-
-                            /** Render Facet **/
-                            html_content += $this.facetsTemplate.render({
-                                facets: facets,
-                                count: facets.length,
-                                sorting_indexes: algoliaSettings.sorting_indexes,
-                                getDate: getDate,
-                                sortSelected: sortSelected
-                            });
                         }
 
-                        /** Render results **/
-                        html_content += $this.template.render({
-                            facets_count: facets.length,
-                            getDate: getDate,
-                            sortSelected: sortSelected,
-                            relevance_index_name: algoliaSettings.index_name + 'all',
-                            sorting_indexes: algoliaSettings.sorting_indexes,
-                            hits: content.hits,
-                            nbHits: content.nbHits,
-                            nbHits_zero: (content.nbHits === 0),
-                            nbHits_one: (content.nbHits === 1),
-                            nbHits_many: (content.nbHits > 1),
-                            query: $this.query,
-                            processingTimeMS: content.processingTimeMS
-                        });
+                        if (algoliaSettings.facets[i].type == "slider")
+                        {
+                            if (content.facets_stats[algoliaSettings.facets[i].tax] != undefined)
+                            {
+                                var min = content.facets_stats[algoliaSettings.facets[i].tax].min;
+                                var max = content.facets_stats[algoliaSettings.facets[i].tax].max;
 
-                        /** Render pagination **/
-                        if (content.hits.length > 0)
-                            html_content += $this.paginationTemplate.render({ pages: pages, prev_page: (content.page > 0 ? content.page : false), next_page: (content.page + 1 < content.nbPages ? content.page + 2 : false) });
+                                var current_min = $this.helper.getNumericsRefine(algoliaSettings.facets[i].tax, ">=");
+                                var current_max = $this.helper.getNumericsRefine(algoliaSettings.facets[i].tax, "<=");
 
-                        html_content += "</div>";
+                                if (current_min == undefined)
+                                    current_min = min;
 
-                        $(algoliaSettings.instant_jquery_selector).html(html_content);
+                                if (current_max == undefined)
+                                    current_max = max;
 
+                                var name = algoliaSettings.facetsLabels[key] != undefined ? algoliaSettings.facetsLabels[key] : key;
+                                var nameattr = key;
 
-                        /** Call this function that should be define in the template **/
+                                sub_facets.push({ current_min: current_min, current_max: current_max, count: min == max ? 0 : 1,slider: 1, conjunctive: 0, disjunctive: 0, nameattr: nameattr, name: name, min: min, max: max });
+                            }
+                        }
 
-                        if (window.finishRenderingResults != undefined)
-                            window.finishRenderingResults();
+                        if (algoliaSettings.facets[i].type == "disjunctive")
+                        {
+                            for (var key in content.disjunctiveFacets[algoliaSettings.facets[i].tax])
+                            {
+                                var checked = $this.helper.isRefined(algoliaSettings.facets[i].tax, key);
+                                var name = algoliaSettings.facetsLabels[key] != undefined ? algoliaSettings.facetsLabels[key] : key;
+                                var nameattr = key;
+
+                                sub_facets.push({ slider: 0, conjunctive: 0, disjunctive: 1, checked: checked, nameattr: nameattr, name: name, count: content.disjunctiveFacets[algoliaSettings.facets[i].tax][key] });
+                            }
+                        }
+
+                        facets.push({count: sub_facets.length, tax: algoliaSettings.facets[i].tax, facet_categorie_name: algoliaSettings.facets[i].name, sub_facets: sub_facets });
                     }
+
+                    return facets;
                 };
 
-                window.sortSelected = function () {
+                this.getPages = function (content) {
+                    var pages = [];
+                    if (content.page > 5)
+                    {
+                        pages.push({ current: false, number: 1 });
+                        pages.push({ current: false, number: '...', disabled: true });
+                    }
+
+                    for (var p = content.page - 5; p < content.page + 5; ++p)
+                    {
+                        if (p < 0 || p >= content.nbPages)
+                            continue;
+
+                        pages.push({ current: content.page == p, number: (p + 1) });
+                    }
+                    if (content.page + 5 < content.nbPages)
+                    {
+                        pages.push({ current: false, number: '...', disabled: true });
+                        pages.push({ current: false, number: content.nbPages });
+                    }
+
+                    return pages;
+                };
+
+
+                /**
+                 * Rendering Html Function
+                 */
+                this.getHtmlForPagination = function (paginationTemplate, content, pages) {
+                    var pagination_html = paginationTemplate.render({
+                        pages: pages,
+                        prev_page: (content.page > 0 ? content.page : false),
+                        next_page: (content.page + 1 < content.nbPages ? content.page + 2 : false)
+                    });
+
+                    return pagination_html;
+                };
+
+                this.getHtmlForResults = function (resultsTemplate, content, facets) {
+
+                    var results_html = resultsTemplate.render({
+                        facets_count: facets.length,
+                        getDate: this.getDate,
+                        sortSelected: this.sortSelected,
+                        relevance_index_name: algoliaSettings.index_name + 'all',
+                        sorting_indexes: algoliaSettings.sorting_indexes,
+                        hits: content.hits,
+                        nbHits: content.nbHits,
+                        nbHits_zero: (content.nbHits === 0),
+                        nbHits_one: (content.nbHits === 1),
+                        nbHits_many: (content.nbHits > 1),
+                        query: $this.query,
+                        processingTimeMS: content.processingTimeMS
+                    });
+
+                    return results_html;
+                };
+
+                this.getHtmlForFacets = function (facetsTemplate, facets) {
+
+                    var facets_html = facetsTemplate.render({
+                        facets: facets,
+                        count: facets.length,
+                        sorting_indexes: algoliaSettings.sorting_indexes,
+                        getDate: this.getDate,
+                        sortSelected: this.sortSelected
+                    });
+
+                    return facets_html;
+                };
+
+                /**
+                 * Helper methods
+                 */
+                this.sortSelected = function () {
                     return function (val) {
                         var template = Hogan.compile(val);
 
@@ -407,13 +311,13 @@ if (algoliaSettings.type_of_search == "instant")
                             return "selected";
                         return "";
                     }
-                }
-
-                window.gotoPage = function(page) {
-                    engine.helper.gotoPage(+page - 1);
                 };
 
-                window.getDate = function () {
+                this.gotoPage = function(page) {
+                    this.helper.gotoPage(+page - 1);
+                };
+
+                this.getDate = function () {
                     return function (val) {
                         var template = Hogan.compile(val);
 
@@ -456,18 +360,7 @@ if (algoliaSettings.type_of_search == "instant")
                         return days[date.getDay()] + ", " + months[date.getMonth()] + " " + day + ", " + date.getFullYear();
                     }
                 };
-
-                window.addEventListener("popstate", function(e) {
-                    engine.getRefinementsFromUrl();
-                });
-
-                /**
-                 * Initialization
-                 */
-
-                $(algoliaSettings.search_input_selector).attr('autocomplete', 'off');
-                this.getRefinementsFromUrl();
-            }
+            };
         }
         else
         {
