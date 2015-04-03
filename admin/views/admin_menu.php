@@ -576,7 +576,7 @@
                                                 </td>
                                                 <td>
                                                     <select name="TYPES[<?php echo $type; ?>][METAS][<?php echo $meta_key; ?>][TYPE]">
-                                                        <?php foreach (array("conjunctive" => "Conjunctive", "disjunctive" => "Disjunctive", "slider" => "Slider") as $key => $value): ?>
+                                                        <?php foreach (array("conjunctive" => "Conjunctive", "disjunctive" => "Disjunctive", "slider" => "Slider", "menu" => "Menu") as $key => $value): ?>
                                                             <?php if (checked(isset($algolia_registry->metas[$type])
                                                                 && in_array($meta_key, array_keys($algolia_registry->metas[$type]))
                                                                 && $algolia_registry->metas[$type][$meta_key]["type"] == $key)) : ?>
@@ -618,10 +618,8 @@
 
                                         <?php
                                         $order = -1;
-                                        if (is_array($algolia_registry->conjunctive_facets) && in_array($tax, array_keys($algolia_registry->conjunctive_facets)))
-                                            $order = $algolia_registry->conjunctive_facets[$tax]['order'];
-                                        if (is_array($algolia_registry->disjunctive_facets) && in_array($tax, array_keys($algolia_registry->disjunctive_facets)))
-                                            $order = $algolia_registry->disjunctive_facets[$tax]['order'];
+                                        if (is_array($algolia_registry->indexable_tax) && isset($algolia_registry->indexable_tax[$tax]))
+                                            $order = $algolia_registry->indexable_tax[$tax]['order'];
                                         ?>
                                         <?php if ($order != -1): ?>
                                             <tr data-type="taxonomy" data-order="<?php echo $order; ?>">
@@ -647,19 +645,22 @@
                                         <td>
                                             <input type="checkbox"
                                                    value="facetable"
-                                                <?php checked((is_array($algolia_registry->conjunctive_facets) && in_array($tax, array_keys($algolia_registry->conjunctive_facets)))
-                                                    || (is_array($algolia_registry->disjunctive_facets) && in_array($tax, array_keys($algolia_registry->disjunctive_facets)))
-                                                ) ?>
-                                                   name="TAX[<?php echo $tax; ?>][FACET]">
+                                                <?php checked(is_array($algolia_registry->indexable_tax) && isset($algolia_registry->indexable_tax[$tax])
+                                                    && $algolia_registry->indexable_tax[$tax]['facetable'])
+                                                ?>
+                                                   name="TAX[<?php echo $tax; ?>][FACETABLE]">
                                         </td>
                                         <td>
                                             <select name="TAX[<?php echo $tax; ?>][FACET_TYPE]">
-                                                <option  value="conjunctive">Conjunctive</option>
-                                                <?php if (is_array($algolia_registry->disjunctive_facets) && in_array($tax, array_keys($algolia_registry->disjunctive_facets))): ?>
-                                                    <option selected="selected" value="disjunctive">Disjunctive</option>
-                                                <?php else: ?>
-                                                    <option value="disjunctive">Disjunctive</option>
-                                                <?php endif; ?>
+                                                <?php foreach (array("conjunctive" => "Conjunctive", "disjunctive" => "Disjunctive", "menu" => "Menu") as $key => $value): ?>
+                                                    <?php if (checked(isset($algolia_registry->indexable_tax[$tax])
+                                                        && $algolia_registry->indexable_tax[$tax]["type"] == $key)) : ?>
+                                                        <?php echo("o"); ?>
+                                                        <option selected="selected" value="<?php echo $key ?>"><?php echo $value; ?></option>
+                                                    <?php else : ?>
+                                                        <option value="<?php echo $key ?>"><?php echo $value; ?></option>
+                                                    <?php endif; ?>
+                                                <?php endforeach; ?>
                                             </select>
                                         </td>
                                         <td>

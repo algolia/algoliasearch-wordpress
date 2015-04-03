@@ -19,17 +19,17 @@
             <div class="logo" style="float: right;">
                 by <img src="<?php echo plugin_dir_url(__FILE__); ?>../../front/algolia-logo.png">
             </div>
-            {{#sorting_indexes.length}}
+            {{#sorting_indices.length}}
             <div style="float: right; margin-right: 10px;">
                 Order by
                 <select id="index_to_use">
                     <option {{#sortSelected}}{{relevance_index_name}}{{/sortSelected}} value="{{relevance_index_name}}">relevance</option>
-                    {{#sorting_indexes}}
+                    {{#sorting_indices}}
                     <option {{#sortSelected}}{{index_name}}{{/sortSelected}} value="{{index_name}}">{{label}}</option>
-                    {{/sorting_indexes}}
+                    {{/sorting_indices}}
                 </select>
             </div>
-            {{/sorting_indexes.length}}
+            {{/sorting_indices.length}}
             <div style="clear: both;"></div>
         </div>
         {{/hits.length}}

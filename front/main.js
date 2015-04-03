@@ -3,6 +3,7 @@
  */
 var algolia_client = new AlgoliaSearch(algoliaSettings.app_id, algoliaSettings.search_key);
 var indices = [];
+var custom_facets_types = [];
 
 for (var i = 0; i < algoliaSettings.indices.length; i++)
     indices.push(algolia_client.initIndex(algoliaSettings.indices[i].index_name));
@@ -160,7 +161,14 @@ if (algoliaSettings.type_of_search == "instant")
                     {
                         var sub_facets = [];
 
-                        if (algoliaSettings.facets[i].type == "conjunctive")
+                        if (custom_facets_types[algoliaSettings.facets[i].type] != undefined)
+                        {
+                            var params = custom_facets_types[algoliaSettings.facets[i].type]($this, content, algoliaSettings.facets[i]);
+
+                            if (params)
+                                sub_facets.push(params);
+                        }
+                        else
                         {
                             for (var key in content.facets[algoliaSettings.facets[i].tax])
                             {
@@ -169,53 +177,18 @@ if (algoliaSettings.type_of_search == "instant")
                                 var name = algoliaSettings.facetsLabels[key] != undefined ? algoliaSettings.facetsLabels[key] : key;
                                 var nameattr = key;
 
-                                sub_facets.push({
-                                    conjunctive: 1,
-                                    disjunctive: 0,
-                                    slider: 0,
+                                var params = {
+                                    type: {},
                                     checked: checked,
                                     nameattr: nameattr,
                                     name: name,
                                     count: content.facets[algoliaSettings.facets[i].tax][key]
-                                });
+                                };
+                                params.type[algoliaSettings.facets[i].type] = true;
+
+                                sub_facets.push(params);
                             }
                         }
-
-                        if (algoliaSettings.facets[i].type == "slider")
-                        {
-                            if (content.facets_stats[algoliaSettings.facets[i].tax] != undefined)
-                            {
-                                var min = content.facets_stats[algoliaSettings.facets[i].tax].min;
-                                var max = content.facets_stats[algoliaSettings.facets[i].tax].max;
-
-                                var current_min = $this.helper.getNumericsRefine(algoliaSettings.facets[i].tax, ">=");
-                                var current_max = $this.helper.getNumericsRefine(algoliaSettings.facets[i].tax, "<=");
-
-                                if (current_min == undefined)
-                                    current_min = min;
-
-                                if (current_max == undefined)
-                                    current_max = max;
-
-                                var name = algoliaSettings.facetsLabels[key] != undefined ? algoliaSettings.facetsLabels[key] : key;
-                                var nameattr = key;
-
-                                sub_facets.push({ current_min: current_min, current_max: current_max, count: min == max ? 0 : 1,slider: 1, conjunctive: 0, disjunctive: 0, nameattr: nameattr, name: name, min: min, max: max });
-                            }
-                        }
-
-                        if (algoliaSettings.facets[i].type == "disjunctive")
-                        {
-                            for (var key in content.disjunctiveFacets[algoliaSettings.facets[i].tax])
-                            {
-                                var checked = $this.helper.isRefined(algoliaSettings.facets[i].tax, key);
-                                var name = algoliaSettings.facetsLabels[key] != undefined ? algoliaSettings.facetsLabels[key] : key;
-                                var nameattr = key;
-
-                                sub_facets.push({ slider: 0, conjunctive: 0, disjunctive: 1, checked: checked, nameattr: nameattr, name: name, count: content.disjunctiveFacets[algoliaSettings.facets[i].tax][key] });
-                            }
-                        }
-
                         facets.push({count: sub_facets.length, tax: algoliaSettings.facets[i].tax, facet_categorie_name: algoliaSettings.facets[i].name, sub_facets: sub_facets });
                     }
 
@@ -266,9 +239,9 @@ if (algoliaSettings.type_of_search == "instant")
                     var results_html = resultsTemplate.render({
                         facets_count: facets.length,
                         getDate: this.getDate,
-                        sortSelected: this.sortSelected,
                         relevance_index_name: algoliaSettings.index_name + 'all',
                         sorting_indices: algoliaSettings.sorting_indices,
+                        sortSelected: this.sortSelected,
                         hits: content.hits,
                         nbHits: content.nbHits,
                         nbHits_zero: (content.nbHits === 0),
@@ -286,8 +259,9 @@ if (algoliaSettings.type_of_search == "instant")
                     var facets_html = facetsTemplate.render({
                         facets: facets,
                         count: facets.length,
-                        sorting_indices: algoliaSettings.sorting_indices,
                         getDate: this.getDate,
+                        relevance_index_name: algoliaSettings.index_name + 'all',
+                        sorting_indices: algoliaSettings.sorting_indices,
                         sortSelected: this.sortSelected
                     });
 

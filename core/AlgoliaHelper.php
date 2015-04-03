@@ -88,8 +88,6 @@ class AlgoliaHelper
         $facets             = array();
         $customRankingTemp  = array();
 
-        $facets[]           = "type";
-
         global $attributesToHighlight;
         global $attributesToSnippet;
 
@@ -135,7 +133,7 @@ class AlgoliaHelper
                     $this->setSettings($index_name . $name . "_temp", $mergeSettings);
                 }
 
-                if (isset($this->algolia_registry->conjunctive_facets[$name]) || isset($this->algolia_registry->disjunctive_facets[$name]))
+                if (isset($this->algolia_registry->indexable_tax[$name]) && $this->algolia_registry->indexable_tax[$name]['facetable'])
                     $facets[] = $name;
             }
         }
