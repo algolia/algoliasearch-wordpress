@@ -136,6 +136,8 @@ jQuery(document).ready(function ($) {
                 engine.helper.toggleRefine($(this).attr("data-tax"), $(this).attr("data-name"));
             });
 
+            engine.helper.setPage(0);
+
             performQueries(true);
         });
 
@@ -146,6 +148,8 @@ jQuery(document).ready(function ($) {
 
         $("body").on("change", "#index_to_use", function () {
             engine.helper.setIndex($(this).val());
+
+            engine.helper.setPage(0);
 
             performQueries(true);
         });
@@ -166,6 +170,8 @@ jQuery(document).ready(function ($) {
 
             if (parseInt(max) == parseInt(slide_dom.attr("data-max")))
                 engine.helper.removeNumericRefine(slide_dom.attr("data-tax"), "<=");
+
+            engine.helper.setPage(0);
 
             updateSlideInfos(ui);
             performQueries(true);
