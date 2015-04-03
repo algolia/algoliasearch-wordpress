@@ -8,15 +8,15 @@ jQuery(document).ready(function ($) {
 
             var hogan_objs = [];
 
-            algoliaSettings.indexes.sort(myCompare);
+            algoliaSettings.indices.sort(indicesCompare);
 
-            for (var i = 0; i < algoliaSettings.indexes.length; i++)
+            for (var i = 0; i < algoliaSettings.indices.length; i++)
             {
                 hogan_objs.push({
-                    source: indexes[i].ttAdapter({hitsPerPage: algoliaSettings.number_by_type}),
+                    source: indices[i].ttAdapter({hitsPerPage: algoliaSettings.number_by_type}),
                     displayKey: 'title',
                     templates: {
-                        header: '<div class="category">' + algoliaSettings.indexes[i].name + '</div>',
+                        header: '<div class="category">' + algoliaSettings.indices[i].name + '</div>',
                         suggestion: function (hit) {
                             return $autocompleteTemplate.render(hit);
                         }
@@ -26,7 +26,7 @@ jQuery(document).ready(function ($) {
             }
 
             hogan_objs.push({
-                source: matcher(),
+                source: getBrandingHits(),
                 displayKey: 'title',
                 templates: {
                     suggestion: function (hit) {
@@ -76,7 +76,7 @@ jQuery(document).ready(function ($) {
             }
         }
 
-        algoliaSettings.facets = algoliaSettings.facets.sort(myCompare2);
+        algoliaSettings.facets = algoliaSettings.facets.sort(facetsCompare);
 
         engine.setHelper(new AlgoliaSearchHelper(algolia_client, algoliaSettings.index_name + 'all', {
             facets: conjunctive_facets,
@@ -117,20 +117,19 @@ jQuery(document).ready(function ($) {
                 html_content += engine.getHtmlForResults(resultsTemplate, content, facets);
 
                 if (content.hits.length > 0)
-                    html_content += engine.getHtmlForPagination(paginationTemplate, content, pages);
+                    html_content += engine.getHtmlForPagination(paginationTemplate, content, pages, facets);
 
                 html_content += "</div>";
 
                 $(algoliaSettings.instant_jquery_selector).html(html_content);
 
-                finishRenderingResults();
+                updateSliderValues();
             }
         }
 
         /**
          * Bindings
          */
-
         $("body").on("click", ".sub_facet", function () {
             $(this).find("input[type='checkbox']").each(function (i) {
                 $(this).prop("checked", !$(this).prop("checked"));
@@ -172,6 +171,17 @@ jQuery(document).ready(function ($) {
             performQueries(true);
         });
 
+        $("body").on("click", ".algolia-pagination a", function (e) {
+            e.preventDefault();
+
+            engine.gotoPage($(this).attr("data-page"));
+            performQueries(true);
+
+            $("body").scrollTop(0);
+
+            return false;
+        });
+
         $(algoliaSettings.search_input_selector).keyup(function (e) {
             e.preventDefault();
 
@@ -190,13 +200,15 @@ jQuery(document).ready(function ($) {
 
                 location.replace('#');
 
-                $(algoliaSettings.instant_jquery_selector).html(engine.old_content);
+                $(algoliaSettings.instant_jquery_selector).html(old_content);
 
                 return;
             }
 
-            engine.helper.clearRefinements();
-            engine.helper.clearNumericRefinements();
+            /* Uncomment to clear refinements on keyup */
+
+            //engine.helper.clearRefinements();
+            //engine.helper.clearNumericRefinements();
 
 
             performQueries(false);
@@ -204,7 +216,7 @@ jQuery(document).ready(function ($) {
             return false;
         });
 
-        function finishRenderingResults()
+        function updateSliderValues()
         {
             $(".algolia-slider-true").each(function (i) {
                 var min = $(this).attr("data-min");
@@ -241,6 +253,7 @@ jQuery(document).ready(function ($) {
          */
 
         $(algoliaSettings.search_input_selector).attr('autocomplete', 'off');
+
         engine.getRefinementsFromUrl(searchCallback);
 
         window.addEventListener("popstate", function(e) {

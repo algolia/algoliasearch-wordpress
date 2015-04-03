@@ -1,13 +1,13 @@
 /**
- * Common stuff
+ * Common variables and function for autocomplete and instant search
  */
 var algolia_client = new AlgoliaSearch(algoliaSettings.app_id, algoliaSettings.search_key);
-var indexes = [];
+var indices = [];
 
-for (var i = 0; i < algoliaSettings.indexes.length; i++)
-    indexes.push(algolia_client.initIndex(algoliaSettings.indexes[i].index_name));
+for (var i = 0; i < algoliaSettings.indices.length; i++)
+    indices.push(algolia_client.initIndex(algoliaSettings.indices[i].index_name));
 
-window.myCompare = function (a, b) {
+window.indicesCompare = function (a, b) {
     if (a.order1 < b.order1)
         return -1;
 
@@ -17,7 +17,7 @@ window.myCompare = function (a, b) {
     return 1;
 };
 
-window.myCompare2 = function (a, b) {
+window.facetsCompare = function (a, b) {
     if (a.order < b.order)
         return -1;
 
@@ -28,12 +28,12 @@ window.myCompare2 = function (a, b) {
 };
 
 /**
- * Autocomplete
+ * Autocomplete functions
  */
 
 if (algoliaSettings.type_of_search == "autocomplete")
 {
-    window.matcher = function () {
+    window.getBrandingHits = function () {
         return function findMatches(q, cb) {
             return cb(["algolia-branding"]);
         }
@@ -57,6 +57,7 @@ if (algoliaSettings.type_of_search == "instant")
             engine = new function () {
 
                 var query = undefined;
+                var $this = this;
 
                 this.helper = undefined;
 
@@ -64,12 +65,11 @@ if (algoliaSettings.type_of_search == "instant")
                   this.helper = helper;
                 };
 
-                var $this = this;
-
                 this.updateUrl = function (push_state)
                 {
                     var refinements = [];
 
+                    /** Get refinements for conjunctive facets **/
                     for (var refine in this.helper.refinements)
                     {
                         if (this.helper.refinements[refine])
@@ -83,6 +83,7 @@ if (algoliaSettings.type_of_search == "instant")
                         }
                     }
 
+                    /** Get refinements for disjunctive facets **/
                     for (var refine in this.helper.disjunctiveRefinements)
                     {
                         for (var value in this.helper.disjunctiveRefinements[refine])
@@ -98,8 +99,9 @@ if (algoliaSettings.type_of_search == "instant")
                         }
                     }
 
-                    var url = '#q=' + encodeURIComponent(this.query) + '&page=' + this.helper.page + '&refinements=' + encodeURIComponent(JSON.stringify(refinements)) + '&numerics_refinements=' + encodeURIComponent(JSON.stringify(this.helper.numericsRefinements)) + '&in=' + encodeURIComponent(JSON.stringify(this.helper.getIndex()));
+                    var url = '#q=' + encodeURIComponent(this.query) + '&page=' + this.helper.page + '&refinements=' + encodeURIComponent(JSON.stringify(refinements)) + '&numerics_refinements=' + encodeURIComponent(JSON.stringify(this.helper.numericsRefinements)) + '&index_name=' + encodeURIComponent(JSON.stringify(this.helper.getIndex()));
 
+                    /** If push_state is false wait for one second to push the state in history **/
                     if (push_state)
                         history.pushState(url, null, url);
                     else
@@ -119,18 +121,19 @@ if (algoliaSettings.type_of_search == "instant")
                         var pageParamOffset                 = params.indexOf('&page=');
                         var refinementsParamOffset          = params.indexOf('&refinements=');
                         var numericsRefinementsParamOffset  = params.indexOf('&numerics_refinements=');
-                        var indexNameOffset                 = params.indexOf('&in=');
+                        var indexNameOffset                 = params.indexOf('&index_name=');
 
                         var q                               = decodeURIComponent(params.substring(0, pageParamOffset));
-                        var page                            = parseInt(params.substring(pageParamOffset + 6, refinementsParamOffset));
-                        var refinements                     = JSON.parse(decodeURIComponent(params.substring(refinementsParamOffset + 13, numericsRefinementsParamOffset)));
-                        var numericsRefinements             = JSON.parse(decodeURIComponent(params.substring(numericsRefinementsParamOffset + 22, indexNameOffset)));
-                        var indexName                       = JSON.parse(decodeURIComponent(params.substring(indexNameOffset + 4)));
+                        var page                            = parseInt(params.substring(pageParamOffset + '&page='.length, refinementsParamOffset));
+                        var refinements                     = JSON.parse(decodeURIComponent(params.substring(refinementsParamOffset + '&refinements='.length, numericsRefinementsParamOffset)));
+                        var numericsRefinements             = JSON.parse(decodeURIComponent(params.substring(numericsRefinementsParamOffset + '&numerics_refinements='.length, indexNameOffset)));
+                        var indexName                       = JSON.parse(decodeURIComponent(params.substring(indexNameOffset + '&index_name='.length)));
 
                         this.query = q;
 
                         this.helper.clearRefinements();
 
+                        /** Set refinements from url data **/
                         for (var i = 0; i < refinements.length; ++i) {
                             for (var refine in refinements[i]) {
                                 this.helper.toggleRefine(refine, refinements[i][refine]);
@@ -247,9 +250,10 @@ if (algoliaSettings.type_of_search == "instant")
                 /**
                  * Rendering Html Function
                  */
-                this.getHtmlForPagination = function (paginationTemplate, content, pages) {
+                this.getHtmlForPagination = function (paginationTemplate, content, pages, facets) {
                     var pagination_html = paginationTemplate.render({
                         pages: pages,
+                        facets_count: facets.length,
                         prev_page: (content.page > 0 ? content.page : false),
                         next_page: (content.page + 1 < content.nbPages ? content.page + 2 : false)
                     });
@@ -264,7 +268,7 @@ if (algoliaSettings.type_of_search == "instant")
                         getDate: this.getDate,
                         sortSelected: this.sortSelected,
                         relevance_index_name: algoliaSettings.index_name + 'all',
-                        sorting_indexes: algoliaSettings.sorting_indexes,
+                        sorting_indices: algoliaSettings.sorting_indices,
                         hits: content.hits,
                         nbHits: content.nbHits,
                         nbHits_zero: (content.nbHits === 0),
@@ -282,7 +286,7 @@ if (algoliaSettings.type_of_search == "instant")
                     var facets_html = facetsTemplate.render({
                         facets: facets,
                         count: facets.length,
-                        sorting_indexes: algoliaSettings.sorting_indexes,
+                        sorting_indices: algoliaSettings.sorting_indices,
                         getDate: this.getDate,
                         sortSelected: this.sortSelected
                     });

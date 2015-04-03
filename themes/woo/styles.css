@@ -97,6 +97,13 @@
     margin: 10px;
 }
 
+#algolia_instant_selector:after
+{
+    content: ' ';
+    clear: both;
+    display: block;
+}
+
 #algolia_instant_selector .category
 {
 
@@ -195,6 +202,11 @@
 }
 
 #algolia_instant_selector .pagination-wrapper
+{
+    width: 100%;
+}
+
+#algolia_instant_selector .pagination-wrapper.with_facets
 {
     width: 80%;
     margin-left: 20%;

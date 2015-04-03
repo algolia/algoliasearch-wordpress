@@ -68,8 +68,8 @@
             No results found matching "<strong>{{query}}</strong>".
         </div>
         {{/hits.length}}
+        <div style="clear: both;"></div>
     </div>
-    <div style="clear: both;"></div>
 </script>
 
 <script type="text/template" id="instant-facets-template">
@@ -114,23 +114,23 @@
 </script>
 
 <script type="text/template" id="instant-pagination-template">
-<div class="pagination-wrapper">
+<div class="pagination-wrapper{{#facets_count}} with_facets{{/facets_count}}">
     <div class="text-center">
         <ul class="algolia-pagination">
             <li {{^prev_page}}class="disabled"{{/prev_page}}>
-                <a href="#" onclick="{{#prev_page}}gotoPage({{ prev_page }});{{/prev_page}} return false;">&laquo;</a>
+                <a href="#" data-page="{{prev_page}}">&laquo;</a>
             </li>
 
             {{#pages}}
             <li class="{{#current}}active{{/current}}{{#disabled}}disabled{{/disabled}}">
-                <a href="#" onclick="{{^disabled}}gotoPage({{ number }});{{/disabled}} return false;">
+                <a href="#" data-page="{{number}}" return false;">
                     {{ number }}
                 </a>
             </li>
             {{/pages}}
 
             <li {{^next_page}}class="disabled"{{/next_page}}>
-                <a href="#" onclick="{{#next_page}}gotoPage({{ next_page }});{{/next_page}} return false;">&raquo;</a>
+                <a href="#" data-page="{{next_page}}">&raquo;</a>
             </li>
         </ul>
     </div>

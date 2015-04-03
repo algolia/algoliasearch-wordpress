@@ -88,12 +88,12 @@ class AlgoliaPlugin
             wp_localize_script($script, 'settings', array());
         }
 
-        $indexes = array();
+        $indices = array();
         $facets = array();
 
         foreach ($this->algolia_registry->indexable_types as $type => $obj)
         {
-            $indexes[] = array('index_name' => $this->algolia_registry->index_name . $type, 'name' => $obj['name'], 'order1' => 0, 'order2' => $obj['order']);
+            $indices[] = array('index_name' => $this->algolia_registry->index_name . $type, 'name' => $obj['name'], 'order1' => 0, 'order2' => $obj['order']);
 
             if (isset($this->algolia_registry->metas[$type]))
                 foreach ($this->algolia_registry->metas[$type] as $meta_key => $meta_value)
@@ -102,7 +102,7 @@ class AlgoliaPlugin
         }
 
         foreach ($this->algolia_registry->indexable_tax as $tax => $obj)
-            $indexes[] = array('index_name' => $this->algolia_registry->index_name . $tax, 'name' => $obj['name'], 'order1' => 1, 'order2' => $obj['order']);
+            $indices[] = array('index_name' => $this->algolia_registry->index_name . $tax, 'name' => $obj['name'], 'order1' => 1, 'order2' => $obj['order']);
 
         foreach ($this->algolia_registry->conjunctive_facets as $tax => $obj)
             $facets[] = array('tax' => $tax, 'name' => $obj['name'], 'order' => $obj['order'], 'type' => 'conjunctive');
@@ -123,7 +123,7 @@ class AlgoliaPlugin
         $algoliaSettings = array(
             'app_id'                    => $this->algolia_registry->app_id,
             'search_key'                => $this->algolia_registry->search_key,
-            'indexes'                   => $indexes,
+            'indices'                   => $indices,
             'sorting_indexes'           => $sorting_indexes,
             'index_name'                => $this->algolia_registry->index_name,
             'type_of_search'            => $this->algolia_registry->type_of_search,
