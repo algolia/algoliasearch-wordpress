@@ -14,7 +14,7 @@ class Registry
         'index_name'                    => '',
         'indexable_types'               => array('post' => array('name' => 'Articles','order' => 0),'page' => array('name' => 'Pages','order' => 1)),
         'indexable_tax'                 => array(),
-        'searchable'                    => array(),
+        'searchable'                    => array('title' => array('ordered' => 'ordered', 'order' => 0), 'content_stripped' => array('ordered' => 'unordered', 'order' => 1)),
         'sortable'                      => array(),
         'type_of_search'                => 'autocomplete',
         'instant_jquery_selector'       => '#content',

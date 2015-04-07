@@ -108,6 +108,15 @@ class WordpressFetcher
         return (array) $obj;
     }
 
+    private function strip($s)
+    {
+        $s = trim(preg_replace('/\s+/', ' ', $s));
+        $s = preg_replace('/&nbsp;/', ' ', $s);
+        $s = preg_replace('!\s+!', ' ', $s);
+
+        return trim(strip_tags($s));
+    }
+
     public function getPostObj($data)
     {
         global $external_attrs;
@@ -122,10 +131,16 @@ class WordpressFetcher
             $obj->$name = $this->cast($data->$key, $value["type"]);
         }
 
-        $obj->author        = get_the_author_meta('display_name', $data->post_author);
-        $obj->author_login  = get_the_author_meta('user_login', $data->post_author);
-        $obj->permalink     = get_permalink($data->ID);
-        $obj->excerpt       = my_excerpt($data->post_content, get_the_excerpt());
+        $obj->content_stripped  = $this->strip($obj->content);
+
+        $obj->author            = get_the_author_meta('display_name', $data->post_author);
+        $obj->author_first_name = get_the_author_meta('first_name', $data->post_author);
+        $obj->author_last_name  = get_the_author_meta('last_name', $data->post_author);
+        $obj->author_login      = get_the_author_meta('user_login', $data->post_author);
+        $obj->permalink         = get_permalink($data->ID);
+
+        unset($obj->excerpt);
+        //$obj->excerpt           = my_excerpt($data->post_content, get_the_excerpt());
 
         $thumbnail_id = get_post_thumbnail_id($data->ID);
 

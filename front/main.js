@@ -3,7 +3,7 @@
  */
 var algolia_client = new AlgoliaSearch(algoliaSettings.app_id, algoliaSettings.search_key);
 var indices = [];
-var custom_facets_types = [];
+var custom_facets_types = algoliaSettings.theme.facet_types;
 
 for (var i = 0; i < algoliaSettings.indices.length; i++)
     indices.push(algolia_client.initIndex(algoliaSettings.indices[i].index_name));
@@ -163,10 +163,17 @@ if (algoliaSettings.type_of_search == "instant")
 
                         if (custom_facets_types[algoliaSettings.facets[i].type] != undefined)
                         {
-                            var params = custom_facets_types[algoliaSettings.facets[i].type]($this, content, algoliaSettings.facets[i]);
+                            try
+                            {
+                                var params = custom_facets_types[algoliaSettings.facets[i].type]($this, content, algoliaSettings.facets[i]);
 
-                            if (params)
-                                sub_facets.push(params);
+                                if (params)
+                                    sub_facets.push(params);
+                            }
+                            catch(error)
+                            {
+                                throw("Bad facet function for '" + algoliaSettings.facets[i].type + "'");
+                            }
                         }
                         else
                         {
@@ -311,15 +318,6 @@ if (algoliaSettings.type_of_search == "instant")
 
 
                         var date = new Date(timestamp * 1000);
-
-                        var datevalues = [
-                            date.getFullYear(),
-                            date.getMonth()+1,
-                            date.getDate(),
-                            date.getHours(),
-                            date.getMinutes(),
-                            date.getSeconds(),
-                        ];
 
                         var days = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
                         var months = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];

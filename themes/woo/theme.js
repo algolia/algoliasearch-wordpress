@@ -128,6 +128,74 @@ jQuery(document).ready(function ($) {
         }
 
         /**
+         * Custom Facets Types
+         */
+
+        custom_facets_types["slider"] = function (engine, content, facet) {
+
+            if (content.facets_stats[facet.tax] != undefined)
+            {
+                var min = content.facets_stats[facet.tax].min;
+                var max = content.facets_stats[facet.tax].max;
+
+                var current_min = engine.helper.getNumericsRefine(facet.tax, ">=");
+                var current_max = engine.helper.getNumericsRefine(facet.tax, "<=");
+
+                if (current_min == undefined)
+                    current_min = min;
+
+                if (current_max == undefined)
+                    current_max = max;
+
+                var params = {
+                    type: {},
+                    current_min: current_min,
+                    current_max: current_max,
+                    count: min == max ? 0 : 1,
+                    min: min,
+                    max: max
+                };
+                params.type[facet.type] = true;
+
+                return params;
+            }
+
+            return null;
+        };
+
+        custom_facets_types["menu"] = function (engine, content, facet) {
+
+            if (content.facets_stats[facet.tax] != undefined)
+            {
+                var min = content.facets_stats[facet.tax].min;
+                var max = content.facets_stats[facet.tax].max;
+
+                var current_min = engine.helper.getNumericsRefine(facet.tax, ">=");
+                var current_max = engine.helper.getNumericsRefine(facet.tax, "<=");
+
+                if (current_min == undefined)
+                    current_min = min;
+
+                if (current_max == undefined)
+                    current_max = max;
+
+                var params = {
+                    type: {},
+                    current_min: current_min,
+                    current_max: current_max,
+                    count: min == max ? 0 : 1,
+                    min: min,
+                    max: max
+                };
+                params.type[facet.type] = true;
+
+                return params;
+            }
+
+            return null;
+        };
+
+        /**
          * Bindings
          */
         $("body").on("click", ".sub_facet", function () {

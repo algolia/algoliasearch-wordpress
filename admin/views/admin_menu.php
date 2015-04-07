@@ -2,6 +2,7 @@
     $langDomain = "algolia";
     $algolia_registry = \Algolia\Core\Registry::getInstance();
     $theme_helper = new Algolia\Core\ThemeHelper();
+    $theme = $theme_helper->get_current_theme();
 
     global $external_attrs;
     global $attributesToIndex;
@@ -491,7 +492,7 @@
                         <p class="help-block">
                             Configure here the additional attributes you want to include in your Algolia records.
                             <br>
-                            Default attributes : objectID, authorId, author, author_login, permalink, date, content, title, excerpt, slug, modified, parent, menu_order, type
+                            Default attributes : objectID, authorId, author, author_login, permalink, date, content, content_stripped, title, slug, modified, parent, menu_order, type
                         </p>
 
                         <table id="extra-meta-and-taxonomies">
@@ -520,7 +521,13 @@
                                     <th>Facet type</th>
                                     <th>Facet label &amp; ordering</th>
                                 </tr>
-                                <?php $i = 0; ?>
+                                <?php
+
+                                $i = 0;
+
+                                $facet_types = array_merge(array("conjunctive" => "Conjunctive", "disjunctive" => "Disjunctive"), $theme->facet_types);
+
+                                ?>
                                 <?php foreach (get_post_types() as $type) : ?>
                                     <?php if (is_array($algolia_registry->indexable_types) && in_array($type, array_keys($algolia_registry->indexable_types))) : ?>
                                         <?php
@@ -576,7 +583,7 @@
                                                 </td>
                                                 <td>
                                                     <select name="TYPES[<?php echo $type; ?>][METAS][<?php echo $meta_key; ?>][TYPE]">
-                                                        <?php foreach (array("conjunctive" => "Conjunctive", "disjunctive" => "Disjunctive", "slider" => "Slider", "menu" => "Menu") as $key => $value): ?>
+                                                        <?php foreach ($facet_types as $key => $value): ?>
                                                             <?php if (checked(isset($algolia_registry->metas[$type])
                                                                 && in_array($meta_key, array_keys($algolia_registry->metas[$type]))
                                                                 && $algolia_registry->metas[$type][$meta_key]["type"] == $key)) : ?>
@@ -652,7 +659,7 @@
                                         </td>
                                         <td>
                                             <select name="TAX[<?php echo $tax; ?>][FACET_TYPE]">
-                                                <?php foreach (array("conjunctive" => "Conjunctive", "disjunctive" => "Disjunctive", "menu" => "Menu") as $key => $value): ?>
+                                                <?php foreach ($facet_types as $key => $value): ?>
                                                     <?php if (checked(isset($algolia_registry->indexable_tax[$tax])
                                                         && $algolia_registry->indexable_tax[$tax]["type"] == $key)) : ?>
                                                         <?php echo("o"); ?>

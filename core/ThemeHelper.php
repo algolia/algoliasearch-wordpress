@@ -3,10 +3,12 @@
 class ThemeHelper
 {
     private $themes_dir;
+    private $algolia_registry;
 
     public function __construct()
     {
         $this->themes_dir = plugin_dir_path(__DIR__).'themes/';
+        $this->algolia_registry = Registry::getInstance();
     }
 
     public function available_themes()
@@ -43,10 +45,19 @@ class ThemeHelper
 
                 $theme->description = isset($configs['description']) ? $configs['description'] : '';
 
+                $theme->facet_types = isset($configs['facet_types']) ? $configs['facet_types'] : array();
+
                 $themes[] = $theme;
             }
         }
 
         return $themes;
+    }
+
+    public function get_current_theme()
+    {
+        foreach ($this->available_themes() as $theme)
+            if ($theme->dir == $this->algolia_registry->theme)
+                return $theme;
     }
 }

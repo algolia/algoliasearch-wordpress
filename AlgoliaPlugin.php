@@ -5,6 +5,7 @@ class AlgoliaPlugin
     private $algolia_registry;
     private $algolia_helper;
     private $indexer;
+    private $theme_helper;
 
     public function __construct()
     {
@@ -18,6 +19,8 @@ class AlgoliaPlugin
                 $this->algolia_registry->admin_key
             );
         }
+
+        $this->theme_helper = new \Algolia\Core\ThemeHelper();
 
         $this->indexer = new \Algolia\Core\Indexer();
 
@@ -124,7 +127,8 @@ class AlgoliaPlugin
             'number_by_page'            => $this->algolia_registry->number_by_page,
             'search_input_selector'     => str_replace("\\", "", $this->algolia_registry->search_input_selector),
             'facetsLabels'              => $facetsLabels,
-            "plugin_url"                => plugin_dir_url(__FILE__)
+            'plugin_url'                => plugin_dir_url(__FILE__),
+            'theme'                     => $this->theme_helper->get_current_theme()
         );
 
         wp_register_script('algolia_main.js', plugin_dir_url(__FILE__) . 'front/main.js', array_merge(array('jquery'), $scripts));
@@ -289,6 +293,30 @@ class AlgoliaPlugin
 
         $this->algolia_registry->search_input_selector  = str_replace('"', '\'', $search_input_selector);
         $this->algolia_registry->theme                  = $theme;
+
+
+        /**
+         * Handle Facet types that do not exist anymore because of theme changing
+         */
+        $new_facet_types = array_merge(array('conjunctive' => 'Conjunctive', 'disjunctive' => 'Disjunctive'), $this->theme_helper->get_current_theme()->facet_types);
+
+        $taxonomies = $this->algolia_registry->indexable_tax;
+
+        foreach ($taxonomies as &$tax)
+            if (isset($new_facet_types[$tax['type']]) == false)
+                $tax['type'] = 'conjunctive';
+
+        $this->algolia_registry->indexable_tax = $taxonomies;
+
+        $metas = $this->algolia_registry->metas;
+
+        foreach ($metas as &$types)
+            foreach ($types as &$meta)
+                if (isset($new_facet_types[$meta['type']]) == false)
+                    $meta['type'] = 'conjunctive';
+
+        $this->algolia_registry->metas = $metas;
+
 
         $this->algolia_helper->handleIndexCreation();
 

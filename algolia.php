@@ -33,8 +33,8 @@ new AlgoliaPluginAuto();
 
 $batch_count = 50;
 
-$attributesToHighlight  = array("title", "content", "author", "type");
-$attributesToSnippet    = array("content");
+$attributesToHighlight  = array("title", "content", "content_stripped", "author", "type");
+$attributesToSnippet    = array("content", "content_stripped");
 
 $facetsLabels = array(
     'post'      => 'Article',
@@ -45,7 +45,7 @@ $facetsLabels = array(
  * Defaults Variables
  */
 
-$attributesToIndex      = array("title", "content", "author", "type");
+$attributesToIndex      = array("title", "content", "content_stripped", "author", "type");
 
 /**
  * Handling Extension
