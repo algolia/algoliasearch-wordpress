@@ -430,7 +430,7 @@ class AlgoliaPlugin
                 if (in_array($tax['SLUG'], $valid_tax) || in_array($tax['SLUG'], array_keys($this->algolia_registry->extras)))
                 {
                     $taxonomies[$tax['SLUG']] = array(
-                        'name'      => $tax['NAME'] == '' ? $tax['SLUG'] : $tax['NAME'],
+                        'name'      => $tax['NAME'],
                         'order'     => $tax["ORDER"],
                         'facetable' => isset($tax['FACETABLE']) ? 1 : 0,
                         'type'      => $tax['FACET_TYPE']

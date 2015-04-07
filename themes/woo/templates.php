@@ -79,19 +79,19 @@
     <div class="facet">
         <div class="name">
             {{ facet_categorie_name }}
-            </div>
+        </div>
         <div>
             {{#sub_facets}}
 
                 {{#type.menu}}
-                <div class="{{#checked}}checked {{/checked}}sub_facet conjunctive">
+                <div data-tax="{{tax}}" data-name="{{nameattr}}" data-type="menu" class="{{#checked}}checked {{/checked}}sub_facet menu">
                     <input style="display: none;" data-tax="{{tax}}" {{#checked}}checked{{/checked}} data-name="{{nameattr}}" class="facet_value" type="checkbox" />
-                    {{name}} ({{count}})
+                    {{name}} {{#print_count}}({{count}}){{/print_count}}
                 </div>
                 {{/type.menu}}
 
                 {{#type.conjunctive}}
-                <div class="{{#checked}}checked {{/checked}}sub_facet conjunctive">
+                <div data-name="{{tax}}" data-type="conjunctive" class="{{#checked}}checked {{/checked}}sub_facet conjunctive">
                     <input style="display: none;" data-tax="{{tax}}" {{#checked}}checked{{/checked}} data-name="{{nameattr}}" class="facet_value" type="checkbox" />
                     {{name}} ({{count}})
                 </div>
@@ -107,7 +107,7 @@
                 {{/type.slider}}
 
                 {{#type.disjunctive}}
-                <div class="{{#checked}}checked {{/checked}}sub_facet disjunctive">
+                <div data-name="{{tax}}" data-type="disjunctive" class="{{#checked}}checked {{/checked}}sub_facet disjunctive">
                     <input data-tax="{{tax}}" {{#checked}}checked{{/checked}} data-name="{{nameattr}}" class="facet_value" type="checkbox" />
                     {{name}} ({{count}})
                 </div>
@@ -125,21 +125,25 @@
 <div class="pagination-wrapper{{#facets_count}} with_facets{{/facets_count}}">
     <div class="text-center">
         <ul class="algolia-pagination">
-            <li {{^prev_page}}class="disabled"{{/prev_page}}>
-                <a href="#" data-page="{{prev_page}}">&laquo;</a>
-            </li>
+            <a href="#" data-page="{{prev_page}}">
+                <li {{^prev_page}}class="disabled"{{/prev_page}}>
+                    &laquo;
+                </li>
+            </a>
 
             {{#pages}}
-            <li class="{{#current}}active{{/current}}{{#disabled}}disabled{{/disabled}}">
-                <a href="#" data-page="{{number}}" return false;">
+            <a href="#" data-page="{{number}}" return false;">
+                <li class="{{#current}}active{{/current}}{{#disabled}}disabled{{/disabled}}">
                     {{ number }}
-                </a>
-            </li>
+                </li>
+            </a>
             {{/pages}}
 
-            <li {{^next_page}}class="disabled"{{/next_page}}>
-                <a href="#" data-page="{{next_page}}">&raquo;</a>
-            </li>
+            <a href="#" data-page="{{next_page}}">
+                <li {{^next_page}}class="disabled"{{/next_page}}>
+                    &raquo;
+                </li>
+            </a>
         </ul>
     </div>
 </div>

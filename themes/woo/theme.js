@@ -59,7 +59,6 @@ jQuery(document).ready(function ($) {
 
         var conjunctive_facets  = [];
         var disjunctive_facets  = [];
-        var slider_facets       = [];
 
         for (var i = 0; i < algoliaSettings.facets.length; i++)
         {
@@ -70,10 +69,10 @@ jQuery(document).ready(function ($) {
                 disjunctive_facets.push(algoliaSettings.facets[i].tax);
 
             if (algoliaSettings.facets[i].type == "slider")
-            {
                 disjunctive_facets.push(algoliaSettings.facets[i].tax);
-                slider_facets.push(algoliaSettings.facets[i].tax);
-            }
+
+            if (algoliaSettings.facets[i].type == "menu")
+                disjunctive_facets.push(algoliaSettings.facets[i].tax);
         }
 
         algoliaSettings.facets = algoliaSettings.facets.sort(facetsCompare);
@@ -155,52 +154,94 @@ jQuery(document).ready(function ($) {
                     min: min,
                     max: max
                 };
+
                 params.type[facet.type] = true;
 
-                return params;
+                return [params];
             }
 
-            return null;
+            return [];
         };
 
         custom_facets_types["menu"] = function (engine, content, facet) {
 
-            if (content.facets_stats[facet.tax] != undefined)
+            var data = [];
+
+            var all_count = 0;
+            var all_unchecked = true;
+
+            for (var key in content.disjunctiveFacets[facet.tax])
             {
-                var min = content.facets_stats[facet.tax].min;
-                var max = content.facets_stats[facet.tax].max;
+                var checked = engine.helper.isRefined(facet.tax, key);
 
-                var current_min = engine.helper.getNumericsRefine(facet.tax, ">=");
-                var current_max = engine.helper.getNumericsRefine(facet.tax, "<=");
+                all_unchecked = all_unchecked && !checked;
 
-                if (current_min == undefined)
-                    current_min = min;
-
-                if (current_max == undefined)
-                    current_max = max;
+                var name = algoliaSettings.facetsLabels[key] != undefined ? algoliaSettings.facetsLabels[key] : key;
+                var nameattr = key;
 
                 var params = {
                     type: {},
-                    current_min: current_min,
-                    current_max: current_max,
-                    count: min == max ? 0 : 1,
-                    min: min,
-                    max: max
+                    checked: checked,
+                    nameattr: nameattr,
+                    name: name,
+                    print_count: true,
+                    count: content.disjunctiveFacets[facet.tax][key]
                 };
+
+                all_count += content.disjunctiveFacets[facet.tax][key];
+
                 params.type[facet.type] = true;
 
-                return params;
+                data.push(params);
             }
 
-            return null;
+            var params = {
+                type: {},
+                checked: all_unchecked,
+                nameattr: 'all',
+                name: 'All',
+                print_count: false,
+                count: all_count
+            };
+
+            params.type[facet.type] = true;
+
+            data.unshift(params);
+
+            return data;
         };
 
         /**
          * Bindings
          */
-        $("body").on("click", ".sub_facet", function () {
+
+        $("body").on("click", ".sub_facet.menu", function (e) {
+
+            e.stopImmediatePropagation();
+
+            if ($(this).attr("data-name") == "all")
+                engine.helper.removeDisjunctiveRefinements($(this).attr("data-tax"));
+
             $(this).find("input[type='checkbox']").each(function (i) {
                 $(this).prop("checked", !$(this).prop("checked"));
+
+                if (false == engine.helper.isRefined($(this).attr("data-tax"), $(this).attr("data-name")))
+                    engine.helper.removeDisjunctiveRefinements($(this).attr("data-tax"));
+
+                if ($(this).attr("data-name") != "all")
+                    engine.helper.toggleRefine($(this).attr("data-tax"), $(this).attr("data-name"));
+            });
+
+            engine.helper.setPage(0);
+
+            performQueries(true);
+        });
+
+        $("body").on("click", ".sub_facet", function () {
+
+            $(this).find("input[type='checkbox']").each(function (i) {
+                $(this).prop("checked", !$(this).prop("checked"));
+
                 engine.helper.toggleRefine($(this).attr("data-tax"), $(this).attr("data-name"));
             });
 

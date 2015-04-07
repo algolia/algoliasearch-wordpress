@@ -57,7 +57,8 @@ if (algoliaSettings.type_of_search == "instant")
 
             engine = new function () {
 
-                var query = undefined;
+                this.query = "";
+
                 var $this = this;
 
                 this.helper = undefined;
@@ -168,16 +169,23 @@ if (algoliaSettings.type_of_search == "instant")
                                 var params = custom_facets_types[algoliaSettings.facets[i].type]($this, content, algoliaSettings.facets[i]);
 
                                 if (params)
-                                    sub_facets.push(params);
+                                    for (var k = 0; k < params.length; k++)
+                                        sub_facets.push(params[k]);
                             }
                             catch(error)
                             {
+                                console.log(error.message);
                                 throw("Bad facet function for '" + algoliaSettings.facets[i].type + "'");
                             }
                         }
                         else
                         {
-                            for (var key in content.facets[algoliaSettings.facets[i].tax])
+                            var content_facets = content.facets;
+
+                            if (algoliaSettings.facets[i].type == 'disjunctive')
+                                content_facets = content.disjunctiveFacets;
+
+                            for (var key in content_facets[algoliaSettings.facets[i].tax])
                             {
                                 var checked = $this.helper.isRefined(algoliaSettings.facets[i].tax, key);
 
@@ -189,7 +197,7 @@ if (algoliaSettings.type_of_search == "instant")
                                     checked: checked,
                                     nameattr: nameattr,
                                     name: name,
-                                    count: content.facets[algoliaSettings.facets[i].tax][key]
+                                    count: content_facets[algoliaSettings.facets[i].tax][key]
                                 };
                                 params.type[algoliaSettings.facets[i].type] = true;
 

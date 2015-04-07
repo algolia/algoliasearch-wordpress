@@ -100,7 +100,7 @@ class AlgoliaHelper
                 $attributesToIndex[] = $key;
 
         foreach ($attributesToSnippet as &$attribute)
-            if ($attribute == 'content')
+            if ($attribute == 'content' || $attribute == 'content_stripped')
                 $attribute = $attribute.':'.$this->algolia_registry->number_of_word_for_content;
 
         $defaultSettings = array(
