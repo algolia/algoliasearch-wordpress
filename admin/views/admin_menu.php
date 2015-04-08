@@ -230,7 +230,7 @@
                                 <div>
                                     <label for="instant_radio_content_nb_snippet">Number of words on the content snippet</label>
                                     <input type="number" min="0" value="<?php echo $algolia_registry->number_of_word_for_content; ?>" name="NUMBER_OF_WORD_FOR_CONTENT" id="instant_radio_content_nb_snippet">
-                                    <p class="description">The number of results to display on a results page.</p>
+                                    <p class="description">The number words to keep while building the snippet.</p>
                                 </div>
                             </div>
                         </div>
