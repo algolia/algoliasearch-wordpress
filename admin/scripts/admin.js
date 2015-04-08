@@ -46,8 +46,10 @@ jQuery(document).ready(function($) {
      */
     selectTab = function(hash)
     {
+        hash2 = "#_" + hash.substr(1);
+
         $(".tab-content").hide();
-        $(hash).show();
+        $(hash2).show();
         $(".tabs .title").removeClass("selected");
         $("[data-tab='"+ hash +"']").addClass("selected");
 

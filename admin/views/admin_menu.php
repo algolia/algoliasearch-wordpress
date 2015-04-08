@@ -92,7 +92,7 @@
         </div>
 
 
-        <div class="tab-content" id="credentials">
+        <div class="tab-content" id="_credentials">
             <form action="<?php echo site_url(); ?>/wp-admin/admin-post.php" method="post">
                 <input type="hidden" name="action" value="update_account_info">
                 <div class="content-wrapper" id="account">
@@ -164,7 +164,7 @@
 
         <?php if ($algolia_registry->validCredential) : ?>
 
-        <div class="tab-content" id="configuration">
+        <div class="tab-content" id="_configuration">
             <form action="<?php echo site_url(); ?>/wp-admin/admin-post.php" method="post">
                 <input type="hidden" name="action" value="update_type_of_search" />
                 <div class="content-wrapper" id="type_of_search">
@@ -284,7 +284,7 @@
 
 
 
-        <div class="tab-content" id="indexable-types">
+        <div class="tab-content" id="_indexable-types">
             <form action="<?php echo site_url(); ?>/wp-admin/admin-post.php" method="post">
                 <input type="hidden" name="action" value="update_indexable_types">
                 <div class="content-wrapper" id="customization">
@@ -338,7 +338,7 @@
             </form>
         </div>
 
-        <div class="tab-content" id="searchable_attributes">
+        <div class="tab-content" id="_searchable_attributes">
             <form action="<?php echo site_url(); ?>/wp-admin/admin-post.php" method="post">
                 <input type="hidden" name="action" value="update_searchable_attributes">
                 <div class="content-wrapper" id="customization">
@@ -415,7 +415,7 @@
             </form>
         </div>
 
-        <div class="tab-content" id="sortable_attributes">
+        <div class="tab-content" id="_sortable_attributes">
             <form action="<?php echo site_url(); ?>/wp-admin/admin-post.php" method="post">
                 <input type="hidden" name="action" value="update_sortable_attributes">
                 <div class="content-wrapper" id="customization">
@@ -484,7 +484,7 @@
             </form>
         </div>
 
-        <div class="tab-content" id="extra-metas">
+        <div class="tab-content" id="_extra-metas">
             <form id="extra-metas-form" action="<?php echo site_url(); ?>/wp-admin/admin-post.php" method="post">
                 <input type="hidden" name="action" value="update_extra_meta">
                 <div class="content-wrapper" id="customization">
@@ -698,7 +698,7 @@
             </style>
         <?php endif; ?>
 
-        <div class="tab-content" id="custom-ranking">
+        <div class="tab-content" id="_custom-ranking">
             <form action="<?php echo site_url(); ?>/wp-admin/admin-post.php" method="post">
                 <input type="hidden" name="action" value="custom_ranking">
                 <div class="content-wrapper" id="customization">
@@ -784,7 +784,7 @@
                                 <?php endforeach; ?>
                             <?php endforeach; ?>
                         </table>
-                        <div class="content-item">
+                        <div class="_content-item">
                             <input type="submit" name="submit" id="submit" class="button button-primary" value="Save Changes">
                         </div>
                     </div>
