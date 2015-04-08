@@ -107,14 +107,17 @@
                                 <div class="content-item">
                                     <label for="algolia_app_id">Application ID</label>
                                     <div><input type="text" value="<?php echo $algolia_registry->app_id ?>" name="APP_ID" id="algolia_app_id"></div>
+                                    <p class="description">Your Algolia APPLICATION ID.</p>
                                 </div>
                                 <div class="content-item">
                                     <label for="algolia_search_api_key">Search-Only API Key</label>
                                     <div><input type="text" value="<?php echo $algolia_registry->search_key ?>" name="SEARCH_KEY" id="algolia_search_api_key"></div>
+                                    <p class="description">Your Algolia search-only API KEY (public).</p>
                                 </div>
                                 <div class="content-item">
                                     <label for="algolia_api_key">Admin API Key</label>
                                     <div><input type="password" value="<?php echo $algolia_registry->admin_key ?>" name="ADMIN_KEY" id="algolia_api_key"></div>
+                                    <p class="description">Your Algolia ADMIN API KEY.</p>
                                 </div>
                                 <div class="content-item">
                                     <label for="algolia_index_name">Index names prefix</label>
