@@ -1,5 +1,6 @@
 #algolia-settings .wrapper
 {
+    max-width: 1100px;
     margin: 20px;
 }
 
@@ -89,6 +90,10 @@
 #algolia-settings .content-wrapper .show-hide
 {
     margin-left: 50px;
+}
+
+#algolia-settings .table-col-enabled {
+    width: 75px;
 }
 
 #algolia-settings .tabs .title

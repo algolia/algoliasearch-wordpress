@@ -292,7 +292,7 @@
                         <p class="help-block">Configure here the types you want index.</p>
                         <table>
                             <tr data-order="-1">
-                                <th>Enabled</th>
+                                <th class="table-col-enabled">Enabled</th>
                                 <th>Name</th>
                                 <?php if ($algolia_registry->type_of_search == 'autocomplete'): ?>
                                 <th>Auto-completion menu label &amp; ordering</th>
@@ -311,7 +311,7 @@
                             <?php else: ?>
                                 <tr data-order="<?php echo (10000 + $i); $i++ ?>">
                             <?php endif; ?>
-                                <td>
+                                <td class="table-col-enabled">
                                     <input type="checkbox"
                                            name="TYPES[<?php echo $type; ?>][SLUG]"
                                            value="<?php echo $type; ?>"
@@ -346,7 +346,7 @@
                         <p class="help-block">Configure here the attributes you want to be able to search in.</p>
                         <table>
                             <tr data-order="-1">
-                                <th>Enabled</th>
+                                <th class="table-col-enabled">Enabled</th>
                                 <th>Name</th>
                                 <th>Attribute ordering</th>
                             </tr>
@@ -388,7 +388,7 @@
                             <?php else: ?>
                                 <tr data-order="<?php echo (10000 + $i); $i++ ?>">
                             <?php endif; ?>
-                                <td><input <?php checked(isset($algolia_registry->searchable[$searchItem])); ?> type="checkbox" name="ATTRIBUTES[<?php echo $searchItem; ?>][SEARCHABLE]"></td>
+                                <td class="table-col-enabled"><input <?php checked(isset($algolia_registry->searchable[$searchItem])); ?> type="checkbox" name="ATTRIBUTES[<?php echo $searchItem; ?>][SEARCHABLE]"></td>
                                 <td>
                                     <?php echo $searchItem; ?>
                                 </td>
@@ -423,7 +423,7 @@
                         <p class="help-block">By default results are sorted by text relevance &amp; your ranking criteria. Configure here the attributes you want to use for the additional sorts (by price, by date, etc...).</p>
                         <table>
                             <tr data-order="-1">
-                                <th>Enabled</th>
+                                <th class="table-col-enabled">Enabled</th>
                                 <th>Name</th>
                                 <th>Sort</th>
                                 <th>Label</th>
@@ -458,7 +458,7 @@
                             <?php foreach ($sortable as $sortItem): ?>
                                 <?php foreach (array('asc', 'desc') as $sort): ?>
                                 <tr>
-                                    <td>
+                                    <td class="table-col-enabled">
                                         <input <?php checked(isset($algolia_registry->sortable[$sortItem.'_'.$sort])); ?> type="checkbox" name="ATTRIBUTES[<?php echo $sortItem; ?>][<?php echo $sort; ?>]">
                                     </td>
                                     <td>
@@ -497,7 +497,7 @@
 
                         <table id="extra-meta-and-taxonomies">
                             <tr data-order="-1">
-                                <th>Enabled</th>
+                                <th class="table-col-enabled">Enabled</th>
                                 <th>Type</th>
                                 <th>Name</th>
                                 <th>Facetable</th>
@@ -514,7 +514,7 @@
                         <div class="sub-tab-content" id="extra-metas-attributes">
                             <table>
                                 <tr data-order="-1">
-                                    <th>Enabled</th>
+                                    <th class="table-col-enabled">Enabled</th>
                                     <th>Type</th>
                                     <th>Meta key</th>
                                     <th>Facetable</th>
@@ -547,7 +547,7 @@
                                             <?php else: ?>
                                           <tr data-type="extra-meta" data-order="<?php echo (10000 + $i); $i++ ?>">
                                             <?php endif; ?>
-                                                <td>
+                                                <td class="table-col-enabled">
                                                     <!-- PREVENT FROM ERASING CUSTOM RANKING -->
                                                     <?php $customs = array('custom_ranking' => 'CUSTOM_RANKING', 'custom_ranking_order' => 'CUSTOM_RANKING_ORDER', 'custom_ranking_sort' => 'CUSTOM_RANKING_SORT'); ?>
                                                     <?php foreach($customs as $custom_key => $custom_value): ?>
