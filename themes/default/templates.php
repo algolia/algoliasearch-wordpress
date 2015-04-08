@@ -2,12 +2,18 @@
     <div class="result">
         <div class="title">
             {{#featureImage}}
-            <img style="width: 30px" src="{{{ featureImage.sizes.thumbnail.file }}}" />
+            <div class="thumb">
+                <img style="width: 30px" src="{{{ featureImage.sizes.thumbnail.file }}}" />
+            </div>
             {{/featureImage}}
-            {{{ _highlightResult.title.value }}}
+            <div class="info{{^featureImage}}-without-thumb{{/featureImage}}">
+                {{{ _highlightResult.title.value }}}
+            </div>
+            <div style="clear: both;"></div>
         </div>
     </div>
 </script>
+
 
 <script type="text/template" id="instant-content-template">
     <div class="hits{{#facets_count}} with_facets{{/facets_count}}">

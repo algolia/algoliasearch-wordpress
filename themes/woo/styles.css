@@ -5,6 +5,7 @@
 {
     width: 100%;
     color: #000000;
+    font-family: "Raleway", "Helvetica Neue", Verdana, Arial, sans-serif;
 }
 
 .twitter-typeahead .tt-input, .twitter-typeahead .tt-hint
@@ -25,6 +26,7 @@
     background-color: #F5F5F5;
     text-align: center;
     border: 1px solid #dddddd;
+    padding: 5px 0;
 }
 
 .twitter-typeahead .tt-hint
@@ -32,10 +34,22 @@
     color: #999;
 }
 
+.twitter-typeahead .thumb {
+    float: left;
+}
+
+.twitter-typeahead .thumb img {
+    width: 50px;
+}
+
+.twitter-typeahead .info {
+    margin-left: 60px;
+}
+
 .twitter-typeahead .tt-dropdown-menu
 {
     width: 100%;
-    min-width: 200px;
+    min-width: 210px;
     padding: 0;
     background-color: #fff;
     border-bottom: solid 1px #DDDDDD;
@@ -44,7 +58,7 @@
 .twitter-typeahead .tt-dropdown-menu .tt-suggestion
 {
     text-align: left;
-    padding: 3px 10px;
+    padding: 10px 10px;
     border-left: solid 1px #DDDDDD;
     border-right: solid 1px #DDDDDD;
 }
@@ -57,6 +71,7 @@
 .twitter-typeahead .tt-dropdown-menu .tt-suggestion.tt-cursor
 {
     background-color: #E5E5E5;
+    cursor: pointer;
 }
 
 .twitter-typeahead .tt-dropdown-menu .tt-suggestion p
@@ -70,8 +85,8 @@
 }
 .twitter-typeahead .tt-dropdown-menu .tt-suggestion em
 {
-    background-color: #ffffe0;
     font-style: normal;
+    font-weight: bold;
 }
 
 .twitter-typeahead .footer:not(:last-child)
@@ -84,8 +99,8 @@
     font-size: 10px;
     text-align: right;
     border-top: solid 1px #f5f5f5;
-    margin: -3px -10px;
-    padding: 5px 10px;
+    margin: -10px -10px;
+    padding: 10px;
 }
 
 /**

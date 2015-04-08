@@ -2,45 +2,42 @@ jQuery(document).ready(function ($) {
 
     if (algoliaSettings.type_of_search == "autocomplete")
     {
-        jQuery(document).ready(function ($)
+        var $autocompleteTemplate = Hogan.compile($('#autocomplete-template').text());
+
+        var hogan_objs = [];
+
+        algoliaSettings.indices.sort(indicesCompare);
+
+        for (var i = 0; i < algoliaSettings.indices.length; i++)
         {
-            var $autocompleteTemplate = Hogan.compile($('#autocomplete-template').text());
-
-            var hogan_objs = [];
-
-            algoliaSettings.indices.sort(indicesCompare);
-
-            for (var i = 0; i < algoliaSettings.indices.length; i++)
-            {
-                hogan_objs.push({
-                    source: indices[i].ttAdapter({hitsPerPage: algoliaSettings.number_by_type}),
-                    displayKey: 'title',
-                    templates: {
-                        header: '<div class="category">' + algoliaSettings.indices[i].name + '</div>',
-                        suggestion: function (hit) {
-                            return $autocompleteTemplate.render(hit);
-                        }
-                    }
-                });
-
-            }
-
             hogan_objs.push({
-                source: getBrandingHits(),
+                source: indices[i].ttAdapter({hitsPerPage: algoliaSettings.number_by_type}),
                 displayKey: 'title',
                 templates: {
+                    header: '<div class="category">' + algoliaSettings.indices[i].name + '</div>',
                     suggestion: function (hit) {
-                        return '<div class="footer">powered by <img width="45" src="' + algoliaSettings.plugin_url + '/front/algolia-logo.png"></div>';
+                        return $autocompleteTemplate.render(hit);
                     }
                 }
             });
 
-            $(algoliaSettings.search_input_selector).each(function (i) {
-                $(this).typeahead({hint: false}, hogan_objs);
+        }
 
-                $(this).on('typeahead:selected', function (e, item) {
-                    window.location.href = item.permalink;
-                });
+        hogan_objs.push({
+            source: getBrandingHits(),
+            displayKey: 'title',
+            templates: {
+                suggestion: function (hit) {
+                    return '<div class="footer">powered by <img width="45" src="' + algoliaSettings.plugin_url + '/front/algolia-logo.png"></div>';
+                }
+            }
+        });
+
+        $(algoliaSettings.search_input_selector).each(function (i) {
+            $(this).typeahead({hint: false}, hogan_objs);
+
+            $(this).on('typeahead:selected', function (e, item) {
+                window.location.href = item.permalink;
             });
         });
     }

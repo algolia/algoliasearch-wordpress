@@ -2,9 +2,14 @@
     <div class="result">
         <div class="title">
             {{#featureImage}}
-            <img style="width: 30px" src="{{{ featureImage.sizes.thumbnail.file }}}" />
+            <div class="thumb">
+                <img style="width: 30px" src="{{{ featureImage.sizes.thumbnail.file }}}" />
+            </div>
             {{/featureImage}}
+            <div class="info{{^featureImage}}-without-thumb{{/featureImage}}">
             {{{ _highlightResult.title.value }}}
+            </div>
+            <div style="clear: both;"></div>
         </div>
     </div>
 </script>
