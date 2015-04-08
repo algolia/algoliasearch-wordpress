@@ -55,7 +55,7 @@ class Indexer
     {
         global $wpdb;
 
-        $query = "SELECT * FROM " . $wpdb->posts . " WHERE post_status IN ('publish') ".$type." ".$limit;
+        $query = "SELECT * FROM " . $wpdb->posts . " WHERE post_password = '' AND post_status IN ('publish') ".$type." ".$limit;
 
         $posts = $wpdb->get_results($query);
 
