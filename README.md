@@ -310,12 +310,11 @@ It depends. The plugin handle every plugin that integrate in the post table and 
 
 If you want to integrate a plugin that is not handle out of the box, you will need dive into the plugin source code as there is no way to handle it in a generic way
 
-### What If I want to add some attribute to highlight or to snippet
+### What If I want to add some attribute to snippet
 
 In the algolia.php file in the root directory of the plugin you can change the following two lines
 
 ```php
-$attributesToHighlight  = array("title", "content", "author", "type");
 $attributesToSnippet    = array("content", "content_stripped");
 ```
 
@@ -341,7 +340,6 @@ In every case the following settings will be erased:
 2. For the Instant Search
   * attributesToIndex
   * attributesForFaceting
-  * attributesToHighlight
   * attributesToSnippet
   * customRanking
   * slaves

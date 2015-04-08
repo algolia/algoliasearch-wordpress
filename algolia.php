@@ -33,7 +33,6 @@ new AlgoliaPluginAuto();
 
 $batch_count = 50;
 
-$attributesToHighlight  = array("title", "content", "content_stripped", "author", "type");
 $attributesToSnippet    = array("content", "content_stripped");
 
 $facetsLabels = array(

@@ -88,7 +88,6 @@ class AlgoliaHelper
         $facets             = array();
         $customRankingTemp  = array();
 
-        global $attributesToHighlight;
         global $attributesToSnippet;
 
         $attributesToIndex  = array();
@@ -105,7 +104,6 @@ class AlgoliaHelper
 
         $defaultSettings = array(
             "attributesToIndex"     => $attributesToIndex,
-            "attributesToHighlight" => $attributesToHighlight,
             "attributesToSnippet"   => $attributesToSnippet
         );
 
@@ -191,7 +189,6 @@ class AlgoliaHelper
         $settings = array(
             'attributesToIndex'     => $attributesToIndex,
             'attributesForFaceting' => array_values(array_unique($facets)),
-            'attributesToHighlight' => $attributesToHighlight,
             'attributesToSnippet'   => $attributesToSnippet,
             'customRanking'         => $customRanking
         );
