@@ -612,7 +612,7 @@
                         <div class="sub-tab-content" id="taxonomies">
                             <table>
                                 <tr data-order="-1">
-                                    <th>Enabled</th>
+                                    <th class="table-col-enabled">Enabled</th>
                                     <th></th>
                                     <th>Name</th>
                                     <th>Facetable</th>
@@ -635,7 +635,7 @@
                                         <?php else: ?>
                                             <tr data-type="taxonomy" data-order="<?php echo (10000 + $i); $i++; ?>">
                                         <?php endif; ?>
-                                        <td>
+                                        <td class="table-col-enabled">
                                             <?php if (in_array($tax, $algolia_registry->extras) == false): ?>
                                                 <input type="checkbox"
                                                        name="TAX[<?php echo $tax; ?>][SLUG]"
@@ -708,13 +708,13 @@
                         <p class="help-block">Configure here the attributes used to reflect the popularity of your records (number of likes, number of views, number of sales...).</p>
                         <table>
                             <tr data-order="-1">
-                                <th>Enabled</th>
+                                <th class="table-col-enabled">Enabled</th>
                                 <th>Meta key</th>
                                 <th>Sort order</th>
                             </tr>
 
                             <tr data-order="<?php echo $algolia_registry->date_custom_ranking['sort']; ?>">
-                                <td>
+                                <td class="table-col-enabled">
                                     <input type="checkbox"
                                            name="TYPES[date][METAS][date][CUSTOM_RANKING]"
                                         <?php checked($algolia_registry->date_custom_ranking['enabled']); ?>
