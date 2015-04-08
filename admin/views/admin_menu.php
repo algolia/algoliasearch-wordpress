@@ -73,19 +73,19 @@
         <div class="tabs myclearfix">
 
             <?php if (! $algolia_registry->validCredential) : ?>
-            <div data-tab="#credentials" class="title selected">Credentials & Get Started</div>
+            <div data-tab="#credentials" class="title selected">Credentials</div>
             <?php else: ?>
-            <div data-tab="#credentials" class="title">Credentials & Get Started</div>
+            <div data-tab="#credentials" class="title">Credentials</div>
             <?php endif; ?>
 
             <?php if ($algolia_registry->validCredential) : ?>
 
-            <div data-tab="#configuration"          class="title selected">UI Integration</div>
+            <div data-tab="#configuration"          class="title selected">UI Configuration</div>
             <div data-tab="#indexable-types"        class="title">Types</div>
             <div data-tab="#extra-metas"            class="title">Attributes</div>
             <div data-tab="#searchable_attributes"  class="title">Search Configuration</div>
-            <div data-tab="#custom-ranking"         class="title">Results Ranking</div>
-            <div data-tab="#sortable_attributes"    class="title">Sorting</div>
+            <div data-tab="#custom-ranking"         class="title">Ranking Configuration</div>
+            <div data-tab="#sortable_attributes"    class="title">Sorting Configuration</div>
 
             <?php endif; ?>
             <div style="clear:both"></div>
