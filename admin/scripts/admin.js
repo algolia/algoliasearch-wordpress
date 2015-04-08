@@ -209,7 +209,7 @@ jQuery(document).ready(function($) {
         containment: "parent",
         items: 'tr:not(:first)',
         helper: fixHelper
-    }).disableSelection();
+    });
 
 
     /**

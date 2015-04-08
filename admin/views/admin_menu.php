@@ -512,6 +512,7 @@
                         <div>
                             <div data-tab="#extra-metas-attributes" class="title selected">Extra Attributes</div>
                             <div data-tab="#taxonomies"             class="title">Taxonomies</div>
+                            <div style="clear: both"></div>
                         </div>
 
                         <div class="sub-tab-content" id="extra-metas-attributes">
