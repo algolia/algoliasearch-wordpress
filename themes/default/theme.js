@@ -296,7 +296,7 @@ jQuery(document).ready(function ($) {
          * Initialization
          */
 
-        $(algoliaSettings.search_input_selector).attr('autocomplete', 'off');
+        $(algoliaSettings.search_input_selector).attr('autocomplete', 'off').attr('autocorrect', 'off').attr('spellcheck', 'false').attr('autocapitalize', 'off');
 
         engine.getRefinementsFromUrl(searchCallback);
 
