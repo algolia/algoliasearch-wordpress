@@ -36,10 +36,10 @@ jQuery(document).ready(function($) {
         handleScreenshot();
     });
 
-    if ($("#custom-ranking tr").length > 1)
-        $('#custom-ranking .warning').hide();
+    if ($("#_custom-ranking tr").length > 1)
+        $('#_custom-ranking .warning').hide();
     else
-        $('#custom-ranking .content-item').hide();
+        $('#_custom-ranking .content-item').hide();
 
     /**
      * Handle Tab
@@ -79,13 +79,13 @@ jQuery(document).ready(function($) {
     {
         $(".sub-tab-content").hide();
         $(hash).show();
-        $("#extra-metas .title").removeClass("selected");
+        $("#_extra-metas .title").removeClass("selected");
         $("[data-tab='"+ hash +"']").addClass("selected");
 
         $(window).scrollTop(0);
     };
 
-    $("#extra-metas .title").click(function () {
+    $("#_extra-metas .title").click(function () {
         var hash = $(this).attr("data-tab");
 
         selectSubTab(hash);
@@ -95,7 +95,7 @@ jQuery(document).ready(function($) {
 
     function reorderMetas()
     {
-        $('#extra-metas tr').each(function (i) {
+        $('#_extra-metas tr').each(function (i) {
             if ($(this).find('td:first input[type="checkbox"]').prop('checked') || $(this).find('td:first i').length > 0)
             {
                 $('#extra-meta-and-taxonomies').append($(this));
@@ -113,15 +113,14 @@ jQuery(document).ready(function($) {
         });
     }
 
-    $('#extra-metas tr td:first-child input').click(function (e) {
-        console.log('ok');
+    $('#_extra-metas tr td:first-child input').click(function (e) {
         reorderMetas();
     });
 
     reorderMetas();
 
     $('#extra-metas-form').submit(function (e) {
-        $('#extra-metas tr').each(function (i) {
+        $('#_extra-metas tr').each(function (i) {
            $(this).find('.order').val(i);
         });
     });
@@ -143,7 +142,7 @@ jQuery(document).ready(function($) {
         });
     }
 
-    var disabelable = ['#indexable-types', '#extra-metas', '#indexable-types', '#searchable_attributes', '#custom-ranking', '#sortable_attributes'];
+    var disabelable = ['#_indexable-types', '#_extra-metas', '#_indexable-types', '#_searchable_attributes', '#_custom-ranking', '#_sortable_attributes'];
 
     for (var i = 0; i < disabelable.length; i++)
     {
@@ -177,7 +176,7 @@ jQuery(document).ready(function($) {
         return ui;
     };
 
-    $('#taxonomies tr, #extra-metas tr, #indexable-types tr, #custom-ranking tr, #searchable_attributes tr').sort(function (a, b) {
+    $('#_taxonomies tr, #_extra-metas tr, #_indexable-types tr, #_custom-ranking tr, #_searchable_attributes tr').sort(function (a, b) {
         var contentA = parseInt($(a).attr('data-order'));
         var contentB = parseInt($(b).attr('data-order'));
 
@@ -186,7 +185,7 @@ jQuery(document).ready(function($) {
         $(container).parent().append(container);
     });;
 
-    $("#taxonomies tbody, #extra-metas tbody, #indexable-types tbody, #custom-ranking tbody, #searchable_attributes tbody").sortable({
+    $("#_taxonomies tbody, #_extra-metas tbody, #_indexable-types tbody, #_custom-ranking tbody, #_searchable_attributes tbody").sortable({
         containment: "parent",
         items: 'tr:not(:first)',
         helper: fixHelper
@@ -260,8 +259,6 @@ jQuery(document).ready(function($) {
 
             actions.push({ subaction: "move_indexes", name: "Move all temp indexes", sup: "" });
 
-
-            console.log(actions);
             var call = function (i, n) {
                 $.ajax({
                     method: "POST",

@@ -117,7 +117,7 @@
     margin-bottom: 20px;
 }
 
-#algolia-settings #extra-metas .title.selected
+#algolia-settings #_extra-metas .title.selected
 {
     background-color: white;
     border-bottom: solid 1px #f5f5f5;
@@ -126,7 +126,7 @@
     cursor: auto;
 }
 
-#algolia-settings #extra-metas .title
+#algolia-settings #_extra-metas .title
 {
     float: left;
     display: inline;
@@ -166,11 +166,11 @@
     margin-top: 20px;
 }
 
-#algolia-settings #taxonomies tbody,
-#algolia-settings #extra-metas tbody,
-#algolia-settings #indexable-types tbody,
-#algolia-settings #custom-ranking tbody,
-#algolia-settings #searchable_attributes tbody
+#algolia-settings #_taxonomies tbody,
+#algolia-settings #_extra-metas tbody,
+#algolia-settings #_indexable-types tbody,
+#algolia-settings #_custom-ranking tbody,
+#algolia-settings #_searchable_attributes tbody
 {
     cursor: move;
 }
