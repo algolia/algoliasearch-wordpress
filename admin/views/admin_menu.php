@@ -1,8 +1,8 @@
 <?php
-    $langDomain = "algolia";
-    $algolia_registry = \Algolia\Core\Registry::getInstance();
-    $theme_helper = new Algolia\Core\ThemeHelper();
-    $theme = $theme_helper->get_current_theme();
+    $langDomain         = "algolia";
+    $algolia_registry   = \Algolia\Core\Registry::getInstance();
+    $theme_helper       = new Algolia\Core\ThemeHelper();
+    $current_theme      = $theme_helper->get_current_theme();
 
     global $external_attrs;
     global $attributesToIndex;
@@ -525,7 +525,7 @@
 
                                 $i = 0;
 
-                                $facet_types = array_merge(array("conjunctive" => "Conjunctive", "disjunctive" => "Disjunctive"), $theme->facet_types);
+                                $facet_types = array_merge(array("conjunctive" => "Conjunctive", "disjunctive" => "Disjunctive"), $current_theme->facet_types);
 
                                 ?>
                                 <?php foreach (get_post_types() as $type) : ?>

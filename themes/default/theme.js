@@ -158,12 +158,13 @@ jQuery(document).ready(function ($) {
                     min: min,
                     max: max
                 };
+
                 params.type[facet.type] = true;
 
-                return params;
+                return [params];
             }
 
-            return null;
+            return [];
         };
 
         /**
