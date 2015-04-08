@@ -97,7 +97,7 @@
                 <input type="hidden" name="action" value="update_account_info">
                 <div class="content-wrapper" id="account">
                     <div class="content">
-                        <div style="float: left; width: 50%;">
+                        <div style="float: left;">
                             <div style="padding: 0px 10px;">
                                 <h3>Algolia account</h3>
                                 <p class="help-block">Configure here your <a href="https://www.algolia.com">Algolia</a> credentials. You can find them in the "<a href="https://www.algolia.com/licensing">Credentials</a>" section of your dashboard. Don't have one? <a href="http://www.algolia.com/users/sign_up" target="_blank">Create one here</a>.</p>
