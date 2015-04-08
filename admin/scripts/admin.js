@@ -149,12 +149,32 @@ jQuery(document).ready(function($) {
         (function (i) {
             disableInput(disabelable[i]);
 
-            $(disabelable[i] + " input").click(function () {
+            $(disabelable[i] + " input[type='checkbox']").click(function () {
                 disableInput(disabelable[i]);
             });
         })(i);
 
     }
+
+    function disableFacetsInput(div)
+    {
+        $(div + " input, " + div + " select").prop('disabled', false);
+        $(div + " tr:not(:first)").each(function (i) {
+            var tds = $(this).find("td");
+
+            if ($(tds[3]).find('input[type="checkbox"]').prop('checked') == false)
+            {
+                console.log($(this).find("td").find("input,select"));
+                $(this).find("td").find("input,select").slice(2).prop('disabled', true);
+            }
+        });
+    }
+
+    disableFacetsInput('#extra-meta-and-taxonomies');
+
+    $('#extra-meta-and-taxonomies input[type="checkbox"]').click(function () {
+        disableFacetsInput('#extra-meta-and-taxonomies');
+    });
 
     /**
      * Handle Theme chooser

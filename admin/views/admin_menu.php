@@ -551,20 +551,6 @@
                                           <tr data-type="extra-meta" data-order="<?php echo (10000 + $i); $i++ ?>">
                                             <?php endif; ?>
                                                 <td class="table-col-enabled">
-                                                    <!-- PREVENT FROM ERASING CUSTOM RANKING -->
-                                                    <?php $customs = array('custom_ranking' => 'CUSTOM_RANKING', 'custom_ranking_order' => 'CUSTOM_RANKING_ORDER', 'custom_ranking_sort' => 'CUSTOM_RANKING_SORT'); ?>
-                                                    <?php foreach($customs as $custom_key => $custom_value): ?>
-                                                        <?php if (isset($algolia_registry->metas[$type])
-                                                            && in_array($meta_key, array_keys($algolia_registry->metas[$type]))
-                                                            && $algolia_registry->metas[$type][$meta_key][$custom_key]): ?>
-                                                        <input type="hidden"
-                                                               name="TYPES[<?php echo $type; ?>][METAS][<?php echo $meta_key; ?>][<?php echo $custom_value; ?>]"
-                                                               value="<?php echo $algolia_registry->metas[$type][$meta_key][$custom_key]; ?>"
-                                                            >
-                                                        <?php endif; ?>
-                                                    <?php endforeach; ?>
-                                                    <!-- /////// PREVENT FROM ERASING CUSTOM RANKING -->
-
                                                     <input type="checkbox"
                                                            name="TYPES[<?php echo $type; ?>][METAS][<?php echo $meta_key; ?>][INDEXABLE]"
                                                            value="<?php echo $type; ?>"
@@ -602,6 +588,19 @@
                                                            value="<?php echo (isset($algolia_registry->metas[$type][$meta_key]) ? $algolia_registry->metas[$type][$meta_key]["name"] : "") ?>" name="TYPES[<?php echo $type; ?>][METAS][<?php echo $meta_key; ?>][NAME]">
                                                     <img width="10" src="<?php echo plugin_dir_url(__FILE__); ?>../imgs/move.png">
                                                 </td>
+                                                <!-- PREVENT FROM ERASING CUSTOM RANKING -->
+                                                <?php $customs = array('custom_ranking' => 'CUSTOM_RANKING', 'custom_ranking_order' => 'CUSTOM_RANKING_ORDER', 'custom_ranking_sort' => 'CUSTOM_RANKING_SORT'); ?>
+                                                <?php foreach($customs as $custom_key => $custom_value): ?>
+                                                    <?php if (isset($algolia_registry->metas[$type])
+                                                        && in_array($meta_key, array_keys($algolia_registry->metas[$type]))
+                                                        && $algolia_registry->metas[$type][$meta_key][$custom_key]): ?>
+                                                        <input type="hidden"
+                                                               name="TYPES[<?php echo $type; ?>][METAS][<?php echo $meta_key; ?>][<?php echo $custom_value; ?>]"
+                                                               value="<?php echo $algolia_registry->metas[$type][$meta_key][$custom_key]; ?>"
+                                                            >
+                                                    <?php endif; ?>
+                                                <?php endforeach; ?>
+                                                <!-- /////// PREVENT FROM ERASING CUSTOM RANKING -->
                                                 <input type="hidden" name="TYPES[<?php echo $type; ?>][METAS][<?php echo $meta_key; ?>][ORDER]" class="order" />
                                             </tr>
                                         <?php endforeach; ?>
