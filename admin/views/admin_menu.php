@@ -494,8 +494,6 @@
                     <div class="content">
                         <p class="help-block">
                             Configure here the additional attributes you want to include in your Algolia records.
-                            <br>
-                            Default attributes : objectID, authorId, author, author_login, permalink, date, content, content_stripped, title, slug, modified, parent, menu_order, type
                         </p>
 
                         <table id="extra-meta-and-taxonomies">
