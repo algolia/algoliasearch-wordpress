@@ -648,7 +648,7 @@
                                                 <input type="hidden" name="TAX[<?php echo $tax; ?>][SLUG]" value="<?php echo $tax; ?>">
                                             <?php endif; ?>
                                         </td>
-                                        <td></td>
+                                        <td>*</td>
                                         <td>
                                             <?php echo $tax; ?>
                                         </td>
