@@ -260,7 +260,7 @@ jQuery(document).ready(function($) {
 
             $(this).hide();
 
-            actions.push({ subaction: "handle_index_creation", name: "Handle index creation", sup: "" });
+            actions.push({ subaction: "handle_index_creation", name: "Setup indices", sup: "" });
 
             for (value in algoliaAdminSettings.types)
             {
@@ -268,16 +268,16 @@ jQuery(document).ready(function($) {
                 for (var i = 0; i < number; i++)
                 {
                     actions.push({
-                        name: algoliaAdminSettings.types[value].name,
+                        name: "Upload " + algoliaAdminSettings.types[value].name,
                         subaction: "type__" + algoliaAdminSettings.types[value].type + "__" + i,
-                        sup: (i + 1) + "/" + number
+                        sup: (i === number - 1 ? algoliaAdminSettings.types[value].count : (i + 1) * algoliaAdminSettings.batch_count) + "/" + algoliaAdminSettings.types[value].count
                     });
                 }
             }
 
-            actions.push({ subaction: "index_taxonomies", name: "Index taxonomies", sup: "" });
+            actions.push({ subaction: "index_taxonomies", name: "Upload taxonomies", sup: "" });
 
-            actions.push({ subaction: "move_indexes", name: "Move all temp indexes", sup: "" });
+            actions.push({ subaction: "move_indexes", name: "Move indices to production", sup: "" });
 
             var call = function (i, n) {
                 $.ajax({
