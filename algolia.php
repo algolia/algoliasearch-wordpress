@@ -31,7 +31,7 @@ new AlgoliaPluginAuto();
  * Variables Definition
  */
 
-$batch_count = 50;
+$batch_count = 100;
 
 $attributesToSnippet    = array("content", "content_stripped");
 
