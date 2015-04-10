@@ -172,16 +172,18 @@
                 <input type="hidden" name="action" value="update_type_of_search" />
                 <div class="content-wrapper" id="type_of_search">
                     <div class="content">
-                        <h3>Configure your Search experience</h3>
                         <div class="content-item">
-                            <label for="search-input-selector">1 - Select the search input used</label>
+                            <h3>Search bar</h3>
+                            <p class="help-block">Configure here the DOM selector used to customize your search input.</p>
+                            <label for="search-input-selector">Search input</label>
                             <div>
-                                <input type="text" value="<?php echo str_replace("\\", "",$algolia_registry->search_input_selector); ?>" name="SEARCH_INPUT_SELECTOR" id="search-input-selector">
+                                <input type="text" value="<?php echo str_replace("\\", "",$algolia_registry->search_input_selector); ?>" name="SEARCH_INPUT_SELECTOR" id="search-input-selector" placeholder="[name='s']">
                                 <p class="description">The jQuery selector used to select your search bar.</p>
                             </div>
                         </div>
                         <div class="has-extra-content content-item">
-                            <label>2 - Select your search experience</label>
+                            <h3>Search Experience</h3>
+                            <p class="help-block">Configure here whether you want an autocomplete menu or a instant search results page.</p>
                             <div>
                                 <input type="radio"
                                                 <?php checked($algolia_registry->type_of_search == 'autocomplete'); ?>
@@ -189,7 +191,7 @@
                                                 name="TYPE_OF_SEARCH"
                                                 value="autocomplete"
                                                 id="instant_radio_autocomplete" />
-                                 <label for="instant_radio_autocomplete">Autocomplete</label>
+                                 <label for="instant_radio_autocomplete">Autocompletion menu</label>
                                  <p class="description">Add an auto-completion menu to your search bar.</p>
                            </div>
                             <div class="show-hide" style="display: none;">
@@ -235,10 +237,7 @@
                             </div>
                         </div>
                         <h3>Theme</h3>
-                        <div style="padding-left: 5px; padding-bottom: 10px;">
-                            Select the theme you want to use to display the search results.<br>
-                            You can either use one of the 2 samples themes, or display results in your own build. <a href="#">Learn how to build a theme</a>
-                        </div>
+                        <p class="help-block">Select the theme you want to use to display the search results. You can either use one of the 2 sample themes or build your own.</p>
                         <div class="content-item">
                             <div class="theme-browser">
                                 <div class="themes">
@@ -292,7 +291,7 @@
                 <input type="hidden" name="action" value="update_indexable_types">
                 <div class="content-wrapper" id="customization">
                     <div class="content">
-                        <p class="help-block">Configure here the types you want index.</p>
+                        <p class="help-block">Configure here the Wordpress types you want index.</p>
                         <table>
                             <tr data-order="-1">
                                 <th class="table-col-enabled">Enabled</th>
@@ -325,7 +324,7 @@
                                     <?php echo $type; ?> (<?php echo $count; ?>)
                                 </td>
                                 <?php if ($algolia_registry->type_of_search == 'autocomplete'): ?>
-                                <td>
+                                <td style="white-space: nowrap;">
                                     <input type="text" value="<?php echo (isset($algolia_registry->indexable_types[$type]) ? $algolia_registry->indexable_types[$type]['name'] : "") ?>" name="TYPES[<?php echo $type; ?>][NAME]">
                                     <img width="10" src="<?php echo plugin_dir_url(__FILE__); ?>../imgs/move.png">
                                 </td>
@@ -346,7 +345,7 @@
                 <input type="hidden" name="action" value="update_searchable_attributes">
                 <div class="content-wrapper" id="customization">
                     <div class="content">
-                        <p class="help-block">Configure here the attributes you want to be able to search in.</p>
+                        <p class="help-block">Configure here the attributes you want to be able to search in. The order of this setting matters as those at the top of the list are considered more important.</p>
                         <table>
                             <tr data-order="-1">
                                 <th class="table-col-enabled">Enabled</th>
@@ -395,7 +394,7 @@
                                 <td>
                                     <?php echo $searchItem; ?>
                                 </td>
-                                <td>
+                                <td style="white-space: nowrap;">
                                     <select name="ATTRIBUTES[<?php echo $searchItem; ?>][ORDERED]">
                                     <?php foreach (array("ordered" => "Ordered", "unordered" => "Unordered") as $key => $value): ?>
                                         <?php if (isset($algolia_registry->searchable[$searchItem]) && $algolia_registry->searchable[$searchItem]['ordered'] == $key): ?>
@@ -493,7 +492,7 @@
                 <div class="content-wrapper" id="customization">
                     <div class="content">
                         <p class="help-block">
-                            Configure here the additional attributes you want to include in your Algolia records.
+                            Configure here the attributes you want to include in your Algolia records.
                         </p>
 
                         <table id="extra-meta-and-taxonomies">
@@ -507,8 +506,12 @@
                             </tr>
                         </table>
 
+                        <p class="help-block">
+                            Configure here the attributes you want to include in your Algolia records.
+                        </p>
+
                         <div>
-                            <div data-tab="#extra-metas-attributes" class="title selected">Extra Attributes</div>
+                            <div data-tab="#extra-metas-attributes" class="title selected">Additional Attributes</div>
                             <div data-tab="#taxonomies"             class="title">Taxonomies</div>
                             <div style="clear: both"></div>
                         </div>
@@ -582,7 +585,7 @@
                                                         <?php endforeach; ?>
                                                     </select>
                                                 </td>
-                                                <td>
+                                                <td style="white-space: nowrap;">
                                                     <input type="text"
                                                            value="<?php echo (isset($algolia_registry->metas[$type][$meta_key]) ? $algolia_registry->metas[$type][$meta_key]["name"] : "") ?>" name="TYPES[<?php echo $type; ?>][METAS][<?php echo $meta_key; ?>][NAME]">
                                                     <img width="10" src="<?php echo plugin_dir_url(__FILE__); ?>../imgs/move.png">
@@ -671,7 +674,7 @@
                                                 <?php endforeach; ?>
                                             </select>
                                         </td>
-                                        <td>
+                                        <td style="white-space: nowrap;">
                                             <input type="text" value="<?php echo (isset($algolia_registry->indexable_tax[$tax]) ? $algolia_registry->indexable_tax[$tax]['name'] : "") ?>" name="TAX[<?php echo $tax; ?>][NAME]">
                                             <img width="10" src="<?php echo plugin_dir_url(__FILE__); ?>../imgs/move.png">
                                         </td>
@@ -720,9 +723,9 @@
                                         />
                                 </td>
                                 <td>date</td>
-                                <td>
+                                <td style="white-space: nowrap;">
                                     <select name="TYPES[date][METAS][date][CUSTOM_RANKING_ORDER]">
-                                        <?php foreach (array('asc' => 'ASC', 'desc' => 'DESC') as $key => $value): ?>
+                                        <?php foreach (array('asc' => 'Ascending', 'desc' => 'Descending') as $key => $value): ?>
                                             <?php if ($algolia_registry->date_custom_ranking['order'] == $key): ?>
                                                 <option selected value=<?php echo $key; ?>><?php echo $value; ?></option>
                                             <?php else : ?>
@@ -766,9 +769,9 @@
                                                     />
                                             </td>
                                             <td data-type="<?php echo $type; ?>"><?php echo $meta_key; ?></td>
-                                            <td>
+                                            <td style="white-space: nowrap;">
                                                 <select name="TYPES[<?php echo $type; ?>][METAS][<?php echo $meta_key; ?>][CUSTOM_RANKING_ORDER]">
-                                                    <?php foreach (array('asc' => 'ASC', 'desc' => 'DESC') as $key => $value): ?>
+                                                    <?php foreach (array('asc' => 'Ascending', 'desc' => 'Descending') as $key => $value): ?>
                                                         <?php if (isset($algolia_registry->metas[$type])
                                                             && in_array($meta_key, array_keys($algolia_registry->metas[$type]))
                                                             && $algolia_registry->metas[$type][$meta_key]["custom_ranking_order"] == $key): ?>
@@ -777,7 +780,8 @@
                                                             <option value=<?php echo $key; ?>><?php echo $value; ?></option>
                                                         <?php endif; ?>
                                                     <?php endforeach; ?>
-                                                </select><img width="10" src="<?php echo plugin_dir_url(__FILE__); ?>../imgs/move.png">
+                                                </select>
+                                                <img width="10" src="<?php echo plugin_dir_url(__FILE__); ?>../imgs/move.png">
                                             </td>
                                             </tr>
                                         <?php endif; ?>
