@@ -18,7 +18,7 @@ class Registry
         'sortable'                      => array(),
         'type_of_search'                => 'autocomplete',
         'instant_jquery_selector'       => '#content',
-        'extras'                        => array('objectID' => 'objectID', 'authorId' => 'authorId', 'author' => 'author', 'author_login' => 'author_login', 'permalink' => 'permalink', 'date' => 'date', 'content' => 'content', 'content_stripped' => 'content_stripped', 'title' => 'title', 'slug' => 'slug', 'modified' => 'modified', 'parent' => 'parent', 'menu_order' => 'menu_order', 'type' => 'type'),
+        'extras'                        => array('author' => 'author', 'author_login' => 'author_login', 'permalink' => 'permalink', 'date' => 'date', 'content' => 'content', 'content_stripped' => 'content_stripped', 'title' => 'title', 'slug' => 'slug', 'modified' => 'modified', 'parent' => 'parent', 'menu_order' => 'menu_order', 'type' => 'type'),
         'metas'                         => array(),
         'number_by_page'                => 10,
         'number_by_type'                => 3,
