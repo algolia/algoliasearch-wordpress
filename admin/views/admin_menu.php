@@ -173,7 +173,7 @@
                 <div class="content-wrapper" id="type_of_search">
                     <div class="content">
                         <div class="content-item">
-                            <h3>Search bar</h3>
+                            <h3>Search Bar</h3>
                             <p class="help-block">Configure here the DOM selector used to customize your search input.</p>
                             <label for="search-input-selector">Search input</label>
                             <div>
