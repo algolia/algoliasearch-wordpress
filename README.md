@@ -17,7 +17,7 @@ This plugin replaces the default search of Wordpress with an Algolia realtime se
 
 ### Credentials
 
-![Credentials](credentials.png)
+![Credentials](doc/credentials.png)
 
 In this section you configure two things:
 
@@ -35,7 +35,7 @@ In this section you configure two things:
 
 ### UI Integration
 
-![UI](ui.png)
+![UI](doc/ui.png)
 
 #### Search Exprerience Configuration
 
@@ -73,13 +73,13 @@ The theme is **totally independent** from the Wordpress theme. Each theme handle
 
 ### Types
 
-![Types](types.png)
+![Types](doc/types.png)
 
 You can choose the Wordpress types you want to index. By default, only `post` and `page` are configured. If one of your extension (WooCommerce for instance) create new types you will see them in this list. You can order them to change the order of each section of the autocompletion menu. In autocompletion menu mode you can also specify the label used for each type to display the title of search section.
 
 ### Attributes
 
-![Attributes](attributes.png)
+![Attributes](doc/attributes.png)
 
 You can configure additional attribute or taxonomies you want to index. If you use Wordpress as a blog you should not have to change anything. When using Wordpress with plugin like WooCommerce this should be very useful as you probably want to index the `price` or the `total_sales` attributes as well.
 
@@ -103,7 +103,7 @@ You can add a label to each enabled facet to display the Facet bloc title. You c
 
 ### Search Configuration
 
-![Search](search.png)
+![Search](doc/search.png)
 
 For each attribute you enable, you can decide to make it searchable. If you do you can choose if you want the attribute ordered or unordered:
 
@@ -119,7 +119,7 @@ For each attribute you enable, you can decide to make it searchable. If you do y
 
 ### Results Ranking
 
-![Ranking](ranking.png)
+![Ranking](doc/ranking.png)
 
 For each attribute you enable, you can make them part of your custom ranking formula.
 
@@ -127,7 +127,7 @@ For each attribute you enable, you can make them part of your custom ranking for
 
 ### Sorting
 
-![Sorting](sorting.png)
+![Sorting](doc/sorting.png)
 
 For each attribute or taxonomy you enable you can select the ones you want to be able to sort with.
 
