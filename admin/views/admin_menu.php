@@ -353,7 +353,7 @@
                                 <th>Attribute ordering</th>
                             </tr>
                             <?php
-                            $searchable = $attributesToIndex;
+                            $searchable = array();
 
                             foreach (array_keys($algolia_registry->indexable_tax) as $tax)
                                 if ($tax != 'type')
@@ -741,7 +741,7 @@
                                     $metas = get_meta_key_list($type);
 
                                     if (isset($external_attrs[$type.'_attrs']))
-                                        $metas = array_merge(get_meta_key_list($type), $external_attrs[$type.'_attrs']);
+                                        $metas = array_merge($metas, $external_attrs[$type.'_attrs']);
                                 ?>
                                 <?php foreach ($metas as $meta_key) : ?>
                                     <?php if (is_array($algolia_registry->indexable_types) && in_array($type, array_keys($algolia_registry->indexable_types))) : ?>

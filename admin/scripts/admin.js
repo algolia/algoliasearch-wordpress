@@ -164,7 +164,6 @@ jQuery(document).ready(function($) {
 
             if ($(tds[3]).find('input[type="checkbox"]').prop('checked') == false)
             {
-                console.log($(this).find("td").find("input,select"));
                 $(this).find("td").find("input,select").slice(2).prop('disabled', true);
             }
         });
