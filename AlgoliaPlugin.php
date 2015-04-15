@@ -143,8 +143,13 @@ class AlgoliaPlugin
 
     }
 
-    public function admin_scripts()
+    public function admin_scripts($hook)
     {
+        // Only load these scripts on the Algolia admin page
+        if ( 'toplevel_page_algolia-settings' != $hook ) {
+            return;
+        }
+
         global $batch_count;
 
         $algoliaAdminSettings = array(
