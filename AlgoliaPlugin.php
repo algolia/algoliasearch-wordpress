@@ -29,7 +29,6 @@ class AlgoliaPlugin
         add_action('admin_post_update_account_info',            array($this, 'admin_post_update_account_info'));
         add_action('admin_post_update_index_name',              array($this, 'admin_post_update_index_name'));
         add_action('admin_post_update_indexable_types',         array($this, 'admin_post_update_indexable_types'));
-        add_action('admin_post_update_indexable_taxonomies',    array($this, 'admin_post_update_indexable_taxonomies'));
         add_action('admin_post_update_type_of_search',          array($this, 'admin_post_update_type_of_search'));
         add_action('admin_post_update_extra_meta',              array($this, 'admin_post_update_extra_meta'));
         add_action('admin_post_custom_ranking',                 array($this, 'admin_post_custom_ranking'));
@@ -96,12 +95,16 @@ class AlgoliaPlugin
                         $facets[] = array('order' => $meta_value['order'], 'tax' => $meta_key, 'name' => $meta_value['name'] ? $meta_value['name'] : $meta_key, 'type' => $meta_value['type']);
         }
 
-        foreach ($this->algolia_registry->indexable_tax as $tax => $obj)
+        if (isset($this->algolia_registry->metas['tax']))
         {
-            $indices[] = array('index_name' => $this->algolia_registry->index_name . $tax, 'name' => $obj['name'], 'order1' => 1, 'order2' => $obj['order']);
+            foreach ($this->algolia_registry->metas['tax'] as $tax => $obj)
+            {
+                if ($obj['default_attribute'] == 0)
+                    $indices[] = array('index_name' => $this->algolia_registry->index_name . $tax, 'name' => $obj['name'], 'order1' => 1, 'order2' => $obj['order']);
 
-            if ($obj['facetable'])
-                $facets[] = array('tax' => $tax, 'name' => $obj['name'], 'order' => $obj['order'], 'type' => $obj['type']);
+                if ($obj['facetable'])
+                    $facets[] = array('tax' => $tax, 'name' => $obj['name'], 'order' => $obj['order'], 'type' => $obj['type']);
+            }
         }
 
         $sorting_indices = array();
@@ -246,6 +249,7 @@ class AlgoliaPlugin
             }
             $this->algolia_registry->searchable = $searchable;
 
+
             $this->algolia_helper->handleIndexCreation();
         }
 
@@ -305,14 +309,6 @@ class AlgoliaPlugin
          */
         $new_facet_types = array_merge(array('conjunctive' => 'Conjunctive', 'disjunctive' => 'Disjunctive'), $this->theme_helper->get_current_theme()->facet_types);
 
-        $taxonomies = $this->algolia_registry->indexable_tax;
-
-        foreach ($taxonomies as &$tax)
-            if (isset($new_facet_types[$tax['type']]) == false)
-                $tax['type'] = 'conjunctive';
-
-        $this->algolia_registry->indexable_tax = $taxonomies;
-
         $metas = $this->algolia_registry->metas;
 
         foreach ($metas as &$types)
@@ -321,7 +317,6 @@ class AlgoliaPlugin
                     $meta['type'] = 'conjunctive';
 
         $this->algolia_registry->metas = $metas;
-
 
         $this->algolia_helper->handleIndexCreation();
 
@@ -332,19 +327,18 @@ class AlgoliaPlugin
     {
         $indexable_types        = $this->algolia_registry->indexable_types;
         $metas                  = $this->algolia_registry->metas;
-        $date_custom_ranking    = array();
 
         if (isset($_POST['TYPES']) && is_array($_POST['TYPES']))
         {
-            $i = 1;
+            $i = 1; // keep 1 and not 0 to avoid bad condition when saving metas
 
             foreach ($_POST['TYPES'] as $key => $value)
             {
-                if ($key == 'date' || (in_array($key, array_keys($indexable_types)) && isset($value["METAS"]) && is_array($value["METAS"])))
+                if (((in_array($key, array_keys($indexable_types)) || $key == 'tax') && isset($value["METAS"]) && is_array($value["METAS"])))
                 {
                     foreach ($value["METAS"] as $meta_key => $meta_value)
                     {
-                        if ($meta_key != "date" && isset($metas[$key][$meta_key]) && $metas[$key][$meta_key]['indexable'])
+                        if (isset($metas[$key][$meta_key]) && $metas[$key][$meta_key]['indexable'])
                         {
                             $metas[$key][$meta_key]['custom_ranking']       = isset($meta_value['CUSTOM_RANKING']) ? 1 : 0;
                             $metas[$key][$meta_key]["custom_ranking_order"] = $meta_value["CUSTOM_RANKING_ORDER"];
@@ -356,24 +350,10 @@ class AlgoliaPlugin
 
                             $i++;
                         }
-
-                        if ($meta_key == "date")
-                        {
-                            $date_custom_ranking['enabled'] = isset($meta_value['CUSTOM_RANKING']) ? 1 : 0;
-                            $date_custom_ranking['order'] = $meta_value["CUSTOM_RANKING_ORDER"];
-
-                            if ($date_custom_ranking['enabled'])
-                                $date_custom_ranking["sort"]  = $i;
-                            else
-                                $date_custom_ranking["sort"]  = 10000;
-
-                            $i++;
-                        }
                     }
                 }
             }
 
-            $this->algolia_registry->date_custom_ranking = $date_custom_ranking;
             $this->algolia_registry->metas = $metas;
         }
 
@@ -389,9 +369,10 @@ class AlgoliaPlugin
          */
         $indexable_types = $this->algolia_registry->indexable_types;
 
+        $metas = array();
+
         if (isset($_POST['TYPES']) && is_array($_POST['TYPES']))
         {
-            $metas = array();
 
             foreach ($_POST['TYPES'] as $key => $value)
             {
@@ -416,17 +397,13 @@ class AlgoliaPlugin
                     }
                 }
             }
-
-            $this->algolia_registry->metas = $metas;
         }
 
         /**
-         * Handle Taxonomies
+         * Handle Taxonomies + Default attributes
          */
 
         $valid_tax = get_taxonomies();
-
-        $taxonomies = array();
 
         if (isset($_POST['TAX']) && is_array($_POST['TAX']))
         {
@@ -434,17 +411,22 @@ class AlgoliaPlugin
             {
                 if (in_array($tax['SLUG'], $valid_tax) || in_array($tax['SLUG'], array_keys($this->algolia_registry->extras)))
                 {
-                    $taxonomies[$tax['SLUG']] = array(
-                        'name'      => $tax['NAME'],
-                        'order'     => $tax["ORDER"],
-                        'facetable' => isset($tax['FACETABLE']) ? 1 : 0,
-                        'type'      => $tax['FACET_TYPE']
-                    );
+                    $metas['tax'][$tax['SLUG']] = array();
+
+                    $metas['tax'][$tax['SLUG']]['default_attribute']    = in_array($tax['SLUG'], array_keys($this->algolia_registry->extras)) ? 1 : 0;
+                    $metas['tax'][$tax['SLUG']]["name"]                 = $tax["NAME"];
+                    $metas['tax'][$tax['SLUG']]["indexable"]            = 1;
+                    $metas['tax'][$tax['SLUG']]["facetable"]            = $metas['tax'][$tax['SLUG']]["indexable"] && isset($tax["FACETABLE"]) ? 1 : 0;
+                    $metas['tax'][$tax['SLUG']]["type"]                 = $tax["FACET_TYPE"];
+                    $metas['tax'][$tax['SLUG']]["order"]                = $tax["ORDER"];
+                    $metas['tax'][$tax['SLUG']]["custom_ranking"]       = isset($tax["CUSTOM_RANKING"]) && $tax["CUSTOM_RANKING"] ? $tax["CUSTOM_RANKING"] : 0;
+                    $metas['tax'][$tax['SLUG']]["custom_ranking_sort"]  = isset($tax["CUSTOM_RANKING_SORT"]) && $tax["CUSTOM_RANKING_SORT"] ? $tax["CUSTOM_RANKING_SORT"] : 10000;
+                    $metas['tax'][$tax['SLUG']]["custom_ranking_order"] = isset($tax["CUSTOM_RANKING_ORDER"]) && $tax["CUSTOM_RANKING_ORDER"] ? $tax["CUSTOM_RANKING_ORDER"] : 'asc';
                 }
             }
         }
 
-        $this->algolia_registry->indexable_tax = $taxonomies;
+        $this->algolia_registry->metas = $metas;
 
         $this->algolia_helper->handleIndexCreation();
 

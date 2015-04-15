@@ -42,8 +42,12 @@ class Indexer
     {
         $this->algolia_helper->move($this->algolia_registry->index_name.'all_temp', $this->algolia_registry->index_name.'all');
 
-        foreach (array_keys($this->algolia_registry->indexable_tax) as $tax)
-            $this->algolia_helper->move($this->algolia_registry->index_name.$tax.'_temp', $this->algolia_registry->index_name.$tax);
+        if (isset($this->algolia_registry->metas['tax']))
+        {
+            foreach ($this->algolia_registry->metas['tax'] as $tax => $value)
+                if ($value['default_attribute'] == 0)
+                    $this->algolia_helper->move($this->algolia_registry->index_name.$tax.'_temp', $this->algolia_registry->index_name.$tax);
+        }
 
         foreach (array_keys($this->algolia_registry->indexable_types) as $type)
             $this->algolia_helper->move($this->algolia_registry->index_name.$type.'_temp', $this->algolia_registry->index_name.$type);
@@ -80,8 +84,10 @@ class Indexer
 
     public function indexTaxonomies()
     {
-        foreach (array_keys($this->algolia_registry->indexable_tax) as $tax)
-            $this->indexTaxonomie($tax);
+        if (isset($this->algolia_registry->metas['tax']))
+            foreach ($this->algolia_registry->metas['tax'] as $tax => $value)
+                if ($value['default_attribute'] == false)
+                    $this->indexTaxonomie($tax);
     }
 
     public function indexPost($post)

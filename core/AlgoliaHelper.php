@@ -120,19 +120,22 @@ class AlgoliaHelper
          * Handle Autocomplete Taxonomies
          */
 
-        foreach ($this->algolia_registry->indexable_tax as $name => $value)
+        if (isset($this->algolia_registry->metas['tax']))
         {
-            if (in_array($index_name . $name, $indexes) == false)
+            foreach ($this->algolia_registry->metas['tax'] as $name => $value)
             {
-                if ($this->algolia_registry->type_of_search == 'autocomplete')
+                if (in_array($index_name . $name, $indexes) == false)
                 {
-                    $mergeSettings = $this->mergeSettings($index_name . $name, $defaultSettings);
-                    $this->setSettings($index_name . $name, $mergeSettings);
-                    $this->setSettings($index_name . $name . "_temp", $mergeSettings);
-                }
+                    if ($value['default_attribute'] == 0 && $this->algolia_registry->type_of_search == 'autocomplete')
+                    {
+                        $mergeSettings = $this->mergeSettings($index_name . $name, $defaultSettings);
+                        $this->setSettings($index_name . $name, $mergeSettings);
+                        $this->setSettings($index_name . $name . "_temp", $mergeSettings);
+                    }
 
-                if (isset($this->algolia_registry->indexable_tax[$name]) && $this->algolia_registry->indexable_tax[$name]['facetable'])
-                    $facets[] = $name;
+                    if (isset($this->algolia_registry->metas['tax'][$name]) && $this->algolia_registry->metas['tax'][$name]['facetable'])
+                        $facets[] = $name;
+                }
             }
         }
 
@@ -143,18 +146,6 @@ class AlgoliaHelper
         {
             if (in_array($index_name . "_" . $name, $indexes) == false)
             {
-                if (isset($this->algolia_registry->metas[$name]))
-                {
-                    foreach ($this->algolia_registry->metas[$name] as $key => $value)
-                    {
-                        if ($value['facetable'])
-                            $facets[] = $key;
-
-                        if ($value['custom_ranking'])
-                            $customRankingTemp[] = array('sort' => $value['custom_ranking_sort'], 'value' => $value['custom_ranking_order'] . '(' . $key . ')');
-                    }
-                }
-
                 if ($this->algolia_registry->type_of_search == 'autocomplete')
                 {
                     $mergeSettings = $this->mergeSettings($index_name . $name, $defaultSettings);
@@ -165,14 +156,25 @@ class AlgoliaHelper
             }
         }
 
+        foreach (array_merge(array('tax'), array_keys($this->algolia_registry->indexable_types)) as $name)
+        {
+            if (isset($this->algolia_registry->metas[$name]))
+            {
+                foreach ($this->algolia_registry->metas[$name] as $key => $value)
+                {
+                    if ($value['facetable'])
+                        $facets[] = $key;
+
+                    if ($value['custom_ranking'])
+                        $customRankingTemp[] = array('sort' => $value['custom_ranking_sort'], 'value' => $value['custom_ranking_order'] . '(' . $key . ')');
+                }
+            }
+        }
+
+
         /**
          * Prepare Settings
          */
-
-        $date_custom_ranking = $this->algolia_registry->date_custom_ranking;
-
-        if ($date_custom_ranking['enabled'])
-            $customRankingTemp[] = array('sort' => $date_custom_ranking['sort'], 'value' => $date_custom_ranking['order'].'(date)');
 
         usort($customRankingTemp, function ($a, $b) {
             if ($a['sort'] < $b['sort'])

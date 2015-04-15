@@ -72,19 +72,22 @@ class AlgoliaPluginAuto
 
     public function termTaxonomyUpdated($term_id, $taxonomy)
     {
-        if ($term_id && in_array($taxonomy, array_keys($this->algolia_registry->indexable_tax)))
-            $this->indexer->indexTerm(get_term_by('term_taxonomy_id', $term_id, $taxonomy), $taxonomy);
+        if ($term_id && isset($this->algolia_registry->metas['tax']) && in_array($taxonomy, array_keys($this->algolia_registry->metas['tax'])))
+            if ($this->algolia_registry->metas['tax']['default_attribute'] == false)
+                $this->indexer->indexTerm(get_term_by('term_taxonomy_id', $term_id, $taxonomy), $taxonomy);
     }
 
     public function termCreated($term_id, $tt_id, $taxonomy)
     {
-        if ($term_id && in_array($taxonomy, array_keys($this->algolia_registry->indexable_tax)))
-            $this->indexer->indexTerm(get_term($term_id, $taxonomy), $taxonomy);
+        if ($term_id && isset($this->algolia_registry->metas['tax']) && in_array($taxonomy, array_keys($this->algolia_registry->metas['tax'])))
+            if ($this->algolia_registry->metas['tax']['default_attribute'] == false)
+                $this->indexer->indexTerm(get_term($term_id, $taxonomy), $taxonomy);
     }
 
     public function termDeleted($term_id, $tt_id, $taxonomy, $deleted_term)
     {
-        if (! empty($tt_id) && in_array($taxonomy, array_keys($this->algolia_registry->indexable_tax)))
-            $this->indexer->deleteTerm($term_id, $taxonomy);
+        if (! empty($tt_id) && isset($this->algolia_registry->metas['tax']) && in_array($taxonomy, array_keys($this->algolia_registry->metas['tax'])))
+            if ($this->algolia_registry->metas['tax']['default_attribute'] == false)
+               $this->indexer->deleteTerm($term_id, $taxonomy);
     }
 }
