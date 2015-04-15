@@ -260,17 +260,23 @@ class AlgoliaPlugin
     {
         if (isset($_POST['ATTRIBUTES']) && is_array($_POST['ATTRIBUTES']))
         {
-
             $sortable = array();
 
             foreach ($_POST['ATTRIBUTES'] as $key => $values)
             {
                 if (isset($values['asc']))
-                    $sortable[$key.'_asc'] = array('name' => $key, 'sort' => 'asc', 'label' => $values['LABEL_asc']);
+                    $sortable[$key.'_asc'] = array('name' => $key, 'sort' => 'asc', 'label' => $values['LABEL_asc'], 'order' => $values['ORDER_asc']);
 
                 if (isset($values['desc']))
-                    $sortable[$key.'_desc'] = array('name' => $key, 'sort' => 'desc', 'label' => $values['LABEL_desc']);
+                    $sortable[$key.'_desc'] = array('name' => $key, 'sort' => 'desc', 'label' => $values['LABEL_desc'], 'order' => $values['ORDER_desc']);
+
             }
+
+            uasort($sortable, function ($a, $b) {
+               if ($a['order'] < $b['order'])
+                   return -1;
+                return 1;
+            });
 
             $this->algolia_registry->sortable = $sortable;
 

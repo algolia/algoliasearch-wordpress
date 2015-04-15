@@ -125,6 +125,12 @@ jQuery(document).ready(function($) {
         });
     });
 
+    $('#sortable-form').submit(function (e) {
+        $('#sortable-form tr').each(function (i) {
+            $(this).find('.order').val(i);
+        });
+    });
+
     /**
      * Handle disabling
      */
@@ -195,7 +201,7 @@ jQuery(document).ready(function($) {
         return ui;
     };
 
-    $('#_taxonomies tr, #_extra-metas tr, #_indexable-types tr, #_custom-ranking tr, #_searchable_attributes tr').sort(function (a, b) {
+    $('#_taxonomies tr, #_extra-metas tr, #_indexable-types tr, #_custom-ranking tr, #_searchable_attributes tr, #_sortable_attributes tr').sort(function (a, b) {
         var contentA = parseInt($(a).attr('data-order'));
         var contentB = parseInt($(b).attr('data-order'));
 
@@ -204,7 +210,7 @@ jQuery(document).ready(function($) {
         $(container).parent().append(container);
     });;
 
-    $("#_taxonomies tbody, #_extra-metas tbody, #_indexable-types tbody, #_custom-ranking tbody, #_searchable_attributes tbody").sortable({
+    $("#_taxonomies tbody, #_extra-metas tbody, #_indexable-types tbody, #_custom-ranking tbody, #_searchable_attributes tbody, #_sortable_attributes tbody").sortable({
         containment: "parent",
         items: 'tr:not(:first)',
         helper: fixHelper

@@ -1,4 +1,6 @@
 version 0.0.1
  - First Release
 version 0.0.2
- - Add the possibility to make default attributes part of the custom ranking + Fix small issues
+ - Add the possibility to make default attributes part of the custom ranking
+ - Fix small issues
+ - Add possibility to order sortable attributes 

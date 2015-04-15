@@ -423,7 +423,7 @@
         </div>
 
         <div class="tab-content" id="_sortable_attributes">
-            <form action="<?php echo site_url(); ?>/wp-admin/admin-post.php" method="post">
+            <form id="sortable-form" action="<?php echo site_url(); ?>/wp-admin/admin-post.php" method="post">
                 <input type="hidden" name="action" value="update_sortable_attributes">
                 <div class="content-wrapper" id="customization">
                     <div class="content">
@@ -459,10 +459,22 @@
                                             $sortable[] = $meta_key;
                             }
 
+                            $i = 0;
+
                             ?>
                             <?php foreach ($sortable as $sortItem): ?>
                                 <?php foreach (array('asc', 'desc') as $sort): ?>
-                                <tr>
+
+                                <?php
+                                    $order = -1;
+                                    if (isset($algolia_registry->sortable[$sortItem.'_'.$sort]))
+                                        $order = $algolia_registry->sortable[$sortItem.'_'.$sort]['order'];
+                                ?>
+                                <?php if ($order != -1): ?>
+                                <tr data-order="<?php echo $order; ?>">
+                                <?php else: ?>
+                                <tr data-order="<?php echo (10000 + $i); $i++ ?>">
+                                <?php endif; ?>
                                     <td class="table-col-enabled">
                                         <input <?php checked(isset($algolia_registry->sortable[$sortItem.'_'.$sort])); ?> type="checkbox" name="ATTRIBUTES[<?php echo $sortItem; ?>][<?php echo $sort; ?>]">
                                     </td>
@@ -477,6 +489,7 @@
                                         <input type="text"
                                                value="<?php echo (isset($algolia_registry->sortable[$sortItem.'_'.$sort]) ? $algolia_registry->sortable[$sortItem.'_'.$sort]["label"] : "") ?>" name="ATTRIBUTES[<?php echo $sortItem; ?>][LABEL_<?php echo $sort; ?>]">
                                     </td>
+                                    <input type="hidden" name="ATTRIBUTES[<?php echo $sortItem; ?>][ORDER_<?php echo $sort ?>]" class="order" />
                                 </tr>
                                 <?php endforeach; ?>
                             <?php endforeach; ?>
