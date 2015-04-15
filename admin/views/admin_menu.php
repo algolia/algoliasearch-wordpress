@@ -488,6 +488,7 @@
                                     <td>
                                         <input type="text"
                                                value="<?php echo (isset($algolia_registry->sortable[$sortItem.'_'.$sort]) ? $algolia_registry->sortable[$sortItem.'_'.$sort]["label"] : "") ?>" name="ATTRIBUTES[<?php echo $sortItem; ?>][LABEL_<?php echo $sort; ?>]">
+                                        <img width="10" src="<?php echo plugin_dir_url(__FILE__); ?>../imgs/move.png">
                                     </td>
                                     <input type="hidden" name="ATTRIBUTES[<?php echo $sortItem; ?>][ORDER_<?php echo $sort ?>]" class="order" />
                                 </tr>
