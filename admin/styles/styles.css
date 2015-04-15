@@ -175,7 +175,7 @@
 #algolia-settings #_extra-metas tbody,
 #algolia-settings #_indexable-types tbody,
 #algolia-settings #_custom-ranking tbody,
-#algolia-settings #_searchable_attributes tbody
+#algolia-settings #_searchable_attributes tbody,
 #algolia-settings #_sortable_attributes tbody
 {
     cursor: move;
