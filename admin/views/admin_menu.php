@@ -364,7 +364,7 @@
                                 $metas = get_meta_key_list($type);
 
                                 if (isset($external_attrs[$type.'_attrs']))
-                                    $metas = array_merge(get_meta_key_list($type), $external_attrs[$type.'_attrs']);
+                                    $metas = array_merge($metas, $external_attrs[$type.'_attrs']);
 
 
                                 foreach ($metas as $meta_key)
