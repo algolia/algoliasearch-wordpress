@@ -4,7 +4,7 @@ class Registry
 {
     private static $instance;
     private $options = array();
-    private static $setting_key = 'algolia';
+    private static $setting_key = 'algolia000';
 
     private $attributes = array(
         'validCredential'               => false,
