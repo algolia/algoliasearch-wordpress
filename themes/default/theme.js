@@ -8,6 +8,10 @@ jQuery(document).ready(function ($) {
 
         algoliaSettings.indices.sort(indicesCompare);
 
+        var indices = [];
+        for (var i = 0; i < algoliaSettings.indices.length; i++)
+            indices.push(algolia_client.initIndex(algoliaSettings.indices[i].index_name));
+
         for (var i = 0; i < algoliaSettings.indices.length; i++)
         {
             hogan_objs.push({

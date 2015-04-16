@@ -2,11 +2,7 @@
  * Common variables and function for autocomplete and instant search
  */
 var algolia_client = new AlgoliaSearch(algoliaSettings.app_id, algoliaSettings.search_key);
-var indices = [];
 var custom_facets_types = algoliaSettings.theme.facet_types;
-
-for (var i = 0; i < algoliaSettings.indices.length; i++)
-    indices.push(algolia_client.initIndex(algoliaSettings.indices[i].index_name));
 
 window.indicesCompare = function (a, b) {
     if (a.order1 < b.order1)
