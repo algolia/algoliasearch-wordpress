@@ -115,8 +115,6 @@ class AlgoliaPlugin
                 'label'      => $values['label']
             );
 
-        global $facetsLabels;
-
         $algoliaSettings = array(
             'app_id'                    => $this->algolia_registry->app_id,
             'search_key'                => $this->algolia_registry->search_key,
@@ -129,7 +127,6 @@ class AlgoliaPlugin
             'number_by_type'            => $this->algolia_registry->number_by_type,
             'number_by_page'            => $this->algolia_registry->number_by_page,
             'search_input_selector'     => str_replace("\\", "", $this->algolia_registry->search_input_selector),
-            'facetsLabels'              => $facetsLabels,
             'plugin_url'                => plugin_dir_url(__FILE__),
             'theme'                     => $this->theme_helper->get_current_theme()
         );

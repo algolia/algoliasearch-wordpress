@@ -35,11 +35,6 @@ $batch_count = 100;
 
 $attributesToSnippet    = array("content", "content_stripped");
 
-$facetsLabels = array(
-    'post'      => 'Article',
-    'page'      => 'Page'
-);
-
 /**
  * Defaults Variables
  */

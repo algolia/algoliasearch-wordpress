@@ -48,6 +48,11 @@ jQuery(document).ready(function ($) {
 
     if (algoliaSettings.type_of_search == "instant")
     {
+        window.facetsLabels = {
+            'post': 'Article',
+            'page': 'Page'
+        };
+
         /**
          * Variables Initialization
          */
@@ -177,7 +182,7 @@ jQuery(document).ready(function ($) {
 
                 all_unchecked = all_unchecked && !checked;
 
-                var name = algoliaSettings.facetsLabels[key] != undefined ? algoliaSettings.facetsLabels[key] : key;
+                var name = window.facetsLabels && window.facetsLabels[key] != undefined ? window.facetsLabels[key] : key;
                 var nameattr = key;
 
                 var params = {

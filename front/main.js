@@ -185,7 +185,7 @@ if (algoliaSettings.type_of_search == "instant")
                             {
                                 var checked = $this.helper.isRefined(algoliaSettings.facets[i].tax, key);
 
-                                var name = algoliaSettings.facetsLabels[key] != undefined ? algoliaSettings.facetsLabels[key] : key;
+                                var name = window.facetsLabels && window.facetsLabels[key] != undefined ? window.facetsLabels[key] : key;
                                 var nameattr = key;
 
                                 var params = {

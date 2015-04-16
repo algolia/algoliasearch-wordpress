@@ -49,6 +49,11 @@ jQuery(document).ready(function ($) {
 
     if (algoliaSettings.type_of_search == "instant")
     {
+        window.facetsLabels = {
+            'post': 'Article',
+            'page': 'Page'
+        };
+
         /**
          * Variables Initialization
          */
