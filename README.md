@@ -294,23 +294,23 @@ The plugin tries to merge the settings that have been modified from the Algolia 
 
 ### I want to change a facet value for example the "Types" facet, what should I do ?
 
-In the `algolia.php` file in the root directory of the plugin you may want to add those attributes to this line:
+In your theme `theme.js` file in the root directory of the plugin you may want to add those attributes to this line:
 
-```php
-$facetsLabels = array(
-    'post'      => 'Article',
-    'page'      => 'Page'
-);
+```javascript
+window.facetsLabels = {
+    'post': 'Article',
+    'page': 'Page'
+};
 ```
 
 For example if you want to replace "product" by "Products" in the facets elements, it will look like this:
 
-```php
-$facetsLabels = array(
-    'post'      => 'Article',
-    'page'      => 'Page',
-    'product'   => 'Product'
-);
+```javascript
+window.facetsLabels = {
+    'post': 'Article',
+    'page': 'Page',
+    'product': 'Product'
+};
 ```
 
 This works for any other facet but the Type one is the most likely to have non wanted formating.
