@@ -154,11 +154,11 @@ jQuery(document).ready(function ($) {
 
                 var params = {
                     type: {},
-                    current_min: current_min,
-                    current_max: current_max,
+                    current_min: Math.floor(current_min),
+                    current_max: Math.ceil(current_max),
                     count: min == max ? 0 : 1,
-                    min: min,
-                    max: max
+                    min: Math.floor(min),
+                    max: Math.ceil(max)
                 };
 
                 params.type[facet.type] = true;
