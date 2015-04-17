@@ -69,28 +69,25 @@ if (algoliaSettings.type_of_search == "instant")
                     {
                         if (this.helper.state.facetsRefinements[refine])
                         {
-                            var i = refine.indexOf(':');
                             var r = {};
 
-                            r[refine.slice(0, i)] = refine.slice(i + 1);
+                            r[refine] = this.helper.state.facetsRefinements[refine];
 
                             refinements.push(r);
                         }
                     }
 
+                    console.log(this.helper.state.disjunctiveFacetsRefinements);
                     /** Get refinements for disjunctive facets **/
                     for (var refine in this.helper.state.disjunctiveFacetsRefinements)
                     {
-                        for (var value in this.helper.state.disjunctiveFacetsRefinements[refine])
+                        for (var i = 0; i < this.helper.state.disjunctiveFacetsRefinements[refine].length; i++)
                         {
-                            if (this.helper.state.disjunctiveFacetsRefinements[refine][value])
-                            {
-                                var r = {};
+                            var r = {};
 
-                                r[refine] = value;
+                            r[refine] = this.helper.state.disjunctiveFacetsRefinements[refine][i];
 
-                                refinements.push(r);
-                            }
+                            refinements.push(r);
                         }
                     }
 
@@ -135,7 +132,9 @@ if (algoliaSettings.type_of_search == "instant")
                             }
                         }
 
-                        this.helper.state.numericRefinements = numericsRefinements;
+                        for (var key in numericsRefinements)
+                            for (var operator in numericsRefinements[key])
+                                this.helper.addNumericRefinement(key, operator, numericsRefinements[key][operator]);
 
                         this.helper.setCurrentPage(page);
                         this.helper.setIndex(indexName);

@@ -88,11 +88,15 @@ jQuery(document).ready(function ($) {
 
         algoliaSettings.facets = algoliaSettings.facets.sort(facetsCompare);
 
-        engine.setHelper(new AlgoliaSearchHelper(algolia_client, algoliaSettings.index_name + 'all', {
+        var helper = algoliasearchHelper(algolia_client, algoliaSettings.index_name + 'all', {
             facets: conjunctive_facets,
             disjunctiveFacets: disjunctive_facets,
             hitsPerPage: algoliaSettings.number_by_page
-        }));
+        });
+
+        helper.on('result', searchCallback);
+
+        engine.setHelper(helper);
 
         /**
          * Functions
@@ -100,41 +104,38 @@ jQuery(document).ready(function ($) {
 
         function performQueries(push_state)
         {
-            engine.helper.search(engine.query, searchCallback);
+            engine.helper.search(engine.helper.state.query);
 
             engine.updateUrl(push_state);
         }
 
-        function searchCallback(success, content)
+        function searchCallback(content)
         {
-            if (success)
+            var html_content = "";
+
+            html_content += "<div id='algolia_instant_selector'>";
+
+            var facets = [];
+            var pages = [];
+
+            if (content.hits.length > 0)
             {
-                var html_content = "";
+                facets = engine.getFacets(content);
+                pages = engine.getPages(content);
 
-                html_content += "<div id='algolia_instant_selector'>";
-
-                var facets = [];
-                var pages = [];
-
-                if (content.hits.length > 0)
-                {
-                    facets = engine.getFacets(content);
-                    pages = engine.getPages(content);
-
-                    html_content += engine.getHtmlForFacets(facetsTemplate, facets);
-                }
-
-                html_content += engine.getHtmlForResults(resultsTemplate, content, facets);
-
-                if (content.hits.length > 0)
-                    html_content += engine.getHtmlForPagination(paginationTemplate, content, pages, facets);
-
-                html_content += "</div>";
-
-                $(algoliaSettings.instant_jquery_selector).html(html_content);
-
-                updateSliderValues();
+                html_content += engine.getHtmlForFacets(facetsTemplate, facets);
             }
+
+            html_content += engine.getHtmlForResults(resultsTemplate, content, facets);
+
+            if (content.hits.length > 0)
+                html_content += engine.getHtmlForPagination(paginationTemplate, content, pages, facets);
+
+            html_content += "</div>";
+
+            $(algoliaSettings.instant_jquery_selector).html(html_content);
+
+            updateSliderValues();
         }
 
         /**
@@ -142,14 +143,13 @@ jQuery(document).ready(function ($) {
          */
 
         custom_facets_types["slider"] = function (engine, content, facet) {
-
-            if (content.facets_stats[facet.tax] != undefined)
+            if (content.getFacetByName(facet.tax) != undefined)
             {
-                var min = content.facets_stats[facet.tax].min;
-                var max = content.facets_stats[facet.tax].max;
+                var min = content.getFacetByName(facet.tax).stats.min;
+                var max = content.getFacetByName(facet.tax).stats.max;
 
-                var current_min = engine.helper.getNumericsRefine(facet.tax, ">=");
-                var current_max = engine.helper.getNumericsRefine(facet.tax, "<=");
+                var current_min = engine.helper.state.getNumericRefinement(facet.tax, ">=");
+                var current_max = engine.helper.state.getNumericRefinement(facet.tax, "<=");
 
                 if (current_min == undefined)
                     current_min = min;
@@ -183,8 +183,6 @@ jQuery(document).ready(function ($) {
                 engine.helper.toggleRefine($(this).attr("data-tax"), $(this).attr("data-name"));
             });
 
-            engine.helper.setPage(0);
-
             performQueries(true);
         });
 
@@ -196,9 +194,9 @@ jQuery(document).ready(function ($) {
         $("body").on("change", "#index_to_use", function () {
             engine.helper.setIndex($(this).val());
 
-            engine.helper.setPage(0);
-
             performQueries(true);
+
+            engine.helper.setPage(0);
         });
 
         $("body").on("slidechange", ".algolia-slider-true", function (event, ui) {
@@ -208,17 +206,15 @@ jQuery(document).ready(function ($) {
             var max = slide_dom.slider("values")[1];
 
             if (parseInt(slide_dom.slider("values")[0]) >= parseInt(slide_dom.attr("data-min")))
-                engine.helper.addNumericsRefine(slide_dom.attr("data-tax"), ">=", min);
+                engine.helper.addNumericRefinement(slide_dom.attr("data-tax"), ">=", min);
             if (parseInt(slide_dom.slider("values")[1]) <= parseInt(slide_dom.attr("data-max")))
-                engine.helper.addNumericsRefine(slide_dom.attr("data-tax"), "<=", max);
+                engine.helper.addNumericRefinement(slide_dom.attr("data-tax"), "<=", max);
 
             if (parseInt(min) == parseInt(slide_dom.attr("data-min")))
-                engine.helper.removeNumericRefine(slide_dom.attr("data-tax"), ">=");
+                engine.helper.removeNumericRefinement(slide_dom.attr("data-tax"), ">=");
 
             if (parseInt(max) == parseInt(slide_dom.attr("data-max")))
-                engine.helper.removeNumericRefine(slide_dom.attr("data-tax"), "<=");
-
-            engine.helper.setPage(0);
+                engine.helper.removeNumericRefinement(slide_dom.attr("data-tax"), "<=");
 
             updateSlideInfos(ui);
             performQueries(true);
@@ -240,11 +236,11 @@ jQuery(document).ready(function ($) {
 
             var $this = $(this);
 
-            engine.query = $(this).val();
+            engine.helper.setQuery($(this).val());
 
             $(algoliaSettings.search_input_selector).each(function (i) {
                 if ($(this)[0] != $this[0])
-                    $(this).val(engine.query);
+                    $(this).val(engine.helper.state.query);
             });
 
             if ($(this).val().length == 0) {
@@ -275,8 +271,8 @@ jQuery(document).ready(function ($) {
                 var min = $(this).attr("data-min");
                 var max = $(this).attr("data-max");
 
-                var new_min = engine.helper.getNumericsRefine($(this).attr("data-tax"), ">=");
-                var new_max = engine.helper.getNumericsRefine($(this).attr("data-tax"), "<=");
+                var new_min = engine.helper.state.getNumericRefinement($(this).attr("data-tax"), ">=");
+                var new_max = engine.helper.state.getNumericRefinement($(this).attr("data-tax"), "<=");
 
                 if (new_min != undefined)
                     min = new_min;
