@@ -159,6 +159,21 @@
                             </div>
 
                         </div>-->
+
+                        <div style="clear: both;"></div>
+
+                        <div style="float: left;">
+                            <div style="padding: 0px 10px;">
+                                <h3>Reset configuration to default</h3>
+                                <p class="help-block">
+                                    This will set the config back to default except api keys
+                                </p>
+                                <div class="content-item">
+                                    <div data-form="<?php echo site_url(); ?>/wp-admin/admin-post.php" data-value="reset_config_to_default" name="submit" id="reset-config" class="button button-danger">Reset</div>
+                                </div>
+                            </div>
+                        </div>
+
                         <div style="clear: both;"></div>
                     </div>
                 </div>

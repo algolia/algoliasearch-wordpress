@@ -34,6 +34,7 @@ class AlgoliaPlugin
         add_action('admin_post_custom_ranking',                 array($this, 'admin_post_custom_ranking'));
         add_action('admin_post_update_searchable_attributes',   array($this, 'admin_post_update_searchable_attributes'));
         add_action('admin_post_update_sortable_attributes',     array($this, 'admin_post_update_sortable_attributes'));
+        add_action('admin_post_reset_config_to_default',        array($this, 'admin_post_reset_config_to_default'));
 
         add_action('admin_post_reindex',                        array($this, 'admin_post_reindex'));
 
@@ -363,6 +364,11 @@ class AlgoliaPlugin
         $this->algolia_helper->handleIndexCreation();
 
         wp_redirect('admin.php?page=algolia-settings#custom-ranking');
+    }
+
+    public function admin_post_reset_config_to_default()
+    {
+        $this->algolia_registry->reset_config_to_default();
     }
 
     public function admin_post_update_extra_meta()
