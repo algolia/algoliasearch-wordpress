@@ -100,7 +100,7 @@ class AlgoliaPlugin
         {
             foreach ($this->algolia_registry->metas['tax'] as $tax => $obj)
             {
-                if ($obj['default_attribute'] == 0)
+                if ($obj['default_attribute'] == 0 && $obj['autocompletable'])
                     $indices[] = array('index_name' => $this->algolia_registry->index_name . $tax, 'name' => $obj['name'], 'order1' => 1, 'order2' => $obj['order']);
 
                 if ($obj['facetable'])
@@ -423,14 +423,18 @@ class AlgoliaPlugin
                     $metas['tax'][$tax['SLUG']] = array();
 
                     $metas['tax'][$tax['SLUG']]['default_attribute']    = in_array($tax['SLUG'], array_keys($this->algolia_registry->extras)) ? 1 : 0;
-                    $metas['tax'][$tax['SLUG']]["name"]                 = $tax["NAME"];
-                    $metas['tax'][$tax['SLUG']]["indexable"]            = 1;
-                    $metas['tax'][$tax['SLUG']]["facetable"]            = $metas['tax'][$tax['SLUG']]["indexable"] && isset($tax["FACETABLE"]) ? 1 : 0;
-                    $metas['tax'][$tax['SLUG']]["type"]                 = $tax["FACET_TYPE"];
-                    $metas['tax'][$tax['SLUG']]["order"]                = $tax["ORDER"];
-                    $metas['tax'][$tax['SLUG']]["custom_ranking"]       = isset($tax["CUSTOM_RANKING"]) && $tax["CUSTOM_RANKING"] ? $tax["CUSTOM_RANKING"] : 0;
-                    $metas['tax'][$tax['SLUG']]["custom_ranking_sort"]  = isset($tax["CUSTOM_RANKING_SORT"]) && $tax["CUSTOM_RANKING_SORT"] ? $tax["CUSTOM_RANKING_SORT"] : 10000;
-                    $metas['tax'][$tax['SLUG']]["custom_ranking_order"] = isset($tax["CUSTOM_RANKING_ORDER"]) && $tax["CUSTOM_RANKING_ORDER"] ? $tax["CUSTOM_RANKING_ORDER"] : 'asc';
+                    $metas['tax'][$tax['SLUG']]['name']                 = isset($tax['NAME']) ? $tax['NAME'] : '';
+                    $metas['tax'][$tax['SLUG']]['indexable']            = 1;
+
+                    $metas['tax'][$tax['SLUG']]['facetable']            = $this->algolia_registry->type_of_search == 'instant'
+                                                                            && $metas['tax'][$tax['SLUG']]['indexable'] && isset($tax['FACETABLE']) ? 1 : 0;
+
+                    $metas['tax'][$tax['SLUG']]['autocompletable']      = $metas['tax'][$tax['SLUG']]['indexable'] && isset($tax['FACETABLE']) ? 1 : 0;
+                    $metas['tax'][$tax['SLUG']]['type']                 = $tax['FACET_TYPE'];
+                    $metas['tax'][$tax['SLUG']]['order']                = $tax['ORDER'];
+                    $metas['tax'][$tax['SLUG']]['custom_ranking']       = isset($tax['CUSTOM_RANKING']) && $tax['CUSTOM_RANKING'] ? $tax['CUSTOM_RANKING'] : 0;
+                    $metas['tax'][$tax['SLUG']]['custom_ranking_sort']  = isset($tax['CUSTOM_RANKING_SORT']) && $tax['CUSTOM_RANKING_SORT'] ? $tax['CUSTOM_RANKING_SORT'] : 10000;
+                    $metas['tax'][$tax['SLUG']]['custom_ranking_order'] = isset($tax['CUSTOM_RANKING_ORDER']) && $tax['CUSTOM_RANKING_ORDER'] ? $tax['CUSTOM_RANKING_ORDER'] : 'asc';
                 }
             }
         }
@@ -450,7 +454,7 @@ class AlgoliaPlugin
 
         foreach ($_POST as $post)
         {
-            $subaction = explode("__", $post);
+            $subaction = explode('__', $post);
 
             if (count($subaction) == 1 && $subaction[0] != "reindex")
             {

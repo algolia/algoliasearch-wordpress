@@ -174,9 +174,12 @@ class WordpressFetcher
             if (count($terms) <= 0)
                 continue;
 
-            $obj->$tax = array_map(function ($obj) {
-                return $obj->name;
-            }, $terms);
+            if (isset($algolia_registry->metas['tax']) && isset($algolia_registry->metas['tax'][$tax]))
+            {
+                $obj->$tax = array_map(function ($obj) {
+                    return $obj->name;
+                }, $terms);
+            }
         }
 
         return (array) $obj;

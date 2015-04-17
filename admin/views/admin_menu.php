@@ -532,9 +532,17 @@
                                 <th class="table-col-enabled">Enabled</th>
                                 <th>Type</th>
                                 <th>Name</th>
-                                <th>Facetable</th>
+                                <?php if ($algolia_registry->type_of_search == 'instant'): ?>
+                                    <th>Facetable</th>
+                                <?php else: ?>
+                                    <th>Autocomplete section</th>
+                                <?php endif; ?>
                                 <th>Facet type</th>
-                                <th>Facet label &amp; ordering</th>
+                                <?php if ($algolia_registry->type_of_search == 'instant'): ?>
+                                    <th>Facet label &amp; ordering</th>
+                                <?php else: ?>
+                                    <th>Auto-completion menu label &amp; ordering</th>
+                                <?php endif; ?>
                             </tr>
                         </table>
 
@@ -596,13 +604,22 @@
                                                 <td><?php echo $type; ?></td>
                                                 <td><?php echo $meta_key; ?></td>
                                                 <td>
+                                                    <?php if ($algolia_registry->type_of_search == 'instant' || $algolia_registry->metas['metas']['default_attribute']) : ?>
                                                     <input type="checkbox"
                                                            name="TYPES[<?php echo $type; ?>][METAS][<?php echo $meta_key; ?>][FACETABLE]"
                                                            value="1"
-                                                        <?php checked(isset($algolia_registry->metas[$type])
-                                                            && in_array($meta_key, array_keys($algolia_registry->metas[$type]))
-                                                            && $algolia_registry->metas[$type][$meta_key]["facetable"]); ?>
+                                                        <?php checked(
+                                                            ($algolia_registry->type_of_search == 'instant' && isset($algolia_registry->metas[$type])
+                                                            && isset($algolia_registry->metas[$type][$meta_key])
+                                                            && $algolia_registry->metas[$type][$meta_key]["facetable"])
+                                                        ||
+                                                            ($algolia_registry->type_of_search == 'autocomplete' && isset($algolia_registry->metas[$type])
+                                                                && isset($algolia_registry->metas[$type][$meta_key])
+                                                                && $algolia_registry->metas[$type][$meta_key]["autocompletable"])
+
+                                                        ); ?>
                                                         >
+                                                    <?php endif; ?>
                                                 </td>
                                                 <td>
                                                     <select name="TYPES[<?php echo $type; ?>][METAS][<?php echo $meta_key; ?>][TYPE]">
@@ -725,8 +742,8 @@
 
         <?php if ($algolia_registry->type_of_search == 'autocomplete') : ?>
             <style>
-                #algolia-settings #extra-meta-and-taxonomies tr td:nth-child(n+4),
-                #algolia-settings #extra-meta-and-taxonomies tr th:nth-child(n+4)
+                #algolia-settings #extra-meta-and-taxonomies tr td:nth-child(5),
+                #algolia-settings #extra-meta-and-taxonomies tr th:nth-child(5)
                 {
                     display: none;
                 }

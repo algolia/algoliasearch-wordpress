@@ -86,7 +86,7 @@ class Indexer
     {
         if (isset($this->algolia_registry->metas['tax']))
             foreach ($this->algolia_registry->metas['tax'] as $tax => $value)
-                if ($value['default_attribute'] == false)
+                if ($value['autocompletable'] && $value['default_attribute'] == false)
                     $this->indexTaxonomie($tax);
     }
 
@@ -106,9 +106,13 @@ class Indexer
 
     public function indexTerm($term, $taxonomy)
     {
-        $object = $this->wordpress_fetcher->getTermObj($term);
+        if (isset($this->algolia_registry->meta['tax'][$taxonomy]) && $this->algolia_registry->meta['tax'][$taxonomy]['autocompletable'])
+        {
+            $object = $this->wordpress_fetcher->getTermObj($term);
 
-        $this->algolia_helper->pushObject($this->algolia_registry->index_name.$taxonomy, $object);
+            $this->algolia_helper->pushObject($this->algolia_registry->index_name.$taxonomy, $object);
+        }
+
     }
 
     public function deleteTerm($term_id, $taxonomy)
