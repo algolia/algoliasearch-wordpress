@@ -82,9 +82,7 @@ class AlgoliaHelper
 
     public function handleIndexCreation()
     {
-        $created_indexes    = $this->algolia_client->listIndexes();
         $index_name         = $this->algolia_registry->index_name;
-        $indexes            = array();
         $facets             = array();
         $customRankingTemp  = array();
 
@@ -107,15 +105,6 @@ class AlgoliaHelper
             "attributesToSnippet"   => $attributesToSnippet
         );
 
-        if (isset($indexes["items"]))
-        {
-            $indexes = array_map(function ($obj) {
-                return $obj["name"];
-            }, $created_indexes["items"]);
-        }
-
-
-
         /**
          * Handle Autocomplete Taxonomies
          */
@@ -124,18 +113,15 @@ class AlgoliaHelper
         {
             foreach ($this->algolia_registry->metas['tax'] as $name => $value)
             {
-                if (in_array($index_name . $name, $indexes) == false)
+                if ($value['default_attribute'] == 0 && $this->algolia_registry->type_of_search == 'autocomplete')
                 {
-                    if ($value['default_attribute'] == 0 && $this->algolia_registry->type_of_search == 'autocomplete')
-                    {
-                        $mergeSettings = $this->mergeSettings($index_name . $name, $defaultSettings);
-                        $this->setSettings($index_name . $name, $mergeSettings);
-                        $this->setSettings($index_name . $name . "_temp", $mergeSettings);
-                    }
-
-                    if (isset($this->algolia_registry->metas['tax'][$name]) && $this->algolia_registry->metas['tax'][$name]['facetable'])
-                        $facets[] = $name;
+                    $mergeSettings = $this->mergeSettings($index_name . $name, $defaultSettings);
+                    $this->setSettings($index_name . $name, $mergeSettings);
+                    $this->setSettings($index_name . $name . "_temp", $mergeSettings);
                 }
+
+                if (isset($this->algolia_registry->metas['tax'][$name]) && $this->algolia_registry->metas['tax'][$name]['facetable'])
+                    $facets[] = $name;
             }
         }
 
@@ -144,15 +130,12 @@ class AlgoliaHelper
          */
         foreach (array_keys($this->algolia_registry->indexable_types) as $name)
         {
-            if (in_array($index_name . "_" . $name, $indexes) == false)
+            if ($this->algolia_registry->type_of_search == 'autocomplete')
             {
-                if ($this->algolia_registry->type_of_search == 'autocomplete')
-                {
-                    $mergeSettings = $this->mergeSettings($index_name . $name, $defaultSettings);
+                $mergeSettings = $this->mergeSettings($index_name . $name, $defaultSettings);
 
-                    $this->setSettings($index_name . $name, $mergeSettings);
-                    $this->setSettings($index_name . $name . "_temp", $mergeSettings);
-                }
+                $this->setSettings($index_name . $name, $mergeSettings);
+                $this->setSettings($index_name . $name . "_temp", $mergeSettings);
             }
         }
 
