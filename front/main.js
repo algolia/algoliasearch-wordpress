@@ -177,9 +177,6 @@ if (algoliaSettings.type_of_search == "instant")
                             if (content_facet == undefined)
                                 continue;
 
-                            if (algoliaSettings.facets[i].type == 'disjunctive')
-                                content_facets = content.disjunctiveFacets;
-
                             for (var key in content_facet.data)
                             {
                                 var checked = this.helper.isRefined(algoliaSettings.facets[i].tax, key);
