@@ -45,6 +45,8 @@ jQuery(document).ready(function ($) {
                 $(this).typeahead({hint: false}, hogan_objs);
 
                 $(this).on('typeahead:selected', function (e, item) {
+                    autocomplete = false;
+                    instant = false;
                     window.location.href = item.permalink;
                 });
             });
@@ -294,7 +296,7 @@ jQuery(document).ready(function ($) {
 
             performQueries(true);
         });
-0
+
         $("body").on("slidechange", ".algolia-slider-true", function (event, ui) {
 
             var slide_dom = $(ui.handle).closest(".algolia-slider");
@@ -401,10 +403,10 @@ jQuery(document).ready(function ($) {
 
         $(algoliaSettings.search_input_selector).attr('autocomplete', 'off').attr('autocorrect', 'off').attr('spellcheck', 'false').attr('autocapitalize', 'off');
 
-        engine.getRefinementsFromUrl(searchCallback);
+        engine.getRefinementsFromUrl();
 
         window.addEventListener("popstate", function(e) {
-            engine.getRefinementsFromUrl(searchCallback);
+            engine.getRefinementsFromUrl();
         });
     }
 
@@ -428,6 +430,10 @@ jQuery(document).ready(function ($) {
         }
 
         $(algoliaSettings.search_input_selector).on('keydown', function (e) {
+
+            if (autocomplete == false && instant == false)
+                return;
+
             if (e.keyCode == 13)
             {
                 e.preventDefault();

@@ -104,7 +104,7 @@ if (algoliaSettings.type_of_search.indexOf("instant") !== -1)
                     }
                 };
 
-                this.getRefinementsFromUrl = function(searchCallback)
+                this.getRefinementsFromUrl = function()
                 {
                     if (location.hash && location.hash.indexOf('#q=') === 0)
                     {
