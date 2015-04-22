@@ -42,9 +42,6 @@ class AlgoliaPlugin
         add_action('wp_enqueue_scripts',                        array($this, 'scripts'));
 
         add_action('wp_footer',                                 array($this, 'wp_footer'));
-
-//        echo '<pre>';
-
     }
 
     public function add_admin_menu()
@@ -286,7 +283,7 @@ class AlgoliaPlugin
 
     public function admin_post_update_type_of_search()
     {
-        if (isset($_POST['TYPE_OF_SEARCH']) && in_array($_POST['TYPE_OF_SEARCH'], array('instant', 'autocomplete')))
+        if (isset($_POST['TYPE_OF_SEARCH']) && is_array($_POST['TYPE_OF_SEARCH']))
             $this->algolia_registry->type_of_search = $_POST['TYPE_OF_SEARCH'];
 
         if (isset($_POST['JQUERY_SELECTOR']))
@@ -426,7 +423,7 @@ class AlgoliaPlugin
                     $metas['tax'][$tax['SLUG']]['name']                 = isset($tax['NAME']) ? $tax['NAME'] : '';
                     $metas['tax'][$tax['SLUG']]['indexable']            = 1;
 
-                    $metas['tax'][$tax['SLUG']]['facetable']            = $this->algolia_registry->type_of_search == 'instant'
+                    $metas['tax'][$tax['SLUG']]['facetable']            = in_array('instant', $this->algolia_registry->type_of_search)
                                                                             && $metas['tax'][$tax['SLUG']]['indexable'] && isset($tax['FACETABLE']) ? 1 : 0;
 
                     $metas['tax'][$tax['SLUG']]['autocompletable']      = $metas['tax'][$tax['SLUG']]['indexable'] && isset($tax['FACETABLE']) ? 1 : 0;

@@ -1,6 +1,6 @@
 jQuery(document).ready(function ($) {
 
-    if (algoliaSettings.type_of_search == "autocomplete")
+    if (algoliaSettings.type_of_search.indexOf("autocomplete") !== -1)
     {
         var $autocompleteTemplate = Hogan.compile($('#autocomplete-template').text());
 
@@ -47,7 +47,7 @@ jQuery(document).ready(function ($) {
         });
     }
 
-    if (algoliaSettings.type_of_search == "instant")
+    if (algoliaSettings.type_of_search.indexOf("instant") !== -1)
     {
         window.facetsLabels = {
             'post': 'Article',

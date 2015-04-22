@@ -200,10 +200,10 @@
                             <h3>Search Experience</h3>
                             <p class="help-block">Configure here whether you want an autocomplete menu or a instant search results page.</p>
                             <div>
-                                <input type="radio"
-                                                <?php checked($algolia_registry->type_of_search == 'autocomplete'); ?>
+                                <input type="checkbox"
+                                                <?php checked(in_array('autocomplete', $algolia_registry->type_of_search)); ?>
                                                 class="instant_radio"
-                                                name="TYPE_OF_SEARCH"
+                                                name="TYPE_OF_SEARCH[]"
                                                 value="autocomplete"
                                                 id="instant_radio_autocomplete" />
                                  <label for="instant_radio_autocomplete">Autocompletion menu</label>
@@ -219,10 +219,10 @@
                         </div>
                         <div class="has-extra-content content-item">
                             <div>
-                                <input type="radio"
-                                                      <?php checked($algolia_registry->type_of_search == 'instant'); ?>
+                                <input type="checkbox"
+                                                      <?php checked(in_array('instant', $algolia_registry->type_of_search)); ?>
                                                       class="instant_radio"
-                                                      name="TYPE_OF_SEARCH"
+                                                      name="TYPE_OF_SEARCH[]"
                                                       value="instant"
                                                       id="instant_radio_instant" />
                                 <label for="instant_radio_instant">Instant-search results page</label>
@@ -311,7 +311,7 @@
                             <tr data-order="-1">
                                 <th class="table-col-enabled">Enabled</th>
                                 <th>Name</th>
-                                <?php if ($algolia_registry->type_of_search == 'autocomplete'): ?>
+                                <?php if (in_array('autocomplete', $algolia_registry->type_of_search)): ?>
                                 <th>Auto-completion menu label &amp; ordering</th>
                                 <?php endif; ?>
                             </tr>
@@ -341,7 +341,7 @@
                                 <td>
                                     <?php echo $type; ?> (<?php echo $count; ?>)
                                 </td>
-                                <?php if ($algolia_registry->type_of_search == 'autocomplete'): ?>
+                                <?php if (in_array('autocomplete', $algolia_registry->type_of_search)): ?>
                                 <td style="white-space: nowrap;">
                                     <input type="text" value="<?php echo (isset($algolia_registry->indexable_types[$type]) ? $algolia_registry->indexable_types[$type]['name'] : "") ?>" name="TYPES[<?php echo $type; ?>][NAME]">
                                     <img width="10" src="<?php echo plugin_dir_url(__FILE__); ?>../imgs/move.png">
@@ -532,13 +532,13 @@
                                 <th class="table-col-enabled">Enabled</th>
                                 <th>Type</th>
                                 <th>Name</th>
-                                <?php if ($algolia_registry->type_of_search == 'instant'): ?>
+                                <?php if (in_array('instant', $algolia_registry->type_of_search)): ?>
                                     <th>Facetable</th>
                                 <?php else: ?>
                                     <th>Autocomplete section</th>
                                 <?php endif; ?>
                                 <th>Facet type</th>
-                                <?php if ($algolia_registry->type_of_search == 'instant'): ?>
+                                <?php if (in_array('instant', $algolia_registry->type_of_search)): ?>
                                     <th>Facet label &amp; ordering</th>
                                 <?php else: ?>
                                     <th>Auto-completion menu label &amp; ordering</th>
@@ -604,19 +604,18 @@
                                                 <td><?php echo $type; ?></td>
                                                 <td><?php echo $meta_key; ?></td>
                                                 <td>
-                                                    <?php if ($algolia_registry->type_of_search == 'instant' || $algolia_registry->metas['metas']['default_attribute']) : ?>
+                                                    <?php if (in_array('instant', $algolia_registry->type_of_search) || $algolia_registry->metas['metas']['default_attribute']) : ?>
                                                     <input type="checkbox"
                                                            name="TYPES[<?php echo $type; ?>][METAS][<?php echo $meta_key; ?>][FACETABLE]"
                                                            value="1"
                                                         <?php checked(
-                                                            ($algolia_registry->type_of_search == 'instant' && isset($algolia_registry->metas[$type])
+                                                            (in_array('instant', $algolia_registry->type_of_search) && isset($algolia_registry->metas[$type])
                                                             && isset($algolia_registry->metas[$type][$meta_key])
                                                             && $algolia_registry->metas[$type][$meta_key]["facetable"])
                                                         ||
-                                                            ($algolia_registry->type_of_search == 'autocomplete' && isset($algolia_registry->metas[$type])
+                                                            (in_array('autocomplete', $algolia_registry->type_of_search) && isset($algolia_registry->metas[$type])
                                                                 && isset($algolia_registry->metas[$type][$meta_key])
                                                                 && $algolia_registry->metas[$type][$meta_key]["autocompletable"])
-
                                                         ); ?>
                                                         >
                                                     <?php endif; ?>
@@ -740,7 +739,7 @@
             </form>
         </div>
 
-        <?php if ($algolia_registry->type_of_search == 'autocomplete') : ?>
+        <?php if (in_array('autocomplete', $algolia_registry->type_of_search)) : ?>
             <style>
                 #algolia-settings #extra-meta-and-taxonomies tr td:nth-child(5),
                 #algolia-settings #extra-meta-and-taxonomies tr th:nth-child(5)

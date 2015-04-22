@@ -1,6 +1,9 @@
 jQuery(document).ready(function ($) {
 
-    if (algoliaSettings.type_of_search == "autocomplete")
+    var autocomplete = true;
+    var instant = true;
+
+    if (algoliaSettings.type_of_search.indexOf("autocomplete") !== -1)
     {
         var $autocompleteTemplate = Hogan.compile($('#autocomplete-template').text());
 
@@ -12,8 +15,7 @@ jQuery(document).ready(function ($) {
         for (var i = 0; i < algoliaSettings.indices.length; i++)
             indices.push(algolia_client.initIndex(algoliaSettings.indices[i].index_name));
 
-        for (var i = 0; i < algoliaSettings.indices.length; i++)
-        {
+        for (var i = 0; i < algoliaSettings.indices.length; i++) {
             hogan_objs.push({
                 source: indices[i].ttAdapter({hitsPerPage: algoliaSettings.number_by_type}),
                 displayKey: 'title',
@@ -37,16 +39,28 @@ jQuery(document).ready(function ($) {
             }
         });
 
-        $(algoliaSettings.search_input_selector).each(function (i) {
-            $(this).typeahead({hint: false}, hogan_objs);
+        function activateAutocomplete()
+        {
+            $(algoliaSettings.search_input_selector).each(function (i) {
+                $(this).typeahead({hint: false}, hogan_objs);
 
-            $(this).on('typeahead:selected', function (e, item) {
-                window.location.href = item.permalink;
+                $(this).on('typeahead:selected', function (e, item) {
+                    window.location.href = item.permalink;
+                });
             });
-        });
+        }
+
+        activateAutocomplete();
+
+        function desactivateAutocomplete()
+        {
+            $(algoliaSettings.search_input_selector).each(function (i) {
+                $(this).typeahead('destroy')
+            });
+        }
     }
 
-    if (algoliaSettings.type_of_search == "instant")
+    if (algoliaSettings.type_of_search.indexOf("instant") !== -1)
     {
         window.facetsLabels = {
             'post': 'Article',
@@ -89,7 +103,21 @@ jQuery(document).ready(function ($) {
             hitsPerPage: algoliaSettings.number_by_page
         });
 
-        helper.on('result', searchCallback);
+        function activateInstant()
+        {
+            helper.on('result', searchCallback);
+        }
+
+        activateInstant();
+
+        function desactivateInstant()
+        {
+            helper.removeAllListeners();
+
+            location.replace('#');
+
+            $(algoliaSettings.instant_jquery_selector).html(old_content);
+        }
 
         engine.setHelper(helper);
 
@@ -266,7 +294,7 @@ jQuery(document).ready(function ($) {
 
             performQueries(true);
         });
-
+0
         $("body").on("slidechange", ".algolia-slider-true", function (event, ui) {
 
             var slide_dom = $(ui.handle).closest(".algolia-slider");
@@ -301,6 +329,9 @@ jQuery(document).ready(function ($) {
 
         $(algoliaSettings.search_input_selector).keyup(function (e) {
             e.preventDefault();
+
+            if (instant === false)
+                return;
 
             var $this = $(this);
 
@@ -374,6 +405,47 @@ jQuery(document).ready(function ($) {
 
         window.addEventListener("popstate", function(e) {
             engine.getRefinementsFromUrl(searchCallback);
+        });
+    }
+
+    if (algoliaSettings.type_of_search.indexOf("autocomplete") !== -1 && algoliaSettings.type_of_search.indexOf("instant") !== -1)
+    {
+        $(algoliaSettings.search_input_selector).each(function () {
+            $(this).closest('form').submit(function (e) {
+                return false;
+            });
+        });
+
+        if (location.hash.length <= 1)
+        {
+            desactivateInstant();
+            instant = false;
+        }
+        else
+        {
+            autocomplete = false;
+            desactivateAutocomplete();
+        }
+
+        $(algoliaSettings.search_input_selector).on('keydown', function (e) {
+            if (e.keyCode == 13)
+            {
+                e.preventDefault();
+                desactivateAutocomplete();
+                activateInstant();
+                autocomplete = false;
+                instant = true;
+                helper.search();
+                $(this).focus();
+            }
+            if (e.keyCode == 27)
+            {
+                e.preventDefault();
+                activateAutocomplete();
+                desactivateInstant();
+                autocomplete = true;
+                instant = false;
+            }
         });
     }
 });

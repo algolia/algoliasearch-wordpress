@@ -28,7 +28,7 @@ window.facetsCompare = function (a, b) {
  * Autocomplete functions
  */
 
-if (algoliaSettings.type_of_search == "autocomplete")
+if (algoliaSettings.type_of_search.indexOf("autocomplete") !== -1)
 {
     window.getBrandingHits = function () {
         return function findMatches(q, cb) {
@@ -41,7 +41,7 @@ if (algoliaSettings.type_of_search == "autocomplete")
  * Instant Search
  */
 
-if (algoliaSettings.type_of_search == "instant")
+if (algoliaSettings.type_of_search.indexOf("instant") !== -1)
 {
     var engine;
     var history_timeout;
@@ -77,7 +77,6 @@ if (algoliaSettings.type_of_search == "instant")
                         }
                     }
 
-                    console.log(this.helper.state.disjunctiveFacetsRefinements);
                     /** Get refinements for disjunctive facets **/
                     for (var refine in this.helper.state.disjunctiveFacetsRefinements)
                     {

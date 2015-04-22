@@ -113,7 +113,7 @@ class AlgoliaHelper
         {
             foreach ($this->algolia_registry->metas['tax'] as $name => $value)
             {
-                if ($value['default_attribute'] == 0 && $value['autocompletable'] && $this->algolia_registry->type_of_search == 'autocomplete')
+                if ($value['default_attribute'] == 0 && $value['autocompletable'] && in_array('autocomplete', $this->algolia_registry->type_of_search))
                 {
                     $mergeSettings = $this->mergeSettings($index_name . $name, $defaultSettings);
                     $this->setSettings($index_name . $name, $mergeSettings);
@@ -130,7 +130,7 @@ class AlgoliaHelper
          */
         foreach (array_keys($this->algolia_registry->indexable_types) as $name)
         {
-            if ($this->algolia_registry->type_of_search == 'autocomplete')
+            if (in_array('autocomplete', $this->algolia_registry->type_of_search))
             {
                 $mergeSettings = $this->mergeSettings($index_name . $name, $defaultSettings);
 
@@ -184,7 +184,7 @@ class AlgoliaHelper
 
         $mergeSettings = $this->mergeSettings($index_name.'all', $settings);
 
-        if ($this->algolia_registry->type_of_search == 'autocomplete')
+        if (in_array('autocomplete', $this->algolia_registry->type_of_search))
             return;
 
         $this->setSettings($index_name.'all', $mergeSettings);

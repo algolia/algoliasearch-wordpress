@@ -4,7 +4,7 @@ jQuery(document).ready(function($) {
     /**
      * Handle display/hide of subcontent
      */
-    $(".has-extra-content input[type='radio']").each(function () {
+    $(".has-extra-content input[type='checkbox']").each(function () {
             if ($(this).is(':checked'))
                 $(this).closest(".has-extra-content").find(".show-hide").show();
     });
@@ -25,8 +25,8 @@ jQuery(document).ready(function($) {
 
     handleScreenshot();
 
-    $(".has-extra-content input[type='radio']").change(function (e) {
-        $(".has-extra-content input[type='radio']").each(function () {
+    $(".has-extra-content input[type='checkbox']").change(function (e) {
+        $(".has-extra-content input[type='checkbox']").each(function () {
             if ($(this).is(':checked'))
                 $(this).closest(".has-extra-content").find(".show-hide").show();
             else
