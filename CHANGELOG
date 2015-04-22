@@ -6,3 +6,4 @@ version 0.0.2
 version 0.0.3
  - Enhance taxonomie autocomplete configuration
  - Add reset config button
+ - Possibility to have both autocomplete and instant search
