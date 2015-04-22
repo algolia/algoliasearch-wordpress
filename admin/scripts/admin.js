@@ -168,10 +168,11 @@ jQuery(document).ready(function($) {
         $(div + " tr:not(:first)").each(function (i) {
             var tds = $(this).find("td");
 
-            if ($(tds[3]).find('input[type="checkbox"]').prop('checked') == false)
-            {
-                $(this).find("td").find("input,select").slice(2).prop('disabled', true);
-            }
+            if (($(tds[3]).find('input[type="checkbox"]').prop('checked') == undefined || $(tds[3]).find('input[type="checkbox"]').prop('checked') == false) && $(tds[4]).find('input[type="checkbox"]').prop('checked') == false)
+                $(tds[6]).find("input,select").prop('disabled', true);
+
+            if ($(tds[4]).find('input[type="checkbox"]').prop('checked') == false)
+                $(tds[5]).find("input,select").prop('disabled', true);
         });
     }
 

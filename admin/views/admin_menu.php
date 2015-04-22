@@ -532,17 +532,20 @@
                                 <th class="table-col-enabled">Enabled</th>
                                 <th>Type</th>
                                 <th>Name</th>
-                                <?php if (in_array('instant', $algolia_registry->type_of_search)): ?>
-                                    <th>Facetable</th>
-                                <?php else: ?>
-                                    <th>Autocomplete section</th>
-                                <?php endif; ?>
+                                <th>
+                                    <?php if (in_array('autocomplete', $algolia_registry->type_of_search)): ?>
+                                        Autocomplete section
+                                    <?php endif; ?>
+                                </th>
+                                <th>
+                                    <?php if (in_array('instant', $algolia_registry->type_of_search)): ?>
+                                        Facetable
+                                    <?php endif; ?>
+                                </th>
                                 <th>Facet type</th>
-                                <?php if (in_array('instant', $algolia_registry->type_of_search)): ?>
-                                    <th>Facet label &amp; ordering</th>
-                                <?php else: ?>
-                                    <th>Auto-completion menu label &amp; ordering</th>
-                                <?php endif; ?>
+                                <th>
+                                    Label &amp; ordering
+                                </th>
                             </tr>
                         </table>
 
@@ -562,7 +565,16 @@
                                     <th class="table-col-enabled">Enabled</th>
                                     <th>Type</th>
                                     <th>Meta key</th>
-                                    <th>Facetable</th>
+                                    <th>
+                                        <?php if (in_array('autocomplete', $algolia_registry->type_of_search)): ?>
+                                            Autocomplete section
+                                        <?php endif; ?>
+                                    </th>
+                                    <th>
+                                        <?php if (in_array('instant', $algolia_registry->type_of_search)): ?>
+                                            Facetable
+                                        <?php endif; ?>
+                                    </th>
                                     <th>Facet type</th>
                                     <th>Facet label &amp; ordering</th>
                                 </tr>
@@ -603,22 +615,18 @@
                                                 </td>
                                                 <td><?php echo $type; ?></td>
                                                 <td><?php echo $meta_key; ?></td>
+                                                <td></td>
                                                 <td>
-                                                    <?php if (in_array('instant', $algolia_registry->type_of_search) || $algolia_registry->metas['metas']['default_attribute']) : ?>
+                                                <?php if (in_array('instant', $algolia_registry->type_of_search)): ?>
                                                     <input type="checkbox"
                                                            name="TYPES[<?php echo $type; ?>][METAS][<?php echo $meta_key; ?>][FACETABLE]"
                                                            value="1"
-                                                        <?php checked(
-                                                            (in_array('instant', $algolia_registry->type_of_search) && isset($algolia_registry->metas[$type])
-                                                            && isset($algolia_registry->metas[$type][$meta_key])
-                                                            && $algolia_registry->metas[$type][$meta_key]["facetable"])
-                                                        ||
-                                                            (in_array('autocomplete', $algolia_registry->type_of_search) && isset($algolia_registry->metas[$type])
-                                                                && isset($algolia_registry->metas[$type][$meta_key])
-                                                                && $algolia_registry->metas[$type][$meta_key]["autocompletable"])
-                                                        ); ?>
+                                                        <?php checked(isset($algolia_registry->metas[$type])
+                                                                        && isset($algolia_registry->metas[$type][$meta_key])
+                                                                        && $algolia_registry->metas[$type][$meta_key]["facetable"]
+                                                                    ); ?>
                                                         >
-                                                    <?php endif; ?>
+                                                <?php endif; ?>
                                                 </td>
                                                 <td>
                                                     <select name="TYPES[<?php echo $type; ?>][METAS][<?php echo $meta_key; ?>][TYPE]">
@@ -665,7 +673,12 @@
                                     <th class="table-col-enabled">Enabled</th>
                                     <th></th>
                                     <th>Name</th>
-                                    <th>Facetable</th>
+                                    <?php if (in_array('autocomplete', $algolia_registry->type_of_search)): ?>
+                                        <th>Autocomplete section</th>
+                                    <?php endif; ?>
+                                    <?php if (in_array('instant', $algolia_registry->type_of_search)): ?>
+                                        <th>Facetable</th>
+                                    <?php endif; ?>
                                     <th>Facet type</th>
                                     <th>Facet label &amp; ordering</th>
                                 </tr>
@@ -702,12 +715,26 @@
                                             <?php echo $tax; ?>
                                         </td>
                                         <td>
+                                            <?php if (in_array('autocomplete', $algolia_registry->type_of_search)): ?>
+                                                <?php if (isset($algolia_registry->metas['tax']) == false || isset($algolia_registry->metas['tax'][$tax]) == false || $algolia_registry->metas['tax'][$tax]['default_attribute'] == 0): ?>
+                                                <input type="checkbox"
+                                                       value="facetable"
+                                                    <?php checked(isset($algolia_registry->metas['tax']) && isset($algolia_registry->metas['tax'][$tax])
+                                                        && $algolia_registry->metas['tax'][$tax]['autocompletable'])
+                                                    ?>
+                                                       name="TAX[<?php echo $tax; ?>][AUTOCOMPLETABLE]">
+                                                <?php endif; ?>
+                                            <?php endif; ?>
+                                        </td>
+                                        <td>
+                                        <?php if (in_array('instant', $algolia_registry->type_of_search)): ?>
                                             <input type="checkbox"
                                                    value="facetable"
                                                 <?php checked(isset($algolia_registry->metas['tax']) && isset($algolia_registry->metas['tax'][$tax])
                                                     && $algolia_registry->metas['tax'][$tax]['facetable'])
                                                 ?>
                                                    name="TAX[<?php echo $tax; ?>][FACETABLE]">
+                                        <?php endif; ?>
                                         </td>
                                         <td>
                                             <select name="TAX[<?php echo $tax; ?>][FACET_TYPE]">
@@ -738,16 +765,6 @@
                 </div>
             </form>
         </div>
-
-        <?php if (in_array('autocomplete', $algolia_registry->type_of_search)) : ?>
-            <style>
-                #algolia-settings #extra-meta-and-taxonomies tr td:nth-child(5),
-                #algolia-settings #extra-meta-and-taxonomies tr th:nth-child(5)
-                {
-                    display: none;
-                }
-            </style>
-        <?php endif; ?>
 
         <div class="tab-content" id="_custom-ranking">
             <form action="<?php echo site_url(); ?>/wp-admin/admin-post.php" method="post">

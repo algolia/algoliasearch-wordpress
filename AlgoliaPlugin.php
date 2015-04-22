@@ -426,7 +426,7 @@ class AlgoliaPlugin
                     $metas['tax'][$tax['SLUG']]['facetable']            = in_array('instant', $this->algolia_registry->type_of_search)
                                                                             && $metas['tax'][$tax['SLUG']]['indexable'] && isset($tax['FACETABLE']) ? 1 : 0;
 
-                    $metas['tax'][$tax['SLUG']]['autocompletable']      = $metas['tax'][$tax['SLUG']]['indexable'] && isset($tax['FACETABLE']) ? 1 : 0;
+                    $metas['tax'][$tax['SLUG']]['autocompletable']      = $metas['tax'][$tax['SLUG']]['indexable'] && isset($tax['AUTOCOMPLETABLE']) ? 1 : 0;
                     $metas['tax'][$tax['SLUG']]['type']                 = $tax['FACET_TYPE'];
                     $metas['tax'][$tax['SLUG']]['order']                = $tax['ORDER'];
                     $metas['tax'][$tax['SLUG']]['custom_ranking']       = isset($tax['CUSTOM_RANKING']) && $tax['CUSTOM_RANKING'] ? $tax['CUSTOM_RANKING'] : 0;
