@@ -40,6 +40,13 @@ class AlgoliaHelper
         }
     }
 
+    public function search($query, $options, $index_name)
+    {
+        $index = $this->algolia_client->initIndex($index_name);
+
+        return $index->search($query, $options);
+    }
+
     public function setSettings($index_name, $settings)
     {
         $index = $this->algolia_client->initIndex($index_name);

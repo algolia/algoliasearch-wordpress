@@ -412,12 +412,6 @@ jQuery(document).ready(function ($) {
 
     if (algoliaSettings.type_of_search.indexOf("autocomplete") !== -1 && algoliaSettings.type_of_search.indexOf("instant") !== -1)
     {
-        $(algoliaSettings.search_input_selector).each(function () {
-            $(this).closest('form').submit(function (e) {
-                return false;
-            });
-        });
-
         if (location.hash.length <= 1)
         {
             desactivateInstant();
@@ -427,31 +421,8 @@ jQuery(document).ready(function ($) {
         {
             autocomplete = false;
             desactivateAutocomplete();
+            $(algoliaSettings.search_input_selector+':first').focus();
+
         }
-
-        $(algoliaSettings.search_input_selector).on('keydown', function (e) {
-
-            if (autocomplete == false && instant == false)
-                return;
-
-            if (e.keyCode == 13)
-            {
-                e.preventDefault();
-                desactivateAutocomplete();
-                activateInstant();
-                autocomplete = false;
-                instant = true;
-                helper.search();
-                $(this).focus();
-            }
-            if (e.keyCode == 27)
-            {
-                e.preventDefault();
-                activateAutocomplete();
-                desactivateInstant();
-                autocomplete = true;
-                instant = false;
-            }
-        });
     }
 });

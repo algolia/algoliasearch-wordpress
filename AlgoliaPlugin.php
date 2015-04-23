@@ -6,6 +6,7 @@ class AlgoliaPlugin
     private $algolia_helper;
     private $indexer;
     private $theme_helper;
+    private $query_replacer;
 
     public function __construct()
     {
@@ -18,6 +19,8 @@ class AlgoliaPlugin
                 $this->algolia_registry->search_key,
                 $this->algolia_registry->admin_key
             );
+
+            $this->query_replacer = new \Algolia\Core\QueryReplacer($this->algolia_helper);
         }
 
         $this->theme_helper = new \Algolia\Core\ThemeHelper();
@@ -35,6 +38,9 @@ class AlgoliaPlugin
         add_action('admin_post_update_searchable_attributes',   array($this, 'admin_post_update_searchable_attributes'));
         add_action('admin_post_update_sortable_attributes',     array($this, 'admin_post_update_sortable_attributes'));
         add_action('admin_post_reset_config_to_default',        array($this, 'admin_post_reset_config_to_default'));
+
+        add_action('pre_get_posts',                             array($this, 'pre_get_posts'));
+        add_filter('the_posts',                                 array($this, 'get_search_result_posts'));
 
         add_action('admin_post_reindex',                        array($this, 'admin_post_reindex'));
 
@@ -170,6 +176,18 @@ class AlgoliaPlugin
 
         wp_enqueue_style('styles-admin', plugin_dir_url(__FILE__) . 'admin/styles/styles.css');
         wp_enqueue_style('jquery-ui', plugin_dir_url(__FILE__) . 'lib/jquery/jquery-ui.min.css');
+    }
+
+    public function pre_get_posts($query)
+    {
+        return $this->query_replacer->search($query);
+    }
+
+    public function get_search_result_posts($posts)
+    {
+        $posts = $this->query_replacer->getOrderedPost($posts);
+
+        return $posts;
     }
 
     public function admin_post_update_account_info()
