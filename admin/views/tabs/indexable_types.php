@@ -23,6 +23,8 @@
         $typeItem->label    = isset($algolia_registry->indexable_types[$type]) ? $algolia_registry->indexable_types[$type]['name'] : "";
 
         $types[]            = $typeItem;
+
+        $i++;
     }
 ?>
 

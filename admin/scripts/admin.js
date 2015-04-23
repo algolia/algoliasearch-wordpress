@@ -81,8 +81,6 @@ jQuery(document).ready(function($) {
         $(hash).show();
         $("#_extra-metas .title").removeClass("selected");
         $("[data-tab='"+ hash +"']").addClass("selected");
-
-        $(window).scrollTop(0);
     };
 
     $("#_extra-metas .title").click(function () {
@@ -146,6 +144,9 @@ jQuery(document).ready(function($) {
                 $(this).find("td").find("input,select").slice(1).prop('disabled', true);
             }
         });
+
+        if (div == '#_extra-metas')
+            disableFacetsInput('#extra-meta-and-taxonomies');
     }
 
     var disabelable = ['#_indexable-types', '#_extra-metas', '#_indexable-types', '#_searchable_attributes', '#_custom-ranking', '#_sortable_attributes'];
