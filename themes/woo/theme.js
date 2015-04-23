@@ -387,7 +387,7 @@ jQuery(document).ready(function ($) {
                     values: [min, max]
                 });
             });
-        };
+        }
 
         function updateSlideInfos(ui)
         {
@@ -422,7 +422,6 @@ jQuery(document).ready(function ($) {
             autocomplete = false;
             desactivateAutocomplete();
             $(algoliaSettings.search_input_selector+':first').focus();
-
         }
     }
 });
