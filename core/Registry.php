@@ -24,7 +24,6 @@ class Registry
         'number_of_word_for_content'    => 30,
         'search_input_selector'         => "[name='s']",
         'theme'                         => 'default',
-        'date_custom_ranking'           => array('sort' => 10000, 'enabled' => true, 'order' => 'desc'),
         'last_update'                   => ''
     );
 

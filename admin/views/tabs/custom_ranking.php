@@ -1,6 +1,5 @@
 <?php
     $i = 0;
-    $n = 0;
 
     $custom_rankings = array();
 
@@ -33,6 +32,8 @@
 
 
                 $custom_rankings[] = $rankable;
+
+                $i++;
             }
         }
     }
@@ -45,7 +46,9 @@
             $metas = array_merge($metas, $external_attrs[$type.'_attrs']);
 
         foreach ($metas as $meta_key)
+        {
             if (is_array($algolia_registry->indexable_types) && in_array($type, array_keys($algolia_registry->indexable_types)))
+            {
                 if (isset($algolia_registry->metas[$type])
                     && in_array($meta_key, array_keys($algolia_registry->metas[$type]))
                     && $algolia_registry->metas[$type][$meta_key]["indexable"])
@@ -72,7 +75,11 @@
                                             : 'asc';
 
                     $custom_rankings[] = $rankable;
+
+                    $i++;
                 }
+            }
+        }
     }
 
 ?>
@@ -105,7 +112,7 @@
                                             <option <?php echo ($rankable->sort == $key ? 'selected' : ''); ?> value="<?php echo $key; ?>"><?php echo $value; ?></option>
                                     <?php endforeach; ?>
                                 </select>
-                                <img width="10" src="<?php echo plugin_dir_url(__FILE__); ?>../../imgs/move.png">
+                                <img width="10" src="<?php echo $move_icon_url; ?>">
                             </td>
                         </tr>
                     <?php endforeach; ?>
