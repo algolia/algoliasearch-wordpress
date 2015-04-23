@@ -4,6 +4,8 @@
     $theme_helper       = new Algolia\Core\ThemeHelper();
     $current_theme      = $theme_helper->get_current_theme();
 
+    $move_icon_url      = plugin_dir_url(__FILE__) . '../imgs/move.png';
+
     global $external_attrs;
     global $attributesToIndex;
 ?>
