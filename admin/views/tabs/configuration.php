@@ -16,12 +16,7 @@
                     <h3>Search Experience</h3>
                     <p class="help-block">Configure here whether you want an autocomplete menu or a instant search results page.</p>
                     <div>
-                        <input type="checkbox"
-                            <?php checked(in_array('autocomplete', $algolia_registry->type_of_search)); ?>
-                               class="instant_radio"
-                               name="TYPE_OF_SEARCH[]"
-                               value="autocomplete"
-                               id="instant_radio_autocomplete" />
+                     <input type="checkbox" value="<?php checked(in_array('autocomplete', $algolia_registry->type_of_search)); ?>" class="instant_radio" name="TYPE_OF_SEARCH[]" id="instant_radio_autocomplete" /> 
                         <label for="instant_radio_autocomplete">Autocompletion menu</label>
                         <p class="description">Add an auto-completion menu to your search bar.</p>
                     </div>
@@ -36,10 +31,9 @@
                 <div class="has-extra-content content-item">
                     <div>
                         <input type="checkbox"
-                            <?php checked(in_array('instant', $algolia_registry->type_of_search)); ?>
+                            value="<?php checked(in_array('instant', $algolia_registry->type_of_search)); ?>"
                                class="instant_radio"
                                name="TYPE_OF_SEARCH[]"
-                               value="instant"
                                id="instant_radio_instant" />
                         <label for="instant_radio_instant">Instant-search results page</label>
                         <p class="description">Refresh the whole results page as you type.</p>
