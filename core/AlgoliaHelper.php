@@ -191,9 +191,6 @@ class AlgoliaHelper
 
         $mergeSettings = $this->mergeSettings($index_name.'all', $settings);
 
-        if (in_array('autocomplete', $this->algolia_registry->type_of_search))
-            return;
-
         $this->setSettings($index_name.'all', $mergeSettings);
         $this->setSettings($index_name.'all_temp', $mergeSettings);
 
