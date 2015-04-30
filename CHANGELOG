@@ -1,9 +1,16 @@
-version 0.0.1
- - First Release
-version 0.0.2
- - Add the possibility to make default attributes part of the custom ranking
- - Add possibility to order sortable attributes
+version 0.0.4
+ - update php & js client
+ - fix various bug
+
 version 0.0.3
  - Enhance taxonomie autocomplete configuration
  - Add reset config button
  - Possibility to have both autocomplete and instant search
+
+version 0.0.2
+ - Add the possibility to make default attributes part of the custom ranking
+ - Add possibility to order sortable attributes
+
+version 0.0.1
+ - First Release
+
