@@ -26,7 +26,7 @@ class QueryReplacer
         {
             if (in_array('instant', $this->algolia_registry->type_of_search))
             {
-                $url = '/#q='.$query->query['s'].'&page=0&refinements=%5B%5D&numerics_refinements=%7B%7D&index_name=%22'.$this->algolia_registry->index_name.'all%22';
+                $url = get_site_url().'/#q='.$query->query['s'].'&page=0&refinements=%5B%5D&numerics_refinements=%7B%7D&index_name=%22'.$this->algolia_registry->index_name.'all%22';
                 header('Location: '.$url);
 
                 die();
