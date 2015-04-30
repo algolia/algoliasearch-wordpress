@@ -29,35 +29,37 @@ namespace AlgoliaSearch;
 
 use Exception;
 
-class AlgoliaException extends \Exception {}
+class AlgoliaException extends \Exception
+{
+}
 
 class ClientContext {
 
     public $applicationID;
     public $apiKey;
-    public $hostsArray;
+    public $readHostsArray;
+    public $writeHostsArray;
     public $curlMHandle;
     public $adminAPIKey;
     public $connectTimeout;
 
     function __construct($applicationID, $apiKey, $hostsArray) {
-        $this->connectTimeout = 5; // connect timeout of 5s by default
-        $this->timeout = 30; // global timeout of 30s by default
+        $this->connectTimeout = 2; // connect timeout of 2s by default
+        $this->readTimeout = 30; // global timeout of 30s by default
+        $this->searchTimeout = 5; // search timeout of 5s by default
         $this->applicationID = $applicationID;
         $this->apiKey = $apiKey;
-        $this->hostsArray = $hostsArray;
-
+        $this->readHostsArray = $hostsArray;
+        $this->writeHostsArray = $hostsArray;
+        if ($this->readHostsArray == null || count($this->readHostsArray) == 0) {
+            $this->readHostsArray = array($applicationID . "-dsn.algolia.net", $applicationID . "-1.algolianet.com", $applicationID . "-2.algolianet.com", $applicationID . "-3.algolianet.com");
+            $this->writeHostsArray = array($applicationID . ".algolia.net", $applicationID . "-1.algolianet.com", $applicationID . "-2.algolianet.com", $applicationID . "-3.algolianet.com");
+        }
         if ($this->applicationID == null || mb_strlen($this->applicationID) == 0) {
             throw new Exception('AlgoliaSearch requires an applicationID.');
         }
         if ($this->apiKey == null || mb_strlen($this->apiKey) == 0) {
             throw new Exception('AlgoliaSearch requires an apiKey.');
-        }
-        if ($this->hostsArray == null || count($this->hostsArray) == 0) {
-            throw new Exception('AlgoliaSearch requires a list of hostnames.');
-        } else {
-            // randomize elements of hostsArray (act as a kind of load-balancer)
-            shuffle($this->hostsArray);
         }
 
         $this->curlMHandle = NULL;
@@ -122,7 +124,7 @@ class Client {
      */
     function __construct($applicationID, $apiKey, $hostsArray = null, $options = array()) {
         if ($hostsArray == null) {
-            $this->context = new ClientContext($applicationID, $apiKey, array($applicationID . "-1.algolia.net", $applicationID . "-2.algolia.net", $applicationID . "-3.algolia.net"));
+            $this->context = new ClientContext($applicationID, $apiKey, null);
         } else {
             $this->context = new ClientContext($applicationID, $apiKey, $hostsArray);
         }
@@ -133,6 +135,7 @@ class Client {
             throw new \Exception('AlgoliaSearch requires the JSON PHP extension.');
         }
         $this->cainfoPath = __DIR__ . '/resources/ca-bundle.crt';
+
         foreach ($options as $option => $value) {
             if ($option == "cainfo") {
                 $this->cainfoPath = $value;
@@ -149,17 +152,19 @@ class Client {
     }
 
     /*
-     * Change the default connect timeout of 5s to a custom value (only useful if your server has a very slow connectivity to Algolia backend)
+     * Change the default connect timeout of 2s to a custom value (only useful if your server has a very slow connectivity to Algolia backend)
      * @param connectTimeout the connection timeout
-     * @param timeout the global timeout for the query
+     * @param timeout the read timeout for the query
+     * @param searchTimeout the read timeout used for search queries only
      */
-    public function setConnectTimeout($connectTimeout, $timeout = 30) {
+    public function setConnectTimeout($connectTimeout, $timeout = 30, $searchTimeout = 5) {
         $version = curl_version();
         if ((version_compare(phpversion(), '5.2.3', '<') || version_compare($version['version'], '7.16.2', '<')) && $this->context->connectTimeout < 1) {
             throw new AlgoliaException("The timeout can't be a float with a PHP version less than 5.2.3 or a curl version less than 7.16.2");
         }
         $this->context->connectTimeout = $connectTimeout;
-        $this->context->timeout = $timeout;
+        $this->context->readTimeout = $timeout;
+        $this->context->searchTimeout = $searchTimeout;
     }
 
     /*
@@ -184,7 +189,7 @@ class Client {
      * Call isAlive
      */
     public function isAlive() {
-        $this->request($this->context, "GET", "/1/isalive");
+        $this->request($this->context, "GET", "/1/isalive", null, null, $this->context->readHostsArray, $this->context->connectTimeout, $this->context->readTimeout);
     }
 
     /*
@@ -198,7 +203,7 @@ class Client {
      * This method allows to query multiple indexes with one API call
      *
      */
-    public function multipleQueries($queries, $indexNameKey = "indexName") {
+    public function multipleQueries($queries, $indexNameKey = "indexName", $strategy = "none") {
         if ($queries == null) {
             throw new \Exception('No query provided');
         }
@@ -218,7 +223,7 @@ class Client {
             $req = array("indexName" => $indexes, "params" => http_build_query($query));
             array_push($requests, $req);
         }
-        return $this->request($this->context, "POST", "/1/indexes/*/queries", array(), array("requests" => $requests));
+        return $this->request($this->context, "POST", "/1/indexes/*/queries?strategy=" . $strategy, array(), array("requests" => $requests), $this->context->readHostsArray, $this->context->connectTimeout, $this->context->searchTimeout);
     }
 
     /*
@@ -230,7 +235,7 @@ class Client {
      *                        ))
      */
     public function listIndexes() {
-        return $this->request($this->context, "GET", "/1/indexes/");
+        return $this->request($this->context, "GET", "/1/indexes/", null, null, $this->context->readHostsArray, $this->context->connectTimeout, $this->context->readTimeout);
     }
 
     /*
@@ -240,7 +245,7 @@ class Client {
      * return an object containing a "deletedAt" attribute
      */
     public function deleteIndex($indexName) {
-        return $this->request($this->context, "DELETE", "/1/indexes/" . urlencode($indexName));
+        return $this->request($this->context, "DELETE", "/1/indexes/" . urlencode($indexName), null, null, $this->context->writeHostsArray, $this->context->connectTimeout, $this->context->readTimeout);
     }
 
     /**
@@ -250,7 +255,7 @@ class Client {
      */
     public function moveIndex($srcIndexName, $dstIndexName) {
         $request = array("operation" => "move", "destination" => $dstIndexName);
-        return $this->request($this->context, "POST", "/1/indexes/" . urlencode($srcIndexName) . "/operation", array(), $request);
+        return $this->request($this->context, "POST", "/1/indexes/" . urlencode($srcIndexName) . "/operation", array(), $request, $this->context->writeHostsArray, $this->context->connectTimeout, $this->context->readTimeout);
     }
 
     /**
@@ -260,7 +265,7 @@ class Client {
      */
     public function copyIndex($srcIndexName, $dstIndexName) {
         $request = array("operation" => "copy", "destination" => $dstIndexName);
-        return $this->request($this->context, "POST", "/1/indexes/" . urlencode($srcIndexName) . "/operation", array(), $request);
+        return $this->request($this->context, "POST", "/1/indexes/" . urlencode($srcIndexName) . "/operation", array(), $request, $this->context->writeHostsArray, $this->context->connectTimeout, $this->context->readTimeout);
     }
 
     /**
@@ -276,7 +281,7 @@ class Client {
                 $type = "all";
             }
         }
-        return $this->request($this->context, "GET", "/1/logs?offset=" . $offset . "&length=" . $length . "&type=" . $type);
+        return $this->request($this->context, "GET", "/1/logs?offset=" . $offset . "&length=" . $length . "&type=" . $type, null, null, $this->context->writeHostsArray, $this->context->connectTimeout, $this->context->readTimeout);
     }
 
     /*
@@ -296,7 +301,7 @@ class Client {
      *
      */
     public function listUserKeys() {
-        return $this->request($this->context, "GET", "/1/keys");
+        return $this->request($this->context, "GET", "/1/keys", null, null, $this->context->readHostsArray, $this->context->connectTimeout, $this->context->readTimeout);
     }
 
     /*
@@ -304,7 +309,7 @@ class Client {
      *
      */
     public function getUserKeyACL($key) {
-        return $this->request($this->context, "GET", "/1/keys/" . $key);
+        return $this->request($this->context, "GET", "/1/keys/" . $key, null, null, $this->context->readHostsArray, $this->context->connectTimeout, $this->context->readTimeout);
     }
 
     /*
@@ -312,13 +317,24 @@ class Client {
      *
      */
     public function deleteUserKey($key) {
-        return $this->request($this->context, "DELETE", "/1/keys/" . $key);
+        return $this->request($this->context, "DELETE", "/1/keys/" . $key, null, null, $this->context->writeHostsArray, $this->context->connectTimeout, $this->context->readTimeout);
     }
 
     /*
      * Create a new user key
      *
-     * @param acls the list of ACL for this key. Defined by an array of strings that
+     * @param obj can be two different parameters:
+     * The list of parameters for this key. Defined by a NSDictionary that
+     * can contains the following values:
+     *   - acl: array of string
+     *   - indices: array of string
+     *   - validity: int
+     *   - referers: array of string
+     *   - description: string
+     *   - maxHitsPerQuery: integer
+     *   - queryParameters: string
+     *   - maxQueriesPerIPPerHour: integer
+     * Or the list of ACL for this key. Defined by an array of NSString that
      * can contains the following values:
      *   - search: allow to search (https and http)
      *   - addObject: allows to add/update an object in the index (https only)
@@ -331,23 +347,42 @@ class Client {
      * @param maxHitsPerQuery Specify the maximum number of hits this API key can retrieve in one call. Defaults to 0 (unlimited)
      * @param indexes Specify the list of indices to target (null means all)
      */
-    public function addUserKey($acls, $validity = 0, $maxQueriesPerIPPerHour = 0, $maxHitsPerQuery = 0, $indexes = null) {
-        $params = array(
-            "acl" => $acls,
-            "validity" => $validity,
-            "maxQueriesPerIPPerHour" => $maxQueriesPerIPPerHour,
-            "maxHitsPerQuery" => $maxHitsPerQuery
-        );
+    public function addUserKey($obj, $validity = 0, $maxQueriesPerIPPerHour = 0, $maxHitsPerQuery = 0, $indexes = null) {
+        if ($obj !== array_values($obj)) { // is dict of value
+            $params = $obj;
+            $params["validity"] = $validity;
+            $params["maxQueriesPerIPPerHour"] = $maxQueriesPerIPPerHour;
+            $params["maxHitsPerQuery"] = $maxHitsPerQuery;
+        } else {
+            $params = array(
+                "acl" => $obj,
+                "validity" => $validity,
+                "maxQueriesPerIPPerHour" => $maxQueriesPerIPPerHour,
+                "maxHitsPerQuery" => $maxHitsPerQuery
+            );
+        }
+
         if ($indexes != null) {
             $params['indexes'] = $indexes;
         }
-        return $this->request($this->context, "POST", "/1/keys", array(), $params);
+        return $this->request($this->context, "POST", "/1/keys", array(), $params, $this->context->writeHostsArray, $this->context->connectTimeout, $this->context->readTimeout);
     }
 
     /*
      * Update a user key
      *
-     * @param acls the list of ACL for this key. Defined by an array of strings that
+     * @param obj can be two different parameters:
+     * The list of parameters for this key. Defined by a NSDictionary that
+     * can contains the following values:
+     *   - acl: array of string
+     *   - indices: array of string
+     *   - validity: int
+     *   - referers: array of string
+     *   - description: string
+     *   - maxHitsPerQuery: integer
+     *   - queryParameters: string
+     *   - maxQueriesPerIPPerHour: integer
+     * Or the list of ACL for this key. Defined by an array of NSString that
      * can contains the following values:
      *   - search: allow to search (https and http)
      *   - addObject: allows to add/update an object in the index (https only)
@@ -360,17 +395,33 @@ class Client {
      * @param maxHitsPerQuery Specify the maximum number of hits this API key can retrieve in one call. Defaults to 0 (unlimited)
      * @param indexes Specify the list of indices to target (null means all)
      */
-    public function updateUserKey($key, $acls, $validity = 0, $maxQueriesPerIPPerHour = 0, $maxHitsPerQuery = 0, $indexes = null) {
-        $params = array(
-            "acl" => $acls,
-            "validity" => $validity,
-            "maxQueriesPerIPPerHour" => $maxQueriesPerIPPerHour,
-            "maxHitsPerQuery" => $maxHitsPerQuery
-        );
+    public function updateUserKey($key, $obj, $validity = 0, $maxQueriesPerIPPerHour = 0, $maxHitsPerQuery = 0, $indexes = null) {
+        if ($obj !== array_values($obj)) { // is dict of value
+            $params = $obj;
+            $params["validity"] = $validity;
+            $params["maxQueriesPerIPPerHour"] = $maxQueriesPerIPPerHour;
+            $params["maxHitsPerQuery"] = $maxHitsPerQuery;
+        } else {
+            $params = array(
+                "acl" => $obj,
+                "validity" => $validity,
+                "maxQueriesPerIPPerHour" => $maxQueriesPerIPPerHour,
+                "maxHitsPerQuery" => $maxHitsPerQuery
+            );
+        }
         if ($indexes != null) {
             $params['indexes'] = $indexes;
         }
-        return $this->request($this->context, "PUT", "/1/keys/" . $key, array(), $params);
+        return $this->request($this->context, "PUT", "/1/keys/" . $key, array(), $params, $this->context->writeHostsArray, $this->context->connectTimeout, $this->context->readTimeout);
+    }
+
+    /**
+     * Send a batch request targeting multiple indices
+     * @param  $requests an associative array defining the batch request body
+     */
+    public function batch($requests) {
+        return $this->request($this->context, "POST", "/1/indexes/*/batch", array(), array("requests" => $requests),
+            $this->context->writeHostsArray, $this->context->connectTimeout, $this->context->readTimeout);
     }
 
     /*
@@ -401,11 +452,17 @@ class Client {
         return hash_hmac('sha256', $tagFilters . $userToken, $privateApiKey);
     }
 
-    public function request($context, $method, $path, $params = array(), $data = array()) {
+    public function request($context, $method, $path, $params = array(), $data = array(), $hostsArray, $connectTimeout, $readTimeout) {
         $exceptions = array();
-        foreach ($context->hostsArray as &$host) {
+        $cnt = 0;
+        foreach ($hostsArray as &$host) {
+            $cnt += 1;
+            if ($cnt == 3) {
+                $connectTimeout += 2;
+                $readTimeout += 10;
+            }
             try {
-                $res = $this->doRequest($context, $method, $host, $path, $params, $data);
+                $res = $this->doRequest($context, $method, $host, $path, $params, $data, $connectTimeout, $readTimeout);
                 if ($res !== null)
                     return $res;
             } catch (AlgoliaException $e) {
@@ -417,7 +474,7 @@ class Client {
         throw new AlgoliaException('Hosts unreachable: ' . join(",", $exceptions));
     }
 
-    public function doRequest($context, $method, $host, $path, $params, $data) {
+    public function doRequest($context, $method, $host, $path, $params, $data, $connectTimeout, $readTimeout) {
         if (strpos($host, "http") === 0) {
             $url = $host . $path;
         } else {
@@ -453,7 +510,7 @@ class Client {
                 'Content-type: application/json'
             ), $context->headers));
         }
-        curl_setopt($curlHandle, CURLOPT_USERAGENT, "Algolia for PHP " . Version::VALUE);
+        curl_setopt($curlHandle, CURLOPT_USERAGENT, "Algolia for PHP " . Version::get());
         //Return the output instead of printing it
         curl_setopt($curlHandle, CURLOPT_RETURNTRANSFER, true);
         curl_setopt($curlHandle, CURLOPT_FAILONERROR, true);
@@ -464,12 +521,12 @@ class Client {
 
         curl_setopt($curlHandle, CURLOPT_URL, $url);
         $version = curl_version();
-        if (version_compare(phpversion(), '5.2.3', '>=') && version_compare($version['version'], '7.16.2', '>=') && $this->context->connectTimeout < 1) {
-            curl_setopt($curlHandle, CURLOPT_CONNECTTIMEOUT_MS, $this->context->connectTimeout * 1000);
-            curl_setopt($curlHandle, CURLOPT_TIMEOUT_MS, $this->context->timeout * 1000);
+        if (version_compare(phpversion(), '5.2.3', '>=') && version_compare($version['version'], '7.16.2', '>=') && $connectTimeout < 1) {
+            curl_setopt($curlHandle, CURLOPT_CONNECTTIMEOUT_MS, $connectTimeout * 1000);
+            curl_setopt($curlHandle, CURLOPT_TIMEOUT_MS, $readTimeout * 1000);
         } else {
-            curl_setopt($curlHandle, CURLOPT_CONNECTTIMEOUT, $this->context->connectTimeout);
-            curl_setopt($curlHandle, CURLOPT_TIMEOUT, $this->context->timeout);
+            curl_setopt($curlHandle, CURLOPT_CONNECTTIMEOUT, $connectTimeout);
+            curl_setopt($curlHandle, CURLOPT_TIMEOUT, $readTimeout);
         }
 
         curl_setopt($curlHandle, CURLOPT_NOSIGNAL, 1); # The problem is that on (Li|U)nix, when libcurl uses the standard name resolver, a SIGALRM is raised during name resolution which libcurl thinks is the timeout alarm.
@@ -525,16 +582,10 @@ class Client {
         $context->releaseMHandle($curlHandle);
         curl_close($curlHandle);
 
-        if ($http_status == 400) {
-            throw new AlgoliaException(isset($answer['message']) ? $answer['message'] : "Bad request");
+        if (intval($http_status / 100) == 4) {
+            throw new AlgoliaException(isset($answer['message']) ? $answer['message'] : $http_status + " error");
         }
-        elseif ($http_status === 403) {
-            throw new AlgoliaException(isset($answer['message']) ? $answer['message'] : "Invalid Application-ID or API-Key");
-        }
-        elseif ($http_status === 404) {
-            throw new AlgoliaException(isset($answer['message']) ? $answer['message'] : "Resource does not exist");
-        }
-        elseif ($http_status != 200 && $http_status != 201) {
+        elseif (intval($http_status / 100) != 2) {
             throw new \Exception($http_status . ": " . $response);
         }
 
@@ -566,14 +617,17 @@ class Client {
     }
 }
 
+
 /*
  * Contains all the functions related to one index
  * You should use Client.initIndex(indexName) to retrieve this object
  */
 class Index {
-    private $indexName;
+
+    public $indexName;
     private $client;
     private $urlIndexName;
+
     /*
      * Index initialization (You should not call this initialized yourself)
      */
@@ -583,6 +637,7 @@ class Index {
         $this->indexName = $indexName;
         $this->urlIndexName = urlencode($indexName);
     }
+
     /*
      * Perform batch operation on several objects
      *
@@ -592,21 +647,28 @@ class Index {
      */
     public function batchObjects($objects, $objectIDKey = "objectID", $objectActionKey = "objectAction") {
         $requests = array();
+
         foreach ($objects as $obj) {
             // If no or invalid action, assume updateObject
             if (! isset($obj[$objectActionKey]) || ! in_array($obj[$objectActionKey], array('addObject', 'updateObject', 'deleteObject', 'partialUpdateObject', 'partialUpdateObjectNoCreate'))) {
                 throw new \Exception('invalid or no action detected');
             }
+
             $action = $obj[$objectActionKey];
             unset($obj[$objectActionKey]); // The action key is not included in the object
+
             $req = array("action" => $action, "body" => $obj);
+
             if (array_key_exists($objectIDKey, $obj)) {
                 $req["objectID"] = (string) $obj[$objectIDKey];
             }
+
             $requests[] = $req;
         }
+
         return $this->batch(array("requests" => $requests));
     }
+
     /*
      * Add an object in this index
      *
@@ -616,12 +678,14 @@ class Index {
      * (if the attribute already exist the old object will be overwrite)
      */
     public function addObject($content, $objectID = null) {
+
         if ($objectID === null) {
-            return $this->client->request($this->context, "POST", "/1/indexes/" . $this->urlIndexName, array(), $content);
+            return $this->client->request($this->context, "POST", "/1/indexes/" . $this->urlIndexName, array(), $content, $this->context->writeHostsArray, $this->context->connectTimeout, $this->context->readTimeout);
         } else {
-            return $this->client->request($this->context, "PUT", "/1/indexes/" . $this->urlIndexName . "/" . urlencode($objectID), array(), $content);
+            return $this->client->request($this->context, "PUT", "/1/indexes/" . $this->urlIndexName . "/" . urlencode($objectID), array(), $content, $this->context->writeHostsArray, $this->context->connectTimeout, $this->context->readTimeout);
         }
     }
+
     /*
      * Add several objects
      *
@@ -631,6 +695,7 @@ class Index {
         $requests = $this->buildBatch("addObject", $objects, true, $objectIDKey);
         return $this->batch($requests);
     }
+
     /*
      * Get an object from this index
      *
@@ -640,10 +705,11 @@ class Index {
     public function getObject($objectID, $attributesToRetrieve = null) {
         $id = urlencode($objectID);
         if ($attributesToRetrieve === null)
-            return $this->client->request($this->context, "GET", "/1/indexes/" . $this->urlIndexName . "/" . $id);
+            return $this->client->request($this->context, "GET", "/1/indexes/" . $this->urlIndexName . "/" . $id, null, null, $this->context->readHostsArray, $this->context->connectTimeout, $this->context->readTimeout);
         else
-            return $this->client->request($this->context, "GET", "/1/indexes/" . $this->urlIndexName . "/" . $id, array("attributes" => $attributesToRetrieve));
+            return $this->client->request($this->context, "GET", "/1/indexes/" . $this->urlIndexName . "/" . $id, array("attributes" => $attributesToRetrieve), null, $this->context->readHostsArray, $this->context->connectTimeout, $this->context->readTimeout);
     }
+
     /*
      * Get several objects from this index
      *
@@ -658,8 +724,9 @@ class Index {
             $req = array("indexName" => $this->indexName, "objectID" => $object);
             array_push($requests, $req);
         }
-        return $this->client->request($this->context, "POST", "/1/indexes/*/objects", array(), array("requests" => $requests));
+        return $this->client->request($this->context, "POST", "/1/indexes/*/objects", array(), array("requests" => $requests), $this->context->readHostsArray, $this->context->connectTimeout, $this->context->readTimeout);
     }
+
     /*
      * Update partially an object (only update attributes passed in argument)
      *
@@ -667,8 +734,9 @@ class Index {
      *  object must contains an objectID attribute
      */
     public function partialUpdateObject($partialObject, $createIfNotExists = true) {
-        return $this->client->request($this->context, "POST", "/1/indexes/" . $this->urlIndexName . "/" . urlencode($partialObject["objectID"]) . "/partial" . ($createIfNotExists ? "" : "?createIfNotExists=false"), array(), $partialObject);
+        return $this->client->request($this->context, "POST", "/1/indexes/" . $this->urlIndexName . "/" . urlencode($partialObject["objectID"]) . "/partial" . ($createIfNotExists ? "" : "?createIfNotExists=false"), array(), $partialObject, $this->context->writeHostsArray, $this->context->connectTimeout, $this->context->readTimeout);
     }
+
     /*
      * Partially Override the content of several objects
      *
@@ -682,14 +750,16 @@ class Index {
         }
         return $this->batch($requests);
     }
+
     /*
      * Override the content of object
      *
      * @param object contains the object to save, the object must contains an objectID attribute
      */
     public function saveObject($object) {
-        return $this->client->request($this->context, "PUT", "/1/indexes/" . $this->urlIndexName . "/" . urlencode($object["objectID"]), array(), $object);
+        return $this->client->request($this->context, "PUT", "/1/indexes/" . $this->urlIndexName . "/" . urlencode($object["objectID"]), array(), $object, $this->context->writeHostsArray, $this->context->connectTimeout, $this->context->readTimeout);
     }
+
     /*
      * Override the content of several objects
      *
@@ -699,6 +769,7 @@ class Index {
         $requests = $this->buildBatch("updateObject", $objects, true, $objectIDKey);
         return $this->batch($requests);
     }
+
     /*
      * Delete an object from the index
      *
@@ -708,8 +779,9 @@ class Index {
         if ($objectID == null || mb_strlen($objectID) == 0) {
             throw new \Exception('objectID is mandatory');
         }
-        return $this->client->request($this->context, "DELETE", "/1/indexes/" . $this->urlIndexName . "/" . urlencode($objectID));
+        return $this->client->request($this->context, "DELETE", "/1/indexes/" . $this->urlIndexName . "/" . urlencode($objectID), null, null, $this->context->writeHostsArray, $this->context->connectTimeout, $this->context->readTimeout);
     }
+
     /*
      * Delete several objects
      *
@@ -723,6 +795,7 @@ class Index {
         $requests = $this->buildBatch("deleteObject", $objectIDs, true);
         return $this->batch($requests);
     }
+
     /*
      * Delete all objects matching a query
      *
@@ -743,6 +816,7 @@ class Index {
             $results = $this->search($query, $args);
         }
     }
+
     /*
      * Search inside the index
      *
@@ -811,8 +885,9 @@ class Index {
             $args = array();
         }
         $args["query"] = $query;
-        return $this->client->request($this->context, "GET", "/1/indexes/" . $this->urlIndexName, $args);
+        return $this->client->request($this->context, "GET", "/1/indexes/" . $this->urlIndexName, $args, null, $this->context->readHostsArray, $this->context->connectTimeout, $this->context->searchTimeout);
     }
+
     /*
      * Perform a search with disjunctive facets generating as many queries as number of disjunctive facets
      *
@@ -829,9 +904,11 @@ class Index {
         if (gettype($refinements) != "array") {
             throw new AlgoliaException("Argument \"refinements\" must be a Hash of Arrays");
         }
+
         if (gettype($disjunctive_facets) == "string") {
             $disjunctive_facets = split(",", $disjunctive_facets);
         }
+
         $disjunctive_refinements = array();
         foreach ($refinements as $key => $value) {
             if (in_array($key, $disjunctive_facets)) {
@@ -840,8 +917,10 @@ class Index {
         }
         $queries = array();
         $filters = array();
+
         foreach ($refinements as $key => $value) {
             $r = array_map(function ($val) use ($key) { return $key . ":" . $val;}, $value);
+
             if (in_array($key, $disjunctive_refinements)) {
                 $filter = array_merge($filters, $r);
             } else {
@@ -857,6 +936,7 @@ class Index {
             foreach ($refinements as $key => $value) {
                 if ($key != $disjunctive_facet) {
                     $r = array_map(function($val) use($key) { return $key . ":" . $val;}, $value);
+
                     if (in_array($key, $disjunctive_refinements)) {
                         $filter = array_merge($filters, $r);
                     } else {
@@ -868,14 +948,16 @@ class Index {
             $params["query"] = $query;
             $params["facetFilters"] = $filters;
             $params["page"] = 0;
-            $params["hitsPerPage"] = 1;
+            $params["hitsPerPage"] = 0;
             $params["attributesToRetrieve"] = array();
             $params["attributesToHighlight"] = array();
             $params["attributesToSnippet"] = array();
             $params["facets"] = $disjunctive_facet;
+            $params["analytics"] = false;
             array_push($queries, $params);
         }
         $answers = $this->client->multipleQueries($queries);
+
         $aggregated_answer = $answers['results'][0];
         $aggregated_answer['disjunctiveFacets'] = array();
         for ($i = 1; $i < count($answers['results']); $i++) {
@@ -893,6 +975,7 @@ class Index {
         }
         return $aggregated_answer;
     }
+
     /*
      * Browse all index content
      *
@@ -902,8 +985,9 @@ class Index {
      */
     public function browse($page = 0, $hitsPerPage = 1000) {
         return $this->client->request($this->context, "GET", "/1/indexes/" . $this->urlIndexName . "/browse",
-            array("page" => $page, "hitsPerPage" => $hitsPerPage));
+            array("page" => $page, "hitsPerPage" => $hitsPerPage), null, $this->context->readHostsArray, $this->context->connectTimeout, $this->context->readTimeout);
     }
+
     /*
      * Wait the publication of a task on the server.
      * All server task are asynchronous and you can check with this method that the task is published.
@@ -913,25 +997,28 @@ class Index {
      */
     public function waitTask($taskID, $timeBeforeRetry = 100) {
         while (true) {
-            $res = $this->client->request($this->context, "GET", "/1/indexes/" . $this->urlIndexName . "/task/" . $taskID);
+            $res = $this->client->request($this->context, "GET", "/1/indexes/" . $this->urlIndexName . "/task/" . $taskID, null, null, $this->context->readHostsArray, $this->context->connectTimeout, $this->context->readTimeout);
             if ($res["status"] === "published")
                 return $res;
             usleep($timeBeforeRetry * 1000);
         }
     }
+
     /*
      * Get settings of this index
      *
      */
     public function getSettings() {
-        return $this->client->request($this->context, "GET", "/1/indexes/" . $this->urlIndexName . "/settings");
+        return $this->client->request($this->context, "GET", "/1/indexes/" . $this->urlIndexName . "/settings", null, null, $this->context->readHostsArray, $this->context->connectTimeout, $this->context->readTimeout);
     }
+
     /*
      * This function deletes the index content. Settings and index specific API keys are kept untouched.
      */
     public function clearIndex() {
-        return $this->client->request($this->context, "POST", "/1/indexes/" . $this->urlIndexName . "/clear");
+        return $this->client->request($this->context, "POST", "/1/indexes/" . $this->urlIndexName . "/clear", null, null, $this->context->writeHostsArray, $this->context->connectTimeout, $this->context->readTimeout);
     }
+
     /*
      * Set settings for this index
      *
@@ -984,33 +1071,48 @@ class Index {
      * - optionalWords: (array of strings) Specify a list of words that should be considered as optional when found in the query.
      */
     public function setSettings($settings) {
-        return $this->client->request($this->context, "PUT", "/1/indexes/" . $this->urlIndexName . "/settings", array(), $settings);
+        return $this->client->request($this->context, "PUT", "/1/indexes/" . $this->urlIndexName . "/settings", array(), $settings, $this->context->writeHostsArray, $this->context->connectTimeout, $this->context->readTimeout);
     }
+
     /*
      * List all existing user keys associated to this index with their associated ACLs
      *
      */
     public function listUserKeys() {
-        return $this->client->request($this->context, "GET", "/1/indexes/" . $this->urlIndexName . "/keys");
+        return $this->client->request($this->context, "GET", "/1/indexes/" . $this->urlIndexName . "/keys", null, null, $this->context->readHostsArray, $this->context->connectTimeout, $this->context->readTimeout);
     }
+
     /*
      * Get ACL of a user key associated to this index
      *
      */
     public function getUserKeyACL($key) {
-        return $this->client->request($this->context, "GET", "/1/indexes/" . $this->urlIndexName . "/keys/" . $key);
+        return $this->client->request($this->context, "GET", "/1/indexes/" . $this->urlIndexName . "/keys/" . $key, null, null, $this->context->readHostsArray, $this->context->connectTimeout, $this->context->readTimeout);
     }
+
     /*
      * Delete an existing user key associated to this index
      *
      */
     public function deleteUserKey($key) {
-        return $this->client->request($this->context, "DELETE", "/1/indexes/" . $this->urlIndexName . "/keys/" . $key);
+        return $this->client->request($this->context, "DELETE", "/1/indexes/" . $this->urlIndexName . "/keys/" . $key, null, null, $this->context->writeHostsArray, $this->context->connectTimeout, $this->context->readTimeout);
     }
+
     /*
      * Create a new user key associated to this index
      *
-     * @param acls the list of ACL for this key. Defined by an array of strings that
+     * @param obj can be two different parameters:
+     * The list of parameters for this key. Defined by a NSDictionary that
+     * can contains the following values:
+     *   - acl: array of string
+     *   - indices: array of string
+     *   - validity: int
+     *   - referers: array of string
+     *   - description: string
+     *   - maxHitsPerQuery: integer
+     *   - queryParameters: string
+     *   - maxQueriesPerIPPerHour: integer
+     * Or the list of ACL for this key. Defined by an array of NSString that
      * can contains the following values:
      *   - search: allow to search (https and http)
      *   - addObject: allows to add/update an object in the index (https only)
@@ -1022,14 +1124,39 @@ class Index {
      * @param maxQueriesPerIPPerHour Specify the maximum number of API calls allowed from an IP address per hour.  Defaults to 0 (no rate limit).
      * @param maxHitsPerQuery Specify the maximum number of hits this API key can retrieve in one call. Defaults to 0 (unlimited)
      */
-    public function addUserKey($acls, $validity = 0, $maxQueriesPerIPPerHour = 0, $maxHitsPerQuery = 0) {
-        return $this->client->request($this->context, "POST", "/1/indexes/" . $this->urlIndexName . "/keys", array(),
-            array("acl" => $acls, "validity" => $validity, "maxQueriesPerIPPerHour" => $maxQueriesPerIPPerHour, "maxHitsPerQuery" => $maxHitsPerQuery));
+    public function addUserKey($obj, $validity = 0, $maxQueriesPerIPPerHour = 0, $maxHitsPerQuery = 0) {
+        if ($obj !== array_values($obj)) { // is dict of value
+            $params = $obj;
+            $params["validity"] = $validity;
+            $params["maxQueriesPerIPPerHour"] = $maxQueriesPerIPPerHour;
+            $params["maxHitsPerQuery"] = $maxHitsPerQuery;
+        } else {
+            $params = array(
+                "acl" => $obj,
+                "validity" => $validity,
+                "maxQueriesPerIPPerHour" => $maxQueriesPerIPPerHour,
+                "maxHitsPerQuery" => $maxHitsPerQuery
+            );
+        }
+        return $this->client->request($this->context, "POST", "/1/indexes/" . $this->urlIndexName . "/keys", array(), $params,
+            $this->context->writeHostsArray, $this->context->connectTimeout, $this->context->readTimeout);
     }
+
     /*
      * Update a user key associated to this index
      *
-     * @param acls the list of ACL for this key. Defined by an array of strings that
+     * @param obj can be two different parameters:
+     * The list of parameters for this key. Defined by a NSDictionary that
+     * can contains the following values:
+     *   - acl: array of string
+     *   - indices: array of string
+     *   - validity: int
+     *   - referers: array of string
+     *   - description: string
+     *   - maxHitsPerQuery: integer
+     *   - queryParameters: string
+     *   - maxQueriesPerIPPerHour: integer
+     * Or the list of ACL for this key. Defined by an array of NSString that
      * can contains the following values:
      *   - search: allow to search (https and http)
      *   - addObject: allows to add/update an object in the index (https only)
@@ -1041,17 +1168,33 @@ class Index {
      * @param maxQueriesPerIPPerHour Specify the maximum number of API calls allowed from an IP address per hour.  Defaults to 0 (no rate limit).
      * @param maxHitsPerQuery Specify the maximum number of hits this API key can retrieve in one call. Defaults to 0 (unlimited)
      */
-    public function updateUserKey($key, $acls, $validity = 0, $maxQueriesPerIPPerHour = 0, $maxHitsPerQuery = 0) {
-        return $this->client->request($this->context, "PUT", "/1/indexes/" . $this->urlIndexName . "/keys/" . $key , array(),
-            array("acl" => $acls, "validity" => $validity, "maxQueriesPerIPPerHour" => $maxQueriesPerIPPerHour, "maxHitsPerQuery" => $maxHitsPerQuery));
+    public function updateUserKey($key, $obj, $validity = 0, $maxQueriesPerIPPerHour = 0, $maxHitsPerQuery = 0) {
+        if ($obj !== array_values($obj)) { // is dict of value
+            $params = $obj;
+            $params["validity"] = $validity;
+            $params["maxQueriesPerIPPerHour"] = $maxQueriesPerIPPerHour;
+            $params["maxHitsPerQuery"] = $maxHitsPerQuery;
+        } else {
+            $params = array(
+                "acl" => $obj,
+                "validity" => $validity,
+                "maxQueriesPerIPPerHour" => $maxQueriesPerIPPerHour,
+                "maxHitsPerQuery" => $maxHitsPerQuery
+            );
+        }
+        return $this->client->request($this->context, "PUT", "/1/indexes/" . $this->urlIndexName . "/keys/" . $key , array(), $params,
+            $this->context->writeHostsArray, $this->context->connectTimeout, $this->context->readTimeout);
     }
+
     /**
      * Send a batch request
      * @param  $requests an associative array defining the batch request body
      */
     public function batch($requests) {
-        return $this->client->request($this->context, "POST", "/1/indexes/" . $this->urlIndexName . "/batch", array(), $requests);
+        return $this->client->request($this->context, "POST", "/1/indexes/" . $this->urlIndexName . "/batch", array(), $requests,
+            $this->context->writeHostsArray, $this->context->connectTimeout, $this->context->readTimeout);
     }
+
     /**
      * Build a batch request
      * @param  $action the batch action
@@ -1073,7 +1216,14 @@ class Index {
     }
 }
 
-class Version {
-    const VALUE = "1.5.4";
-}
+class Version
+{
+    const VALUE                   = "1.5.5";
 
+    public static $custom_value   = "";
+
+    public static function get()
+    {
+        return self::VALUE.static::$custom_value;
+    }
+}
