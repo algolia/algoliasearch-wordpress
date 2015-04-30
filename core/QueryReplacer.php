@@ -2,7 +2,6 @@
 
 class QueryReplacer
 {
-    private $algolia_helper;
     private $algolia_registry;
 
     private $total_result_count;
@@ -11,9 +10,8 @@ class QueryReplacer
 
     private $ids = array();
 
-    public function __construct(AlgoliaHelper $algolia_helper)
+    public function __construct()
     {
-        $this->algolia_helper = $algolia_helper;
         $this->algolia_registry = Registry::getInstance();
     }
 
@@ -22,7 +20,7 @@ class QueryReplacer
         if (function_exists('is_main_query') && ! $query->is_main_query())
             return $query;
 
-        if (is_search() && ! is_admin())
+        if (is_search() && ! is_admin() && $this->algolia_registry->validCredential)
         {
             if (in_array('instant', $this->algolia_registry->type_of_search))
             {
@@ -39,7 +37,13 @@ class QueryReplacer
                 'page'          => get_query_var('paged') ? get_query_var('paged') - 1 : 0
             );
 
-            $results = $this->algolia_helper->search($algolia_query, $options, $this->algolia_registry->index_name.'all');
+            $algolia_helper = new \Algolia\Core\AlgoliaHelper(
+                $this->algolia_registry->app_id,
+                $this->algolia_registry->search_key,
+                $this->algolia_registry->admin_key
+            );
+
+            $results = $algolia_helper->search($algolia_query, $options, $this->algolia_registry->index_name.'all');
 
             foreach ($results['hits'] as $result)
                 $this->ids[] = $result['objectID'];

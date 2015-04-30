@@ -19,9 +19,9 @@ class AlgoliaPlugin
                 $this->algolia_registry->search_key,
                 $this->algolia_registry->admin_key
             );
-
-            $this->query_replacer = new \Algolia\Core\QueryReplacer($this->algolia_helper);
         }
+
+        $this->query_replacer = new \Algolia\Core\QueryReplacer();
 
         $this->theme_helper = new \Algolia\Core\ThemeHelper();
 
