@@ -24,7 +24,7 @@ require_once(plugin_dir_path(__FILE__).'/core/QueryReplacer.php');
 require_once(plugin_dir_path(__FILE__).'/AlgoliaPlugin.php');
 require_once(plugin_dir_path(__FILE__).'/AlgoliaPluginAuto.php');
 
-\AlgoliaSearch\Version::$custom_value = " WORDPRESS (0.0.4)";
+\AlgoliaSearch\Version::$custom_value = " WORDPRESS (0.0.5)";
 
 
 new AlgoliaPlugin();

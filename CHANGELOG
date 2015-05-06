@@ -1,3 +1,6 @@
+version 0.0.5
+ - Fix Firefox bug
+
 version 0.0.4
  - update php & js client
  - fix various bug
