@@ -105,24 +105,6 @@ jQuery(document).ready(function ($) {
             hitsPerPage: algoliaSettings.number_by_page
         });
 
-        function activateInstant()
-        {
-            helper.on('result', searchCallback);
-        }
-
-        activateInstant();
-
-        function desactivateInstant()
-        {
-            helper.removeAllListeners();
-
-            location.replace('#');
-
-            $(algoliaSettings.instant_jquery_selector).html(old_content);
-        }
-
-        engine.setHelper(helper);
-
         /**
          * Functions
          */
@@ -162,6 +144,25 @@ jQuery(document).ready(function ($) {
 
             updateSliderValues();
         }
+
+        function activateInstant()
+        {
+            helper.on('result', searchCallback);
+        }
+
+        activateInstant();
+
+        function desactivateInstant()
+        {
+            helper.removeAllListeners();
+
+            location.replace('#');
+
+            $(algoliaSettings.instant_jquery_selector).html(old_content);
+        }
+
+        engine.setHelper(helper);
+
 
         /**
          * Custom Facets Types
