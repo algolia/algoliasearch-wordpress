@@ -343,7 +343,7 @@ jQuery(document).ready(function ($) {
             engine.getRefinementsFromUrl();
         });
 
-        if (algoliaSettings.type_of_search.indexOf("autocomplete") !== -1)
+        if (algoliaSettings.type_of_search.indexOf("autocomplete") !== -1 && algoliaSettings.type_of_search.indexOf("instant") !== -1)
         {
             if (location.hash.length <= 1)
             {
