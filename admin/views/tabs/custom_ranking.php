@@ -53,9 +53,6 @@
                     && in_array($meta_key, array_keys($algolia_registry->metas[$type]))
                     && $algolia_registry->metas[$type][$meta_key]["indexable"])
                 {
-                    if (isset($custom_rankings[$type]) == false)
-                        $custom_rankings[$type] = array();
-
                     $rankable           = new stdClass();
                     $rankable->name     = $meta_key;
                     $rankable->type     = $type;
@@ -81,6 +78,7 @@
             }
         }
     }
+
 
 ?>
 

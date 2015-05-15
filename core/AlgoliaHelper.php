@@ -1,5 +1,7 @@
 <?php namespace Algolia\Core;
 
+use AlgoliaSearch\AlgoliaException;
+
 class AlgoliaHelper
 {
     private $algolia_client;
@@ -104,7 +106,7 @@ class AlgoliaHelper
                 $attributesToIndex[] = $key;
 
         foreach ($attributesToSnippet as &$attribute)
-            if ($attribute == 'content' || $attribute == 'content_stripped')
+            if ($attribute == 'content')
                 $attribute = $attribute.':'.$this->algolia_registry->number_of_word_for_content;
 
         $defaultSettings = array(
@@ -228,14 +230,36 @@ class AlgoliaHelper
     {
         $index = $this->algolia_client->initIndex($index_name);
 
-        $index->saveObjects($objects);
+        try
+        {
+            $index->saveObjects($objects);
+        }
+        catch(AlgoliaException $e)
+        {
+            if (strstr($e->getMessage(), 'Record is too big') == false)
+                throw $e;
+
+            echo "<div>One of your record is too big. You can activate truncate is the plugin admin panel</div>";
+        }
     }
 
     public function pushObject($index_name, $object)
     {
         $index = $this->algolia_client->initIndex($index_name);
 
-        $index->saveObject($object);
+        try
+        {
+            $index->saveObject($object);
+        }
+        catch(AlgoliaException $e)
+        {
+            if (strstr($e->getMessage(), 'Record is too big') == false)
+                throw $e;
+
+            echo "Your record is too big. You can re-activate truncate is the Algolia plugin admin panel or contact support";
+
+            die();
+        }
     }
 
     public function deleteObject($index_name, $object)

@@ -13,6 +13,7 @@
 defined( 'ABSPATH' ) or die( 'Not Allowed' );
 
 require_once(plugin_dir_path(__FILE__).'/lib/algolia/algoliasearch.php');
+require_once(plugin_dir_path(__FILE__).'/lib/dom/simple_html_dom.php');
 
 require_once(plugin_dir_path(__FILE__).'/core/Indexer.php');
 require_once(plugin_dir_path(__FILE__).'/core/AlgoliaHelper.php');
@@ -23,6 +24,7 @@ require_once(plugin_dir_path(__FILE__).'/core/QueryReplacer.php');
 
 require_once(plugin_dir_path(__FILE__).'/AlgoliaPlugin.php');
 require_once(plugin_dir_path(__FILE__).'/AlgoliaPluginAuto.php');
+
 
 \AlgoliaSearch\Version::$custom_value = " WORDPRESS (0.0.6)";
 
@@ -36,13 +38,13 @@ new AlgoliaPluginAuto();
 
 $batch_count = 100;
 
-$attributesToSnippet    = array("content", "content_stripped");
+$attributesToSnippet    = array("content");
 
 /**
  * Defaults Variables
  */
 
-$attributesToIndex      = array("title", "content", "content_stripped", "author", "type");
+$attributesToIndex      = array("title", "content", "author", "type");
 
 /**
  * Handling Extension
@@ -137,6 +139,25 @@ function my_excerpt($text, $excerpt)
     } else {
         $text = implode(' ', $words);
     }
+
+    return apply_filters('wp_trim_excerpt', $text);
+}
+
+function truncate($text, $length)
+{
+    $text           = strip_shortcodes( $text );
+    $text           = apply_filters('the_content', $text);
+    $text           = str_replace(']]>', ']]&gt;', $text);
+    $excerpt_length = apply_filters('excerpt_length', $length);
+    $words          = preg_split("/[\n\r\t ]+/", $text, $excerpt_length + 1, PREG_SPLIT_NO_EMPTY);
+
+    if (count($words) > $excerpt_length)
+    {
+        array_pop($words);
+        $text = implode(' ', $words);
+    }
+    else
+        $text = implode(' ', $words);
 
     return apply_filters('wp_trim_excerpt', $text);
 }

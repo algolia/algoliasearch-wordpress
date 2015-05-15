@@ -91,7 +91,13 @@ class WordpressFetcher
         return $image;
     }
 
-
+    private function strip($s)
+    {
+        $s = trim(preg_replace('/\s+/', ' ', $s));
+        $s = preg_replace('/&nbsp;/', ' ', $s);
+        $s = preg_replace('!\s+!', ' ', $s);
+        return trim(strip_tags($s));
+    }
 
     public function getTermObj($data)
     {
@@ -108,13 +114,83 @@ class WordpressFetcher
         return (array) $obj;
     }
 
-    private function strip($s)
+    public function getContent($data, &$obj)
     {
-        $s = trim(preg_replace('/\s+/', ' ', $s));
-        $s = preg_replace('/&nbsp;/', ' ', $s);
-        $s = preg_replace('!\s+!', ' ', $s);
+        if ($data->post_type != "post" && $data->post_type != "page")
+            return;
 
-        return trim(strip_tags($s));
+        $html = $obj->content;
+
+        if ($html == "")
+            return;
+
+        unset($obj->content);
+
+        $html = preg_replace( '/>(\s|\n|\r)+</', '><', $html);
+
+        $html = str_get_html($html);
+
+        $nodes = $html->root->nodes;
+
+        while (count($nodes) == 1 && count($nodes[0]->nodes) >= 1)
+            $nodes = $nodes[0]->nodes;
+
+        $obj->h1 = array();
+        $obj->h2 = array();
+        $obj->h3 = array();
+        $obj->h4 = array();
+        $obj->h5 = array();
+        $obj->h6 = array();
+        $obj->text = array();
+
+        $tags = array('h1', 'h2', 'h3', 'h4', 'h5', 'h6');
+        $excludedTags = array('hr');
+
+        $order = 0;
+
+        /** @var \simple_html_dom_node $child */
+        foreach ($nodes as $child)
+        {
+            if (in_array($child->tag, $excludedTags))
+                continue;
+
+            if (in_array($child->tag, $tags))
+                $obj->{$child->tag}[] = array('order' => $order, 'value' => $this->strip($child->innertext()));
+            else
+                $obj->text[] = array('order' => $order, 'value' => $this->strip($child->innertext()));
+
+            $order++;
+        }
+
+        $max_size = 9000;
+
+        $size = 0;
+
+        $too_much = false;
+
+        foreach (array_merge($tags, array("text")) as $tag)
+        {
+            foreach ($obj->$tag as $key => $tag_element)
+            {
+                $add_size = mb_strlen(json_encode($tag_element));
+
+                if ($size + $add_size <= $max_size)
+                    $size += $add_size;
+                else
+                    $too_much = true;
+
+                if ($too_much)
+                {
+                    if ($max_size - $size > 0)
+                    {
+                        $obj->{$tag}[$key]['value'] = substr($obj->{$tag}[$key]['value'], 0, $max_size - $size);
+                        $size = $max_size;
+                    }
+                    else
+                        unset($obj->{$tag}[$key]);
+                }
+            }
+        }
     }
 
     public function getPostObj($data)
@@ -131,13 +207,13 @@ class WordpressFetcher
             $obj->$name = $this->cast($data->$key, $value["type"]);
         }
 
-        $obj->content_stripped  = $this->strip($obj->content);
-
         $obj->author            = get_the_author_meta('display_name', $data->post_author);
         $obj->author_first_name = get_the_author_meta('first_name', $data->post_author);
         $obj->author_last_name  = get_the_author_meta('last_name', $data->post_author);
         $obj->author_login      = get_the_author_meta('user_login', $data->post_author);
         $obj->permalink         = get_permalink($data->ID);
+
+        $this->getContent($data, $obj);
 
         unset($obj->excerpt);
         //$obj->excerpt           = my_excerpt($data->post_content, get_the_excerpt());

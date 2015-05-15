@@ -242,6 +242,81 @@ if (algoliaSettings.type_of_search.indexOf("instant") !== -1)
 
                 this.getHtmlForResults = function (resultsTemplate, content, facets) {
 
+                    var fields = ['h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'text'];
+
+                    for (var l = 0; l < content.hits.length; l++)
+                    {
+                        if (content.hits[l].type != 'page' && content.hits[l].type != 'post')
+                            continue;
+
+                        var content_matches = {};
+
+
+                        var highligth_hit = content.hits[l]._highlightResult;
+
+                        for (var i = 0; i < fields.length; i++)
+                        {
+                            if (highligth_hit[fields[i]] != undefined)
+                            {
+                                for (var j = 0; j < highligth_hit[fields[i]].length; j++)
+                                {
+                                    for (var k = 0; k < highligth_hit[fields[i]][j].value.matchedWords.length; k++)
+                                    {
+                                        if (content_matches[highligth_hit[fields[i]][j].value.matchedWords[k]] == undefined)
+                                        {
+                                            content_matches[highligth_hit[fields[i]][j].value.matchedWords[k]] = {i: i, type: fields[i], order: highligth_hit[fields[i]][j].order, count : highligth_hit[fields[i]][j].value.matchedWords.length, value: highligth_hit[fields[i]][j].value.value};
+                                        }
+                                        else
+                                        {
+                                            if (i == content_matches[highligth_hit[fields[i]][j].value.matchedWords[k]].i
+                                                && highligth_hit[fields[i]][j].value.matchedWords.length > content_matches[highligth_hit[fields[i]][j].value.matchedWords[k]].count)
+                                            {
+                                                content_matches[highligth_hit[fields[i]][j].value.matchedWords[k]] = {i: i, type: fields[i], order: highligth_hit[fields[i]][j].order, count : highligth_hit[fields[i]][j].value.matchedWords.length, value: highligth_hit[fields[i]][j].value.value};
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+
+                        content_matches = $.map(content_matches, function(value, index) {
+                            return [value];
+                        });
+
+
+                        content_matches.sort(function (a, b) {
+                            if (a.order < b.order)
+                                return -1;
+                            return 1;
+                        });
+
+
+                        content.hits[l]._highlightResult = {};
+                        content.hits[l]._highlightResult.content = {};
+                        content.hits[l]._highlightResult.content.value = "";
+
+                        var separator = "<div>[...]</div>";
+                        var old_order = -1;
+                        for (i = 0; i < content_matches.length; i++)
+                        {
+                            if (old_order != content_matches[i].order)
+                            {
+                                old_order = content_matches[i].order;
+
+                                content.hits[l]._highlightResult.content.value += "<div>" + content_matches[i].value + "</div>";
+                                content.hits[l]._highlightResult.content.value += separator;
+                            }
+                        }
+
+                        content.hits[l]._highlightResult.content.value = content.hits[l]._highlightResult.content.value.substring(0, content.hits[l]._highlightResult.content.value.length - separator.length);
+
+
+                        console.log(content.hits[l]._highlightResult.content.value);
+
+                    }
+
+
+
                     var results_html = resultsTemplate.render({
                         facets_count: facets.length,
                         getDate: this.getDate,

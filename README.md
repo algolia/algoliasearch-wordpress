@@ -275,13 +275,13 @@ If you want to integrate a plugin that is not handled out of the box, you will n
 In the `algolia.php` file in the root directory of the plugin you can change the following two lines:
 
 ```php
-$attributesToSnippet    = array("content", "content_stripped");
+$attributesToSnippet    = array("content");
 ```
 
-For the attributes to snippet you can add a length **EXCEPT for "content" and "content_stripped" which is set from the params in UI integration**. If you add an attribute it should look like
+For the attributes to snippet you can add a length **EXCEPT for "content" which is set from the params in UI integration**. If you add an attribute it should look like
 
 ```php
-$attributesToSnippet    = array("content", "content_stripped", "description:30");
+$attributesToSnippet    = array("content", "description:30");
 ```
 
 ### What happens if I modify a setting from the Algolia dashboard?

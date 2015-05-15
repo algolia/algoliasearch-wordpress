@@ -254,7 +254,7 @@ jQuery(document).ready(function($) {
                 "<div style='float: left; margin-left: 20px'>" + percent + "%</div>"
         }
 
-        function render(action, i, n)
+        function render(action, i, n, result)
         {
             var percentage = Math.ceil(i * 100 / n);
             if (i == -1)
@@ -269,6 +269,7 @@ jQuery(document).ready(function($) {
                 "<tr>" +
                 "<td>" + action.name + " " + action.sup + "<td>" +
                 "<td>[OK]</td>" +
+                "<td>" + result + "</td>" +
                 "</tr>");
         }
 
@@ -313,7 +314,7 @@ jQuery(document).ready(function($) {
                     url: base_url,
                     data: { action: "reindex", subaction: actions[0].subaction },
                     success: function (result) {
-                        render(actions[0], i + 1, n);
+                        render(actions[0], i + 1, n, result);
 
                         actions = actions.slice(1);
 
