@@ -4,7 +4,7 @@
 
 This plugin replaces the default search of Wordpress with an Algolia realtime search. It has been designed in a generic way to support plugins like WooCommerce in addition to the standard blog system.
 
-![Latest version](https://img.shields.io/badge/latest-0.0.6-green.svg)
+![Latest version](https://img.shields.io/badge/latest-0.0.7-green.svg)
 ![MIT](http://img.shields.io/badge/license-MIT-green.svg?style=flat-square)
 ![Wordpress 4.2](https://img.shields.io/badge/wordpress-4.2.x-blue.svg)
 ![Wordpress 4.1](https://img.shields.io/badge/wordpress-4.1.x-blue.svg)

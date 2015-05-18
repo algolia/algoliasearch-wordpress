@@ -1,3 +1,7 @@
+version 0.0.7
+ - Add a better strategy to index content for page and post
+ - Handle content truncating
+
 version 0.0.6
  - Fix js bug when type of search has only autocomplete
 
