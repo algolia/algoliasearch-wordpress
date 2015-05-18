@@ -235,12 +235,15 @@ class AlgoliaHelper
             if (strstr($e->getMessage(), 'Record is too big') == false)
                 throw $e;
 
-            echo "<div>One of your record is too big. You can activate truncate is the plugin admin panel</div>";
+            echo "<div>One of your record is too big. You need to reconfigure truncation in the Algolia plugin admin panel or contact support to increase record size limit</div>";
         }
     }
 
     public function pushObject($index_name, $object)
     {
+        if (isset($_GET['reload']))
+            return;
+
         $index = $this->algolia_client->initIndex($index_name);
 
         try
@@ -252,7 +255,13 @@ class AlgoliaHelper
             if (strstr($e->getMessage(), 'Record is too big') == false)
                 throw $e;
 
-            echo "Your record is too big. You can re-activate truncate is the Algolia plugin admin panel or contact support";
+            echo "<div>Your record is too big. You need to reconfigure truncation in the Algolia plugin admin panel or contact support to increase record size limit</div>";
+            echo "<div>You will be redirected in 5 seconds</div>";
+            echo "<script>
+                setTimeout(function () {
+                    window.location = window.location + '?reload=true';
+                }, 5000);
+            </script>";
 
             die();
         }
