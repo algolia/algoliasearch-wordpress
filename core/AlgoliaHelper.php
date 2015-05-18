@@ -105,10 +105,6 @@ class AlgoliaHelper
             else
                 $attributesToIndex[] = $key;
 
-        foreach ($attributesToSnippet as &$attribute)
-            if ($attribute == 'content')
-                $attribute = $attribute.':'.$this->algolia_registry->number_of_word_for_content;
-
         $defaultSettings = array(
             "attributesToIndex"     => $attributesToIndex,
             "attributesToSnippet"   => $attributesToSnippet

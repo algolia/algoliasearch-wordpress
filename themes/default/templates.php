@@ -46,8 +46,10 @@
                     </div>
                     {{/featureImage}}
                     <div class="result-excerpt">
-                        {{{ _highlightResult.content.value }}}
-                        <a href="{{permalink}}" class="more-link">Continue reading…</a>
+                        <div>{{{ _highlightResult.content.value }}}</div>
+                        <div>
+                            <a href="{{permalink}}" class="more-link">Continue reading…</a>
+                        </div>
                     </div>
                 </div>
             </div>

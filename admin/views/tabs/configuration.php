@@ -60,11 +60,6 @@
                             <input type="number" min="0" value="<?php echo $algolia_registry->number_by_page; ?>" name="NUMBER_BY_PAGE" id="instant_radio_instant_nb_results">
                             <p class="description">The number of results to display on a results page.</p>
                         </div>
-                        <div>
-                            <label for="instant_radio_content_nb_snippet">Number of words on the content snippet</label>
-                            <input type="number" min="0" value="<?php echo $algolia_registry->number_of_word_for_content; ?>" name="NUMBER_OF_WORD_FOR_CONTENT" id="instant_radio_content_nb_snippet">
-                            <p class="description">The number words to keep while building the snippet.</p>
-                        </div>
                     </div>
                 </div>
                 <h3>Theme</h3>

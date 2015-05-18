@@ -34,7 +34,6 @@ class Registry
         'metas'                         => array(),
         'number_by_page'                => 10,
         'number_by_type'                => 3,
-        'number_of_word_for_content'    => 30,
         'search_input_selector'         => "[name='s']",
         'theme'                         => 'default',
         'last_update'                   => ''

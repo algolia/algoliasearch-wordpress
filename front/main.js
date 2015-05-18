@@ -251,6 +251,7 @@ if (algoliaSettings.type_of_search.indexOf("instant") !== -1)
 
                         var content_matches = {};
 
+                        var noHighlights = false;
 
                         var highligth_hit = content.hits[l]._highlightResult;
 
@@ -283,6 +284,20 @@ if (algoliaSettings.type_of_search.indexOf("instant") !== -1)
                             return [value];
                         });
 
+                        if (content_matches.length == 0)
+                        {
+                            noHighlights = true;
+
+                            for (var i = 0; i < fields.length; i++)
+                            {
+                                for (var j = 0; j < content.hits[l][fields[i]].length; j++)
+                                {
+                                    content.hits[l][fields[i]][j].type = fields[i];
+                                    content_matches.push(content.hits[l][fields[i]][j]);
+                                }
+
+                            }
+                        }
 
                         content_matches.sort(function (a, b) {
                             if (a.order < b.order)
@@ -290,9 +305,12 @@ if (algoliaSettings.type_of_search.indexOf("instant") !== -1)
                             return 1;
                         });
 
+                        if (content.hits[l]._highlightResult == undefined)
+                            content.hits[l]._highlightResult = {};
 
-                        content.hits[l]._highlightResult = {};
-                        content.hits[l]._highlightResult.content = {};
+                        if (content.hits[l]._highlightResult.content == undefined)
+                            content.hits[l]._highlightResult.content = {};
+
                         content.hits[l]._highlightResult.content.value = "";
 
                         var separator = "<div>[...]</div>";
@@ -303,16 +321,21 @@ if (algoliaSettings.type_of_search.indexOf("instant") !== -1)
                             {
                                 old_order = content_matches[i].order;
 
-                                content.hits[l]._highlightResult.content.value += "<div>" + content_matches[i].value + "</div>";
-                                content.hits[l]._highlightResult.content.value += separator;
+                                var balise = content_matches[i].type != "text" ? content_matches[i].type : "div";
+
+                                content.hits[l]._highlightResult.content.value += "<div>";
+                                content.hits[l]._highlightResult.content.value += "<" + balise + '>';
+                                content.hits[l]._highlightResult.content.value += content_matches[i].value;
+                                content.hits[l]._highlightResult.content.value += "</" + balise + '>';
+                                content.hits[l]._highlightResult.content.value += "</div>";
+
+                                if (noHighlights === false)
+                                    content.hits[l]._highlightResult.content.value += separator;
                             }
                         }
 
-                        content.hits[l]._highlightResult.content.value = content.hits[l]._highlightResult.content.value.substring(0, content.hits[l]._highlightResult.content.value.length - separator.length);
-
-
-                        console.log(content.hits[l]._highlightResult.content.value);
-
+                        if (noHighlights == false)
+                            content.hits[l]._highlightResult.content.value.substring(0, content.hits[l]._highlightResult.content.value.length - separator.length);
                     }
 
 

@@ -72,7 +72,7 @@ In this section you configure two things:
 
      You need to indicate the jQuery DOM selector specifying where the plugin is supposed to put your results.
 
-     You can also configure the number of results you want by page and the number of words included in the snippets.
+     You can also configure the number of results you want by page.
 
 #### Themes
 
@@ -281,7 +281,7 @@ $attributesToSnippet    = array("content");
 For the attributes to snippet you can add a length **EXCEPT for "content" which is set from the params in UI integration**. If you add an attribute it should look like
 
 ```php
-$attributesToSnippet    = array("content", "description:30");
+$attributesToSnippet    = array("description:30");
 ```
 
 ### What happens if I modify a setting from the Algolia dashboard?

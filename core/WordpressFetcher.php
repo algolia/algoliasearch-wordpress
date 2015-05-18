@@ -172,22 +172,22 @@ class WordpressFetcher
         {
             foreach ($obj->$tag as $key => $tag_element)
             {
-                $add_size = mb_strlen(json_encode($tag_element));
+                if (! $too_much)
+                {
+                    $add_size = mb_strlen(json_encode($tag_element));
 
-                if ($size + $add_size <= $max_size)
-                    $size += $add_size;
-                else
-                    $too_much = true;
+                    if ($size + $add_size <= $max_size)
+                        $size += $add_size;
+                    else
+                        $too_much = true;
+                }
 
                 if ($too_much)
                 {
                     if ($max_size - $size > 0)
-                    {
-                        $obj->{$tag}[$key]['value'] = substr($obj->{$tag}[$key]['value'], 0, $max_size - $size);
                         $size = $max_size;
-                    }
-                    else
-                        unset($obj->{$tag}[$key]);
+
+                    unset($obj->{$tag}[$key]);
                 }
             }
         }
