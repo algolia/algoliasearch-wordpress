@@ -38,6 +38,7 @@ class AlgoliaPlugin
         add_action('admin_post_update_searchable_attributes',   array($this, 'admin_post_update_searchable_attributes'));
         add_action('admin_post_update_sortable_attributes',     array($this, 'admin_post_update_sortable_attributes'));
         add_action('admin_post_reset_config_to_default',        array($this, 'admin_post_reset_config_to_default'));
+        add_action('admin_post_update_advanced_settings',       array($this, 'admin_post_update_advanced_settings'));
 
         add_action('pre_get_posts',                             array($this, 'pre_get_posts'));
         add_filter('the_posts',                                 array($this, 'get_search_result_posts'));
@@ -298,6 +299,17 @@ class AlgoliaPlugin
 
         wp_redirect('admin.php?page=algolia-settings#sortable_attributes');
     }
+
+    public function admin_post_update_advanced_settings()
+    {
+        $this->algolia_registry->enable_truncating = isset($_POST['ENABLE_TRUNCATING']);
+
+        if (isset($_POST['TRUNCATE_SIZE']) && is_numeric($_POST['TRUNCATE_SIZE']))
+            $this->algolia_registry->truncate_size = $_POST['TRUNCATE_SIZE'];
+
+        wp_redirect('admin.php?page=algolia-settings#advanced');
+    }
+
 
     public function admin_post_update_type_of_search()
     {

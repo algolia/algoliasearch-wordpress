@@ -36,7 +36,9 @@ class Registry
         'number_by_type'                => 3,
         'search_input_selector'         => "[name='s']",
         'theme'                         => 'default',
-        'last_update'                   => ''
+        'last_update'                   => '',
+        'enable_truncating'             => true,
+        'truncate_size'                 => 9000
     );
 
     public static function getInstance()

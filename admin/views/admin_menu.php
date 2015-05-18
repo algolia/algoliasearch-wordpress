@@ -88,6 +88,7 @@
             <div data-tab="#searchable_attributes"  class="title">Search Configuration</div>
             <div data-tab="#custom-ranking"         class="title">Ranking Configuration</div>
             <div data-tab="#sortable_attributes"    class="title">Sorting Configuration</div>
+            <div data-tab="#advanced"               class="title">Advanced</div>
 
             <?php endif; ?>
             <div style="clear:both"></div>
@@ -103,6 +104,7 @@
             <?php include __DIR__ . '/tabs/sortable_attributes.php'; ?>
             <?php include __DIR__ . '/tabs/extra-metas.php'; ?>
             <?php include __DIR__ . '/tabs/custom_ranking.php'; ?>
+            <?php include __DIR__ . '/tabs/advanced.php'; ?>
 
         <?php endif; ?>
     </div>

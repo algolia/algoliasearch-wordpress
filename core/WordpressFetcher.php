@@ -119,6 +119,8 @@ class WordpressFetcher
         if ($data->post_type != "post" && $data->post_type != "page")
             return;
 
+        $algolia_registry = \Algolia\Core\Registry::getInstance();
+
         $html = $obj->content;
 
         if ($html == "")
@@ -162,32 +164,28 @@ class WordpressFetcher
             $order++;
         }
 
-        $max_size = 9000;
-
-        $size = 0;
-
-        $too_much = false;
-
-        foreach (array_merge($tags, array("text")) as $tag)
+        if ($algolia_registry->enable_truncating)
         {
-            foreach ($obj->$tag as $key => $tag_element)
+            $size = 0;
+
+            $too_much = false;
+
+            foreach (array_merge($tags, array("text")) as $tag)
             {
-                if (! $too_much)
+                foreach ($obj->$tag as $key => $tag_element)
                 {
-                    $add_size = mb_strlen(json_encode($tag_element));
+                    if (! $too_much)
+                    {
+                        $add_size = mb_strlen(json_encode($tag_element));
 
-                    if ($size + $add_size <= $max_size)
-                        $size += $add_size;
-                    else
-                        $too_much = true;
-                }
+                        if ($size + $add_size <= $algolia_registry->truncate_size)
+                            $size += $add_size;
+                        else
+                            $too_much = true;
+                    }
 
-                if ($too_much)
-                {
-                    if ($max_size - $size > 0)
-                        $size = $max_size;
-
-                    unset($obj->{$tag}[$key]);
+                    if ($too_much)
+                        unset($obj->{$tag}[$key]);
                 }
             }
         }
