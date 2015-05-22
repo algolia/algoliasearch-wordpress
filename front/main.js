@@ -290,12 +290,14 @@ if (algoliaSettings.type_of_search.indexOf("instant") !== -1)
 
                             for (var i = 0; i < fields.length; i++)
                             {
-                                for (var j = 0; j < content.hits[l][fields[i]].length; j++)
+                                if (content.hits[l][fields[i]] != undefined)
                                 {
-                                    content.hits[l][fields[i]][j].type = fields[i];
-                                    content_matches.push(content.hits[l][fields[i]][j]);
+                                    for (var j = 0; j < content.hits[l][fields[i]].length; j++)
+                                    {
+                                        content.hits[l][fields[i]][j].type = fields[i];
+                                        content_matches.push(content.hits[l][fields[i]][j]);
+                                    }
                                 }
-
                             }
                         }
 
