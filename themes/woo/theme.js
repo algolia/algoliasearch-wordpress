@@ -209,6 +209,9 @@ jQuery(document).ready(function ($) {
 
             var content_facet = content.getFacetByName(facet.tax);
 
+            if (content_facet == undefined)
+                return data;
+
             for (var key in content_facet.data)
             {
                 var checked = engine.helper.isRefined(facet.tax, key);
