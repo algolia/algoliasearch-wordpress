@@ -106,7 +106,7 @@ class Indexer
 
     public function indexTerm($term, $taxonomy)
     {
-        if (isset($this->algolia_registry->meta['tax'][$taxonomy]) && $this->algolia_registry->meta['tax'][$taxonomy]['autocompletable'])
+        if (isset($this->algolia_registry->metas['tax'][$taxonomy]) && $this->algolia_registry->metas['tax'][$taxonomy]['autocompletable'])
         {
             $object = $this->wordpress_fetcher->getTermObj($term);
 
