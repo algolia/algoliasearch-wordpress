@@ -1,3 +1,6 @@
+version 0.0.8
+ - Fix issue with indexing terms
+
 version 0.0.7
  - Add a better strategy to index content for page and post
  - Handle content truncating
