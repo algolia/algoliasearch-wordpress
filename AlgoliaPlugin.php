@@ -203,6 +203,8 @@ class AlgoliaPlugin
             try
             {
                 $this->algolia_registry->import(json_decode($content, true));
+                wp_redirect('admin.php?page=algolia-settings#credentials');
+                return;
             }
             catch(\Exception $e)
             {
