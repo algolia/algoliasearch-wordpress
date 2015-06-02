@@ -38,6 +38,7 @@ class AlgoliaPlugin
         add_action('admin_post_update_searchable_attributes',   array($this, 'admin_post_update_searchable_attributes'));
         add_action('admin_post_update_sortable_attributes',     array($this, 'admin_post_update_sortable_attributes'));
         add_action('admin_post_reset_config_to_default',        array($this, 'admin_post_reset_config_to_default'));
+        add_action('admin_post_export_config',                  array($this, 'admin_post_export_config'));
         add_action('admin_post_update_advanced_settings',       array($this, 'admin_post_update_advanced_settings'));
 
         add_action('pre_get_posts',                             array($this, 'pre_get_posts'));
@@ -193,6 +194,25 @@ class AlgoliaPlugin
 
     public function admin_post_update_account_info()
     {
+
+        if (isset($_POST['submit']) && $_POST['submit'] == 'Import'
+            && isset($_FILES['import']) && isset($_FILES['import']['tmp_name']) && is_file($_FILES['import']['tmp_name']))
+        {
+            $content = file_get_contents($_FILES['import']['tmp_name']);
+
+            try
+            {
+                $this->algolia_registry->import(json_decode($content, true));
+            }
+            catch(\Exception $e)
+            {
+                echo $e->getMessage();
+                echo '<pre>';
+                echo $e->getTraceAsString();
+                die();
+            }
+        }
+
         $app_id     = !empty($_POST['APP_ID'])      ? sanitize_text_field($_POST['APP_ID']) : '';
         $search_key = !empty($_POST['SEARCH_KEY'])  ? sanitize_text_field($_POST['SEARCH_KEY']) : '';
         $admin_key  = !empty($_POST['ADMIN_KEY'])   ? sanitize_text_field($_POST['ADMIN_KEY']) : '';
@@ -393,6 +413,14 @@ class AlgoliaPlugin
     public function admin_post_reset_config_to_default()
     {
         $this->algolia_registry->reset_config_to_default();
+    }
+
+    public function admin_post_export_config()
+    {
+        header("Content-type: text/plain");
+        header("Content-Disposition: attachment; filename=algolia-wordpress-config.txt");
+
+        echo $this->algolia_registry->export();
     }
 
     public function admin_post_update_extra_meta()

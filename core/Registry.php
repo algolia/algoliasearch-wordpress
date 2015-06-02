@@ -89,6 +89,21 @@ class Registry
             add_option(static::$setting_key, $this->options);
     }
 
+    public function export()
+    {
+        return json_encode($this->options);
+    }
+
+    public function import($attributes)
+    {
+        if (is_array($attributes))
+            foreach ($attributes as $key => $value)
+                if (isset($this->attributes[$key]))
+                    $this->options[$key] = $value;
+
+        $this->save();
+    }
+
     public function reset_config_to_default()
     {
        foreach ($this->attributes as $key => $value)

@@ -44,7 +44,7 @@ $attributesToSnippet    = array("content");
  * Defaults Variables
  */
 
-$attributesToIndex      = array("title", "content", "author", "type");
+$attributesToIndex      = array("title", "excerpt", "content", "author", "type");
 
 /**
  * Handling Extension

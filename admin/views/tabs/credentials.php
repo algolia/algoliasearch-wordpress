@@ -1,5 +1,5 @@
 <div class="tab-content" id="_credentials">
-    <form action="<?php echo site_url(); ?>/wp-admin/admin-post.php" method="post">
+    <form action="<?php echo site_url(); ?>/wp-admin/admin-post.php" method="post" enctype="multipart/form-data">
         <input type="hidden" name="action" value="update_account_info">
         <div class="content-wrapper" id="account">
             <div class="content">
@@ -65,6 +65,31 @@
                     </div>
 
                 </div>-->
+
+                <div style="clear: both;"></div>
+
+                <div style="float: left;">
+                    <div style="padding: 0px 10px;">
+                        <h3>Export configuration</h3>
+                        <div class="content-item">
+                            <div data-form="<?php echo site_url(); ?>/wp-admin/admin-post.php" data-value="export_config" name="submit" id="export" class="do-submit button button-danger">Export</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div style="clear: both;"></div>
+
+                <div style="float: left;">
+                    <div style="padding: 0px 10px;">
+                        <h3>Import configuration</h3>
+                        <div class="content-item">
+                            <input type="file" name="import">
+                        </div>
+                        <div class="content-item">
+                            <input type="submit" name="submit" id="submit" class="button button-primary" value="Import">
+                        </div>
+                    </div>
+                </div>
 
                 <div style="clear: both;"></div>
 

@@ -203,6 +203,7 @@ jQuery(document).ready(function($) {
         return ui;
     };
 
+
     $('#_taxonomies tr, #_extra-metas tr, #_indexable-types tr, #_custom-ranking tr, #_searchable_attributes tr, #_sortable_attributes tr').sort(function (a, b) {
         var contentA = parseInt($(a).attr('data-order'));
         var contentB = parseInt($(b).attr('data-order'));
@@ -210,7 +211,8 @@ jQuery(document).ready(function($) {
         return (contentA < contentB) ? -1 : (contentA > contentB) ? 1 : 0;
     }).each(function (_, container) {
         $(container).parent().append(container);
-    });;
+    });
+
 
     $("#_taxonomies tbody, #_extra-metas tbody, #_indexable-types tbody, #_custom-ranking tbody, #_searchable_attributes tbody, #_sortable_attributes tbody").sortable({
         containment: "parent",
@@ -238,6 +240,22 @@ jQuery(document).ready(function($) {
                 }
             });
         }
+    });
+
+    $('.do-submit').click(function (e) {
+        var url = $(this).attr('data-form');
+        var value = $(this).attr('data-value');
+
+        $(this).parent().append('<iframe id="createdIframe"></iframe>');
+
+        $(this).parent().find('#createdIframe').hide();
+
+        var iframedoc = $(this).parent().find('#createdIframe').contents().find('html').html('<form id="to-submit" action="' + url + '" method="post" style="display:none;">' +
+                '<input type="text" name="action" value="' + value+ '" />' +
+            '</form>'
+        );
+
+        $(this).parent().find('#createdIframe').contents().find('#to-submit').submit();
     });
 
     /**
