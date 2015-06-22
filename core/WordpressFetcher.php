@@ -72,7 +72,7 @@ class WordpressFetcher
         $image->width    = $metas["width"];
         $image->height   = $metas["height"];
         $image->file     = sprintf('%s/%s', $uploadBaseUrl, $metas["file"]);
-        $image->sizes    = $metas["sizes"];
+        $image->sizes    = $metas["sizes"] ? $metas["sizes"] : array();
 
         foreach ($image->sizes as $size => &$sizeAttrs)
         {
