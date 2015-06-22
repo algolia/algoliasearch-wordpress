@@ -2,7 +2,7 @@ FROM ubuntu:14.04
 
 RUN apt-get update
 RUN apt-get -y install apache2
-RUN apt-get -y install php5 libapache2-mod-php5 php5-mcrypt php5-curl
+RUN apt-get -y install php5 libapache2-mod-php5 php5-mcrypt php5-curl php5-gd php5-mysql
 
 RUN sed -i -e 's/\/var\/www/\/var\/www\/htdocs/' /etc/apache2/apache2.conf
 RUN sed -i -e 's/\/var\/www\/html/\/var\/www\/htdocs/' /etc/apache2/sites-available/000-default.conf
@@ -15,7 +15,7 @@ RUN echo 'mysql-server mysql-server/root_password_again password P4ssw0rd' | deb
 WORKDIR /var/www/htdocs
 
 # packages/dependencies installation
-RUN apt-get install -y mysql-client-5.5 mysql-server php5-mysql
+RUN apt-get install -y mysql-client-5.5 mysql-server
 
 COPY bin/php.ini /usr/local/etc/php/php.ini
 
@@ -62,6 +62,7 @@ RUN service mysql start && wp --allow-root plugin activate wordpress-importer &&
 
 RUN service mysql start && wp --allow-root import /var/www/htdocs/wp-content/plugins/woocommerce/dummy-data/dummy-data.xml --authors=create && service mysql stop
 
+RUN service mysql start && wp --allow-root media --yes regenerate && service mysql stop
 
 ###### Algolia Extension
 
