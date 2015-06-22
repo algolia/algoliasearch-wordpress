@@ -2,7 +2,7 @@
 
 [Algolia Search](http://www.algolia.com) is a hosted full-text, numerical, and faceted search engine capable of delivering realtime results from the first keystroke.
 
-This plugin replaces the default search of Wordpress with an Algolia realtime search. It has been designed in a generic way to support plugins like WooCommerce in addition to the standard blog system.
+This plugin replaces the default search of Wordpress with an Algolia realtime search. It has been designed to support plugins like WooCommerce in addition to the standard blog system.
 
 ![Latest version](https://img.shields.io/badge/latest-0.0.9-green.svg)
 ![MIT](http://img.shields.io/badge/license-MIT-green.svg?style=flat-square)
@@ -15,136 +15,138 @@ This plugin replaces the default search of Wordpress with an Algolia realtime se
 
 ## Installation
 
-1. Create an Algolia account with [https://www.algolia.com/users/sign_up](https://www.algolia.com/users/sign_up)
-2. Once logged in, go to the "Credential" section and get your Application ID & API keys
+1. Create an [Algolia account](https://www.algolia.com/users/sign_up)
+2. Once logged in, go to the *Credentials* section and get your **Application ID** & **API keys**
 3. Install Algolia Wordpress Plugin in your Wordpress dashboard
-4. Activate the plugin through the Plugins menu in Wordpress
-5. Go to the "Algolia Search" left menu configuration page and fill the your API keys
-6. Configure the way Algolia is indexing your posts, products
+4. Activate the plugin through the *Plugins* menu in Wordpress
+5. Go to the **Algolia Search** left menu configuration page and fill the your API keys
+6. Configure the way Algolia is indexing your objects.
 
 ## Configuration
 
 ### Credentials
 
-![Credentials](doc/credentials.png)
-
 In this section you configure two things:
 
-   1. Your Application ID & API keys (credentials):
+   1. **Your Application ID & API keys (credentials)**:
 
    You need to choose which api keys to use. You can go [https://www.algolia.com/licensing](https://www.algolia.com/licensing)
 
-   2. Your index names prefix:
+   2. **Your index names prefix**:
 
    The plugin will create several indices:
 
     * 1 index for the instant search
-    * 1 index for each section of the autocompletion menu
-    * 1 (slave) index for each sort you enable
+    * 1 index for each section of the auto-completion menu
+    * 1 (slave) index for each sort order you enable
+
+![Credentials](doc/credentials.png)
 
 ### UI Integration
 
-![UI](doc/ui.png)
-
 #### Search Exprerience Configuration
 
-   1. Search Bar
+   1. **Search Bar**
 
-   To be able to trigger the search at each keystroke on your site you need to specify where the plugin is supposed to find the HTML search input. You do that by specifying a jQuery selector.
+   To be able to trigger the search at each keystroke on your site you need to specify where the plugin is supposed to find the search input. You do that by specifying a jQuery/DOM selector.
 
    In Wordpress's default theme it is: `[name='s']`
 
-   2. Search Experience
+   2. **Search Experience**
 
-   The plugin let you choose between two differents experience: an autocompletion menu or an instant search results page.
+   The plugin let you choose between two different experiences: an autocompletion menu and/or an instant search results page.
 
-     * Autocompletion menu
+     * **Autocompletion menu**
 
-      This experience adds an autocompletion menu to your search bar. In this menu you will have a section for every type you enable (page, post, ...) and one section for every taxonomy you enable (category, tag, ...).
+      This experience adds an autocompletion menu to your search bar. In this menu you will have a section for each type & taxonomy you enable (page, post, category, tag...).
 
       You need to specify the maximum number of result you want to display in each section.
 
-      **Notes:** The types section will be displayed before the taxonomies one.
+     * **Instant search**
 
-     * Instant search
+     This experience refreshes the whole results page as you type. At each keystroke, the plugin refreshes your whole search results page: including hits, facets & pagination.
 
-     This experience refreshes the whole results page as you type. At each keystroke, the plugin refresh your whole search results page: including hits, facets & pagination.
-
-     You need to indicate the jQuery DOM selector specifying where the plugin is supposed to put your results.
+     You need to indicate the jQuery/DOM selector specifying where the plugin is supposed to inject your results.
 
      You can also configure the number of results you want by page.
 
+![UI](doc/ui.png)
+
 #### Themes
 
-The plugin supports themes which allow you to choose the way your results are displayed. You can choose one of the 2 sample themes or build your own one.
+The plugin supports themes which allows you to customize the way your results are displayed. You can choose one of the 2 sample themes or build your own.
 
-The theme is **totally independent** from the Wordpress theme. Each theme handles both Autocompletion **AND** Instant-search results page.
+The theme is **totally independent** from the Wordpress theme. The default themes handle both Autocompletion **AND** Instant-search results page.
 
 ### Types
 
-![Types](doc/types.png)
+You can choose the Wordpress types you want to index. By default, only `post` and `page` are configured. If one of your extensions (WooCommerce for instance) creates new types you will see them in this list.
 
-You can choose the Wordpress types you want to index. By default, only `post` and `page` are configured. If one of your extension (WooCommerce for instance) create new types you will see them in this list. You can order them to change the order of each section of the autocompletion menu. In autocompletion menu mode you can also specify the label used for each type to display the title of search section.
+You can order them to change the order of each section of the autocompletion menu. In autocompletion menu mode you can also specify the label used for each type to display the title of search section.
+
+![Types](doc/types.png)
 
 ### Attributes
 
-![Attributes](doc/attributes.png)
+You can configure additional attributes or taxonomies you want to index. If you use Wordpress as a blog you shouldn't have to change anything. When using Wordpress with plugins like WooCommerce this should be very useful as you probably want to index the `price` or the `total_sales` attributes as well.
 
-You can configure additional attribute or taxonomies you want to index. If you use Wordpress as a blog you should not have to change anything. When using Wordpress with plugin like WooCommerce this should be very useful as you probably want to index the `price` or the `total_sales` attributes as well.
-
-When you enable an attribute, the plugin will add this attribute to the record but **it will not be searchable unless you enable it in the Search Configuration tab**.
+When you enable an attribute, the plugin will add this attribute to the record but **it will NOT be searchable UNLESS you enable it in the Search Configuration tab**.
 
 When you make an attribute facetable **AND if you are in Instant Search Results Page mode** you will see a faceting/filtering bloc appears in which you can filter your results easily.
 
 There is two facet types you can choose:
 
-  1. Conjunctive
+  1. **Conjunctive**
 
-	  Your refinements on conjunctive facets are ANDed
+	  Your refinements are ANDed. Think about a post having the tags `lifestyle` AND `mood`.
 
-  2. Disjunctive
+  2. **Disjunctive**
 
-	  Your refinements on conjunctive facets are ORed (e.g., hotels with 4 OR 5 stars)
+	  Your refinements are ORed. Think about a products search with: `4` OR `5` stars.
+	  
+  3. **Custom: slider, tag clouds, ...**
+
+  	  A theme can declare new facet types. The default one is adding the "slider" type.
 
 You can add a label to each enabled facet to display the Facet bloc title. You can also order the facet blocs ordering the attributes.
 
-**Note:** A theme can add new facet types (sliders, tag clouds, ...).
+![Attributes](doc/attributes.png)
 
 ### Search Configuration
 
-![Search](doc/search.png)
+For each attribute you enable, you can decide to make it searchable. You can also choose if you want the attribute to be consider ordered or not:
 
-For each attribute you enable, you can decide to make it searchable. If you do you can choose if you want the attribute ordered or unordered:
+   1. **Ordered**
 
-   1. Ordered
+      Matches at the beginning of an attribute **will be** considered more important than matches at the end. This setting is recommended for short attributes like `title`.
 
-      Matches in attributes at the beginning of the list **will be** considered more important than matches in attributes further down the list. This setting is recommended for short attribute like `title`.
+   2. **Unordered**
 
-   2. Unordered
-
-   Matches in attributes at the beginning of the list **will not be** considered more important than matches in attributes further down the list. This setting is recommended for long attribute like `content`/
+   Matches at the beginning of the list **will not be** considered more important than matches at the end. This setting is recommended for long attribute like `content`.
 
 **Notes:** If an attribute does not appear in this tab, be sure that you first enabled it on the <b>Attributes tab</b>.
 
-### Results Ranking
+![Search](doc/search.png)
 
-![Ranking](doc/ranking.png)
+### Results Ranking
 
 For each attribute you enable, you can make them part of your custom ranking formula.
 
-**Notes:** Attributes that you enable <b>NEED to been numerics</b>
+**Notes:** Attributes that you enable here <b>NEED to be numerical attributes</b>.
+
+![Ranking](doc/ranking.png)
 
 ### Sorting
 
+For each attribute or taxonomy you enable you can select the ones you want to sort with.
+
+**Notes:** Adding a new sort order will create a slave index with the exact same settings except the ranking formula will have the use the attribute you enable as the first ranking criterion. You can choose a label which will be displayed on the instant search result page.
+
 ![Sorting](doc/sorting.png)
-
-For each attribute or taxonomy you enable you can select the ones you want to be able to sort with.
-
-Enabling a new sort order will create a slave index with the exact same settings except the ranking formula will have the use the attribute you enable as the first ranking criterion. You can choose a label which will be displayed on the instant search result page.
 
 ## Build your theme
 
-You can build your own search theme to make it look exactly like your current theme. The simplest way to do that is to copy one of the two default themes and work from there.  In most cases the only thing you will need to do is modify the `templates.php` file so that you can put you **own DOM/CSS elements to the template**.
+You can build your own search theme to make the search results look exactly like your current Wordpress theme. The simplest way to do that is to copy one of the two default themes and work from there.  In most cases the only thing you will need to do is modify the `templates.php` file so that you can put you **own DOM/CSS elements to the template**.
 
 **Notes:** Remember: there is no link between the Wordpress theme and the plugin theme.
 
@@ -167,11 +169,11 @@ A theme is composed by several **MANDATORY** files:
 	);
 	```
 
-	The name attribute will be displayed on the UI Page: it's your theme's name. And the screenshot and screenshot-autocomplete is the path of your instant search **AND** autocompletion menu screenshots (**relative to your theme root directory**).
+	The `name` will be displayed on the UI Page: it's your theme's name. And the screenshot and screenshot-autocomplete is the path of your instant search **AND** autocompletion menu screenshots (**relative to your theme root directory**).
 
 - `styles.css`
 
-  This file contains every CSS rule you need.
+  This file contains every CSS rules used by the theme.
 
 - `templates.php`
 
@@ -197,7 +199,7 @@ A theme is composed by several **MANDATORY** files:
 
 - `theme.js`
 
-  This file includes all the JS logic.
+  This file includes all the JavaScript logic.
 
 
 ### Customize the `theme.js` file
@@ -236,9 +238,9 @@ You will have access to every function and attribute define in the `front/main.j
 
 **getRefinementsFromUrl**: Load the refinements from the url and make a query with those refinements
 
-**getFacets**:Make an object you can use to render your facets template
+**getFacets**: Make an object you can use to render your facets template
 
-**getPages**:Make an object you can use to render your page template
+**getPages**: Make an object you can use to render your page template
 
 **getHtmlForPagination**: Return the rendered hogan template for pagination
 
