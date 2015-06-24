@@ -215,3 +215,25 @@
     display: block;
     margin-top: 0.5em;
 }
+
+.menu-top.toplevel_page_algolia-settings .wp-menu-image {
+    padding: 0 !important;
+    margin: 7px 8px !important;
+    width: 20px !important;
+    height: 20px !important;
+    overflow: hidden;
+    position: relative;
+}
+
+.menu-top.toplevel_page_algolia-settings .wp-menu-image img {
+    padding: 0 !important;
+    margin: 0 !important;
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 20px;
+}
+
+.menu-top.toplevel_page_algolia-settings .current .wp-menu-image img {
+    top: -20px;
+}

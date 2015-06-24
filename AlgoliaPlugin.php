@@ -151,6 +151,8 @@ class AlgoliaPlugin
 
     public function admin_scripts($hook)
     {
+        wp_enqueue_style('styles-admin', plugin_dir_url(__FILE__) . 'admin/styles/styles.css');
+
         // Only load these scripts on the Algolia admin page
         if ( 'toplevel_page_algolia-settings' != $hook ) {
             return;
@@ -176,7 +178,6 @@ class AlgoliaPlugin
         wp_localize_script('admin.js', 'algoliaAdminSettings', $algoliaAdminSettings);
         wp_enqueue_script('admin.js');
 
-        wp_enqueue_style('styles-admin', plugin_dir_url(__FILE__) . 'admin/styles/styles.css');
         wp_enqueue_style('jquery-ui', plugin_dir_url(__FILE__) . 'lib/jquery/jquery-ui.min.css');
     }
 
