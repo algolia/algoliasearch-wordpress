@@ -232,6 +232,7 @@
     left: 0;
     top: 0;
     width: 20px;
+    opacity: 1 !important;
 }
 
 .menu-top.toplevel_page_algolia-settings .current .wp-menu-image img {
