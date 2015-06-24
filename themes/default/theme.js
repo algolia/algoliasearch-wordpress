@@ -1,11 +1,11 @@
-jQuery(document).ready(function ($) {
+algoliaBundle.$(document).ready(function ($) {
 
     var autocomplete = true;
     var instant = true;
 
     if (algoliaSettings.type_of_search.indexOf("autocomplete") !== -1)
     {
-        var $autocompleteTemplate = Hogan.compile($('#autocomplete-template').text());
+        var $autocompleteTemplate = algoliaBundle.Hogan.compile($('#autocomplete-template').text());
 
         var hogan_objs = [];
 
@@ -78,9 +78,9 @@ jQuery(document).ready(function ($) {
 
         var old_content         = $(algoliaSettings.instant_jquery_selector).html();
 
-        var resultsTemplate     = Hogan.compile($('#instant-content-template').text());
-        var facetsTemplate      = Hogan.compile($('#instant-facets-template').text());
-        var paginationTemplate  = Hogan.compile($('#instant-pagination-template').text());
+        var resultsTemplate     = algoliaBundle.Hogan.compile($('#instant-content-template').text());
+        var facetsTemplate      = algoliaBundle.Hogan.compile($('#instant-facets-template').text());
+        var paginationTemplate  = algoliaBundle.Hogan.compile($('#instant-pagination-template').text());
 
         var conjunctive_facets  = [];
         var disjunctive_facets  = [];
@@ -106,7 +106,7 @@ jQuery(document).ready(function ($) {
 
         algoliaSettings.facets = algoliaSettings.facets.sort(facetsCompare);
 
-        var helper = algoliasearchHelper(algolia_client, algoliaSettings.index_name + 'all', {
+        var helper = algoliaBundle.algoliasearchHelper(algolia_client, algoliaSettings.index_name + 'all', {
             facets: conjunctive_facets,
             disjunctiveFacets: disjunctive_facets,
             hitsPerPage: algoliaSettings.number_by_page

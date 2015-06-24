@@ -73,14 +73,11 @@ class AlgoliaPlugin
         if (is_admin())
             return;
 
-        wp_enqueue_style('jquery-ui', plugin_dir_url(__FILE__) . 'lib/jquery/jquery-ui.min.css');
+        wp_enqueue_style('algolia_styles', plugin_dir_url(__FILE__) . 'themes/' . $this->algolia_registry->theme . '/bundle.css');
         wp_enqueue_style('algolia_styles', plugin_dir_url(__FILE__) . 'themes/' . $this->algolia_registry->theme . '/styles.css');
 
         $scripts = array(
-            'lib/jquery/jquery-ui.js',
-            'lib/algolia/algoliasearch.min.js',
-            'lib/hogan/hogan.js',
-            'lib/typeahead/typeahead.js'
+            'lib/bundle.min.js'
         );
 
         foreach ($scripts as $script) {

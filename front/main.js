@@ -1,7 +1,7 @@
 /**
  * Common variables and function for autocomplete and instant search
  */
-var algolia_client = algoliasearch(algoliaSettings.app_id, algoliaSettings.search_key);
+var algolia_client = algoliaBundle.algoliasearch(algoliaSettings.app_id, algoliaSettings.search_key);
 var custom_facets_types = algoliaSettings.theme.facet_types;
 
 window.indicesCompare = function (a, b) {
@@ -46,7 +46,7 @@ if (algoliaSettings.type_of_search.indexOf("instant") !== -1)
     var engine;
     var history_timeout;
 
-    jQuery(document).ready(function ($) {
+    algoliaBundle.$(document).ready(function ($) {
 
         if ($(algoliaSettings.instant_jquery_selector).length !== 1)
             throw '[Algolia] Invalid instant-search selector: ' + algoliaSettings.instant_jquery_selector;
@@ -383,7 +383,7 @@ if (algoliaSettings.type_of_search.indexOf("instant") !== -1)
              */
             this.sortSelected = function () {
                 return function (val) {
-                    var template = Hogan.compile(val);
+                    var template = algoliaBundle.Hogan.compile(val);
 
                     var renderer = function(context) {
                         return function(text) {
@@ -407,7 +407,7 @@ if (algoliaSettings.type_of_search.indexOf("instant") !== -1)
 
             this.getDate = function () {
                 return function (val) {
-                    var template = Hogan.compile(val);
+                    var template = algoliaBundle.Hogan.compile(val);
 
                     var renderer = function(context) {
                         return function(text) {
