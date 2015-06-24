@@ -73,7 +73,7 @@ class AlgoliaPlugin
         if (is_admin())
             return;
 
-        wp_enqueue_style('algolia_styles', plugin_dir_url(__FILE__) . 'themes/' . $this->algolia_registry->theme . '/bundle.css');
+        wp_enqueue_style('algolia_bundle', plugin_dir_url(__FILE__) . 'themes/' . $this->algolia_registry->theme . '/bundle.css');
         wp_enqueue_style('algolia_styles', plugin_dir_url(__FILE__) . 'themes/' . $this->algolia_registry->theme . '/styles.css');
 
         $scripts = array(
