@@ -14,7 +14,7 @@
                 </div>
                 <div class="has-extra-content content-item">
                     <h3>Search Experience</h3>
-                    <p class="help-block">Configure here whether you want an autocomplete menu or a instant search results page.</p>
+                    <p class="help-block">Configure here whether you want an auto-completion menu or an instant search results page.</p>
                     <div>
                         <input type="checkbox"
                             <?php checked(in_array('autocomplete', $algolia_registry->type_of_search)); ?>
@@ -22,7 +22,7 @@
                                name="TYPE_OF_SEARCH[]"
                                value="autocomplete"
                                id="instant_radio_autocomplete" />
-                        <label for="instant_radio_autocomplete">Autocompletion menu</label>
+                        <label for="instant_radio_autocomplete">Auto-completion menu</label>
                         <p class="description">Add an auto-completion menu to your search bar.</p>
                     </div>
                     <div class="show-hide" style="display: none;">

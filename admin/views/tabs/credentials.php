@@ -68,40 +68,19 @@
 
                 <div style="clear: both;"></div>
 
-                <div style="float: left;">
-                    <div style="padding: 0px 10px;">
-                        <h3>Export configuration</h3>
-                        <div class="content-item">
-                            <div data-form="<?php echo site_url(); ?>/wp-admin/admin-post.php" data-value="export_config" name="submit" id="export" class="do-submit button button-danger">Export</div>
-                        </div>
+                <div style="padding: 0px 10px;">
+                    <h3>Administration</h3>
+                    <p class="help-block">Use this section to export, import or reset your configuration.</p>
+                    <div class="content-item" style="float: left; margin-right: 30px;">
+                        <div data-form="<?php echo site_url(); ?>/wp-admin/admin-post.php" data-value="export_config" name="submit" id="export" class="do-submit button button-primary">Export configuration</div>
                     </div>
-                </div>
-
-                <div style="clear: both;"></div>
-
-                <div style="float: left;">
-                    <div style="padding: 0px 10px;">
-                        <h3>Import configuration</h3>
-                        <div class="content-item">
-                            <input type="file" name="import">
-                        </div>
-                        <div class="content-item">
-                            <input type="submit" name="submit" id="submit" class="button button-primary" value="Import">
-                        </div>
+                    <h4 style="float: left; margin-right: 30px;">or</h4>
+                    <div class="content-item" style="float: left; margin-right: 30px;">
+                        <input type="submit" name="submit" id="submit" class="button button-primary" value="Import configuration" />
+                        <input type="file" name="import" />
                     </div>
-                </div>
-
-                <div style="clear: both;"></div>
-
-                <div style="float: left;">
-                    <div style="padding: 0px 10px;">
-                        <h3>Reset configuration to default</h3>
-                        <p class="help-block">
-                            This will set the config back to default except api keys
-                        </p>
-                        <div class="content-item">
-                            <div data-form="<?php echo site_url(); ?>/wp-admin/admin-post.php" data-value="reset_config_to_default" name="submit" id="reset-config" class="button button-danger">Reset</div>
-                        </div>
+                    <div class="content-item" style="float: right">
+                        <div data-form="<?php echo site_url(); ?>/wp-admin/admin-post.php" data-value="reset_config_to_default" name="submit" id="reset-config" class="button button-primary">Reset configuration</div>
                     </div>
                 </div>
 

@@ -89,7 +89,7 @@
                                         <?php endif; ?>
                                     <?php endforeach; ?>
                                 </select>
-                                <img width="10" src="<?php echo $move_icon_url; ?>">
+                                <img width="10" src="<?php echo $move_icon_url; ?>" style="float: right; margin-top: 10px">
                             </td>
                         </tr>
                     <?php endforeach; ?>

@@ -16,7 +16,7 @@
 
     <?php if ($algolia_registry->validCredential) : ?>
     <h2>
-        Algolia Realtime Search
+        Algolia Search
         <button type="button" class="button button-primary " id="algolia_reindex" name="algolia_reindex">
             <i class="dashicons dashicons-upload"></i>
             Reindex data
@@ -26,7 +26,7 @@
             <?php if ($algolia_registry->last_update): ?>
                 <?php echo date('Y-m-d H:i:s', $algolia_registry->last_update); ?>
             <?php else: ?>
-                N/A
+                <span style="color: red">Never: please re-index your data.</span>
             <?php endif; ?>
         </em>
     </h2>
@@ -82,12 +82,12 @@
 
             <?php if ($algolia_registry->validCredential) : ?>
 
-            <div data-tab="#configuration"          class="title selected">UI Configuration</div>
+            <div data-tab="#configuration"          class="title selected">UI</div>
             <div data-tab="#indexable-types"        class="title">Types</div>
             <div data-tab="#extra-metas"            class="title">Attributes</div>
-            <div data-tab="#searchable_attributes"  class="title">Search Configuration</div>
-            <div data-tab="#custom-ranking"         class="title">Ranking Configuration</div>
-            <div data-tab="#sortable_attributes"    class="title">Sorting Configuration</div>
+            <div data-tab="#searchable_attributes"  class="title">Search</div>
+            <div data-tab="#custom-ranking"         class="title">Ranking</div>
+            <div data-tab="#sortable_attributes"    class="title">Sorting</div>
             <div data-tab="#advanced"               class="title">Advanced</div>
 
             <?php endif; ?>

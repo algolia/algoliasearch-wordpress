@@ -63,7 +63,7 @@
         <input type="hidden" name="action" value="update_sortable_attributes">
         <div class="content-wrapper" id="customization">
             <div class="content">
-                <p class="help-block">By default results are sorted by text relevance &amp; your ranking criteria. Configure here the attributes you want to use for the additional sorts (by price, by date, etc...).</p>
+                <p class="help-block">By default results are sorted by text relevance &amp; by the ranking criteria. Configure here the attributes you want to use for the additional sorts (by price, by date, etc...).</p>
                 <table>
                     <tr data-order="-1">
                         <th class="table-col-enabled">Enabled</th>
@@ -87,7 +87,7 @@
                             <td>
                                 <input type="text"
                                        value="<?php echo $sortItem->label ?>" name="ATTRIBUTES[<?php echo $sortItem->name; ?>][LABEL_<?php echo $sortItem->sort; ?>]">
-                                <img width="10" src="<?php echo $move_icon_url; ?>">
+                                <img width="10" src="<?php echo $move_icon_url; ?>" style="float: right; margin-top: 10px" />
                             </td>
                             <input type="hidden" name="ATTRIBUTES[<?php echo $sortItem->name; ?>][ORDER_<?php echo $sortItem->sort ?>]" class="order" />
                         </tr>

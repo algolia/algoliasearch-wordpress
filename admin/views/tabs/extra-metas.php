@@ -106,9 +106,7 @@
         <input type="hidden" name="action" value="update_extra_meta">
         <div class="content-wrapper" id="customization">
             <div class="content">
-                <p class="help-block">
-                    Configure here the attributes you want to include in your Algolia records.
-                </p>
+                <p class="help-block">Configure here the attributes of your Algolia records.</p>
 
                 <table id="extra-meta-and-taxonomies">
                     <tr data-order="-1">
@@ -132,9 +130,7 @@
                     </tr>
                 </table>
 
-                <p class="help-block">
-                    Configure here the attributes you want to include in your Algolia records.
-                </p>
+                <p class="help-block">Configure here the additional attributes you want to include in your Algolia records.</p>
 
                 <div>
                     <div data-tab="#extra-metas-attributes" class="title selected">Additional Attributes</div>
@@ -195,7 +191,7 @@
                                 <td style="white-space: nowrap;">
                                     <input type="text"
                                            value="<?php echo $metaItem->label ?>" name="TYPES[<?php echo $metaItem->type; ?>][METAS][<?php echo $metaItem->name; ?>][NAME]">
-                                    <img width="10" src="<?php echo $move_icon_url; ?>">
+                                    <img width="10" src="<?php echo $move_icon_url; ?>" style="float: right; margin-top: 10px" />
                                 </td>
 
                                 <!-- PREVENT FROM ERASING CUSTOM RANKING -->
@@ -281,7 +277,7 @@
                                 </td>
                                 <td style="white-space: nowrap;">
                                     <input type="text" value="<?php echo $taxItem->label ?>" name="TAX[<?php echo $taxItem->name; ?>][NAME]">
-                                    <img width="10" src="<?php echo $move_icon_url; ?>">
+                                    <img width="10" src="<?php echo $move_icon_url; ?>"  style="float: right; margin-top: 10px" />
                                 </td>
                                 <input type="hidden" name="TAX[<?php echo $taxItem->name; ?>][ORDER]" class="order" />
                                 </tr>

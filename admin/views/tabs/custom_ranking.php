@@ -110,7 +110,7 @@
                                             <option <?php echo ($rankable->sort == $key ? 'selected' : ''); ?> value="<?php echo $key; ?>"><?php echo $value; ?></option>
                                     <?php endforeach; ?>
                                 </select>
-                                <img width="10" src="<?php echo $move_icon_url; ?>">
+                                <img width="10" src="<?php echo $move_icon_url; ?>" style="float: right; margin-top: 10px" />
                             </td>
                         </tr>
                     <?php endforeach; ?>
