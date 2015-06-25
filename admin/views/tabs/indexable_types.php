@@ -33,13 +33,19 @@
         <input type="hidden" name="action" value="update_indexable_types">
         <div class="content-wrapper" id="customization">
             <div class="content">
-                <p class="help-block">Configure here the Wordpress types you want index.</p>
+                <h3>Wordpress Types</h3>
+                <p class="help-block">
+                    Configure here the Wordpress types you want index.
+                    <?php if (in_array('autocomplete', $algolia_registry->type_of_search)): ?>
+                        The order of this setting reflects the order of the sections in the auto-completion menu.
+                    <?php endif; ?>
+                </p>
                 <table>
                     <tr data-order="-1">
                         <th class="table-col-enabled">Enabled</th>
                         <th>Name</th>
                         <?php if (in_array('autocomplete', $algolia_registry->type_of_search)): ?>
-                            <th>Auto-completion menu label &amp; ordering</th>
+                            <th>Auto-completion menu label</th>
                         <?php endif; ?>
                     </tr>
 
@@ -58,7 +64,7 @@
                             <?php if (in_array('autocomplete', $algolia_registry->type_of_search)): ?>
                             <td style="white-space: nowrap;">
                                 <input type="text" value="<?php echo $typeItem->label ?>" name="TYPES[<?php echo $typeItem->name; ?>][NAME]">
-                                <img width="10" src="<?php echo $move_icon_url; ?>">
+                                <img width="10" src="<?php echo $move_icon_url; ?>" style="float: right; margin-top: 10px">
                             </td>
                             <?php endif; ?>
                         </tr>

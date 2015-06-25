@@ -63,12 +63,13 @@
         <input type="hidden" name="action" value="update_searchable_attributes">
         <div class="content-wrapper" id="customization">
             <div class="content">
+                <h3>Search Configuration</h3>
                 <p class="help-block">Configure here the attributes you want to be able to search in. The order of this setting matters as those at the top of the list are considered more important.</p>
                 <table>
                     <tr data-order="-1">
                         <th class="table-col-enabled">Enabled</th>
                         <th>Name</th>
-                        <th>Attribute ordering</th>
+                        <th>Options</th>
                     </tr>
                     <?php
 

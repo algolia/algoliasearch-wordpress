@@ -63,6 +63,7 @@
         <input type="hidden" name="action" value="update_sortable_attributes">
         <div class="content-wrapper" id="customization">
             <div class="content">
+                <h3>Sorting Configuration</h3>
                 <p class="help-block">By default results are sorted by text relevance &amp; by the ranking criteria. Configure here the attributes you want to use for the additional sorts (by price, by date, etc...).</p>
                 <table>
                     <tr data-order="-1">

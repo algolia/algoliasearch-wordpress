@@ -106,6 +106,7 @@
         <input type="hidden" name="action" value="update_extra_meta">
         <div class="content-wrapper" id="customization">
             <div class="content">
+                <h3>Attributes Configuration</h3>
                 <p class="help-block">Configure here the attributes of your Algolia records.</p>
 
                 <table id="extra-meta-and-taxonomies">
@@ -125,7 +126,7 @@
                         </th>
                         <th>Facet type</th>
                         <th>
-                            Label &amp; ordering
+                            Label
                         </th>
                     </tr>
                 </table>

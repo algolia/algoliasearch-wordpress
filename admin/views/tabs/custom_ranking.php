@@ -87,6 +87,7 @@
         <input type="hidden" name="action" value="custom_ranking">
         <div class="content-wrapper" id="customization">
             <div class="content">
+                <h3>Ranking Configuration</h3>
                 <p class="help-block">Configure here the attributes used to reflect the popularity of your records (number of likes, number of views, number of sales...).</p>
                 <table>
                     <tr data-order="-1">
