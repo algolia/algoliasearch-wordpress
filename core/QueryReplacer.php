@@ -67,7 +67,7 @@ class QueryReplacer
 
     public function getOrderedPost($posts)
     {
-        if(! is_search())
+        if(! is_search() || is_admin())
             return $posts;
 
         global $wp_query;
