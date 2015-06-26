@@ -134,11 +134,6 @@ class AlgoliaPlugin
             'theme'                     => $this->theme_helper->get_current_theme()
         );
 
-        wp_register_script('algolia_main.js', plugin_dir_url(__FILE__) . 'front/main.js', array_merge(array('jquery'), $scripts));
-        wp_localize_script('algolia_main.js', 'algoliaSettings', $algoliaSettings);
-
-        wp_enqueue_script('algolia_main.js');
-
         wp_register_script('theme.js',  plugin_dir_url(__FILE__) . 'themes/' . $this->algolia_registry->theme . '/theme.js', array(), array());
         wp_localize_script('theme.js', 'themesSettings', array());
 
@@ -149,6 +144,7 @@ class AlgoliaPlugin
     public function admin_scripts($hook)
     {
         wp_enqueue_style('styles-admin', plugin_dir_url(__FILE__) . 'admin/styles/styles.css');
+        wp_enqueue_style('algolia_bundle', plugin_dir_url(__FILE__) . 'themes/' . $this->algolia_registry->theme . '/bundle.css');
 
         // Only load these scripts on the Algolia admin page
         if ( 'toplevel_page_algolia-settings' != $hook ) {
@@ -167,15 +163,11 @@ class AlgoliaPlugin
         foreach ($this->algolia_registry->indexable_types as $type => $obj)
             $algoliaAdminSettings["types"][] = array('type' => $type, 'name' => $obj['name'], 'count' => wp_count_posts($type)->publish);
 
-        wp_register_script('jquery-ui', plugin_dir_url(__FILE__) . 'lib/jquery/jquery-ui.js', array_merge(array('jquery')));
-        wp_localize_script('jquery-ui', 'algoliaAdminSettings', $algoliaAdminSettings);
-        wp_enqueue_script('jquery-ui');
 
-        wp_register_script('admin.js', plugin_dir_url(__FILE__) . 'admin/scripts/admin.js', array_merge(array('jquery')));
+        wp_register_script('lib/bundle.min.js', plugin_dir_url(__FILE__) . 'lib/bundle.min.js', array());
+        wp_register_script('admin.js', plugin_dir_url(__FILE__) . 'admin/scripts/admin.js', array('lib/bundle.min.js'));
         wp_localize_script('admin.js', 'algoliaAdminSettings', $algoliaAdminSettings);
         wp_enqueue_script('admin.js');
-
-        wp_enqueue_style('jquery-ui', plugin_dir_url(__FILE__) . 'lib/jquery/jquery-ui.min.css');
     }
 
     public function pre_get_posts($query)
