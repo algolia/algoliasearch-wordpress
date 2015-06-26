@@ -1,5 +1,5 @@
 # updating the bundle
 
 ```sh
-npm run build
+npm run update-bundle
 ```
