@@ -31,13 +31,10 @@ algoliaBundle.$(document).ready(function ($) {
      * Autocomplete functions
      */
 
-    if (algoliaSettings.type_of_search.indexOf("autocomplete") !== -1)
-    {
-        window.getBrandingHits = function () {
-            return function findMatches(q, cb) {
-                return cb(["algolia-branding"]);
-            }
-        };
+    function getBrandingHits() {
+        return function findMatches(q, cb) {
+            return cb(["algolia-branding"]);
+        }
     }
 
     function updateUrl(push_state)
@@ -115,10 +112,7 @@ algoliaBundle.$(document).ready(function ($) {
                 for (var operator in numericsRefinements[key])
                     helper.addNumericRefinement(key, operator, numericsRefinements[key][operator]);
 
-            helper.setCurrentPage(page);
-            helper.setIndex(indexName);
-
-            $(algoliaSettings.search_input_selector).val(helper.state.query);
+            helper.setIndex(indexName).setCurrentPage(page);
 
             helper.search();
 
@@ -177,6 +171,8 @@ algoliaBundle.$(document).ready(function ($) {
             }
             facets.push({count: sub_facets.length, tax: algoliaSettings.facets[i].tax, facet_categorie_name: algoliaSettings.facets[i].name, sub_facets: sub_facets });
         }
+
+        console.log(facets);
 
         return facets;
     }
@@ -371,7 +367,7 @@ algoliaBundle.$(document).ready(function ($) {
 
             var index_name = render(val);
 
-            if (index_name == engine.helper.getIndex())
+            if (index_name == helper.getIndex())
                 return "selected";
             return "";
         }
@@ -456,30 +452,18 @@ algoliaBundle.$(document).ready(function ($) {
             }
         });
 
-        function activateAutocomplete()
-        {
-            $(algoliaSettings.search_input_selector).each(function (i) {
-                $(this).typeahead({hint: false}, hogan_objs);
+        $(algoliaSettings.search_input_selector).each(function (i) {
+            $(this).typeahead({hint: false}, hogan_objs);
 
-                $(this).on('typeahead:selected', function (e, item) {
-                    autocomplete = false;
-                    instant = false;
-                    window.location.href = item.permalink;
-                });
+            $(this).on('typeahead:selected', function (e, item) {
+                autocomplete = false;
+                instant = false;
+                window.location.href = item.permalink;
             });
-        }
-
-        activateAutocomplete();
-
-        function desactivateAutocomplete()
-        {
-            $(algoliaSettings.search_input_selector).each(function (i) {
-                $(this).typeahead('destroy')
-            });
-        }
+        });
     }
 
-    if (algoliaSettings.type_of_search.indexOf("instant") !== -1)
+    if (algoliaSettings.type_of_search.indexOf("instant") !== -1 && algoliaSettings.is_search_page === '1')
     {
         window.facetsLabels = {
             'post': 'Article',
@@ -497,7 +481,9 @@ algoliaBundle.$(document).ready(function ($) {
          * Variables Initialization
          */
 
-        var old_content         = $(algoliaSettings.instant_jquery_selector).html();
+        var wrapperTemplate     = algoliaBundle.Hogan.compile($('#instant_wrapper_template').html());
+
+        var initialized         = false;
 
         var resultsTemplate     = algoliaBundle.Hogan.compile($('#instant-content-template').text());
         var facetsTemplate      = algoliaBundle.Hogan.compile($('#instant-facets-template').text());
@@ -544,9 +530,19 @@ algoliaBundle.$(document).ready(function ($) {
 
         function searchCallback(content)
         {
-            var html_content = "";
+            if (initialized === false)
+            {
+                $(algoliaSettings.instant_jquery_selector).html(wrapperTemplate.render()).show();
+                initialized = true;
+            }
 
-            html_content += "<div id='algolia_instant_selector'>";
+            var instant_search_facets_container = $('#instant-search-facets-container');
+            var instant_search_results_container = $('#instant-search-results-container');
+            var instant_search_pagination_container = $('#instant-search-pagination-container');
+
+            instant_search_facets_container.html('');
+            instant_search_results_container.html('');
+            instant_search_pagination_container.html('');
 
             var facets = [];
             var pages = [];
@@ -556,36 +552,27 @@ algoliaBundle.$(document).ready(function ($) {
                 facets = getFacets(content);
                 pages = getPages(content);
 
-                html_content += getHtmlForFacets(facetsTemplate, facets);
+                instant_search_facets_container.html(getHtmlForFacets(facetsTemplate, facets));
             }
 
-            html_content += getHtmlForResults(resultsTemplate, content, facets);
+            instant_search_results_container.html(getHtmlForResults(resultsTemplate, content, facets));
 
             if (content.hits.length > 0)
-                html_content += getHtmlForPagination(paginationTemplate, content, pages, facets);
-
-            html_content += "</div>";
-
-            $(algoliaSettings.instant_jquery_selector).html(html_content);
+                instant_search_pagination_container.html(getHtmlForPagination(paginationTemplate, content, pages, facets));
 
             updateSliderValues();
+
+            var instant_search_bar = $('#instant-search-bar');
+
+            if (instant_search_bar.is(":focus") === false)
+            {
+                instant_search_bar.focus().val('');
+                instant_search_bar.val(helper.state.query);
+            }
         }
 
-        function activateInstant()
-        {
-            helper.on('result', searchCallback);
-        }
 
-        activateInstant();
-
-        function desactivateInstant()
-        {
-            helper.removeAllListeners();
-
-            location.replace('#');
-
-            $(algoliaSettings.instant_jquery_selector).html(old_content);
-        }
+        helper.on('result', searchCallback);
 
 
         /**
@@ -757,36 +744,14 @@ algoliaBundle.$(document).ready(function ($) {
             return false;
         });
 
-        $(algoliaSettings.search_input_selector).keyup(function (e) {
+        $('body').on('keyup', '#instant-search-bar', function (e) {
             e.preventDefault();
 
-            if (instant === false)
-                return;
-
-            var $this = $(this);
-
             helper.setQuery($(this).val());
-
-            $(algoliaSettings.search_input_selector).each(function (i) {
-                if ($(this)[0] != $this[0])
-                    $(this).val(helper.state.query);
-            });
-
-            if ($(this).val().length == 0) {
-
-                clearTimeout(history_timeout);
-
-                location.replace('#');
-
-                $(algoliaSettings.instant_jquery_selector).html(old_content);
-
-                return;
-            }
 
             /* Uncomment to clear refinements on keyup */
 
             //helper.clearRefinements();
-
 
             performQueries(false);
 
@@ -836,20 +801,5 @@ algoliaBundle.$(document).ready(function ($) {
         window.addEventListener("popstate", function(e) {
             getRefinementsFromUrl();
         });
-    }
-
-    if (algoliaSettings.type_of_search.indexOf("autocomplete") !== -1 && algoliaSettings.type_of_search.indexOf("instant") !== -1)
-    {
-        if (location.hash.length <= 1)
-        {
-            desactivateInstant();
-            instant = false;
-        }
-        else
-        {
-            autocomplete = false;
-            desactivateAutocomplete();
-            $(algoliaSettings.search_input_selector+':first').focus();
-        }
     }
 });

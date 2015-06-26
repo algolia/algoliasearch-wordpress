@@ -68,14 +68,8 @@ class AlgoliaPlugin
         include __DIR__ . '/themes/' . $this->algolia_registry->theme . '/templates.php';
     }
 
-    public function scripts()
+    private function buildSettings()
     {
-        if (is_admin())
-            return;
-
-        wp_enqueue_style('algolia_bundle', plugin_dir_url(__FILE__) . 'themes/' . $this->algolia_registry->theme . '/bundle.css');
-        wp_enqueue_style('algolia_styles', plugin_dir_url(__FILE__) . 'themes/' . $this->algolia_registry->theme . '/styles.css');
-
         $indices = array();
         $facets = array();
 
@@ -97,7 +91,7 @@ class AlgoliaPlugin
                     $indices[] = array('index_name' => $this->algolia_registry->index_name . $tax, 'name' => $obj['name'], 'order1' => 1, 'order2' => $obj['order']);
 
                 if ($obj['facetable'])
-                    $facets[] = array('tax' => $tax, 'name' => $obj['name'], 'order' => $obj['order'], 'type' => $obj['type']);
+                    $facets[] = array('tax' => $tax, 'name' => $obj['name'] ? $obj['name'] : $tax, 'order' => $obj['order'], 'type' => $obj['type']);
             }
         }
 
@@ -122,11 +116,25 @@ class AlgoliaPlugin
             'number_by_page'            => $this->algolia_registry->number_by_page,
             'search_input_selector'     => str_replace("\\", "", $this->algolia_registry->search_input_selector),
             'plugin_url'                => plugin_dir_url(__FILE__),
-            'theme'                     => $this->theme_helper->get_current_theme()
+            'theme'                     => $this->theme_helper->get_current_theme(),
+            'is_search_page'            => isset($_GET['instant'])
         );
 
+        return $algoliaSettings;
+    }
+
+    public function scripts()
+    {
+        if (is_admin())
+            return;
+
+        wp_enqueue_style('algolia_bundle', plugin_dir_url(__FILE__) . 'themes/' . $this->algolia_registry->theme . '/bundle.css');
+        wp_enqueue_style('algolia_styles', plugin_dir_url(__FILE__) . 'themes/' . $this->algolia_registry->theme . '/styles.css');
+
+
+
         wp_register_script('lib/bundle.min.js', plugin_dir_url(__FILE__) . 'lib/bundle.min.js', array());
-        wp_localize_script('lib/bundle.min.js', 'algoliaSettings', $algoliaSettings);
+        wp_localize_script('lib/bundle.min.js', 'algoliaSettings', $this->buildSettings());
 
         wp_register_script('theme.js',  plugin_dir_url(__FILE__) . 'themes/' . $this->algolia_registry->theme . '/theme.js', array('lib/bundle.min.js'), array());
 
