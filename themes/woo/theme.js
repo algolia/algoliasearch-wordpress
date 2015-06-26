@@ -3,6 +3,7 @@ algoliaBundle.$(document).ready(function ($) {
     /**
      * Common variables and function for autocomplete and instant search
      */
+
     var algolia_client = algoliaBundle.algoliasearch(algoliaSettings.app_id, algoliaSettings.search_key);
     var custom_facets_types = algoliaSettings.theme.facet_types;
 

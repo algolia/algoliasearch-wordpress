@@ -76,15 +76,6 @@ class AlgoliaPlugin
         wp_enqueue_style('algolia_bundle', plugin_dir_url(__FILE__) . 'themes/' . $this->algolia_registry->theme . '/bundle.css');
         wp_enqueue_style('algolia_styles', plugin_dir_url(__FILE__) . 'themes/' . $this->algolia_registry->theme . '/styles.css');
 
-        $scripts = array(
-            'lib/bundle.min.js'
-        );
-
-        foreach ($scripts as $script) {
-            wp_register_script($script, plugin_dir_url(__FILE__) . $script, array());
-            wp_localize_script($script, 'settings', array());
-        }
-
         $indices = array();
         $facets = array();
 
@@ -134,8 +125,10 @@ class AlgoliaPlugin
             'theme'                     => $this->theme_helper->get_current_theme()
         );
 
-        wp_register_script('theme.js',  plugin_dir_url(__FILE__) . 'themes/' . $this->algolia_registry->theme . '/theme.js', array(), array());
-        wp_localize_script('theme.js', 'themesSettings', array());
+        wp_register_script('lib/bundle.min.js', plugin_dir_url(__FILE__) . 'lib/bundle.min.js', array());
+        wp_localize_script('lib/bundle.min.js', 'algoliaSettings', $algoliaSettings);
+
+        wp_register_script('theme.js',  plugin_dir_url(__FILE__) . 'themes/' . $this->algolia_registry->theme . '/theme.js', array('lib/bundle.min.js'), array());
 
         wp_enqueue_script('theme.js');
 
