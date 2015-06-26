@@ -1,6 +1,6 @@
 var selectTab;
 
-jQuery(document).ready(function($) {
+algoliaBundle.$(document).ready(function($) {
     /**
      * Handle display/hide of subcontent
      */
