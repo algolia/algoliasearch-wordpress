@@ -13,6 +13,9 @@ class AlgoliaHelper
 
     public function __construct($app_id, $search_key, $admin_key)
     {
+        if (function_exists('curl_version') == false)
+            return;
+
         $this->algolia_client   = new \AlgoliaSearch\Client($app_id, $admin_key);
         $this->algolia_registry = \Algolia\Core\Registry::getInstance();
 

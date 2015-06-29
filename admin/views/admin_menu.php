@@ -8,6 +8,24 @@
 
     global $external_attrs;
     global $attributesToIndex;
+
+?>
+
+<?php
+
+if (function_exists('curl_version') == false)
+{
+?>
+    <div>
+        <h1>Algolia Search : Errors</h1>
+        <ul>
+            <li>You need to have <b>curl</b> and <b>php5-curl</b> installed</li>
+        </ul>
+    </div>
+<?php
+    return;
+}
+
 ?>
 
 <div id="algolia-settings" class="wrap">
