@@ -416,7 +416,7 @@ algoliaBundle.$(document).ready(function ($) {
     var autocomplete = true;
     var instant = true;
 
-    if (algoliaSettings.type_of_search.indexOf("autocomplete") !== -1)
+    if (algoliaSettings.autocomplete)
     {
         var $autocompleteTemplate = algoliaBundle.Hogan.compile($('#autocomplete-template').text());
 
@@ -463,7 +463,7 @@ algoliaBundle.$(document).ready(function ($) {
         });
     }
 
-    if (algoliaSettings.type_of_search.indexOf("instant") !== -1 && algoliaSettings.is_search_page === '1')
+    if (algoliaSettings.instant && algoliaSettings.is_search_page === '1')
     {
         window.facetsLabels = {
             'post': 'Article',

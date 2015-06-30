@@ -16,6 +16,13 @@
     border-bottom: 1px solid #DDD;
     padding-left: 5px;
 }
+
+#algolia-settings .content-wrapper .content h3 .h3-info
+{
+    font-weight: normal;
+    font-size: 13px;
+}
+
 #algolia-settings .content-wrapper .content .help-block {
     border-left: 5px solid #DDD;
     background-color: #F1F1F1;

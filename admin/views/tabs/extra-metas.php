@@ -115,12 +115,12 @@
                         <th>Type</th>
                         <th>Name</th>
                         <th>
-                            <?php if (in_array('autocomplete', $algolia_registry->type_of_search)): ?>
+                            <?php if ($algolia_registry->autocomplete): ?>
                                 Autocomplete section
                             <?php endif; ?>
                         </th>
                         <th>
-                            <?php if (in_array('instant', $algolia_registry->type_of_search)): ?>
+                            <?php if ($algolia_registry->instant): ?>
                                 Facetable
                             <?php endif; ?>
                         </th>
@@ -146,12 +146,12 @@
                             <th>Type</th>
                             <th>Meta key</th>
                             <th>
-                                <?php if (in_array('autocomplete', $algolia_registry->type_of_search)): ?>
+                                <?php if ($algolia_registry->autocomplete): ?>
                                     Autocomplete section
                                 <?php endif; ?>
                             </th>
                             <th>
-                                <?php if (in_array('instant', $algolia_registry->type_of_search)): ?>
+                                <?php if ($algolia_registry->instant): ?>
                                     Facetable
                                 <?php endif; ?>
                             </th>
@@ -171,7 +171,7 @@
                                 <td><?php echo $metaItem->name; ?></td>
                                 <td></td>
                                 <td>
-                                    <?php if (in_array('instant', $algolia_registry->type_of_search)): ?>
+                                    <?php if ($algolia_registry->instant): ?>
                                         <input type="checkbox"
                                                name="TYPES[<?php echo $metaItem->type; ?>][METAS][<?php echo $metaItem->name; ?>][FACETABLE]"
                                                value="1"
@@ -218,10 +218,10 @@
                             <th class="table-col-enabled">Enabled</th>
                             <th></th>
                             <th>Name</th>
-                            <?php if (in_array('autocomplete', $algolia_registry->type_of_search)): ?>
+                            <?php if ($algolia_registry->autocomplete): ?>
                                 <th>Autocomplete section</th>
                             <?php endif; ?>
-                            <?php if (in_array('instant', $algolia_registry->type_of_search)): ?>
+                            <?php if ($algolia_registry->instant): ?>
                                 <th>Facetable</th>
                             <?php endif; ?>
                             <th>Facet type</th>
@@ -247,7 +247,7 @@
                                     <?php echo $taxItem->name; ?>
                                 </td>
                                 <td>
-                                    <?php if (in_array('autocomplete', $algolia_registry->type_of_search)): ?>
+                                    <?php if ($algolia_registry->autocomplete): ?>
                                         <?php if ($taxItem->default_attribute == false): ?>
                                             <input type="checkbox"
                                                    value="facetable"
@@ -258,7 +258,7 @@
                                     <?php endif; ?>
                                 </td>
                                 <td>
-                                    <?php if (in_array('instant', $algolia_registry->type_of_search)): ?>
+                                    <?php if ($algolia_registry->instant): ?>
                                         <input type="checkbox"
                                                value="facetable"
                                                name="TAX[<?php echo $taxItem->name; ?>][FACETABLE]"

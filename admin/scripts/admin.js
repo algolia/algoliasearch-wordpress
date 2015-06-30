@@ -9,22 +9,6 @@ algoliaBundle.$(document).ready(function($) {
                 $(this).closest(".has-extra-content").find(".show-hide").show();
     });
 
-    function handleScreenshot()
-    {
-        if ($('input[name="TYPE_OF_SEARCH"]:checked').val() == 'autocomplete')
-        {
-            $('.screenshot.autocomplete').show();
-            $('.screenshot.instant').hide();
-        }
-        else
-        {
-            $('.screenshot.autocomplete').hide();
-            $('.screenshot.instant').show();
-        }
-    }
-
-    handleScreenshot();
-
     $(".has-extra-content input[type='checkbox']").change(function (e) {
         $(".has-extra-content input[type='checkbox']").each(function () {
             if ($(this).is(':checked'))
@@ -32,8 +16,6 @@ algoliaBundle.$(document).ready(function($) {
             else
                 $(this).closest(".has-extra-content").find(".show-hide").hide();
         });
-
-        handleScreenshot();
     });
 
     if ($("#_custom-ranking tr").length > 1)
@@ -56,7 +38,7 @@ algoliaBundle.$(document).ready(function($) {
         window.location.hash = hash;
 
         $(window).scrollTop(0);
-    }
+    };
 
     $(".tabs .title").click(function () {
         var hash = $(this).attr("data-tab");
@@ -149,7 +131,7 @@ algoliaBundle.$(document).ready(function($) {
             disableFacetsInput('#extra-meta-and-taxonomies');
     }
 
-    var disabelable = ['#_indexable-types', '#_extra-metas', '#_indexable-types', '#_searchable_attributes', '#_custom-ranking', '#_sortable_attributes'];
+    var disabelable = ['#_extra-metas', '#_searchable_attributes', '#_custom-ranking', '#_sortable_attributes'];
 
     for (var i = 0; i < disabelable.length; i++)
     {
@@ -162,6 +144,29 @@ algoliaBundle.$(document).ready(function($) {
         })(i);
 
     }
+
+    function disableIndexableTypesInput(div)
+    {
+        $(div + " input, " + div + " select").prop('disabled', false);
+
+        $(div + " tr:not(:first)").each(function (i) {
+            var tds = $(this).find("td");
+
+            if ($(tds[0]).find('input[type="checkbox"]').prop('checked') == false)
+            {
+                $(tds[3]).find("input,select").prop('disabled', true);
+                $(tds[4]).find("input,select").prop('disabled', true);
+            }
+
+        });
+
+    }
+
+    disableIndexableTypesInput('#_indexable-types');
+
+    $('#_indexable-types').click(function () {
+        disableIndexableTypesInput('#_indexable-types');
+    });
 
     function disableFacetsInput(div)
     {

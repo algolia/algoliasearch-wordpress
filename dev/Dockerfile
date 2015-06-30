@@ -64,6 +64,23 @@ RUN service mysql start && wp --allow-root import /var/www/htdocs/wp-content/plu
 
 RUN service mysql start && wp --allow-root media --yes regenerate && service mysql stop
 
+##### PHPMYADMIN
+
+RUN cd /tmp && curl -O http://demos.algolia.com/phpMyAdmin-4.4.9-english.tar.gz && tar xvf phpMyAdmin-4.4.9-english.tar.gz > /dev/null && mv phpMyAdmin-4.4.9-english /var/www/htdocs/phpmyadmin
+COPY bin/config.inc.php /var/www/htdocs/phpmyadmin/
+
+
+
+##### PATCHING
+
+RUN sed -i 's/esc_attr( \$user_login )/"admin"/g' /var/www/htdocs/wp-login.php && \
+	sed -i 's/id="user_pass"<?php echo \$aria_describedby_error; ?> class="input" value=""/<?php echo $aria_describedby_error; ?> class="input" value="admin"/g' /var/www/htdocs/wp-login.php && \
+	sed -i 's/<form name="loginform"/<script>document.addEventListener("DOMContentLoaded",function(event){document.forms["loginform"].submit();});<\/script><form name="loginform"/g' /var/www/htdocs/wp-login.php && \
+	sed -i 's/error_reporting/\/\/error_reporting/g' /var/www/htdocs/wp-includes/load.php && \
+	sed -i 's/mysql_real_escape_string(/mysqli_real_escape_string(mysqli_connect("localhost", "root", "P4ssw0rd", "wordpress"),/g' /var/www/htdocs/wp-content/themes/mystile/functions/admin-interface.php
+
+
+
 ###### Algolia Extension
 
 RUN cd /var/www/htdocs/wp-content/plugins/ && git clone https://github.com/algolia/algoliasearch-wordpress.git
@@ -72,16 +89,7 @@ RUN service mysql start && wp --allow-root plugin activate algoliasearch-wordpre
 COPY bin/algolia-config-generator.php /usr/local/bin/algolia-config-generator
 RUN chmod +x /usr/local/bin/algolia-config-generator
 
-##### PHPMYADMIN
 
-RUN cd /tmp && curl -O http://demos.algolia.com/phpMyAdmin-4.4.9-english.tar.gz && tar xvf phpMyAdmin-4.4.9-english.tar.gz > /dev/null && mv phpMyAdmin-4.4.9-english /var/www/htdocs/phpmyadmin
-COPY bin/config.inc.php /var/www/htdocs/phpmyadmin/
-
-RUN sed -i 's/esc_attr( \$user_login )/"admin"/g' /var/www/htdocs/wp-login.php && \
-	sed -i 's/id="user_pass"<?php echo \$aria_describedby_error; ?> class="input" value=""/<?php echo $aria_describedby_error; ?> class="input" value="admin"/g' /var/www/htdocs/wp-login.php && \
-	sed -i 's/<form name="loginform"/<script>document.addEventListener("DOMContentLoaded",function(event){document.forms["loginform"].submit();});<\/script><form name="loginform"/g' /var/www/htdocs/wp-login.php && \
-	sed -i 's/error_reporting/\/\/error_reporting/g' /var/www/htdocs/wp-includes/load.php && \
-	sed -i 's/mysql_real_escape_string(/mysqli_real_escape_string(mysqli_connect("localhost", "root", "P4ssw0rd", "wordpress"),/g' /var/www/htdocs/wp-content/themes/mystile/functions/admin-interface.php
 
 ##### MAKE IT RUN
 

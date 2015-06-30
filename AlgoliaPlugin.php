@@ -32,7 +32,7 @@ class AlgoliaPlugin
         add_action('admin_post_update_account_info',            array($this, 'admin_post_update_account_info'));
         add_action('admin_post_update_index_name',              array($this, 'admin_post_update_index_name'));
         add_action('admin_post_update_indexable_types',         array($this, 'admin_post_update_indexable_types'));
-        add_action('admin_post_update_type_of_search',          array($this, 'admin_post_update_type_of_search'));
+        add_action('admin_post_update_ui',                      array($this, 'admin_post_update_ui'));
         add_action('admin_post_update_extra_meta',              array($this, 'admin_post_update_extra_meta'));
         add_action('admin_post_custom_ranking',                 array($this, 'admin_post_custom_ranking'));
         add_action('admin_post_update_searchable_attributes',   array($this, 'admin_post_update_searchable_attributes'));
@@ -75,7 +75,8 @@ class AlgoliaPlugin
 
         foreach ($this->algolia_registry->indexable_types as $type => $obj)
         {
-            $indices[] = array('index_name' => $this->algolia_registry->index_name . $type, 'name' => $obj['name'], 'order1' => 0, 'order2' => $obj['order']);
+            if ($obj['autocompletable'])
+                $indices[] = array('index_name' => $this->algolia_registry->index_name . $type, 'name' => $obj['name'], 'order1' => 0, 'order2' => $obj['order']);
 
             if (isset($this->algolia_registry->metas[$type]))
                 foreach ($this->algolia_registry->metas[$type] as $meta_key => $meta_value)
@@ -109,7 +110,8 @@ class AlgoliaPlugin
             'indices'                   => $indices,
             'sorting_indices'           => $sorting_indices,
             'index_name'                => $this->algolia_registry->index_name,
-            'type_of_search'            => $this->algolia_registry->type_of_search,
+            'autocomplete'              => $this->algolia_registry->autocomplete,
+            'instant'                   => $this->algolia_registry->instant,
             'instant_jquery_selector'   => str_replace("\\", "", $this->algolia_registry->instant_jquery_selector),
             'facets'                    => $facets,
             'number_by_type'            => $this->algolia_registry->number_by_type,
@@ -229,17 +231,36 @@ class AlgoliaPlugin
 
         $types = array();
 
+        $instant        = false;
+        $autocomplete   = false;
+
+        $metas = $this->algolia_registry->metas;
+
+        if (isset($metas['tax']) && is_array($metas['tax']))
+        {
+            foreach ($metas['tax'] as $tax)
+            {
+                $autocomplete = $autocomplete || $tax['autocompletable'];
+            }
+        }
+
         if (isset($_POST['TYPES']) && is_array($_POST['TYPES']))
         {
             $i = 0;
 
-            foreach ($_POST['TYPES'] as $type)
+            foreach ($_POST['TYPES'] as $slug => $type)
             {
-                if (in_array($type['SLUG'], $valid_types))
+                if (in_array($slug, $valid_types))
                 {
-                    $types[$type['SLUG']] = array(
-                        'name' => $type['NAME'] == '' ? $type['SLUG'] : $type['NAME'],
-                        'order' => $i
+                    $autocomplete   = $autocomplete || isset($type['AUTOCOMPLETABLE']);
+                    $instant        = $instant || isset($type['INSTANTABLE']);
+
+                    $types[$slug] = array(
+                        'autocompletable'       => isset($type['AUTOCOMPLETABLE']),
+                        'instantable'           => isset($type['INSTANTABLE']),
+                        'nb_results_by_section' => $type['NB_RESULTS_BY_SECTION'],
+                        'name'                  => $type['NAME'] == '' ? $type['SLUG'] : $type['NAME'],
+                        'order'                 => $i
                     );
 
                     $i++;
@@ -247,7 +268,10 @@ class AlgoliaPlugin
             }
         }
 
-        $this->algolia_registry->indexable_types = $types;
+        $this->algolia_registry->instant            = $instant;
+        $this->algolia_registry->autocomplete       = $autocomplete;
+
+        $this->algolia_registry->indexable_types    = $types;
 
         $this->algolia_helper->handleIndexCreation();
 
@@ -324,19 +348,13 @@ class AlgoliaPlugin
     }
 
 
-    public function admin_post_update_type_of_search()
+    public function admin_post_update_ui()
     {
-        if (isset($_POST['TYPE_OF_SEARCH']) && is_array($_POST['TYPE_OF_SEARCH']))
-            $this->algolia_registry->type_of_search = $_POST['TYPE_OF_SEARCH'];
-
         if (isset($_POST['JQUERY_SELECTOR']))
             $this->algolia_registry->instant_jquery_selector = str_replace('"', '\'', $_POST['JQUERY_SELECTOR']);
 
         if (isset($_POST['NUMBER_BY_PAGE']) && is_numeric($_POST['NUMBER_BY_PAGE']))
             $this->algolia_registry->number_by_page = $_POST['NUMBER_BY_PAGE'];
-
-        if (isset($_POST['NUMBER_BY_TYPE']) && is_numeric($_POST['NUMBER_BY_TYPE']))
-            $this->algolia_registry->number_by_type = $_POST['NUMBER_BY_TYPE'];
 
         $search_input_selector  = !empty($_POST['SEARCH_INPUT_SELECTOR']) ? $_POST['SEARCH_INPUT_SELECTOR'] : '';
         $theme                  = !empty($_POST['THEME']) ? $_POST['THEME'] : 'default';
@@ -459,6 +477,13 @@ class AlgoliaPlugin
 
         $valid_tax = get_taxonomies();
 
+        $autocomplete = false;
+
+        foreach ($indexable_types as $type)
+        {
+            $autocomplete = $autocomplete || $type['autocompletable'];
+        }
+
         if (isset($_POST['TAX']) && is_array($_POST['TAX']))
         {
             foreach ($_POST['TAX'] as $tax)
@@ -471,8 +496,10 @@ class AlgoliaPlugin
                     $metas['tax'][$tax['SLUG']]['name']                 = isset($tax['NAME']) ? $tax['NAME'] : '';
                     $metas['tax'][$tax['SLUG']]['indexable']            = 1;
 
-                    $metas['tax'][$tax['SLUG']]['facetable']            = in_array('instant', $this->algolia_registry->type_of_search)
+                    $metas['tax'][$tax['SLUG']]['facetable']            = $this->algolia_registry->instant
                                                                             && $metas['tax'][$tax['SLUG']]['indexable'] && isset($tax['FACETABLE']) ? 1 : 0;
+
+                    $autocomplete = $autocomplete || $metas['tax'][$tax['SLUG']]['indexable'] && isset($tax['AUTOCOMPLETABLE']);
 
                     $metas['tax'][$tax['SLUG']]['autocompletable']      = $metas['tax'][$tax['SLUG']]['indexable'] && isset($tax['AUTOCOMPLETABLE']) ? 1 : 0;
                     $metas['tax'][$tax['SLUG']]['type']                 = $tax['FACET_TYPE'];
@@ -483,6 +510,8 @@ class AlgoliaPlugin
                 }
             }
         }
+
+        $this->algolia_registry->autocomplete = $autocomplete;
 
         $this->algolia_registry->metas = $metas;
 

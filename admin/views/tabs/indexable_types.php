@@ -5,27 +5,33 @@
 
     foreach (get_post_types() as $type)
     {
-        $count = wp_count_posts($type)->publish;
-
-        if ($count == 0 || in_array($type, $excluded_types))
+        if (in_array($type, $excluded_types))
             continue;
 
-        $typeItem           = new stdClass();
+        $count = wp_count_posts($type)->publish;
 
-        $typeItem->name     = $type;
-        $typeItem->count    = $count;
+        if ($count == 0)
+            continue;
 
-        $typeItem->order    = is_array($algolia_registry->indexable_types) && in_array($type, array_keys($algolia_registry->indexable_types))
-                                ? $algolia_registry->indexable_types[$type]['order'] : 10000 + $i;
+        $typeItem                           = new stdClass();
 
-        $typeItem->checked  = is_array($algolia_registry->indexable_types) && in_array($type, array_keys($algolia_registry->indexable_types));
+        $typeItem->name                     = $type;
+        $typeItem->count                    = $count;
 
-        $typeItem->label    = isset($algolia_registry->indexable_types[$type]) ? $algolia_registry->indexable_types[$type]['name'] : "";
+        $typeItem->order                    = is_array($algolia_registry->indexable_types) && in_array($type, array_keys($algolia_registry->indexable_types))
+                                                ? $algolia_registry->indexable_types[$type]['order'] : 10000 + $i;
 
-        $types[]            = $typeItem;
+        $typeItem->autocompletable          = isset($algolia_registry->indexable_types[$type]) && $algolia_registry->indexable_types[$type]['autocompletable'];
+        $typeItem->instantable              = isset($algolia_registry->indexable_types[$type]) && $algolia_registry->indexable_types[$type]['instantable'];
+        $typeItem->nb_results_by_section    = isset($algolia_registry->indexable_types[$type]) ? (int) $algolia_registry->indexable_types[$type]['nb_results_by_section'] : 3;
+
+        $typeItem->label                    = isset($algolia_registry->indexable_types[$type]) ? $algolia_registry->indexable_types[$type]['name'] : "";
+
+        $types[]                            = $typeItem;
 
         $i++;
     }
+
 ?>
 
 <div class="tab-content" id="_indexable-types">
@@ -35,38 +41,62 @@
             <div class="content">
                 <h3>Wordpress Types</h3>
                 <p class="help-block">
-                    Configure here the Wordpress types you want index.
-                    <?php if (in_array('autocomplete', $algolia_registry->type_of_search)): ?>
-                        The order of this setting reflects the order of the sections in the auto-completion menu.
-                    <?php endif; ?>
+                    Configure here the Wordpress types you want index. The order of this setting reflects the order of the sections in the auto-completion menu.
                 </p>
                 <table>
                     <tr data-order="-1">
-                        <th class="table-col-enabled">Enabled</th>
+                        <th class="table-col-enabled">Autocomplete</th>
+                        <th class="table-col-enabled">Instant</th>
                         <th>Name</th>
-                        <?php if (in_array('autocomplete', $algolia_registry->type_of_search)): ?>
+
+                        <th class="table-col-enabled">Number of results by section</th>
+
+                        <?php if ($algolia_registry->autocomplete): ?>
                             <th>Auto-completion menu label</th>
                         <?php endif; ?>
+
+                        <th></th>
                     </tr>
 
                     <?php foreach ($types as $typeItem) : ?>
                         <tr data-order="<?php echo $typeItem->order; ?>">
+
                             <td class="table-col-enabled">
                                 <input type="checkbox"
-                                       name="TYPES[<?php echo $typeItem->name; ?>][SLUG]"
+                                       name="TYPES[<?php echo $typeItem->name; ?>][AUTOCOMPLETABLE]"
                                        value="<?php echo $typeItem->name; ?>"
-                                    <?php checked($typeItem->checked) ?>
+                                    <?php checked($typeItem->autocompletable) ?>
                                     >
                             </td>
+
+                            <td class="table-col-enabled">
+                                <input type="checkbox"
+                                       name="TYPES[<?php echo $typeItem->name; ?>][INSTANTABLE]"
+                                       value="<?php echo $typeItem->name; ?>"
+                                    <?php checked($typeItem->instantable) ?>
+                                    >
+                            </td>
+
                             <td>
                                 <?php echo $typeItem->name; ?> (<?php echo $typeItem->count; ?>)
                             </td>
-                            <?php if (in_array('autocomplete', $algolia_registry->type_of_search)): ?>
+
+
+                            <td class="table-col-enabled">
+                                <input type="number"
+                                       name="TYPES[<?php echo $typeItem->name; ?>][NB_RESULTS_BY_SECTION]"
+                                       value="<?php echo $typeItem->nb_results_by_section; ?>"
+                                    >
+                            </td>
+
                             <td style="white-space: nowrap;">
                                 <input type="text" value="<?php echo $typeItem->label ?>" name="TYPES[<?php echo $typeItem->name; ?>][NAME]">
+                            </td>
+
+                            <td>
                                 <img width="10" src="<?php echo $move_icon_url; ?>" style="float: right; margin-top: 10px">
                             </td>
-                            <?php endif; ?>
+
                         </tr>
                     <?php endforeach; ?>
                 </table>

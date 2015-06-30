@@ -94,8 +94,11 @@ class Indexer
     {
         $object = $this->wordpress_fetcher->getPostObj($post);
 
-        $this->algolia_helper->pushObject($this->algolia_registry->index_name.$post->post_type, $object);
-        $this->algolia_helper->pushObject($this->algolia_registry->index_name.'all', $object);
+        if (isset($this->algolia_registry->indexable_types[$post->post_type]) && $this->algolia_registry->indexable_types[$post->post_type]['autocompletable'])
+            $this->algolia_helper->pushObject($this->algolia_registry->index_name.$post->post_type, $object);
+
+        if (isset($this->algolia_registry->indexable_types[$post->post_type]) && $this->algolia_registry->indexable_types[$post->post_type]['instantable'])
+            $this->algolia_helper->pushObject($this->algolia_registry->index_name.'all', $object);
     }
 
     public function deletePost($post_id, $type)
@@ -124,7 +127,10 @@ class Indexer
     {
         $objects = $this->getPosts("AND post_type = '".$type."' ", "LIMIT ".($offset * $count).",".$count);
 
-        $this->algolia_helper->pushObjects($this->algolia_registry->index_name.$type.'_temp', $objects);
-        $this->algolia_helper->pushObjects($this->algolia_registry->index_name.'all_temp', $objects);
+        if (isset($this->algolia_registry->indexable_types[$type]) && $this->algolia_registry->indexable_types[$type]['autocompletable'])
+            $this->algolia_helper->pushObjects($this->algolia_registry->index_name.$type.'_temp', $objects);
+
+        if (isset($this->algolia_registry->indexable_types[$type]) && $this->algolia_registry->indexable_types[$type]['instantable'])
+            $this->algolia_helper->pushObjects($this->algolia_registry->index_name.'all_temp', $objects);
     }
 }

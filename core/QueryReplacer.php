@@ -22,7 +22,7 @@ class QueryReplacer
 
         if (is_search() && ! is_admin() && $this->algolia_registry->validCredential && isset($_GET['instant']) === false)
         {
-            if (in_array('instant', $this->algolia_registry->type_of_search))
+            if ($this->algolia_registry->instant)
             {
                 $url = get_site_url().'/?instant=1&s='.$query->query['s'].'#q='.$query->query['s'].'&page=0&refinements=%5B%5D&numerics_refinements=%7B%7D&index_name=%22'.$this->algolia_registry->index_name.'all%22';
                 header('Location: '.$url);
