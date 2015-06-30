@@ -465,7 +465,8 @@ algoliaBundle.$(document).ready(function ($) {
     {
         window.facetsLabels = {
             'post': 'Article',
-            'page': 'Page'
+            'page': 'Page',
+            'product': 'Products'
         };
 
 

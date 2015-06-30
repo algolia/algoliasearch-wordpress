@@ -467,7 +467,8 @@ algoliaBundle.$(document).ready(function ($) {
     {
         window.facetsLabels = {
             'post': 'Article',
-            'page': 'Page'
+            'page': 'Page',
+            'product': 'Products'
         };
 
         if ($(algoliaSettings.instant_jquery_selector).length !== 1)
