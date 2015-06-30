@@ -491,7 +491,6 @@ algoliaBundle.$(document).ready(function ($) {
 
         var conjunctive_facets  = [];
         var disjunctive_facets  = [];
-        var slider_facets       = [];
 
         var history_timeout;
 
@@ -504,10 +503,7 @@ algoliaBundle.$(document).ready(function ($) {
                 disjunctive_facets.push(algoliaSettings.facets[i].tax);
 
             if (algoliaSettings.facets[i].type == "slider")
-            {
                 disjunctive_facets.push(algoliaSettings.facets[i].tax);
-                slider_facets.push(algoliaSettings.facets[i].tax);
-            }
 
             if (algoliaSettings.facets[i].type == "menu")
                 conjunctive_facets.push(algoliaSettings.facets[i].tax);

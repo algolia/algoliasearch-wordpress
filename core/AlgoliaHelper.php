@@ -124,6 +124,13 @@ class AlgoliaHelper
                 if ($value['default_attribute'] == 0 && $value['autocompletable'] && $this->algolia_registry->autocomplete)
                 {
                     $mergeSettings = $this->mergeSettings($index_name . $name, $defaultSettings);
+
+                    if (has_filter('prepare_algolia_set_settings'))
+                    {
+                        $mergeSettings = apply_filters('prepare_algolia_set_settings', $index_name . $name, $mergeSettings);
+                        $mergeSettings = apply_filters('prepare_algolia_set_settings', $index_name . "_temp", $mergeSettings);
+                    }
+
                     $this->setSettings($index_name . $name, $mergeSettings);
                     $this->setSettings($index_name . $name . "_temp", $mergeSettings);
                 }
@@ -141,6 +148,12 @@ class AlgoliaHelper
             if ($this->algolia_registry->autocomplete)
             {
                 $mergeSettings = $this->mergeSettings($index_name . $name, $defaultSettings);
+
+                if (has_filter('prepare_algolia_set_settings'))
+                {
+                    $mergeSettings = apply_filters('prepare_algolia_set_settings', $index_name . $name, $mergeSettings);
+                    $mergeSettings = apply_filters('prepare_algolia_set_settings', $index_name . "_temp", $mergeSettings);
+                }
 
                 $this->setSettings($index_name . $name, $mergeSettings);
                 $this->setSettings($index_name . $name . "_temp", $mergeSettings);
@@ -195,6 +208,12 @@ class AlgoliaHelper
         if ($this->algolia_registry->instant == false)
             return;
 
+        if (has_filter('prepare_algolia_set_settings'))
+        {
+            $mergeSettings = apply_filters('prepare_algolia_set_settings', $index_name.'all', $mergeSettings);
+            $mergeSettings = apply_filters('prepare_algolia_set_settings', $index_name.'all_temp', $mergeSettings);
+        }
+
         $this->setSettings($index_name.'all', $mergeSettings);
         $this->setSettings($index_name.'all_temp', $mergeSettings);
 
@@ -209,11 +228,23 @@ class AlgoliaHelper
             foreach ($this->algolia_registry->sortable as $values)
                 $slaves[] = $index_name.'all_'.$values['name'].'_'.$values['sort'];
 
-            $this->setSettings($index_name.'all', array('slaves' => $slaves));
+            $settings = array('slaves' => $slaves);
+
+            if (has_filter('prepare_algolia_set_settings'))
+            {
+                $settings = apply_filters('prepare_algolia_set_settings', $index_name.'all', $settings);
+            }
+
+            $this->setSettings($index_name.'all', $settings);
 
             foreach ($this->algolia_registry->sortable as $values)
             {
                 $mergeSettings['ranking'] = array($values['sort'].'('.$values['name'].')', 'typo', 'geo', 'words', 'proximity', 'attribute', 'exact', 'custom');
+
+                if (has_filter('prepare_algolia_set_settings'))
+                {
+                    $mergeSettings = apply_filters('prepare_algolia_set_settings', $index_name.'all_'.$values['name'].'_'.$values['sort'], $mergeSettings);
+                }
 
                 $this->setSettings($index_name.'all_'.$values['name'].'_'.$values['sort'], $mergeSettings);
             }

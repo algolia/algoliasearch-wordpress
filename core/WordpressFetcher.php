@@ -40,7 +40,7 @@ class WordpressFetcher
         return $value; //utf8_encode ?
     }
 
-    private function try_cast($value)
+    public static function try_cast($value)
     {
         if (is_serialized($value))
             return @unserialize($value);
@@ -196,8 +196,6 @@ class WordpressFetcher
 
     public function getPostObj($data)
     {
-        global $external_attrs;
-
         $algolia_registry = \Algolia\Core\Registry::getInstance();
 
         $obj = new \stdClass();
@@ -221,12 +219,6 @@ class WordpressFetcher
 
         $thumbnail_id = get_post_thumbnail_id($data->ID);
 
-        $extra_attrs = array();
-
-        if (isset($external_attrs[$data->post_type]))
-            $extra_attrs = $external_attrs[$data->post_type]($data);
-
-
         if ($thumbnail_id)
             $obj->featureImage = $this->getImage($thumbnail_id);
 
@@ -236,11 +228,6 @@ class WordpressFetcher
                 if (in_array($meta_key, array_keys($algolia_registry->metas[$data->post_type])))
                     if ($algolia_registry->metas[$data->post_type][$meta_key]["indexable"])
                         $obj->$meta_key = $this->try_cast($meta_value[0]);
-
-            foreach ($extra_attrs as $meta_key => $meta_value)
-                if (in_array($meta_key, array_keys($algolia_registry->metas[$data->post_type])))
-                    if ($algolia_registry->metas[$data->post_type][$meta_key]["indexable"])
-                        $obj->$meta_key = $this->try_cast($meta_value);
         }
 
 
@@ -257,6 +244,11 @@ class WordpressFetcher
                     return $obj->name;
                 }, $terms);
             }
+        }
+
+        if (has_filter('prepare_algolia_record'))
+        {
+            $obj = apply_filters('prepare_algolia_record', $obj);
         }
 
         return (array) $obj;

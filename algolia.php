@@ -46,59 +46,74 @@ $attributesToSnippet    = array("content");
 
 $attributesToIndex      = array("title", "excerpt", "content", "author", "type");
 
-/**
- * Handling Extension
- */
+/** Woo Commerce Handling */
+add_filter('prepare_algolia_record', function ($data) {
 
-$external_attrs = array();
+    if (class_exists('WC_Product_Factory') && $data->type == 'product')
+    {
+        $algolia_registry = \Algolia\Core\Registry::getInstance();
 
-$external_attrs['product_attrs'] = array('virtual', 'sku', 'taxable', 'tax_status', 'tax_class', 'managing_stock', 'stock_quantity', 'in_stock', 'backorders_allowed', 'sold_individually', 'purchaseable', 'visible', 'catalog_visibility', 'on_sale', 'weight', 'length', 'shipping_required', 'shipping_taxable', 'shipping_class', 'shipping_class_id', 'reviews_allowed', 'average_rating', 'rating_count', 'related_ids', 'upsell_ids', 'download_type', 'purchase_note');
-$external_attrs['product'] = function ($data) {
-        if (class_exists('WC_Product_Factory'))
+        $factory = new WC_Product_Factory();
+        $product = $factory->get_product($data->objectID);
+
+
+
+        $product_attrs = array(
+            'virtual'            => $product->is_virtual(),
+            'sku'                => $product->get_sku(),
+            'taxable'            => $product->is_taxable(),
+            'tax_status'         => $product->get_tax_status(),
+            'tax_class'          => $product->get_tax_class(),
+            'managing_stock'     => $product->managing_stock(),
+            'stock_quantity'     => (int) $product->get_stock_quantity(),
+            'in_stock'           => $product->is_in_stock(),
+            'backorders_allowed' => $product->backorders_allowed(),
+            'sold_individually'  => $product->is_sold_individually(),
+            'purchaseable'       => $product->is_purchasable(),
+            'visible'            => $product->is_visible(),
+            'catalog_visibility' => $product->visibility,
+            'on_sale'            => $product->is_on_sale(),
+            'weight'             => $product->get_weight() ? wc_format_decimal( $product->get_weight(), 2 ) : null,
+            'length'             => $product->length,
+            'shipping_required'  => $product->needs_shipping(),
+            'shipping_taxable'   => $product->is_shipping_taxable(),
+            'shipping_class'     => $product->get_shipping_class(),
+            'shipping_class_id'  => (0 !== $product->get_shipping_class_id()) ? $product->get_shipping_class_id() : null,
+            'reviews_allowed'    => ('open' === $product->get_post_data()->comment_status),
+            'average_rating'     => wc_format_decimal($product->get_average_rating(), 2),
+            'rating_count'       => (int) $product->get_rating_count(),
+            'related_ids'        => array_map('absint', array_values($product->get_related())),
+            'upsell_ids'         => array_map('absint', $product->get_upsells()),
+            'download_type'      => $product->download_type,
+            'purchase_note'      => wpautop(do_shortcode(wp_kses_post($product->purchase_note))),
+        );
+
+        foreach ($product_attrs as $key => $value)
         {
-            $factory = new WC_Product_Factory();
-            $product = $factory->get_product($data->ID);
-
-
-
-            $product_attrs = array(
-                'virtual'            => $product->is_virtual(),
-                'sku'                => $product->get_sku(),
-                'taxable'            => $product->is_taxable(),
-                'tax_status'         => $product->get_tax_status(),
-                'tax_class'          => $product->get_tax_class(),
-                'managing_stock'     => $product->managing_stock(),
-                'stock_quantity'     => (int) $product->get_stock_quantity(),
-                'in_stock'           => $product->is_in_stock(),
-                'backorders_allowed' => $product->backorders_allowed(),
-                'sold_individually'  => $product->is_sold_individually(),
-                'purchaseable'       => $product->is_purchasable(),
-                'visible'            => $product->is_visible(),
-                'catalog_visibility' => $product->visibility,
-                'on_sale'            => $product->is_on_sale(),
-                'weight'             => $product->get_weight() ? wc_format_decimal( $product->get_weight(), 2 ) : null,
-                'length'             => $product->length,
-                'shipping_required'  => $product->needs_shipping(),
-                'shipping_taxable'   => $product->is_shipping_taxable(),
-                'shipping_class'     => $product->get_shipping_class(),
-                'shipping_class_id'  => (0 !== $product->get_shipping_class_id()) ? $product->get_shipping_class_id() : null,
-                'reviews_allowed'    => ('open' === $product->get_post_data()->comment_status),
-                'average_rating'     => wc_format_decimal($product->get_average_rating(), 2),
-                'rating_count'       => (int) $product->get_rating_count(),
-                'related_ids'        => array_map('absint', array_values($product->get_related())),
-                'upsell_ids'         => array_map('absint', $product->get_upsells()),
-                'download_type'      => $product->download_type,
-                'purchase_note'      => wpautop(do_shortcode(wp_kses_post($product->purchase_note))),
-            );
-
-            foreach ($product->get_attributes() as $attribute)
-                $product_attrs[$attribute['name']] = $attribute['value'];
-
-            return $product_attrs;
+            if (in_array($key, array_keys($algolia_registry->metas[$data->type])))
+            {
+                if ($algolia_registry->metas[$data->type][$key]["indexable"])
+                {
+                    $data->$key = \Algolia\Core\WordpressFetcher::try_cast($value);
+                }
+            }
         }
 
-        return array();
-    };
+        foreach ($product->get_attributes() as $attribute)
+        {
+            if (in_array($attribute['name'], array_keys($algolia_registry->metas[$data->type])))
+            {
+                if ($algolia_registry->metas[$data->type][$attribute['name']]["indexable"])
+                {
+                    $product_attrs[$attribute['name']] = \Algolia\Core\WordpressFetcher::try_cast($attribute['value']);
+                }
+            }
+        }
+    }
+
+    return $data;
+}, 0);
+
 /**
  * Functions definitions
  */
