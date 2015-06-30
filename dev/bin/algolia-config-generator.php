@@ -457,7 +457,7 @@ $config = '{
     "number_by_page": "10",
     "number_by_type": "3",
     "search_input_selector": "[name=\\"s\\"]",
-    "theme": "woo",
+    "template": "woo",
     "date_custom_ranking": {
         "sort": 10000,
         "enabled": true,

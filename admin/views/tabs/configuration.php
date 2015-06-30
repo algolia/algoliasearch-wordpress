@@ -13,8 +13,8 @@
                     </div>
                 </div>
                 <div class="content-item">
-                    <h3>Instant Search</h3>
-                    <p class="help-block">Configure here settings for instant search.</p>
+                    <h3>Search Results Page</h3>
+                    <p class="help-block">Configure here your instant search results page.</p>
                 </div>
                 <div class="content-item">
                     <div>
@@ -33,34 +33,34 @@
                         <p class="description">The number of results to display on a results page.</p>
                     </div>
                 </div>
-                <h3>Results template <span class="h3-info">(includes html, js and css needed to display the results for both autocomplete and instant search)</span></h3>
-                <p class="help-block">Select the theme you want to use to display the search results. You can either use one of the 2 sample themes or build your own.</p>
+                <h3>Results template <span class="h3-info">(includes html, js and css needed to display the results for both the auto-completion menu and the instant search results page)</span></h3>
+                <p class="help-block">Select the template you want to use to display the search results. You can either use one of the 2 sample templates or build your own.</p>
                 <div class="content-item">
                     <div class="theme-browser">
                         <div class="themes">
-                            <?php foreach ($theme_helper->available_themes() as $theme): ?>
-                            <?php if ($theme->dir == $algolia_registry->theme): ?>
+                            <?php foreach ($template_helper->available_templates() as $template): ?>
+                            <?php if ($template->dir == $algolia_registry->template): ?>
                             <div class="theme active">
                                 <?php else: ?>
                                 <div class="theme">
                                     <?php endif; ?>
-                                    <label for="<?php echo $theme->dir; ?>">
+                                    <label for="<?php echo $template->dir; ?>">
                                         <div class="theme-screenshot">
-                                            <?php if ($theme->screenshot): ?>
-                                                <img class="screenshot instant" src="<?php echo $theme->screenshot; ?>">
+                                            <?php if ($template->screenshot): ?>
+                                                <img class="screenshot instant" src="<?php echo $template->screenshot; ?>">
                                             <?php else: ?>
                                                 <div class="no-screenshot screenshot instant">No screenshot</div>
                                             <?php endif; ?>
                                         </div>
                                         <div class="theme-name">
-                                            <?php echo $theme->name; ?>
+                                            <?php echo $template->name; ?>
                                             <input type="radio"
-                                                   id="<?php echo $theme->dir; ?>"
-                                                <?php checked($theme->dir == $algolia_registry->theme); ?>
-                                                   name='THEME'
-                                                   value="<?php echo $theme->dir; ?>"/>
+                                                   id="<?php echo $template->dir; ?>"
+                                                <?php checked($template->dir == $algolia_registry->template); ?>
+                                                   name='template'
+                                                   value="<?php echo $template->dir; ?>"/>
                                         </div>
-                                        <div><?php echo $theme->description; ?></div>
+                                        <div><?php echo $template->description; ?></div>
                                     </label>
                                 </div>
                                 <?php endforeach; ?>

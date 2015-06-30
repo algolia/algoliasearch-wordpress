@@ -3,9 +3,8 @@ algoliaBundle.$(document).ready(function ($) {
     /**
      * Common variables and function for autocomplete and instant search
      */
-
     var algolia_client = algoliaBundle.algoliasearch(algoliaSettings.app_id, algoliaSettings.search_key);
-    var custom_facets_types = algoliaSettings.theme.facet_types;
+    var custom_facets_types = algoliaSettings.template.facet_types;
 
     window.indicesCompare = function (a, b) {
         if (a.order1 < b.order1)
@@ -27,15 +26,6 @@ algoliaBundle.$(document).ready(function ($) {
         return 1;
     };
 
-    /**
-     * Autocomplete functions
-     */
-
-    function getBrandingHits() {
-        return function findMatches(q, cb) {
-            return cb(["algolia-branding"]);
-        }
-    }
 
     function updateUrl(push_state)
     {
@@ -113,10 +103,9 @@ algoliaBundle.$(document).ready(function ($) {
                     helper.addNumericRefinement(key, operator, numericsRefinements[key][operator]);
 
             helper.setIndex(indexName).setCurrentPage(page);
-
-            helper.search();
-
         }
+
+        helper.search();
     }
 
     function getFacets(content) {
@@ -171,8 +160,6 @@ algoliaBundle.$(document).ready(function ($) {
             }
             facets.push({count: sub_facets.length, tax: algoliaSettings.facets[i].tax, facet_categorie_name: algoliaSettings.facets[i].name, sub_facets: sub_facets });
         }
-
-        console.log(facets);
 
         return facets;
     }
@@ -412,6 +399,15 @@ algoliaBundle.$(document).ready(function ($) {
         }
     }
 
+    function getBrandingHits() {
+        return function findMatches(q, cb) {
+            return cb(["algolia-branding"]);
+        }
+    }
+
+    /**
+     * Instant Search
+     */
 
     var autocomplete = true;
     var instant = true;
@@ -428,7 +424,8 @@ algoliaBundle.$(document).ready(function ($) {
         for (var i = 0; i < algoliaSettings.indices.length; i++)
             indices.push(algolia_client.initIndex(algoliaSettings.indices[i].index_name));
 
-        for (var i = 0; i < algoliaSettings.indices.length; i++) {
+        for (var i = 0; i < algoliaSettings.indices.length; i++)
+        {
             hogan_objs.push({
                 source: indices[i].ttAdapter({hitsPerPage: algoliaSettings.number_by_type}),
                 displayKey: 'title',
@@ -453,6 +450,7 @@ algoliaBundle.$(document).ready(function ($) {
         });
 
         $(algoliaSettings.search_input_selector).each(function (i) {
+
             $(this).typeahead({hint: false}, hogan_objs);
 
             $(this).on('typeahead:selected', function (e, item) {
@@ -471,12 +469,13 @@ algoliaBundle.$(document).ready(function ($) {
             'product': 'Products'
         };
 
+
         if ($(algoliaSettings.instant_jquery_selector).length !== 1)
             throw '[Algolia] Invalid instant-search selector: ' + algoliaSettings.instant_jquery_selector;
 
         if ($(algoliaSettings.instant_jquery_selector).find(algoliaSettings.search_input_selector).length > 0)
             throw '[Algolia] You can\'t have a search input matching "' + algoliaSettings.search_input_selector +
-            '" inside you instant selector "' + algoliaSettings.instant_jquery_selector + '"';
+                '" inside you instant selector "' + algoliaSettings.instant_jquery_selector + '"';
 
         /**
          * Variables Initialization
@@ -507,7 +506,7 @@ algoliaBundle.$(document).ready(function ($) {
                 disjunctive_facets.push(algoliaSettings.facets[i].tax);
 
             if (algoliaSettings.facets[i].type == "menu")
-                disjunctive_facets.push(algoliaSettings.facets[i].tax);
+                conjunctive_facets.push(algoliaSettings.facets[i].tax);
         }
 
         algoliaSettings.facets = algoliaSettings.facets.sort(facetsCompare);
@@ -518,13 +517,14 @@ algoliaBundle.$(document).ready(function ($) {
             hitsPerPage: algoliaSettings.number_by_page
         });
 
+
         /**
          * Functions
          */
 
         function performQueries(push_state)
         {
-            helper.search(helper.state.query, searchCallback);
+            helper.search(helper.state.query);
 
             updateUrl(push_state);
         }
@@ -572,7 +572,6 @@ algoliaBundle.$(document).ready(function ($) {
             }
         }
 
-
         helper.on('result', searchCallback);
 
 
@@ -612,88 +611,12 @@ algoliaBundle.$(document).ready(function ($) {
             return [];
         };
 
-        custom_facets_types["menu"] = function (helper, content, facet) {
-
-            var data = [];
-
-            var all_count = 0;
-            var all_unchecked = true;
-
-            var content_facet = content.getFacetByName(facet.tax);
-
-            if (content_facet == undefined)
-                return data;
-
-            for (var key in content_facet.data)
-            {
-                var checked = helper.isRefined(facet.tax, key);
-
-                all_unchecked = all_unchecked && !checked;
-
-                var name = window.facetsLabels && window.facetsLabels[key] != undefined ? window.facetsLabels[key] : key;
-                var nameattr = key;
-
-                var params = {
-                    type: {},
-                    checked: checked,
-                    nameattr: nameattr,
-                    name: name,
-                    print_count: true,
-                    count: content_facet.data[key]
-                };
-
-                all_count += content_facet.data[key];
-
-                params.type[facet.type] = true;
-
-                data.push(params);
-            }
-
-            var params = {
-                type: {},
-                checked: all_unchecked,
-                nameattr: 'all',
-                name: 'All',
-                print_count: false,
-                count: all_count
-            };
-
-            params.type[facet.type] = true;
-
-            data.unshift(params);
-
-            return data;
-        };
-
         /**
          * Bindings
          */
-
-        $("body").on("click", ".sub_facet.menu", function (e) {
-
-            e.stopImmediatePropagation();
-
-            if ($(this).attr("data-name") == "all")
-                helper.state.clearRefinements($(this).attr("data-tax"));
-
-            $(this).find("input[type='checkbox']").each(function (i) {
-                $(this).prop("checked", !$(this).prop("checked"));
-
-                if (false == helper.isRefined($(this).attr("data-tax"), $(this).attr("data-name")))
-                    helper.state.clearRefinements($(this).attr("data-tax"));
-
-                if ($(this).attr("data-name") != "all")
-                    helper.toggleRefine($(this).attr("data-tax"), $(this).attr("data-name"));
-            });
-
-            performQueries(true);
-        });
-
         $("body").on("click", ".sub_facet", function () {
-
             $(this).find("input[type='checkbox']").each(function (i) {
                 $(this).prop("checked", !$(this).prop("checked"));
-
                 helper.toggleRefine($(this).attr("data-tax"), $(this).attr("data-name"));
             });
 
@@ -708,9 +631,9 @@ algoliaBundle.$(document).ready(function ($) {
         $("body").on("change", "#index_to_use", function () {
             helper.setIndex($(this).val());
 
-            helper.setCurrentPage(0);
-
             performQueries(true);
+
+            helper.setPage(0);
         });
 
         $("body").on("slidechange", ".algolia-slider-true", function (event, ui) {
@@ -781,7 +704,7 @@ algoliaBundle.$(document).ready(function ($) {
                     values: [min, max]
                 });
             });
-        }
+        };
 
         function updateSlideInfos(ui)
         {

@@ -48,12 +48,13 @@ $facets = $this->buildSettings()['facets'];
             </div>
             {{/featureImage}}
             <div class="info{{^featureImage}}-without-thumb{{/featureImage}}">
-            {{{ _highlightResult.title.value }}}
+                {{{ _highlightResult.title.value }}}
             </div>
             <div style="clear: both;"></div>
         </div>
     </div>
 </script>
+
 
 <script type="text/template" id="instant-content-template">
     <div class="hits">
@@ -78,50 +79,31 @@ $facets = $this->buildSettings()['facets'];
         {{/hits.length}}
 
         {{#hits}}
-        <div class="result-wrapper">
-            <a href="{{permalink}}" class="result">
-                <div class="result-content">
-                    <div class="result-thumbnail">
-                        {{#featureImage}}
+        <div class="result">
+            <div class="result-content">
+                <div class="result-thumbnail">
+                    {{#featureImage}}
                         <img src="{{{ featureImage.file }}}" />
-                        {{/featureImage}}
-                        {{^featureImage}}
-                        <span class="no-image"></span>
-                        {{/featureImage}}
-                    </div>
-                    <div class="result-sub-content">
-                        <h3 class="result-title text-ellipsis">
-                            {{{ _highlightResult.title.value }}}
-                        </h3>
-                        <div class="ratings">
-                            <div class="rating-box">
-                                <div class="rating" style="width:{{average_rating}}%" width="148" height="148"></div>
+                    {{/featureImage}}
+                </div>
+                <div class="result-sub-content">
+                    <div class="result-wrapper">
+                        <h1 class="result-title">
+                            <a href="{{permalink}}">
+                                {{{ _highlightResult.title.value }}}
+                            </a>
+                        </h1>
+
+                        <div class="result-excerpt">
+                            <div class="content">{{{ _highlightResult.content.value }}}</div>
+                            <div>
+                                <a href="{{permalink}}" class="more-link">Continue reading…</a>
                             </div>
                         </div>
-                        <div class="price">
-                            <div class="algoliasearch-autocomplete-price">
-                                <div>
-                                    {{_price}}€
-                                </div>
-                            </div>
-                        </div>
-                        <div class="result-description text-ellipsis">
-                            {{{ _highlightResult.description.value }}}
-                        </div>
-
-                        {{#isAddToCartEnabled}}
-                        <form action="/checkout/cart/add/product/{{objectID}}" method="post">
-                            <input type="hidden" name="form_key" value="" />
-
-                            <input type="hidden" name="qty" value="1">
-
-                            <button type="submit">Add to Cart</button>
-                        </form>
-                        {{/isAddToCartEnabled}}
                     </div>
                 </div>
                 <div class="clearfix"></div>
-            </a>
+            </div>
         </div>
         {{/hits}}
         {{^hits.length}}
@@ -129,9 +111,11 @@ $facets = $this->buildSettings()['facets'];
             No results found matching "<strong>{{query}}</strong>".
         </div>
         {{/hits.length}}
-        <div style="clear: both;"></div>
     </div>
+    <div style="clear: both;"></div>
 </script>
+
+
 
 <script type="text/template" id="instant-facets-template">
 <div class="facets">
@@ -140,19 +124,19 @@ $facets = $this->buildSettings()['facets'];
     <div class="facet">
         <div class="name">
             {{ facet_categorie_name }}
-        </div>
+            </div>
         <div>
             {{#sub_facets}}
 
                 {{#type.menu}}
-                <div data-tax="{{tax}}" data-name="{{nameattr}}" data-type="menu" class="{{#checked}}checked {{/checked}}sub_facet menu">
+                <div class="{{#checked}}checked {{/checked}}sub_facet conjunctive">
                     <input style="display: none;" data-tax="{{tax}}" {{#checked}}checked{{/checked}} data-name="{{nameattr}}" class="facet_value" type="checkbox" />
-                    {{name}} {{#print_count}}({{count}}){{/print_count}}
+                    {{name}} ({{count}})
                 </div>
                 {{/type.menu}}
 
                 {{#type.conjunctive}}
-                <div data-name="{{tax}}" data-type="conjunctive" class="{{#checked}}checked {{/checked}}sub_facet conjunctive">
+                <div class="{{#checked}}checked {{/checked}}sub_facet conjunctive">
                     <input style="display: none;" data-tax="{{tax}}" {{#checked}}checked{{/checked}} data-name="{{nameattr}}" class="facet_value" type="checkbox" />
                     {{name}} ({{count}})
                 </div>
@@ -168,7 +152,7 @@ $facets = $this->buildSettings()['facets'];
                 {{/type.slider}}
 
                 {{#type.disjunctive}}
-                <div data-name="{{tax}}" data-type="disjunctive" class="{{#checked}}checked {{/checked}}sub_facet disjunctive">
+                <div class="{{#checked}}checked {{/checked}}sub_facet disjunctive">
                     <input data-tax="{{tax}}" {{#checked}}checked{{/checked}} data-name="{{nameattr}}" class="facet_value" type="checkbox" />
                     {{name}} ({{count}})
                 </div>
@@ -183,29 +167,27 @@ $facets = $this->buildSettings()['facets'];
 </script>
 
 <script type="text/template" id="instant-pagination-template">
-<div class="pagination-wrapper">
-    <div class="text-center">
-        <ul class="algolia-pagination">
-            <a href="#" data-page="{{prev_page}}">
+    <div class="pagination-wrapper">
+        <div class="text-center">
+            <ul class="algolia-pagination">
                 <li {{^prev_page}}class="disabled"{{/prev_page}}>
+                <a href="#" data-page="{{prev_page}}">
                     &laquo;
+                </a>
                 </li>
-            </a>
 
-            {{#pages}}
-            <a href="#" data-page="{{number}}" return false;">
+                {{#pages}}
+                <a href="#" data-page="{{number}}">
                 <li class="{{#current}}active{{/current}}{{#disabled}}disabled{{/disabled}}">
                     {{ number }}
                 </li>
-            </a>
-            {{/pages}}
+                </a>
+                {{/pages}}
 
-            <a href="#" data-page="{{next_page}}">
                 <li {{^next_page}}class="disabled"{{/next_page}}>
-                    &raquo;
+                <a href="#" data-page="{{next_page}}">&raquo;</a>
                 </li>
-            </a>
-        </ul>
+            </ul>
+        </div>
     </div>
-</div>
 </script>

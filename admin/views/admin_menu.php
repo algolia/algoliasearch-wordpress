@@ -1,8 +1,8 @@
 <?php
     $langDomain         = "algolia";
     $algolia_registry   = \Algolia\Core\Registry::getInstance();
-    $theme_helper       = new Algolia\Core\ThemeHelper();
-    $current_theme      = $theme_helper->get_current_theme();
+    $template_helper    = new Algolia\Core\TemplateHelper();
+    $current_template   = $template_helper->get_current_template();
 
     $move_icon_url      = plugin_dir_url(__FILE__) . '../imgs/move.png';
 
