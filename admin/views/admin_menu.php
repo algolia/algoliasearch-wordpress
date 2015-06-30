@@ -40,6 +40,7 @@ if (function_exists('curl_version') == false)
         <button type="button" class="button <?php echo (! $need_to_reindex ? "button-secondary" : "button-primary"); ?> " id="algolia_reindex" name="algolia_reindex">
             <i class="dashicons dashicons-upload"></i>
             <?php echo (! $need_to_reindex ? "Reindex data" : "Reindexing Needed"); ?>
+            <span class="record-count"></span>
         </button>
         <em id='last-update' style="color: #444;font-family: 'Open Sans',sans-serif;font-size: 13px;line-height: 1.4em;">
             Last update:

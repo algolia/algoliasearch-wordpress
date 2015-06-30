@@ -157,14 +157,19 @@ class AlgoliaPlugin
         global $batch_count;
 
         $algoliaAdminSettings = array(
-            "types"         => array(),
-            "batch_count"   => $batch_count,
-            "site_url"      => site_url()
+            'taxonomies'    => array(),
+            'types'         => array(),
+            'batch_count'   => $batch_count,
+            'site_url'      => site_url()
         );
 
+        foreach (get_taxonomies() as $tax)
+            $algoliaAdminSettings['taxonomies'][$tax] = array('count' => wp_count_terms($tax, array('hide_empty' => false)));
 
         foreach ($this->algolia_registry->indexable_types as $type => $obj)
-            $algoliaAdminSettings["types"][] = array('type' => $type, 'name' => $obj['name'], 'count' => wp_count_posts($type)->publish);
+            $algoliaAdminSettings["types"][$type] = array('type' => $type, 'name' => $obj['name'], 'count' => wp_count_posts($type)->publish);
+
+
 
 
         wp_register_script('lib/bundle.min.js', plugin_dir_url(__FILE__) . 'lib/bundle.min.js', array());
@@ -215,10 +220,12 @@ class AlgoliaPlugin
 
         $algolia_helper = new \Algolia\Core\AlgoliaHelper($app_id, $search_key, $admin_key);
 
-        $this->algolia_registry->app_id     = $app_id;
-        $this->algolia_registry->search_key = $search_key;
-        $this->algolia_registry->admin_key  = $admin_key;
-        $this->algolia_registry->index_name = $index_name;
+        $this->algolia_registry->app_id             = $app_id;
+        $this->algolia_registry->search_key         = $search_key;
+        $this->algolia_registry->admin_key          = $admin_key;
+        $this->algolia_registry->index_name         = $index_name;
+
+        $this->algolia_registry->need_to_reindex    = true;
 
         $algolia_helper->checkRights();
 

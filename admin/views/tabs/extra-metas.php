@@ -70,6 +70,8 @@
 
         $taxItem                    = new stdClass();
 
+        $taxItem->count             = in_array($tax, $algolia_registry->extras) ? "" : $count;
+
         $taxItem->name              = $tax;
         $taxItem->order             = isset($algolia_registry->metas['tax']) && isset($algolia_registry->metas['tax'][$tax])
                                         && $algolia_registry->metas['tax'][$tax]['order']
@@ -245,6 +247,7 @@
                                 <td>*</td>
                                 <td>
                                     <?php echo $taxItem->name; ?>
+                                    <?php echo ($taxItem->count != '' ? '('.$taxItem->count.')' : ''); ?>
                                 </td>
                                 <td>
                                     <?php if ($algolia_registry->autocomplete): ?>

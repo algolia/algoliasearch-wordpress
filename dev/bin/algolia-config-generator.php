@@ -505,7 +505,8 @@ $config = '{
     "number_of_word_for_content": 30,
     "last_update": 1434960441,
     "enable_truncating": true,
-    "truncate_size": "9000"
+    "truncate_size": "9000",
+    "excluded_types": ["revision", "nav_menu_item", "acf", "product_variation", "shop_order", "shop_order_refund", "shop_coupon", "shop_webhook", "wooframework"]
 }';
 
 $config = str_replace('%APP_ID%', $argv[1], $config);

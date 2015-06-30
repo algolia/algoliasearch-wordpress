@@ -1,5 +1,6 @@
 <?php
-    $excluded_types = array('revision', 'nav_menu_item', 'acf', 'product_variation', 'shop_order', 'shop_order_refund', 'shop_coupon', 'shop_webhook', 'wooframework');
+    $excluded_types = $algolia_registry->excluded_types;
+
     $types = array();
     $i = 0;
 

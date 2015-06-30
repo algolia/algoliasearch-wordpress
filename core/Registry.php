@@ -40,7 +40,8 @@ class Registry
         'last_update'                   => '',
         'enable_truncating'             => true,
         'truncate_size'                 => 9000,
-        'need_to_reindex'               => true
+        'need_to_reindex'               => true,
+        'excluded_types'                => array('revision', 'nav_menu_item', 'acf', 'product_variation', 'shop_order', 'shop_order_refund', 'shop_coupon', 'shop_webhook', 'wooframework')
     );
 
     public static function getInstance()
