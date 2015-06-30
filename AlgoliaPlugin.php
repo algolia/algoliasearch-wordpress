@@ -273,6 +273,8 @@ class AlgoliaPlugin
 
         $this->algolia_registry->indexable_types    = $types;
 
+        $this->algolia_registry->need_to_reindex      = true;
+
         $this->algolia_helper->handleIndexCreation();
 
         wp_redirect('admin.php?page=algolia-settings#indexable-types');
@@ -334,6 +336,8 @@ class AlgoliaPlugin
             $this->algolia_helper->handleIndexCreation();
         }
 
+        $this->algolia_registry->need_to_reindex  = true;
+
         wp_redirect('admin.php?page=algolia-settings#sortable_attributes');
     }
 
@@ -343,6 +347,8 @@ class AlgoliaPlugin
 
         if (isset($_POST['TRUNCATE_SIZE']) && is_numeric($_POST['TRUNCATE_SIZE']))
             $this->algolia_registry->truncate_size = $_POST['TRUNCATE_SIZE'];
+
+        $this->algolia_registry->need_to_reindex  = true;
 
         wp_redirect('admin.php?page=algolia-settings#advanced');
     }
@@ -424,6 +430,8 @@ class AlgoliaPlugin
     public function admin_post_reset_config_to_default()
     {
         $this->algolia_registry->reset_config_to_default();
+
+        $this->algolia_registry->need_to_reindex  = true;
     }
 
     public function admin_post_export_config()
@@ -511,13 +519,16 @@ class AlgoliaPlugin
             }
         }
 
-        $this->algolia_registry->autocomplete = $autocomplete;
+        $this->algolia_registry->autocomplete   = $autocomplete;
 
-        $this->algolia_registry->metas = $metas;
+        $this->algolia_registry->metas          = $metas;
+
+        $this->algolia_registry->need_to_reindex  = true;
 
         $this->algolia_helper->handleIndexCreation();
 
         $this->indexer->indexTaxonomies();
+
 
         wp_redirect('admin.php?page=algolia-settings#extra-metas');
     }
@@ -537,7 +548,11 @@ class AlgoliaPlugin
                 if ($subaction[0] == 'index_taxonomies')
                     $this->indexer->indexTaxonomies();
                 if ($subaction[0] == 'move_indexes')
+                {
                     $this->indexer->moveTempIndexes();
+
+                    $this->algolia_registry->need_to_reindex  = false;
+                }
             }
 
             if (count($subaction) == 3)

@@ -6,6 +6,8 @@
 
     $move_icon_url      = plugin_dir_url(__FILE__) . '../imgs/move.png';
 
+    $need_to_reindex    = $algolia_registry->need_to_reindex;
+
     global $external_attrs;
     global $attributesToIndex;
 
@@ -35,9 +37,9 @@ if (function_exists('curl_version') == false)
     <?php if ($algolia_registry->validCredential) : ?>
     <h2>
         Algolia Search
-        <button type="button" class="button button-primary " id="algolia_reindex" name="algolia_reindex">
+        <button type="button" class="button <?php echo (! $need_to_reindex ? "button-secondary" : "button-primary"); ?> " id="algolia_reindex" name="algolia_reindex">
             <i class="dashicons dashicons-upload"></i>
-            Reindex data
+            <?php echo (! $need_to_reindex ? "Reindex data" : "Reindexing Needed"); ?>
         </button>
         <em id='last-update' style="color: #444;font-family: 'Open Sans',sans-serif;font-size: 13px;line-height: 1.4em;">
             Last update:

@@ -299,7 +299,7 @@ algoliaBundle.$(document).ready(function($) {
         $("body").on("click", ".close-results", function () {
             $("#results-wrapper").hide();
             $(this).hide();
-            $("#algolia_reindex").show();
+            $("#algolia_reindex").removeClass('button-primary').addClass('button-secondary').html('<i class="dashicons dashicons-upload"></i> Reindex data').show();
         });
 
         $("#algolia_reindex").click(function (e) {

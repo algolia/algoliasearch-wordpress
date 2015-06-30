@@ -39,7 +39,8 @@ class Registry
         'theme'                         => 'default',
         'last_update'                   => '',
         'enable_truncating'             => true,
-        'truncate_size'                 => 9000
+        'truncate_size'                 => 9000,
+        'need_to_reindex'               => true
     );
 
     public static function getInstance()
