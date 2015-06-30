@@ -177,7 +177,7 @@ $facets = $this->buildSettings()['facets'];
                 </li>
 
                 {{#pages}}
-                <a href="#" data-page="{{number}}" return false;">
+                <a href="#" data-page="{{number}}">
                 <li class="{{#current}}active{{/current}}{{#disabled}}disabled{{/disabled}}">
                     {{ number }}
                 </li>
