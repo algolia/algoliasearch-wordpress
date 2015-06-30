@@ -2,7 +2,7 @@
 
 [Algolia Search](http://www.algolia.com) is a hosted full-text, numerical, and faceted search engine capable of delivering realtime results from the first keystroke.
 
-This plugin replaces the default search of Wordpress with an Algolia realtime search. It has been designed to support plugins like WooCommerce in addition to the standard blog system.
+This plugin replaces the default search of Wordpress adding an as-you-type auto-completion menu and an instant search results page. It has been designed to support plugins like WooCommerce in addition to the standard blog system.
 
 ![Latest version](https://img.shields.io/badge/latest-0.0.9-green.svg)
 ![MIT](http://img.shields.io/badge/license-MIT-green.svg?style=flat-square)
@@ -17,11 +17,12 @@ Installation
 --------
 
 1. Create an [Algolia account](https://www.algolia.com/users/sign_up)
-2. Once logged in, go to the *Credentials* section and get your **Application ID** & **API keys**
-3. Install Algolia Wordpress Plugin in your Wordpress dashboard
+2. Once logged in, go to the *Credentials* section and get your **Application ID**, **ADMIN API key** and **Search-only API key**
+3. Install Algolia Wordpress Plugin from your Wordpress dashboard or unzip the plugin archive in the `wp-content/plugins` directory.
 4. Activate the plugin through the *Plugins* menu in Wordpress
-5. Go to the **Algolia Search** left menu configuration page and fill the your API keys
-6. Configure the way Algolia is indexing your objects.
+5. Go to the **Algolia Search** left menu configuration page and fill your credentials
+6. Configure the way you want the plugin to render your search results
+7. Click the "Re-index" button
 
 Features
 --------
@@ -50,21 +51,21 @@ Once the plugin is installed a new tab will appears in Wordpress admin panel
 
 In this section you configure two things:
 
-   1. **Your Application ID & API keys (credentials)**:
+   1. **Your Application ID & API keys**:
 
-   You need to choose which api keys to use. You can go [https://www.algolia.com/licensing](https://www.algolia.com/licensing)
+   You need to configure this section based on your Algolia credentials. You can fetch them from [here](https://www.algolia.com/licensing).
 
    2. **Your index names prefix**:
 
-   The plugin will create several indices:
+   The plugin will create several indices, all of them will be prefixed by this value:
 
-    * 1 index for the instant search
+    * 1 index for the instant search results page
     * 1 index for each section of the auto-completion menu
     * 1 (slave) index for each sort order you enable
 
 ### UI Integration
 
-#### Search Exprerience Configuration
+#### Search Experience Configuration
 
    1. **Search Bar**
 
@@ -73,26 +74,26 @@ In this section you configure two things:
    In Wordpress's default theme it is: `[name='s']`
 
    2. Instant search
-   
-     You need to indicate the jQuery/DOM selector specifying where the plugin is supposed to inject your results.
 
-     You can also configure the number of results you want by page.
+   You need to indicate the jQuery/DOM selector specifying where the plugin is supposed to inject your results.
+
+   You can also configure the number of results you want by page.
 
 #### Results template
 
 The plugin supports templates which allows you to customize the way your results are displayed. You can choose one of the 2 sample templates or build your own.
 
-The template is **totally independent** from the Wordpress theme. The default themes are handling both Autocompletion **AND** Instant-search results page.
+The template is **totally independent** from the Wordpress theme. The default templates are handling both Autocompletion **AND** Instant-search results page.
 
 ### Types
 
-You can choose the Wordpress types you want to index. By default, only `post` and `page` are configured. If one of your extensions (WooCommerce for instance) creates new types you will see them in this list.
+You can choose the Wordpress types you want to index. By default, only `post` and `page` are selected. If one of your extensions (WooCommerce for instance) creates new types you will see them in this list.
 
-You can order them to change the order of each section of the autocompletion menu. In autocompletion menu mode you can also specify the label used for each type to display the title of search section.
+You can order them to change the order of each section in the auto-completion menu. You can also specify the label used for each type to display the title of each auto-completion menu section.
 
 ### Attributes
 
-You can configure additional attributes or taxonomies you want to index. If you use Wordpress as a blog you shouldn't have to change anything. When using Wordpress with plugins like WooCommerce this should be very useful as you probably want to index the `price` or the `total_sales` attributes as well.
+You can configure additional attributes or taxonomies you want to index. If you use Wordpress as a blog you shouldn't have to change anything. When using Wordpress with plugins like WooCommerce this should be very useful as you probably want to include the `price` or the `total_sales` attributes as well.
 
 When you enable an attribute, the plugin will add this attribute to the record but **it will NOT be searchable UNLESS you enable it in the Search Configuration tab**.
 
@@ -110,7 +111,7 @@ There is two facet types you can choose:
 	  
   3. **Custom: slider, tag clouds, ...**
 
-  	  A theme can declare new facet types. The "Default" template is adding the "slider" type.
+  	  A results template can declare new facet types. The "Default" template is adding the "slider" type.
 
 You can add a label to each enabled facet to display the Facet bloc title. You can also order the facet blocs ordering the attributes.
 
@@ -180,7 +181,7 @@ A template is composed by several **MANDATORY** files:
 	);
 	```
 
-	The `name` will be displayed on the UI Page: it's your template's name. And the screenshot is the path screenshot (**relative to your theme root directory**).
+	The `name` will be displayed on the UI Page: it's your template's name. And the screenshot is the path screenshot (**relative to your template root directory**).
 
 - `styles.css`
 
@@ -208,7 +209,7 @@ A template is composed by several **MANDATORY** files:
   </script>
   ```
 
-- `theme.js`
+- `template.js`
 
   This file includes all the JavaScript logic.
   
@@ -260,7 +261,7 @@ return array(
 
 2. Choose the behavior of the facet type (conjunctive or disjunctive)
 
- Locate this code in theme.js
+ Locate this code in template.js
 
 	```php
 		for (var i = 0; i < algoliaSettings.facets.length; i++)
@@ -351,7 +352,7 @@ The plugin tries to merge the settings that have been modified from the Algolia 
 
 ### I want to change a facet value for example the "Types" facet, what should I do ?
 
-In your theme `theme.js` file in the root directory of the plugin you may want to add those attributes to this line:
+In your template `template.js` file in the root directory of the plugin you may want to add those attributes to this line:
 
 ```javascript
 window.facetsLabels = {

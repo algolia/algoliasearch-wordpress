@@ -5,7 +5,7 @@ class AlgoliaPlugin
     private $algolia_registry;
     private $algolia_helper;
     private $indexer;
-    private $theme_helper;
+    private $template_helper;
     private $query_replacer;
 
     public function __construct()
@@ -23,7 +23,7 @@ class AlgoliaPlugin
 
         $this->query_replacer = new \Algolia\Core\QueryReplacer();
 
-        $this->theme_helper = new \Algolia\Core\ThemeHelper();
+        $this->template_helper = new \Algolia\Core\TemplateHelper();
 
         $this->indexer = new \Algolia\Core\Indexer();
 
@@ -65,7 +65,7 @@ class AlgoliaPlugin
 
     public function wp_footer()
     {
-        include __DIR__ . '/themes/' . $this->algolia_registry->theme . '/templates.php';
+        include __DIR__ . '/templates/' . $this->algolia_registry->template . '/templates.php';
     }
 
     private function buildSettings()
@@ -118,7 +118,7 @@ class AlgoliaPlugin
             'number_by_page'            => $this->algolia_registry->number_by_page,
             'search_input_selector'     => str_replace("\\", "", $this->algolia_registry->search_input_selector),
             'plugin_url'                => plugin_dir_url(__FILE__),
-            'theme'                     => $this->theme_helper->get_current_theme(),
+            'template'                  => $this->template_helper->get_current_template(),
             'is_search_page'            => isset($_GET['instant'])
         );
 
@@ -130,24 +130,24 @@ class AlgoliaPlugin
         if (is_admin())
             return;
 
-        wp_enqueue_style('algolia_bundle', plugin_dir_url(__FILE__) . 'themes/' . $this->algolia_registry->theme . '/bundle.css');
-        wp_enqueue_style('algolia_styles', plugin_dir_url(__FILE__) . 'themes/' . $this->algolia_registry->theme . '/styles.css');
+        wp_enqueue_style('algolia_bundle', plugin_dir_url(__FILE__) . 'templates/' . $this->algolia_registry->template . '/bundle.css');
+        wp_enqueue_style('algolia_styles', plugin_dir_url(__FILE__) . 'templates/' . $this->algolia_registry->template . '/styles.css');
 
 
 
         wp_register_script('lib/bundle.min.js', plugin_dir_url(__FILE__) . 'lib/bundle.min.js', array());
         wp_localize_script('lib/bundle.min.js', 'algoliaSettings', $this->buildSettings());
 
-        wp_register_script('theme.js',  plugin_dir_url(__FILE__) . 'themes/' . $this->algolia_registry->theme . '/theme.js', array('lib/bundle.min.js'), array());
+        wp_register_script('template.js',  plugin_dir_url(__FILE__) . 'templates/' . $this->algolia_registry->template . '/template.js', array('lib/bundle.min.js'), array());
 
-        wp_enqueue_script('theme.js');
+        wp_enqueue_script('template.js');
 
     }
 
     public function admin_scripts($hook)
     {
         wp_enqueue_style('styles-admin', plugin_dir_url(__FILE__) . 'admin/styles/styles.css');
-        wp_enqueue_style('algolia_bundle', plugin_dir_url(__FILE__) . 'themes/' . $this->algolia_registry->theme . '/bundle.css');
+        wp_enqueue_style('algolia_bundle', plugin_dir_url(__FILE__) . 'templates/' . $this->algolia_registry->template . '/bundle.css');
 
         // Only load these scripts on the Algolia admin page
         if ( 'toplevel_page_algolia-settings' != $hook ) {
@@ -363,16 +363,16 @@ class AlgoliaPlugin
             $this->algolia_registry->number_by_page = $_POST['NUMBER_BY_PAGE'];
 
         $search_input_selector  = !empty($_POST['SEARCH_INPUT_SELECTOR']) ? $_POST['SEARCH_INPUT_SELECTOR'] : '';
-        $theme                  = !empty($_POST['THEME']) ? $_POST['THEME'] : 'default';
+        $template                  = !empty($_POST['template']) ? $_POST['template'] : 'default';
 
         $this->algolia_registry->search_input_selector  = str_replace('"', '\'', $search_input_selector);
-        $this->algolia_registry->theme                  = $theme;
+        $this->algolia_registry->template                  = $template;
 
 
         /**
-         * Handle Facet types that do not exist anymore because of theme changing
+         * Handle Facet types that do not exist anymore because of template changing
          */
-        $new_facet_types = array_merge(array('conjunctive' => 'Conjunctive', 'disjunctive' => 'Disjunctive'), $this->theme_helper->get_current_theme()->facet_types);
+        $new_facet_types = array_merge(array('conjunctive' => 'Conjunctive', 'disjunctive' => 'Disjunctive'), $this->template_helper->get_current_template()->facet_types);
 
         $metas = $this->algolia_registry->metas;
 

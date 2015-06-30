@@ -45,16 +45,11 @@
                 </p>
                 <table>
                     <tr data-order="-1">
-                        <th class="table-col-enabled">Autocomplete</th>
-                        <th class="table-col-enabled">Instant</th>
+                        <th class="table-col-enabled">Auto-completion menu</th>
+                        <th class="table-col-enabled">Instant search results page</th>
                         <th>Name</th>
-
-                        <th class="table-col-enabled">Number of results by section</th>
-
-                        <?php if ($algolia_registry->autocomplete): ?>
-                            <th>Auto-completion menu label</th>
-                        <?php endif; ?>
-
+                        <th class="table-col-enabled">Auto-completion suggestions</th>
+                        <th>Auto-completion menu label</th>
                         <th></th>
                     </tr>
 

@@ -1,6 +1,6 @@
 <?php
     $extra_metas = array();
-    $facet_types = array_merge(array("conjunctive" => "Conjunctive", "disjunctive" => "Disjunctive"), $current_theme->facet_types);
+    $facet_types = array_merge(array("conjunctive" => "Conjunctive", "disjunctive" => "Disjunctive"), $current_template->facet_types);
     $i = 0;
 
     foreach (get_post_types() as $type)
