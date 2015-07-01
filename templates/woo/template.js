@@ -1,11 +1,20 @@
 algoliaBundle.$(document).ready(function ($) {
 
-    /**
-     * Common variables and function for autocomplete and instant search
-     */
+    /*****************
+     **
+     ** INITIALIZATION
+     **
+     *****************/
 
     var algolia_client = algoliaBundle.algoliasearch(algoliaSettings.app_id, algoliaSettings.search_key);
     var custom_facets_types = algoliaSettings.template.facet_types;
+
+
+    /*****************
+     **
+     ** HELPERS
+     **
+     *****************/
 
     window.indicesCompare = function (a, b) {
         if (a.order1 < b.order1)
@@ -28,7 +37,7 @@ algoliaBundle.$(document).ready(function ($) {
     };
 
     /**
-     * Autocomplete functions
+     * Autocomplete helpers
      */
 
     function getBrandingHits() {
@@ -202,9 +211,12 @@ algoliaBundle.$(document).ready(function ($) {
     }
 
 
-    /**
-     * Rendering Html Function
-     */
+    /*****************
+     **
+     ** RENDERING HELPERS
+     **
+     *****************/
+
     function getHtmlForPagination(paginationTemplate, content, pages, facets) {
         var pagination_html = paginationTemplate.render({
             pages: pages,
@@ -350,9 +362,6 @@ algoliaBundle.$(document).ready(function ($) {
         return facets_html;
     }
 
-    /**
-     * Helper methods
-     */
     function sortSelected() {
         return function (val) {
             var template = algoliaBundle.Hogan.compile(val);
@@ -412,9 +421,11 @@ algoliaBundle.$(document).ready(function ($) {
         }
     }
 
-
-    var autocomplete = true;
-    var instant = true;
+    /*****************
+     **
+     ** AUTOCOMPLETE
+     **
+     *****************/
 
     if (algoliaSettings.autocomplete)
     {
@@ -462,6 +473,12 @@ algoliaBundle.$(document).ready(function ($) {
             });
         });
     }
+
+    /*****************
+     **
+     ** INSTANT SEARCH
+     **
+     *****************/
 
     if (algoliaSettings.instant && algoliaSettings.is_search_page === '1')
     {
@@ -666,9 +683,8 @@ algoliaBundle.$(document).ready(function ($) {
         };
 
         /**
-         * Bindings
+         * Handle click on menu custom facet
          */
-
         $("body").on("click", ".sub_facet.menu", function (e) {
 
             e.stopImmediatePropagation();
@@ -689,6 +705,9 @@ algoliaBundle.$(document).ready(function ($) {
             performQueries(true);
         });
 
+        /**
+         * Handle click on conjunctive and disjunctive facet
+         */
         $("body").on("click", ".sub_facet", function () {
 
             $(this).find("input[type='checkbox']").each(function (i) {
@@ -700,11 +719,17 @@ algoliaBundle.$(document).ready(function ($) {
             performQueries(true);
         });
 
-
+        /**
+         * Handle jquery-ui slider initialisation
+         */
         $("body").on("slide", "", function (event, ui) {
             updateSlideInfos(ui);
         });
 
+
+        /**
+         * Handle sort change
+         */
         $("body").on("change", "#index_to_use", function () {
             helper.setIndex($(this).val());
 
@@ -713,6 +738,9 @@ algoliaBundle.$(document).ready(function ($) {
             performQueries(true);
         });
 
+        /**
+         * Handle jquery-ui slide event
+         */
         $("body").on("slidechange", ".algolia-slider-true", function (event, ui) {
 
             var slide_dom = $(ui.handle).closest(".algolia-slider");
@@ -734,6 +762,9 @@ algoliaBundle.$(document).ready(function ($) {
             performQueries(true);
         });
 
+        /**
+         * Handle page change
+         */
         $("body").on("click", ".algolia-pagination a", function (e) {
             e.preventDefault();
 
@@ -745,6 +776,19 @@ algoliaBundle.$(document).ready(function ($) {
             return false;
         });
 
+        /**
+         * Handle input clearing
+         */
+        $('body').on('click', '.clear-button', function () {
+            $('#instant-search-bar').val('').focus();
+            helper.clearRefinements().setQuery('');
+
+            performQueries(true);
+        });
+
+        /**
+         * Handle search
+         */
         $('body').on('keyup', '#instant-search-bar', function (e) {
             e.preventDefault();
 

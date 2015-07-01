@@ -4,6 +4,39 @@ $facets = $this->buildSettings()['facets'];
 
 ?>
 
+<!--
+//================================
+//
+// Multi-category Autocomplete
+//
+//================================
+-->
+
+
+<script type="text/template" id="autocomplete-template">
+    <div class="result">
+        <div class="title">
+            {{#featureImage}}
+            <div class="thumb">
+                <img style="width: 30px" src="{{{ featureImage.sizes.thumbnail.file }}}" />
+            </div>
+            {{/featureImage}}
+            <div class="info{{^featureImage}}-without-thumb{{/featureImage}}">
+            {{{ _highlightResult.title.value }}}
+            </div>
+            <div style="clear: both;"></div>
+        </div>
+    </div>
+</script>
+
+<!--
+//================================
+//
+// Instant search results page
+//
+//================================
+-->
+
 <!-- Wrapping template -->
 <script type="text/template" id="instant_wrapper_template">
 
@@ -39,21 +72,6 @@ $facets = $this->buildSettings()['facets'];
     </div>
 </script>
 
-<script type="text/template" id="autocomplete-template">
-    <div class="result">
-        <div class="title">
-            {{#featureImage}}
-            <div class="thumb">
-                <img style="width: 30px" src="{{{ featureImage.sizes.thumbnail.file }}}" />
-            </div>
-            {{/featureImage}}
-            <div class="info{{^featureImage}}-without-thumb{{/featureImage}}">
-            {{{ _highlightResult.title.value }}}
-            </div>
-            <div style="clear: both;"></div>
-        </div>
-    </div>
-</script>
 
 <script type="text/template" id="instant-content-template">
     <div class="hits">
@@ -126,7 +144,7 @@ $facets = $this->buildSettings()['facets'];
         {{/hits}}
         {{^hits.length}}
         <div class="infos">
-            No results found matching "<strong>{{query}}</strong>".
+            No results found matching "<strong>{{query}}</strong>".  <span class="button clear-button">Clear query and filters</span>
         </div>
         {{/hits.length}}
         <div style="clear: both;"></div>

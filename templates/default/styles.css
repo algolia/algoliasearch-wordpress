@@ -37,10 +37,12 @@
     color: #666;
 }
 
+/******************
+**
+** Auto Completion Menu
+**
+******************/
 
-/**
- * AutoComplete
- */
 .twitter-typeahead
 {
     width: 100%;
@@ -143,29 +145,15 @@
     padding: 10px;
 }
 
-
-/**
- * Instant Search
- */
+/******************
+**
+** Instant Search
+**
+******************/
 
 #algolia_instant_selector
 {
     margin: 10px;
-}
-
-#algolia_instant_selector .category
-{
-
-}
-
-#algolia_instant_selector .result
-{
-
-}
-
-#algolia_instant_selector .title
-{
-
 }
 
 #algolia_instant_selector .title img
@@ -184,23 +172,21 @@
     color: #555;
 }
 
-#algolia_instant_selector .hits .no-results {
-    margin: 40px 0;
+#algolia_instant_selector .hits .infos {
     color: #aaa;
     text-align: center;
 }
-#algolia_instant_selector .hits .no-results strong {
-    color: #555;
-}
 
-#algolia_instant_selector .hits .no-results .clear-button {
+#algolia_instant_selector .hits .infos .clear-button {
     cursor: pointer;
 }
 
+/******************
+**
+** Facets
+**
+******************/
 
-/**
- * Facets
- */
 #algolia_instant_selector .facets {
     padding-top: 50px;
 }
@@ -359,7 +345,11 @@
     min-height: 1px;
 }
 
-/** INSTANT SEARCH BAR **/
+/******************
+**
+** INSTANT SEARCH BOX
+**
+******************/
 
 #algolia_instant_selector #instant-search-bar-container {
     padding: 10px;
