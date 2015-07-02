@@ -331,7 +331,7 @@ It depends :) The plugin handles every other plugins that uses the `post` and `m
 
 ### How do I handle a non-supported plugin?
 
-If you want to integrate a plugin that is not handled out of the box, you will need to dive into the plugin source code since there is no way to handle it in a generic way.
+You can use the filters to add any attribute you want to the record
 
 ### What happens if I modify a setting from the Algolia dashboard?
 
