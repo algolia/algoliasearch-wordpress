@@ -24,7 +24,8 @@
 
         $typeItem->autocompletable          = isset($algolia_registry->indexable_types[$type]) && $algolia_registry->indexable_types[$type]['autocompletable'];
         $typeItem->instantable              = isset($algolia_registry->indexable_types[$type]) && $algolia_registry->indexable_types[$type]['instantable'];
-        $typeItem->nb_results_by_section    = isset($algolia_registry->indexable_types[$type]) ? (int) $algolia_registry->indexable_types[$type]['nb_results_by_section'] : 3;
+        $typeItem->nb_results_by_section    = isset($algolia_registry->indexable_types[$type]) && isset($algolia_registry->indexable_types[$type]['nb_results_by_section'])
+                                                ? (int) $algolia_registry->indexable_types[$type]['nb_results_by_section'] : 3;
 
         $typeItem->label                    = isset($algolia_registry->indexable_types[$type]) ? $algolia_registry->indexable_types[$type]['name'] : "";
 

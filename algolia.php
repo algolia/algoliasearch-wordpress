@@ -118,7 +118,23 @@ add_filter('prepare_algolia_record', function ($data) {
  * Functions definitions
  */
 
-function get_meta_key_list($type)
+function get_meta_key_list_count($type)
+{
+    global $wpdb;
+    $query = "
+        SELECT count(*)
+        FROM $wpdb->posts
+        LEFT JOIN $wpdb->postmeta
+        ON $wpdb->posts.ID = $wpdb->postmeta.post_id
+        WHERE $wpdb->posts.post_type = '%s'
+        AND $wpdb->postmeta.meta_key != ''
+        ORDER BY $wpdb->postmeta.meta_key
+    ";
+
+    return (int) $wpdb->get_col($wpdb->prepare($query, $type))[0];
+}
+
+function get_meta_key_list($type, $offset, $batch_count)
 {
     global $wpdb;
     $query = "
@@ -129,6 +145,7 @@ function get_meta_key_list($type)
         WHERE $wpdb->posts.post_type = '%s'
         AND $wpdb->postmeta.meta_key != ''
         ORDER BY $wpdb->postmeta.meta_key
+        LIMIT $offset, $batch_count
     ";
     $meta_keys = $wpdb->get_col($wpdb->prepare($query, $type));
 

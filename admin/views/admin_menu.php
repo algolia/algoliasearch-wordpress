@@ -8,7 +8,6 @@
 
     $need_to_reindex    = $algolia_registry->need_to_reindex;
 
-    global $external_attrs;
     global $attributesToIndex;
 
 ?>

@@ -3,14 +3,19 @@
     $facet_types = array_merge(array("conjunctive" => "Conjunctive", "disjunctive" => "Disjunctive"), $current_template->facet_types);
     $i = 0;
 
+    global $batch_count;
+
+
     foreach (get_post_types() as $type)
     {
         if (is_array($algolia_registry->indexable_types) && in_array($type, array_keys($algolia_registry->indexable_types)))
         {
-            $metas = get_meta_key_list($type);
+            $type_count = floor(get_meta_key_list_count($type) / $batch_count);
 
-            if (isset($external_attrs[$type.'_attrs']))
-                $metas = array_merge(get_meta_key_list($type), $external_attrs[$type.'_attrs']);
+            $metas = array();
+
+            for ($offset = 0; $offset <= $type_count; $offset++)
+                $metas = array_merge($metas, get_meta_key_list($type, $offset * $batch_count, $batch_count));
 
             foreach ($metas as $meta)
             {

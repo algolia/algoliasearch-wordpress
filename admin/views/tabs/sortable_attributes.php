@@ -1,4 +1,6 @@
 <?php
+    global $batch_count;
+
     $sortable = array();
 
     $i = 0;
@@ -28,11 +30,12 @@
 
     foreach (get_post_types() as $type)
     {
-        $metas = get_meta_key_list($type);
+        $type_count = floor(get_meta_key_list_count($type) / $batch_count);
 
-        if (isset($external_attrs[$type.'_attrs']))
-            $metas = array_merge($metas, $external_attrs[$type.'_attrs']);
+        $metas = array();
 
+        for ($offset = 0; $offset <= $type_count; $offset++)
+            $metas = array_merge($metas, get_meta_key_list($type, $offset * $batch_count, $batch_count));
 
         foreach ($metas as $meta_key)
         {
