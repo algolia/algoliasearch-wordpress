@@ -131,7 +131,9 @@ function get_meta_key_list_count($type)
         ORDER BY $wpdb->postmeta.meta_key
     ";
 
-    return (int) $wpdb->get_col($wpdb->prepare($query, $type))[0];
+    $count = (int) $wpdb->get_col($wpdb->prepare($query, $type));
+
+    return $count[0];
 }
 
 function get_meta_key_list($type, $offset, $batch_count)
