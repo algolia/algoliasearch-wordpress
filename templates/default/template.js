@@ -485,7 +485,7 @@ algoliaBundle.$(document).ready(function ($) {
      **
      *****************/
 
-    if (algoliaSettings.instant && algoliaSettings.is_search_page === '1')
+    if (algoliaSettings.instant && (algoliaSettings.is_search_page === '1' || ! algoliaSettings.autocomplete))
     {
         window.facetsLabels = {
             'post': 'Article',
@@ -504,6 +504,8 @@ algoliaBundle.$(document).ready(function ($) {
         /**
          * Variables Initialization
          */
+
+        var instant_selector = ! algoliaSettings.autocomplete ? algoliaSettings.search_input_selector : "#instant-search-bar";
 
         var wrapperTemplate     = algoliaBundle.Hogan.compile($('#instant_wrapper_template').html());
 
@@ -564,7 +566,7 @@ algoliaBundle.$(document).ready(function ($) {
         {
             if (initialized === false)
             {
-                $(algoliaSettings.instant_jquery_selector).html(wrapperTemplate.render()).show();
+                $(algoliaSettings.instant_jquery_selector).html(wrapperTemplate.render({ second_bar: algoliaSettings.autocomplete })).show();
                 initialized = true;
             }
 
@@ -594,7 +596,7 @@ algoliaBundle.$(document).ready(function ($) {
 
             updateSliderValues();
 
-            var instant_search_bar = $('#instant-search-bar');
+            var instant_search_bar = $(instant_selector);
 
             if (instant_search_bar.is(":focus") === false)
             {
@@ -714,7 +716,7 @@ algoliaBundle.$(document).ready(function ($) {
          * Handle input clearing
          */
         $('body').on('click', '.clear-button', function () {
-            $('#instant-search-bar').val('').focus();
+            $(instant_selector).val('').focus();
             helper.clearRefinements().setQuery('');
 
             performQueries(true);
@@ -723,7 +725,7 @@ algoliaBundle.$(document).ready(function ($) {
         /**
          * Handle search
          */
-        $('body').on('keyup', '#instant-search-bar', function (e) {
+        $('body').on('keyup', instant_selector, function (e) {
             e.preventDefault();
 
             helper.setQuery($(this).val());
@@ -773,12 +775,14 @@ algoliaBundle.$(document).ready(function ($) {
          * Initialization
          */
 
-        $(algoliaSettings.search_input_selector).attr('autocomplete', 'off').attr('autocorrect', 'off').attr('spellcheck', 'false').attr('autocapitalize', 'off');
-
-        getRefinementsFromUrl();
+        if (algoliaSettings.is_search_page === '1' || location.hash.length > 1) {
+            getRefinementsFromUrl();
+        }
 
         window.addEventListener("popstate", function(e) {
             getRefinementsFromUrl();
         });
     }
+
+    $(algoliaSettings.search_input_selector).attr('autocomplete', 'off').attr('autocorrect', 'off').attr('spellcheck', 'false').attr('autocapitalize', 'off');
 });

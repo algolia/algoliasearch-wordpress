@@ -49,6 +49,7 @@ $facets = $facets['facets'];
 
         <div id="algolia-right-container">
 
+            {{#second_bar}}
             <div id="instant-search-bar-container">
                 <div id="instant-search-box">
                     <label for="instant-search-bar">
@@ -67,6 +68,7 @@ $facets = $facets['facets'];
                     </svg>
                 </div>
             </div>
+            {{/second_bar}}
 
             <div id="instant-search-results-container"></div>
             <div id="instant-search-pagination-container"></div>
