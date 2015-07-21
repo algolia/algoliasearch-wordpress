@@ -1,7 +1,7 @@
 <?php
 
 $facets = $this->buildSettings();
-$facets = ['facets'];
+$facets = $facets['facets'];
 
 ?>
 
