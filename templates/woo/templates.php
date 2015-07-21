@@ -55,7 +55,8 @@ $facets = $facets['facets'];
                         Search :
                     </label>
 
-                    <input value="<?php echo $_GET['s'] ?>" placeholder="Search for products" id="instant-search-bar" type="text" autocomplete="off" spellcheck="false" autocorrect="off" autocapitalize="off" />
+                    <?php $s = isset($_GET['s']) ? $_GET['s'] : "" ?>
+                    <input value="<?php echo $s; ?>" placeholder="Search for products" id="instant-search-bar" type="text" autocomplete="off" spellcheck="false" autocorrect="off" autocapitalize="off" />
 
                     <svg xmlns="http://www.w3.org/2000/svg" class="magnifying-glass" width="24" height="24" viewBox="0 0 128 128">
                         <g transform="scale(4)">
