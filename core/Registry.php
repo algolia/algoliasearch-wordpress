@@ -12,11 +12,26 @@ class Registry
         'search_key'                    => '',
         'admin_key'                     => '',
         'index_name'                    => '',
+
+        'instant_jquery_selector'       => '#content',
+        'search_input_selector'         => "[name='s']",
+        'template'                      => 'default',
+
+        'excluded_types'                => array('revision', 'nav_menu_item', 'acf', 'product_variation', 'shop_order', 'shop_order_refund', 'shop_coupon', 'shop_webhook', 'wooframework'),
+
+        'enable_truncating'             => true,
+        'truncate_size'                 => 9000,
+
+        'last_update'                   => '',
+        'need_to_reindex'               => true,
+
+        'autocomplete_types'            => array(),
+
         'indexable_types'               => array(
                                                 'post' => array('name' => 'Articles', 'order' => 0, 'instantable' => true, 'autocompletable' => true),
                                                 'page' => array('name' => 'Pages', 'order' => 1, 'instantable' => true, 'autocompletable' => false)
                                             ),
-        'searchable'                    => array(
+        /*'searchable'                    => array(
                                                 'title'     => array('ordered' => 'ordered', 'order' => 0),
                                                 'h1'        => array('ordered' => 'ordered', 'order' => 1),
                                                 'h2'        => array('ordered' => 'ordered', 'order' => 2),
@@ -26,22 +41,21 @@ class Registry
                                                 'h6'        => array('ordered' => 'ordered', 'order' => 6),
                                                 'text'      => array('ordered' => 'unordered', 'order' => 7),
                                                 'content'   => array('ordered' => 'unordered', 'order' => 8)
-                                            ),
-        'sortable'                      => array(),
-        'instant'                       => true,
-        'autocomplete'                  => true,
-        'instant_jquery_selector'       => '#content',
+                                            ),*/
+        /*'sortable'                      => array(),*/
+        //'instant'                       => true,
+        //'autocomplete'                  => true,
+
         'extras'                        => array('author' => 'author', 'author_login' => 'author_login', 'permalink' => 'permalink', 'date' => 'date', 'content' => 'content', 'h1' => 'h1', 'h2' => 'h2', 'h3' => 'h3', 'h4' => 'h4', 'h5' => 'h5', 'h6' => 'h6', 'text' => 'text', 'title' => 'title', 'slug' => 'slug', 'modified' => 'modified', 'parent' => 'parent', 'menu_order' => 'menu_order', 'type' => 'type'),
-        'metas'                         => array(),
+        //'metas'                         => array(),
         'number_by_page'                => 10,
         'number_by_type'                => 3,
-        'search_input_selector'         => "[name='s']",
-        'template'                      => 'default',
-        'last_update'                   => '',
-        'enable_truncating'             => true,
-        'truncate_size'                 => 9000,
-        'need_to_reindex'               => true,
-        'excluded_types'                => array('revision', 'nav_menu_item', 'acf', 'product_variation', 'shop_order', 'shop_order_refund', 'shop_coupon', 'shop_webhook', 'wooframework')
+
+
+
+
+
+
     );
 
     public static function getInstance()
@@ -68,7 +82,17 @@ class Registry
                 return $this->attributes[$name];
         }
 
-        throw new \Exception("Unknown attribute: ".$name);
+        try
+        {
+            throw new \Exception("Unknown attribute: ".$name);
+        }
+        catch(\Exception $e)
+        {
+            echo '<pre>';
+            echo $e->getMessage().'<br>';
+            echo $e->getTraceAsString();
+            die('lol');
+        }
     }
 
     public function __set($name, $value)
@@ -80,7 +104,17 @@ class Registry
         }
         else
         {
-            throw new \Exception("Unknown attribute: ".$name);
+            try
+            {
+                throw new \Exception("Unknown attribute: ".$name);
+            }
+            catch(\Exception $e)
+            {
+                echo '<pre>';
+                echo $e->getMessage();
+                echo $e->getTraceAsString();
+                die('lol');
+            }
         }
     }
 

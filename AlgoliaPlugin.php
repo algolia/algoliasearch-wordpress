@@ -166,8 +166,8 @@ class AlgoliaPlugin
         foreach (get_taxonomies() as $tax)
             $algoliaAdminSettings['taxonomies'][$tax] = array('count' => wp_count_terms($tax, array('hide_empty' => false)));
 
-        foreach ($this->algolia_registry->indexable_types as $type => $obj)
-            $algoliaAdminSettings["types"][$type] = array('type' => $type, 'name' => $obj['name'], 'count' => wp_count_posts($type)->publish);
+        /*foreach ($this->algolia_registry->indexable_types as $type => $obj)
+            $algoliaAdminSettings["types"][$type] = array('type' => $type, 'name' => $obj['name'], 'count' => wp_count_posts($type)->publish);*/
 
 
 

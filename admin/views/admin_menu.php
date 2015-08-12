@@ -10,6 +10,54 @@
 
     global $attributesToIndex;
 
+
+    /**
+     * Get config
+     */
+
+    $excluded_types = $algolia_registry->excluded_types;
+
+    /*** get Types ***/
+
+    $types = array();
+
+    foreach (get_post_types() as $type)
+    {
+        if (in_array($type, $excluded_types))
+            continue;
+
+        $count = wp_count_posts($type)->publish;
+
+        if ($count == 0)
+            continue;
+
+        $typeObj = new stdClass();
+        $typeObj->name = $type;
+        $typeObj->count = $count;
+        $typeObj->label = $type.' ('.$count.')';
+        $types[] = $typeObj;
+    }
+
+
+
+    /*** Autocomplete types */
+
+
+        /*$autocomplete_types = array();
+
+        foreach ($types as $type)
+        {
+            $typeItem                           = new stdClass();
+
+            $typeItem->name                     = $type;
+            $typeItem->count                    = $count;
+            $typeItem->nb_results_by_section    = 1;
+            $typeItem->label                    = "test";
+
+
+            $autocomplete_types[]                            = $typeItem;
+        }
+        */
 ?>
 
 <?php
@@ -29,7 +77,10 @@ if (function_exists('curl_version') == false)
 
 ?>
 
-<div id="algolia-settings" class="wrap">
+<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.3/angular.min.js"></script>
+<script src="https://cdn.jsdelivr.net/g/angular.ui-sortable"></script>
+
+<div id="algolia-settings" ng-app="algoliaSettings" class="wrap">
 
     <a target="_blank" href="//algolia.com/dashboard" class="header-button" id="dashboard-link">Go to Algolia dashboard</a>
 
@@ -103,6 +154,7 @@ if (function_exists('curl_version') == false)
             <?php if ($algolia_registry->validCredential) : ?>
 
             <div data-tab="#configuration"          class="title selected">UI</div>
+            <div data-tab="#autocomplete"           class="title">Autocomplete</div>
             <div data-tab="#indexable-types"        class="title">Types</div>
             <div data-tab="#extra-metas"            class="title">Attributes</div>
             <div data-tab="#searchable_attributes"  class="title">Search</div>
@@ -119,11 +171,12 @@ if (function_exists('curl_version') == false)
         <?php if ($algolia_registry->validCredential) : ?>
 
             <?php include __DIR__ . '/tabs/configuration.php'; ?>
-            <?php include __DIR__ . '/tabs/indexable_types.php'; ?>
-            <?php include __DIR__ . '/tabs/searchable_attributes.php'; ?>
-            <?php include __DIR__ . '/tabs/sortable_attributes.php'; ?>
-            <?php include __DIR__ . '/tabs/extra-metas.php'; ?>
-            <?php include __DIR__ . '/tabs/custom_ranking.php'; ?>
+            <?php include __DIR__ . '/tabs/autocomplete.php'; ?>
+            <?php //include __DIR__ . '/tabs/indexable_types.php'; ?>
+            <?php //include __DIR__ . '/tabs/searchable_attributes.php'; ?>
+            <?php //include __DIR__ . '/tabs/sortable_attributes.php'; ?>
+            <?php //include __DIR__ . '/tabs/extra-metas.php'; ?>
+            <?php //include __DIR__ . '/tabs/custom_ranking.php'; ?>
             <?php include __DIR__ . '/tabs/advanced.php'; ?>
 
         <?php endif; ?>

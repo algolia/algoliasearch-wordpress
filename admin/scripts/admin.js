@@ -72,7 +72,7 @@ algoliaBundle.$(document).ready(function($) {
     });
 
     selectSubTab('#extra-metas-attributes');
-
+/*
     function reorderMetas()
     {
         $('#_extra-metas tr').each(function (i) {
@@ -110,12 +110,12 @@ algoliaBundle.$(document).ready(function($) {
             $(this).find('.order').val(i);
         });
     });
-
+*/
     /**
      * Handle disabling
      */
 
-    function disableInput(div)
+   /* function disableInput(div)
     {
         $(div + " input, " + div + " select").prop('disabled', false);
         $(div + " tr:not(:first)").each(function (i) {
@@ -186,7 +186,7 @@ algoliaBundle.$(document).ready(function($) {
 
     $('#extra-meta-and-taxonomies input[type="checkbox"]').click(function () {
         disableFacetsInput('#extra-meta-and-taxonomies');
-    });
+    });*/
 
     /**
      * Handle Theme chooser
@@ -201,7 +201,7 @@ algoliaBundle.$(document).ready(function($) {
      * Handle Sorting
      */
 
-    var fixHelper = function(e, ui) {
+    /*var fixHelper = function(e, ui) {
         ui.children().each(function() {
             $(this).width($(this).width());
         });
@@ -224,7 +224,7 @@ algoliaBundle.$(document).ready(function($) {
         items: 'tr:not(:first)',
         helper: fixHelper
     });
-
+*/
 
     /**
      * Handle Reset config to default
@@ -268,7 +268,7 @@ algoliaBundle.$(document).ready(function($) {
      */
 
 
-    function countNumberOfRecords()
+    /*function countNumberOfRecords()
     {
         var autocomplete_count  = 0;
         var instant_count       = 0;
@@ -312,7 +312,7 @@ algoliaBundle.$(document).ready(function($) {
 
     $('#algolia-settings input').change(function () {
         countNumberOfRecords();
-    });
+    });*/
 
     /**
      * Handle Async Indexation
