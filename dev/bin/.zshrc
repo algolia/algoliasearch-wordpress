@@ -73,7 +73,7 @@ export PATH="/opt/local/bin:/opt/local/sbin:/opt/local/bin:/opt/local/sbin:/opt/
 # ssh
 # export SSH_KEY_PATH="~/.ssh/dsa_id"
 
-PS1='`echo "\e[0;33m┌─\e[0;36m[DOCKER MAGENTO]\e[0;35m[%*]\e[0;37m[%?]\e[0;37m[%~]\e[0;33m
+PS1='`echo "\e[0;33m┌─\e[0;36m[DOCKER WORDPRESS]\e[0;35m[%*]\e[0;37m[%?]\e[0;37m[%~]\e[0;33m
 └─>DOCKER:~$ ";`'
 
 alias ll='ls -alF'

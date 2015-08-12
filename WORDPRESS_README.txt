@@ -76,7 +76,7 @@ Make it look like anything you want! Algolia does not restrict you to any user i
 
 ### Easy Integration
 
-Integrate Algolia Search API on your Magento store in minutes.
+Integrate Algolia Search API on your Wordpress store in minutes.
 
 ### Open source
 

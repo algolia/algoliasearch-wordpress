@@ -4,7 +4,7 @@ PROG="$0"
 APPLICATION_ID=
 API_KEY=
 SEARCH_ONLY_API_KEY=
-INDEX_PREFIX=magento_
+INDEX_PREFIX=worpdress_
 BASE_URL=http://mywordpress.com/
 
 env
@@ -25,7 +25,7 @@ usage() {
   echo "   -k | --api-key                      The ADMIN API key" >&2
   echo "   -s | --search-only-api-key          The Search-only API key" >&2
   echo "   -p | --index-prefix                 The index prefix (default: magento_)" >&2
-  echo "   -b | --base-url                     The base URL (default: http://mymagentostore.com/)" >&2
+  echo "   -b | --base-url                     The base URL (default: http://myworpdressstore.com/)" >&2
   echo "   -h | --help                         Print this help" >&2
 }
 
