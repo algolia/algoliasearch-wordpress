@@ -18,11 +18,6 @@ algoliaBundle.$(document).ready(function($) {
         });
     });
 
-    if ($("#_custom-ranking tr").length > 1)
-        $('#_custom-ranking .warning').hide();
-    else
-        $('#_custom-ranking .content-item').hide();
-
     /**
      * Handle Tab
      */
@@ -72,121 +67,6 @@ algoliaBundle.$(document).ready(function($) {
     });
 
     selectSubTab('#extra-metas-attributes');
-/*
-    function reorderMetas()
-    {
-        $('#_extra-metas tr').each(function (i) {
-            if ($(this).find('td:first input[type="checkbox"]').prop('checked') || $(this).find('td:first i').length > 0)
-            {
-                $('#extra-meta-and-taxonomies').append($(this));
-            }
-        });
-
-        $('#extra-meta-and-taxonomies tr').each(function (i) {
-            if ($(this).find('td:first input[type="checkbox"]').prop('checked') == false && $(this).find('td:first i').length <= 0)
-            {
-                if ($(this).attr('data-type') == 'taxonomy')
-                    $('#taxonomies table tr:first').after($(this));
-                else
-                    $('#extra-metas-attributes table tr:first').after($(this));
-            }
-        });
-    }
-
-    $('#_extra-metas tr td:first-child input').click(function (e) {
-        reorderMetas();
-    });
-
-    reorderMetas();
-
-    $('#extra-metas-form').submit(function (e) {
-        $('#_extra-metas tr').each(function (i) {
-           $(this).find('.order').val(i);
-        });
-    });
-
-    $('#sortable-form').submit(function (e) {
-        $('#sortable-form tr').each(function (i) {
-            $(this).find('.order').val(i);
-        });
-    });
-*/
-    /**
-     * Handle disabling
-     */
-
-   /* function disableInput(div)
-    {
-        $(div + " input, " + div + " select").prop('disabled', false);
-        $(div + " tr:not(:first)").each(function (i) {
-            var tds = $(this).find("td");
-
-            if ($(tds[0]).find('input[type="checkbox"]').prop('checked') == false)
-            {
-                $(this).find("td").find("input,select").slice(1).prop('disabled', true);
-            }
-        });
-
-        if (div == '#_extra-metas')
-            disableFacetsInput('#extra-meta-and-taxonomies');
-    }
-
-    var disabelable = ['#_extra-metas', '#_searchable_attributes', '#_custom-ranking', '#_sortable_attributes'];
-
-    for (var i = 0; i < disabelable.length; i++)
-    {
-        (function (i) {
-            disableInput(disabelable[i]);
-
-            $(disabelable[i] + " input[type='checkbox']").click(function () {
-                disableInput(disabelable[i]);
-            });
-        })(i);
-
-    }
-
-    function disableIndexableTypesInput(div)
-    {
-        $(div + " input, " + div + " select").prop('disabled', false);
-
-        $(div + " tr:not(:first)").each(function (i) {
-            var tds = $(this).find("td");
-
-            if ($(tds[0]).find('input[type="checkbox"]').prop('checked') == false)
-            {
-                $(tds[3]).find("input,select").prop('disabled', true);
-                $(tds[4]).find("input,select").prop('disabled', true);
-            }
-
-        });
-
-    }
-
-    disableIndexableTypesInput('#_indexable-types');
-
-    $('#_indexable-types').click(function () {
-        disableIndexableTypesInput('#_indexable-types');
-    });
-
-    function disableFacetsInput(div)
-    {
-        $(div + " input, " + div + " select").prop('disabled', false);
-        $(div + " tr:not(:first)").each(function (i) {
-            var tds = $(this).find("td");
-
-            if (($(tds[3]).find('input[type="checkbox"]').prop('checked') == undefined || $(tds[3]).find('input[type="checkbox"]').prop('checked') == false) && $(tds[4]).find('input[type="checkbox"]').prop('checked') == false)
-                $(tds[6]).find("input,select").prop('disabled', true);
-
-            if ($(tds[4]).find('input[type="checkbox"]').prop('checked') == false)
-                $(tds[5]).find("input,select").prop('disabled', true);
-        });
-    }
-
-    disableFacetsInput('#extra-meta-and-taxonomies');
-
-    $('#extra-meta-and-taxonomies input[type="checkbox"]').click(function () {
-        disableFacetsInput('#extra-meta-and-taxonomies');
-    });*/
 
     /**
      * Handle Theme chooser
@@ -196,35 +76,6 @@ algoliaBundle.$(document).ready(function($) {
         $('#algolia-settings .theme').removeClass('active');
         $(this).addClass('active');
     });
-
-    /**
-     * Handle Sorting
-     */
-
-    /*var fixHelper = function(e, ui) {
-        ui.children().each(function() {
-            $(this).width($(this).width());
-        });
-        return ui;
-    };
-
-
-    $('#_taxonomies tr, #_extra-metas tr, #_indexable-types tr, #_custom-ranking tr, #_searchable_attributes tr, #_sortable_attributes tr').sort(function (a, b) {
-        var contentA = parseInt($(a).attr('data-order'));
-        var contentB = parseInt($(b).attr('data-order'));
-
-        return (contentA < contentB) ? -1 : (contentA > contentB) ? 1 : 0;
-    }).each(function (_, container) {
-        $(container).parent().append(container);
-    });
-
-
-    $("#_taxonomies tbody, #_extra-metas tbody, #_indexable-types tbody, #_custom-ranking tbody, #_searchable_attributes tbody, #_sortable_attributes tbody").sortable({
-        containment: "parent",
-        items: 'tr:not(:first)',
-        helper: fixHelper
-    });
-*/
 
     /**
      * Handle Reset config to default
