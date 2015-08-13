@@ -94,19 +94,17 @@ class AlgoliaHelper
 
     public function handleIndexCreation()
     {
-        $index_name         = $this->algolia_registry->index_name;
-        $facets             = array();
-        $customRankingTemp  = array();
+        $index_name         = $this->algolia_registry->index_prefix;
 
         global $attributesToSnippet;
 
         $attributesToIndex  = array();
 
-        foreach ($this->algolia_registry->searchable as $key => $value)
+        foreach ($this->algolia_registry->attributesToIndex as $value)
             if ($value['ordered'] == 'unordered')
-                $attributesToIndex[] = $value['ordered'].'('.$key.')';
+                $attributesToIndex[] = $value['ordered'].'('.$value['name'].')';
             else
-                $attributesToIndex[] = $key;
+                $attributesToIndex[] = $value['name'];
 
         $defaultSettings = array(
             "attributesToIndex"     => $attributesToIndex,
@@ -114,83 +112,49 @@ class AlgoliaHelper
         );
 
         /**
-         * Handle Autocomplete Taxonomies
+         * Handle Additional autocomplete sections
          */
-
-        if (isset($this->algolia_registry->metas['tax']))
+        foreach ($this->algolia_registry->additionalAttributes as $value)
         {
-            foreach ($this->algolia_registry->metas['tax'] as $name => $value)
+            $mergeSettings = $this->mergeSettings($index_name . $value['name'], $defaultSettings);
+
+            if (has_filter('prepare_algolia_set_settings'))
             {
-                if ($value['default_attribute'] == 0 && $value['autocompletable'] && $this->algolia_registry->autocomplete)
-                {
-                    $mergeSettings = $this->mergeSettings($index_name . $name, $defaultSettings);
-
-                    if (has_filter('prepare_algolia_set_settings'))
-                    {
-                        $mergeSettings = apply_filters('prepare_algolia_set_settings', $index_name . $name, $mergeSettings);
-                        $mergeSettings = apply_filters('prepare_algolia_set_settings', $index_name . "_temp", $mergeSettings);
-                    }
-
-                    $this->setSettings($index_name . $name, $mergeSettings);
-                    $this->setSettings($index_name . $name . "_temp", $mergeSettings);
-                }
-
-                if (isset($this->algolia_registry->metas['tax'][$name]) && $this->algolia_registry->metas['tax'][$name]['facetable'])
-                    $facets[] = $name;
+                $mergeSettings = apply_filters('prepare_algolia_set_settings', $index_name . $value['name'], $mergeSettings);
+                $mergeSettings = apply_filters('prepare_algolia_set_settings', $index_name . $value['name'] . "_temp", $mergeSettings);
             }
+
+            $this->setSettings($index_name . $value['name'], $mergeSettings);
+            $this->setSettings($index_name . $value['name'] . "_temp", $mergeSettings);
         }
 
         /**
-         * Handle Autocomplete Types
+         * Handle Types autocomplete
          */
-        foreach (array_keys($this->algolia_registry->indexable_types) as $name)
+
+        foreach ($this->algolia_registry->autocompleteTypes as $value)
         {
-            if ($this->algolia_registry->autocomplete)
+            $mergeSettings = $this->mergeSettings($index_name . $value['name'], $defaultSettings);
+
+            if (has_filter('prepare_algolia_set_settings'))
             {
-                $mergeSettings = $this->mergeSettings($index_name . $name, $defaultSettings);
-
-                if (has_filter('prepare_algolia_set_settings'))
-                {
-                    $mergeSettings = apply_filters('prepare_algolia_set_settings', $index_name . $name, $mergeSettings);
-                    $mergeSettings = apply_filters('prepare_algolia_set_settings', $index_name . "_temp", $mergeSettings);
-                }
-
-                $this->setSettings($index_name . $name, $mergeSettings);
-                $this->setSettings($index_name . $name . "_temp", $mergeSettings);
+                $mergeSettings = apply_filters('prepare_algolia_set_settings', $index_name . $value['name'], $mergeSettings);
+                $mergeSettings = apply_filters('prepare_algolia_set_settings', $index_name . $value['name'] . "_temp", $mergeSettings);
             }
-        }
 
-        foreach (array_merge(array('tax'), array_keys($this->algolia_registry->indexable_types)) as $name)
-        {
-            if (isset($this->algolia_registry->metas[$name]))
-            {
-                foreach ($this->algolia_registry->metas[$name] as $key => $value)
-                {
-                    if ($value['facetable'])
-                        $facets[] = $key;
-
-                    if ($value['custom_ranking'])
-                        $customRankingTemp[] = array('sort' => $value['custom_ranking_sort'], 'value' => $value['custom_ranking_order'] . '(' . $key . ')');
-                }
-            }
+            $this->setSettings($index_name . $value['name'], $mergeSettings);
+            $this->setSettings($index_name . $value['name'] . "_temp", $mergeSettings);
         }
 
 
-        /**
-         * Prepare Settings
-         */
+        $facets             = array();
+        $customRanking      = array();
 
-        usort($customRankingTemp, function ($a, $b) {
-            if ($a['sort'] < $b['sort'])
-                return -1;
-            if ($a['sort'] == $b['sort'])
-                return 0;
-            return 1;
-        });
+        foreach($this->algolia_registry->facets as $value)
+            $facets[] = $value['name'];
 
-        $customRanking = array_map(function ($obj) {
-            return $obj['value'];
-        }, $customRankingTemp);
+        foreach($this->algolia_registry->customRankings as $value)
+            $customRanking[] = $value['sort'] . '(' . $value['name'] . ')';
 
         $settings = array(
             'attributesToIndex'     => $attributesToIndex,
@@ -205,7 +169,7 @@ class AlgoliaHelper
 
         $mergeSettings = $this->mergeSettings($index_name.'all', $settings);
 
-        if ($this->algolia_registry->instant == false)
+        if (count($this->algolia_registry->instantTypes) <= 0)
             return;
 
         if (has_filter('prepare_algolia_set_settings'))
@@ -221,11 +185,11 @@ class AlgoliaHelper
          * Handle Slaves
          */
 
-        if (count($this->algolia_registry->sortable) > 0)
+        if (count($this->algolia_registry->sorts) > 0)
         {
             $slaves = array();
 
-            foreach ($this->algolia_registry->sortable as $values)
+            foreach ($this->algolia_registry->sorts as $values)
                 $slaves[] = $index_name.'all_'.$values['name'].'_'.$values['sort'];
 
             $settings = array('slaves' => $slaves);
@@ -237,7 +201,7 @@ class AlgoliaHelper
 
             $this->setSettings($index_name.'all', $settings);
 
-            foreach ($this->algolia_registry->sortable as $values)
+            foreach ($this->algolia_registry->sorts as $values)
             {
                 $mergeSettings['ranking'] = array($values['sort'].'('.$values['name'].')', 'typo', 'geo', 'words', 'proximity', 'attribute', 'exact', 'custom');
 

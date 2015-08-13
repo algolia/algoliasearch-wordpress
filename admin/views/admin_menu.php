@@ -15,6 +15,7 @@ $need_to_reindex    = $algolia_registry->need_to_reindex;
 $excluded_types = $algolia_registry->excluded_types;
 $facet_types = array_merge(array("conjunctive" => "Conjunctive", "disjunctive" => "Disjunctive"), $current_template->facet_types);
 $facetTypes = array();
+$templates = $template_helper->available_templates();
 
 foreach ($facet_types as $key => $value)
 {
@@ -120,9 +121,6 @@ if (function_exists('curl_version') == false)
 
 ?>
 
-<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.3/angular.min.js"></script>
-<script src="https://cdn.jsdelivr.net/g/angular.ui-sortable"></script>
-
 <div id="algolia-settings" ng-app="algoliaSettings" class="wrap" ng-controller="algoliaController">
 
     <a target="_blank" href="//algolia.com/dashboard" class="header-button" id="dashboard-link">Go to Algolia dashboard</a>
@@ -188,21 +186,13 @@ if (function_exists('curl_version') == false)
     <div class="wrapper">
         <div class="tabs myclearfix">
 
-            <?php if (! $algolia_registry->validCredential) : ?>
-            <div data-tab="#credentials" class="title selected">Credentials</div>
-            <?php else: ?>
-            <div data-tab="#credentials" class="title">Credentials</div>
-            <?php endif; ?>
+            <div ng-click="changeTab('credentials')"            class="title {{current_tab == 'credentials' ? 'selected' :''}}">Credentials</div>
+            <div ng-click="changeTab('ui')"                     class="title {{current_tab == 'ui' ? 'selected' :''}}">UI</div>
+            <div ng-click="changeTab('autocomplete')"           class="title {{current_tab == 'autocomplete' ? 'selected' :''}}">Autocomplete</div>
+            <div ng-click="changeTab('instant')"                class="title {{current_tab == 'instant' ? 'selected' :''}}">Instant</div>
+            <div ng-click="changeTab('ranking')"                class="title {{current_tab == 'ranking' ? 'selected' :''}}">Ranking</div>
+            <div ng-click="changeTab('advanced')"               class="title {{current_tab == 'advanced' ? 'selected' :''}}">Advanced</div>
 
-            <?php if ($algolia_registry->validCredential) : ?>
-
-            <div data-tab="#ui"                     class="title selected">UI</div>
-            <div data-tab="#autocomplete"           class="title">Autocomplete</div>
-            <div data-tab="#instant"                class="title">Instant</div>
-            <div data-tab="#ranking"                class="title">Ranking</div>
-            <div data-tab="#advanced"               class="title">Advanced</div>
-
-            <?php endif; ?>
             <div style="clear:both"></div>
         </div>
 
@@ -224,44 +214,67 @@ if (function_exists('curl_version') == false)
     angular.module('algoliaSettings', []).controller('algoliaController', ['$scope', function($scope) {
         $scope.types                            = <?php echo json_encode($types); ?>;
         $scope.attributes                       = <?php echo json_encode($attributes); ?>;
+        $scope.templates                        = <?php echo json_encode($templates); ?>;
 
-        $scope.app_id                           = "";
-        $scope.search_key                       = "";
-        $scope.admin_key                        = "";
-        $scope.index_prefix                     = "";
+        $scope.app_id                           = "<?php echo $algolia_registry->app_id; ?>";
+        $scope.search_key                       = "<?php echo $algolia_registry->search_key; ?>";
+        $scope.admin_key                        = "<?php echo $algolia_registry->admin_key; ?>";
+        $scope.index_prefix                     = "<?php echo $algolia_registry->index_prefix; ?>";
 
-        $scope.search_input_selector            = "";
-        $scope.template                         = "";
+        $scope.enable_truncating                = Boolean(<?php echo $algolia_registry->enable_truncating; ?>);
+        $scope.truncate_size                    = <?php echo $algolia_registry->truncate_size; ?>;
 
-        $scope.number_by_page                   = "";
-        $scope.instant_jquery_selector          = "";
+        $scope.search_input_selector            = "<?php echo str_replace("\\", "",$algolia_registry->search_input_selector); ?>";
+        $scope.template_dir                     = "<?php echo $algolia_registry->template_dir; ?>";
 
-        $scope.autocompleteTypes                = [];
+        $scope.number_by_page                   = <?php echo $algolia_registry->number_by_page; ?>;
+        $scope.instant_jquery_selector          = "<?php echo $algolia_registry->instant_jquery_selector; ?>";
+
+        $scope.autocompleteTypes                = <?php echo json_encode($algolia_registry->autocompleteTypes); ?>;
         $scope.autocomplete_type_selected       = null;
 
-        $scope.additionalAttributes             = [];
+        $scope.additionalAttributes             = <?php echo json_encode($algolia_registry->additionalAttributes); ?>;
         $scope.additional_attribute_selected    = null;
 
-        $scope.instantTypes                     = [];
+        $scope.instantTypes                     = <?php echo json_encode($algolia_registry->instantTypes); ?>;
         $scope.instant_type_selected            = null;
 
-        $scope.attributesToIndex                = [];
+        $scope.attributesToIndex                = <?php echo json_encode($algolia_registry->attributesToIndex); ?>;
         $scope.attribute_to_index_selected      = null;
 
-        $scope.customRankings                   = [];
+        $scope.customRankings                   = <?php echo json_encode($algolia_registry->customRankings); ?>;
         $scope.custom_ranking_selected          = null;
 
+        $scope.facets                           = <?php echo json_encode($algolia_registry->facets); ?>;
         $scope.facet_selected                   = null;
-        $scope.facets                           = [];
+
+        $scope.sorts                            = <?php echo json_encode($algolia_registry->sorts); ?>;
+        $scope.sort_selected                    = null;
 
         $scope.orderedTab   = [{key: 'ordered',value: 'Ordered'},{key: 'unordered',value: 'Unordered'}];
         $scope.sortTab      = [{key: 'asc',value: 'Ascending'},{key: 'desc',value: 'Descending'}];
         $scope.facetTypes   = <?php echo json_encode($facetTypes); ?>;
 
+        $scope.validCredential = Boolean(<?php echo $algolia_registry->validCredential; ?>);
+
+        $scope.current_tab = "";
+        $scope.save_message = "";
+
+        $scope.changeTab = function (tab) {
+            $scope.current_tab = tab;
+            location.hash = tab;
+        };
+
+        $scope.changeTab(window.location.hash != "" ? location.hash.substring(1) : "ui");
+
         $scope.add = function (tab, item, type) {
             var obj = undefined;
 
-            if (tab.filter(function (filteredObj) { return filteredObj.name == item.name }).length > 0) {
+            if (type !== "sort" && tab.filter(function (filteredObj) { return filteredObj.name == item.name }).length > 0) {
+                return;
+            }
+
+            if (type === "sort" && tab.filter(function (filteredObj) { return filteredObj.name == item.name }).length > 1) {
                 return;
             }
 
@@ -278,12 +291,17 @@ if (function_exists('curl_version') == false)
                 $scope.add($scope.attributesToIndex, obj, 'attribute_to_index');
             }
 
+            if (type == 'sort') {
+                obj = { name: item.name, group: item.group, sort: 'asc', label: item.label };
+                $scope.add($scope.attributesToIndex, obj, 'attribute_to_index');
+            }
+
             if (type == 'additionnal_section') {
                 obj = { name: item.name, group: item.group, nb_results_by_section: 3, label: "" };
             }
 
             if (type == 'instant_type') {
-                obj = { name: item.name, count: item.count, nb_results_by_section: 3, label: ""};
+                obj = { name: item.name, count: item.count, label: ""};
             }
 
             if (type == 'facet') {
@@ -321,12 +339,34 @@ if (function_exists('curl_version') == false)
         };
 
         $scope.save = function () {
-            console.log(angular.toJson($scope.autocompleteTypes));
-            console.log(angular.toJson($scope.additionalAttributes));
-            console.log(angular.toJson($scope.instantTypes));
-            console.log(angular.toJson($scope.attributesToIndex));
-            console.log(angular.toJson($scope.customRankings));
-            console.log(angular.toJson($scope.facets));
+            var settings_name = [
+                'autocompleteTypes', 'additionalAttributes', 'instantTypes', 'attributesToIndex',
+                'customRankings', 'facets', 'app_id', 'search_key', 'admin_key', 'index_prefix', 'enable_truncating',
+                'truncate_size', 'search_input_selector', 'template_dir', 'number_by_page', 'instant_jquery_selector',
+                'sorts'
+            ];
+
+            var newSettings = {};
+
+            for (var i = 0; i < settings_name.length; i++)
+                newSettings[settings_name[i]] = angular.copy($scope[settings_name[i]]);
+
+          algoliaBundle.$.ajax({
+                method: "POST",
+                url: '<?php echo site_url(); ?>' + '/wp-admin/admin-post.php',
+                data: { action: "update_account_info", data: newSettings },
+                success: function (result) {
+                    $scope.save_message = 'Your settings has been saved';
+                    $scope.$apply();
+                    setTimeout(function () {
+                        $scope.save_message = "";
+                        $scope.$apply();
+                    }, 3000);
+                    console.log("saved");
+                }
+            });
+
+            console.log(newSettings);
         };
     }]);
 </script>

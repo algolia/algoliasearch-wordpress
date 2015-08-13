@@ -57,7 +57,7 @@ class TemplateHelper
     public function get_current_template()
     {
         foreach ($this->available_templates() as $template)
-            if ($template->dir == $this->algolia_registry->template)
+            if ($template->dir == $this->algolia_registry->template_dir)
                 return $template;
     }
 }

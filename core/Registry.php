@@ -4,18 +4,20 @@ class Registry
 {
     private static $instance;
     private $options = array();
-    private static $setting_key = 'algolia';
+    private static $setting_key = 'algolia 1.0';
 
     private $attributes = array(
         'validCredential'               => false,
         'app_id'                        => '',
         'search_key'                    => '',
         'admin_key'                     => '',
-        'index_name'                    => '',
+        'index_prefix'                  => 'wordpress_',
 
         'instant_jquery_selector'       => '#content',
+        'number_by_page'                => 10,
+
         'search_input_selector'         => "[name='s']",
-        'template'                      => 'default',
+        'template_dir'                  => 'default',
 
         'excluded_types'                => array('revision', 'nav_menu_item', 'acf', 'product_variation', 'shop_order', 'shop_order_refund', 'shop_coupon', 'shop_webhook', 'wooframework'),
 
@@ -25,37 +27,13 @@ class Registry
         'last_update'                   => '',
         'need_to_reindex'               => true,
 
-        'autocomplete_types'            => array(),
-
-        'indexable_types'               => array(
-                                                'post' => array('name' => 'Articles', 'order' => 0, 'instantable' => true, 'autocompletable' => true),
-                                                'page' => array('name' => 'Pages', 'order' => 1, 'instantable' => true, 'autocompletable' => false)
-                                            ),
-        /*'searchable'                    => array(
-                                                'title'     => array('ordered' => 'ordered', 'order' => 0),
-                                                'h1'        => array('ordered' => 'ordered', 'order' => 1),
-                                                'h2'        => array('ordered' => 'ordered', 'order' => 2),
-                                                'h3'        => array('ordered' => 'ordered', 'order' => 3),
-                                                'h4'        => array('ordered' => 'ordered', 'order' => 4),
-                                                'h5'        => array('ordered' => 'ordered', 'order' => 5),
-                                                'h6'        => array('ordered' => 'ordered', 'order' => 6),
-                                                'text'      => array('ordered' => 'unordered', 'order' => 7),
-                                                'content'   => array('ordered' => 'unordered', 'order' => 8)
-                                            ),*/
-        /*'sortable'                      => array(),*/
-        //'instant'                       => true,
-        //'autocomplete'                  => true,
-
-        'extras'                        => array('author' => 'author', 'author_login' => 'author_login', 'permalink' => 'permalink', 'date' => 'date', 'content' => 'content', 'h1' => 'h1', 'h2' => 'h2', 'h3' => 'h3', 'h4' => 'h4', 'h5' => 'h5', 'h6' => 'h6', 'text' => 'text', 'title' => 'title', 'slug' => 'slug', 'modified' => 'modified', 'parent' => 'parent', 'menu_order' => 'menu_order', 'type' => 'type'),
-        //'metas'                         => array(),
-        'number_by_page'                => 10,
-        'number_by_type'                => 3,
-
-
-
-
-
-
+        'autocompleteTypes'             => [],
+        'additionalAttributes'          => [],
+        'instantTypes'                  => [],
+        'attributesToIndex'             => [],
+        'customRankings'                => [],
+        'facets'                        => [],
+        'sorts'                         => []
     );
 
     public static function getInstance()
@@ -113,9 +91,14 @@ class Registry
                 echo '<pre>';
                 echo $e->getMessage();
                 echo $e->getTraceAsString();
-                die('lol');
+                die();
             }
         }
+    }
+
+    public function resetAttribute($name)
+    {
+        $this->$name = $this->attributes[$name];
     }
 
     private function save()

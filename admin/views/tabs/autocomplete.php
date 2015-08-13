@@ -1,4 +1,4 @@
-<div class="tab-content" id="_autocomplete">
+<div class="tab-content" ng-show="validCredential && current_tab == 'autocomplete'">
     <div class="content-wrapper" id="customization">
         <div class="content">
             <h3>Autocomplete Types</h3>
@@ -72,7 +72,7 @@
             </div>
 
             <div class="content-item">
-                <button ng-click="save()" class="button button-primary">Save Changes</button>
+                <button ng-click="save()" class="button button-primary">Save Changes</button>  <p ng-show="save_message !== ''" class="help-block">{{save_message}}</p>
             </div>
         </div>
     </div>
