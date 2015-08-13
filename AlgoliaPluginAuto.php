@@ -8,7 +8,7 @@ class AlgoliaPluginAuto
 
     public function __construct()
     {
-        $this->algolia_registry = \Algolia\Core\Registry::getInstance();
+      /*  $this->algolia_registry = \Algolia\Core\Registry::getInstance();
 
         if ($this->algolia_registry->validCredential == false)
             return;
@@ -30,7 +30,7 @@ class AlgoliaPluginAuto
             add_action('edited_term_taxonomy',     array($this, 'termTaxonomyUpdated')  , 10, 2);
             add_action('created_term',             array($this, 'termCreated')          , 10, 3);
             add_action('delete_term',              array($this, 'termDeleted')          , 10, 4);
-        }
+        }*/
     }
 
     public function postDeleted($post_id)

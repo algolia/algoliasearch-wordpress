@@ -40,17 +40,13 @@ class Indexer
 
     public function moveTempIndexes()
     {
-        $this->algolia_helper->move($this->algolia_registry->index_name.'all_temp', $this->algolia_registry->index_name.'all');
+        $this->algolia_helper->move($this->algolia_registry->index_prefix.'all_temp', $this->algolia_registry->index_prefix.'all');
 
-        if (isset($this->algolia_registry->metas['tax']))
-        {
-            foreach ($this->algolia_registry->metas['tax'] as $tax => $value)
-                if ($value['default_attribute'] == 0)
-                    $this->algolia_helper->move($this->algolia_registry->index_name.$tax.'_temp', $this->algolia_registry->index_name.$tax);
-        }
+        foreach ($this->algolia_registry->additionalAttributes as $value)
+            $this->algolia_helper->move($this->algolia_registry->index_prefix . $value['name'] . "_temp", $this->algolia_registry->index_prefix . $value['name']);
 
-        foreach (array_keys($this->algolia_registry->indexable_types) as $type)
-            $this->algolia_helper->move($this->algolia_registry->index_name.$type.'_temp', $this->algolia_registry->index_name.$type);
+        foreach ($this->algolia_registry->autocompleteTypes as $value)
+            $this->algolia_helper->move($this->algolia_registry->index_prefix . $value['name'] . "_temp", $this->algolia_registry->index_prefix . $value['name']);
 
         $this->algolia_helper->handleIndexCreation();
     }
@@ -72,6 +68,42 @@ class Indexer
         return $objects;
     }
 
+    public function indexMeta($meta)
+    {
+        global $wpdb;
+
+        $terms = $wpdb->get_col("SELECT DISTINCT(meta_value) FROM $wpdb->postmeta WHERE meta_key = '$meta'" );
+
+        $terms = array_map(function ($item) use ($meta) {
+            return array(
+                'objectID'  => $item,
+                $meta       => $item
+            );
+        }, $terms);
+
+        $this->algolia_helper->pushObjects($this->algolia_registry->index_prefix.$meta.'_temp', $terms);
+    }
+
+    public function indexAttribute($attribute)
+    {
+        global $wpdb;
+
+        if ($attribute == 'author')
+        {
+            $terms = $wpdb->get_col("SELECT DISTINCT(display_name) FROM $wpdb->users INNER JOIN $wpdb->posts ON $wpdb->posts.post_author = $wpdb->users.ID WHERE post_type='post' OR post_type='page'");
+
+            $terms = array_map(function ($item) {
+                return array(
+                    'objectID' => $item,
+                    'author'   => $item
+                );
+            }, $terms);
+
+            $this->algolia_helper->pushObjects($this->algolia_registry->index_prefix.$attribute.'_temp', $terms);
+        }
+
+    }
+
     public function indexTaxonomie($tax)
     {
         $terms = array();
@@ -79,15 +111,20 @@ class Indexer
         foreach (get_terms($tax) as $term)
             $terms[] = $this->wordpress_fetcher->getTermObj($term);
 
-        $this->algolia_helper->pushObjects($this->algolia_registry->index_name.$tax.'_temp', $terms);
+        $this->algolia_helper->pushObjects($this->algolia_registry->index_prefix.$tax.'_temp', $terms);
     }
 
     public function indexTaxonomies()
     {
-        if (isset($this->algolia_registry->metas['tax']))
-            foreach ($this->algolia_registry->metas['tax'] as $tax => $value)
-                if ($value['autocompletable'] && $value['default_attribute'] == false)
-                    $this->indexTaxonomie($tax);
+        foreach ($this->algolia_registry->additionalAttributes as $attribute)
+        {
+            if ($attribute['group'] == 'Taxonomy')
+                $this->indexTaxonomie($attribute['name']);
+            if (strpos($attribute['group'], 'Meta') !== false)
+                $this->indexMeta($attribute['name']);
+            if ($attribute['group'] == 'Record attribute')
+                $this->indexAttribute($attribute['name']);
+        }
     }
 
     public function indexPost($post)
@@ -95,16 +132,16 @@ class Indexer
         $object = $this->wordpress_fetcher->getPostObj($post);
 
         if (isset($this->algolia_registry->indexable_types[$post->post_type]) && $this->algolia_registry->indexable_types[$post->post_type]['autocompletable'])
-            $this->algolia_helper->pushObject($this->algolia_registry->index_name.$post->post_type, $object);
+            $this->algolia_helper->pushObject($this->algolia_registry->index_prefix.$post->post_type, $object);
 
         if (isset($this->algolia_registry->indexable_types[$post->post_type]) && $this->algolia_registry->indexable_types[$post->post_type]['instantable'])
-            $this->algolia_helper->pushObject($this->algolia_registry->index_name.'all', $object);
+            $this->algolia_helper->pushObject($this->algolia_registry->index_prefix.'all', $object);
     }
 
     public function deletePost($post_id, $type)
     {
-        $this->algolia_helper->deleteObject($this->algolia_registry->index_name.$type, $post_id);
-        $this->algolia_helper->deleteObject($this->algolia_registry->index_name.'all', $post_id);
+        $this->algolia_helper->deleteObject($this->algolia_registry->index_prefix.$type, $post_id);
+        $this->algolia_helper->deleteObject($this->algolia_registry->index_prefix.'all', $post_id);
     }
 
     public function indexTerm($term, $taxonomy)
@@ -113,24 +150,22 @@ class Indexer
         {
             $object = $this->wordpress_fetcher->getTermObj($term);
 
-            $this->algolia_helper->pushObject($this->algolia_registry->index_name.$taxonomy, $object);
+            $this->algolia_helper->pushObject($this->algolia_registry->index_prefix.$taxonomy, $object);
         }
 
     }
 
     public function deleteTerm($term_id, $taxonomy)
     {
-        $this->algolia_helper->deleteObject($this->algolia_registry->index_name.$taxonomy, $term_id);
+        $this->algolia_helper->deleteObject($this->algolia_registry->index_prefix.$taxonomy, $term_id);
     }
 
     public function indexPostsTypePart($type, $count, $offset)
     {
         $objects = $this->getPosts("AND post_type = '".$type."' ", "LIMIT ".($offset * $count).",".$count);
 
-        if (isset($this->algolia_registry->indexable_types[$type]) && $this->algolia_registry->indexable_types[$type]['autocompletable'])
-            $this->algolia_helper->pushObjects($this->algolia_registry->index_name.$type.'_temp', $objects);
+        $this->algolia_helper->pushObjects($this->algolia_registry->index_prefix.$type.'_temp', $objects);
 
-        if (isset($this->algolia_registry->indexable_types[$type]) && $this->algolia_registry->indexable_types[$type]['instantable'])
-            $this->algolia_helper->pushObjects($this->algolia_registry->index_name.'all_temp', $objects);
+        $this->algolia_helper->pushObjects($this->algolia_registry->index_prefix.'all_temp', $objects);
     }
 }

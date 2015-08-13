@@ -222,28 +222,29 @@ class WordpressFetcher
         if ($thumbnail_id)
             $obj->featureImage = $this->getImage($thumbnail_id);
 
-        if ($algolia_registry->metas && isset($algolia_registry->metas[$data->post_type]) && is_array($algolia_registry->metas[$data->post_type]))
+        foreach ($algolia_registry->additionalAttributes as $attribute)
         {
-            foreach (get_post_meta($data->ID) as $meta_key => $meta_value)
-                if (in_array($meta_key, array_keys($algolia_registry->metas[$data->post_type])))
-                    if ($algolia_registry->metas[$data->post_type][$meta_key]["indexable"])
-                        $obj->$meta_key = $this->try_cast($meta_value[0]);
-        }
-
-
-        foreach (get_post_taxonomies($data->ID) as $tax)
-        {
-            $terms = wp_get_post_terms($data->ID, $tax);
-
-            if (count($terms) <= 0)
-                continue;
-
-            if (isset($algolia_registry->metas['tax']) && isset($algolia_registry->metas['tax'][$tax]))
+            if ($attribute['group'] == 'Taxonomy')
             {
-                $obj->$tax = array_map(function ($obj) {
+                $terms = wp_get_post_terms($data->ID, $attribute['name']);
+
+                if (count($terms) <= 0)
+                    continue;
+
+                $obj->{$attribute['name']} = array_map(function ($obj) {
                     return $obj->name;
                 }, $terms);
             }
+
+            if (strpos($attribute['group'], 'Meta') !== false)
+            {
+                $value = get_post_meta($data->ID, $attribute['name']);
+                $obj->{$attribute['name']} = $this->try_cast($value);
+            }
+
+            /***
+             * Potential need to handle various post attribute if we add other than author
+             */
         }
 
         if (has_filter('prepare_algolia_record'))

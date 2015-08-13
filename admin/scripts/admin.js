@@ -147,7 +147,7 @@ algoliaBundle.$(document).ready(function($) {
             for (var i = 0; i < number; i++)
             {
                 actions.push({
-                    name: "Upload " + algoliaAdminSettings.types[value].name,
+                    name: "Upload " + algoliaAdminSettings.types[value].type,
                     subaction: "type__" + algoliaAdminSettings.types[value].type + "__" + i,
                     sup: (i === number - 1 ? algoliaAdminSettings.types[value].count : (i + 1) * algoliaAdminSettings.batch_count) + "/" + algoliaAdminSettings.types[value].count
                 });

@@ -52,6 +52,7 @@ foreach (get_post_types() as $type)
  * Get Metas
  */
 $attributes = array();
+$attributes_additionals_sections = array();
 
 foreach ($types as $type)
 {
@@ -71,6 +72,7 @@ foreach ($types as $type)
                 $attributeObj->group = 'Meta: '.$type->name;
 
                 $attributes[$elt] = $attributeObj;
+                $attributes_additionals_sections[$elt] = $attributeObj;
             }
         }
     //}
@@ -84,8 +86,11 @@ foreach ($taxonomies as $taxonomy)
     $attributeObj->name = $taxonomy;
     $attributeObj->group = 'Taxonomy';
 
-    $attributes[] = $attributeObj;
+    $attributes[$taxonomy] = $attributeObj;
+    $attributes_additionals_sections[$taxonomy] = $attributeObj;
 }
+
+$attributes_additionals_sections = $attributes;
 
 $extras = array("title","h1","h2","h3","h4","h5","h6","text","content", "author");
 
@@ -95,12 +100,17 @@ foreach ($extras as $extra)
     $attributeObj->name = $extra;
     $attributeObj->group = 'Record attribute';
 
-    $attributes[] = $attributeObj;
+    $attributes[$extra] = $attributeObj;
+
+    if ($extra == "author")
+        $attributes_additionals_sections[$extra] = $attributeObj;
 }
 
 ksort($attributes);
+ksort($attributes_additionals_sections);
 
 $attributes = array_values($attributes);
+$attributes_additionals_sections = array_values($attributes_additionals_sections);
 
 ?>
 
@@ -186,12 +196,12 @@ if (function_exists('curl_version') == false)
     <div class="wrapper">
         <div class="tabs myclearfix">
 
-            <div ng-click="changeTab('credentials')"            class="title {{current_tab == 'credentials' ? 'selected' :''}}">Credentials</div>
-            <div ng-click="changeTab('ui')"                     class="title {{current_tab == 'ui' ? 'selected' :''}}">UI</div>
-            <div ng-click="changeTab('autocomplete')"           class="title {{current_tab == 'autocomplete' ? 'selected' :''}}">Autocomplete</div>
-            <div ng-click="changeTab('instant')"                class="title {{current_tab == 'instant' ? 'selected' :''}}">Instant</div>
-            <div ng-click="changeTab('ranking')"                class="title {{current_tab == 'ranking' ? 'selected' :''}}">Ranking</div>
-            <div ng-click="changeTab('advanced')"               class="title {{current_tab == 'advanced' ? 'selected' :''}}">Advanced</div>
+            <div ng-click="changeTab('credentials')"                            class="title {{current_tab == 'credentials' ? 'selected' :''}}">Credentials</div>
+            <div ng-show="validCredential" ng-click="changeTab('ui')"           class="title {{current_tab == 'ui' ? 'selected' :''}}">UI</div>
+            <div ng-show="validCredential" ng-click="changeTab('autocomplete')" class="title {{current_tab == 'autocomplete' ? 'selected' :''}}">Autocomplete</div>
+            <div ng-show="validCredential" ng-click="changeTab('instant')"      class="title {{current_tab == 'instant' ? 'selected' :''}}">Instant</div>
+            <div ng-show="validCredential" ng-click="changeTab('ranking')"      class="title {{current_tab == 'ranking' ? 'selected' :''}}">Ranking</div>
+            <div ng-show="validCredential" ng-click="changeTab('advanced')"     class="title {{current_tab == 'advanced' ? 'selected' :''}}">Advanced</div>
 
             <div style="clear:both"></div>
         </div>
@@ -214,6 +224,7 @@ if (function_exists('curl_version') == false)
     angular.module('algoliaSettings', []).controller('algoliaController', ['$scope', function($scope) {
         $scope.types                            = <?php echo json_encode($types); ?>;
         $scope.attributes                       = <?php echo json_encode($attributes); ?>;
+        $scope.attributes_additionals_sections  = <?php echo json_encode($attributes_additionals_sections); ?>;
         $scope.templates                        = <?php echo json_encode($templates); ?>;
 
         $scope.app_id                           = "<?php echo $algolia_registry->app_id; ?>";
@@ -234,6 +245,7 @@ if (function_exists('curl_version') == false)
         $scope.autocomplete_type_selected       = null;
 
         $scope.additionalAttributes             = <?php echo json_encode($algolia_registry->additionalAttributes); ?>;
+
         $scope.additional_attribute_selected    = null;
 
         $scope.instantTypes                     = <?php echo json_encode($algolia_registry->instantTypes); ?>;
@@ -298,6 +310,7 @@ if (function_exists('curl_version') == false)
 
             if (type == 'additionnal_section') {
                 obj = { name: item.name, group: item.group, nb_results_by_section: 3, label: "" };
+                $scope.add($scope.facets, obj, 'facet');
             }
 
             if (type == 'instant_type') {
@@ -356,13 +369,7 @@ if (function_exists('curl_version') == false)
                 url: '<?php echo site_url(); ?>' + '/wp-admin/admin-post.php',
                 data: { action: "update_account_info", data: newSettings },
                 success: function (result) {
-                    $scope.save_message = 'Your settings has been saved';
-                    $scope.$apply();
-                    setTimeout(function () {
-                        $scope.save_message = "";
-                        $scope.$apply();
-                    }, 3000);
-                    console.log("saved");
+                    window.location.reload();
                 }
             });
 

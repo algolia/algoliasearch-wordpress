@@ -65,14 +65,14 @@
                 </tr>
             </table>
             <div class="content-item">
-                <select ng-options="item as item.name group by item.group for item in attributes" ng-model="additional_attribute_selected">
+                <select ng-options="item as item.name group by item.group for item in attributes_additionals_sections" ng-model="additional_attribute_selected">
 
                 </select>
                 <button  ng-click="add(additionalAttributes, additional_attribute_selected, 'additionnal_section')">Add</button>
             </div>
 
             <div class="content-item">
-                <button ng-click="save()" class="button button-primary">Save Changes</button>  <p ng-show="save_message !== ''" class="help-block">{{save_message}}</p>
+                <button ng-click="save()" class="button button-primary">Save Changes</button>
             </div>
         </div>
     </div>

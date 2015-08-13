@@ -33,7 +33,7 @@
                     <div style="clear: both"></div>
                 </div>
                 <div class="content-item">
-                    <button ng-click="save()" class="button button-primary">Save Changes</button>  <p ng-show="save_message !== ''" class="help-block">{{save_message}}</p>
+                    <button ng-click="save()" class="button button-primary">Save Changes</button>
                 </div>
             </div>
         </div>

@@ -53,7 +53,7 @@ class AlgoliaPlugin
 
     public function admin_view()
     {
-        $this->algolia_helper->handleIndexCreation();
+        $this->indexer->indexTaxonomies();
         include __DIR__ . '/admin/views/admin_menu.php';
     }
 
@@ -120,6 +120,11 @@ class AlgoliaPlugin
             'site_url'      => site_url()
         );
 
+
+        foreach ($this->algolia_registry->autocompleteTypes as $value)
+            $algoliaAdminSettings["types"][$value['name']] = array('type' => $value['name'], 'count' => wp_count_posts($value['name'])->publish);
+
+
         foreach (get_taxonomies() as $tax)
             $algoliaAdminSettings['taxonomies'][$tax] = array('count' => wp_count_terms($tax, array('hide_empty' => false)));
 
@@ -174,7 +179,18 @@ class AlgoliaPlugin
         foreach ($settings_name as $name)
         {
             if (isset($_POST['data']) && isset($_POST['data'][$name]))
-                $this->algolia_registry->{$name} = $_POST['data'][$name];
+            {
+                $data = $_POST['data'][$name];
+
+                if (is_array($data))
+                    foreach ($data as $key => &$value)
+                        if (is_array($value))
+                            foreach ($value as $sub_key => &$sub_value)
+                                $sub_value = \Algolia\Core\WordpressFetcher::try_cast($sub_value);
+
+                $this->algolia_registry->{$name} = $data;
+
+            }
             else
                 $this->algolia_registry->resetAttribute($name);
         }
@@ -231,7 +247,7 @@ class AlgoliaPlugin
             if (count($subaction) == 3)
             {
                 $this->algolia_registry->last_update = time();
-                if ($subaction[0] == 'type' && in_array($subaction[1], array_keys($this->algolia_registry->indexable_types)) && is_numeric($subaction[2]))
+                if ($subaction[0] == 'type' && is_numeric($subaction[2]))
                     $this->indexer->indexPostsTypePart($subaction[1], $batch_count, $subaction[2]);
             }
         }
