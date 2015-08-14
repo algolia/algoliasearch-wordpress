@@ -27,13 +27,41 @@ class Registry
         'last_update'                   => '',
         'need_to_reindex'               => true,
 
-        'autocompleteTypes'             => [],
-        'additionalAttributes'          => [],
-        'instantTypes'                  => [],
-        'attributesToIndex'             => [],
+        'autocompleteTypes'             => [
+                ["name" => "page", "count" => 1, "nb_results_by_section" => 3, "label" => ""],
+                ["name" => "post", "count" => 1, "nb_results_by_section" => 3, "label" => ""]
+            ],
+        'additionalAttributes'          => [["name" => "category", "group" => "Taxonomy", "nb_results_by_section" => 3, "label" => ""]],
+        'instantTypes'                  => [["name" => "post", "count" => 1, "label" => ""], ["name" => "page", "count" => 1, "label" => ""]],
+        'attributesToIndex'             => [
+                ["name" => "title", "group" => "Record attribute", "ordered" => "ordered"],
+                ["name" => "h1", "group" => "Record attribute", "ordered" => "ordered"],
+                ["name" => "h2", "group" => "Record attribute", "ordered" => "ordered"],
+                ["name" => "h3", "group" => "Record attribute", "ordered" => "ordered"],
+                ["name" => "h4", "group" => "Record attribute", "ordered" => "ordered"], ["name" => "h5", "group" => "Record attribute", "ordered" => "ordered"],
+                ["name" => "h6", "group" => "Record attribute", "ordered" => "ordered"],
+                ["name" => "content", "group" => "Record attribute", "ordered" => "ordered"],
+                ["name" => "text", "group" => "Record attribute", "ordered" => "ordered"],
+                ["name" => "category", "group" => "Taxonomy", "ordered" => "ordered"],
+                ["name" => "author", "group" => "Record attribute", "ordered" => "ordered"],
+                ["name" => "type", "group" => "Record attribute", "ordered" => "ordered"],
+                ["name" => "date", "group" => "Record attribute", "ordered" => "ordered"],
+                ["name" => "author_login", "group" => "Record attribute", "ordered" => "ordered"],
+                ["name" => "modified", "group" => "Record attribute", "ordered" => "ordered"],
+                ["name" => "parent", "group" => "Record attribute", "ordered" => "ordered"],
+                ["name" => "permalink", "group" => "Record attribute", "ordered" => "ordered"],
+                ["name" => "slug", "group" => "Record attribute", "ordered" => "ordered"]
+            ],
         'customRankings'                => [],
-        'facets'                        => [],
-        'sorts'                         => []
+        'facets'                        => [
+                ["name" => "author", "group" => "Record attribute", "type" => "conjunctive", "label" => ""],
+                ["name" => "type", "group" => "Record attribute", "type" => "menu", "label" => ""],
+                ["name" => "category", "group" => "Taxonomy", "type" => "disjunctive", "label" => ""]
+            ],
+        'sorts'                         => [
+                ["name" => "date", "group" => "Record attribute", "sort" => "asc", "label" => "Date asc"],
+                ["name" => "date", "group" => "Record attribute", "sort" => "desc", "label" => "Date desc"]
+            ]
     );
 
     public static function getInstance()
