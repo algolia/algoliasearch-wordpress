@@ -65,26 +65,22 @@ if (count(array_filter($types, function ($item) { return $item->name = 'product'
 
 foreach ($typesForAttributes as $type)
 {
-    //if (is_array($algolia_registry->indexable_types) && in_array($type, array_keys($algolia_registry->indexable_types)))
-    //{
-        $type_count = floor(get_meta_key_list_count($type->name) / 1000);
+    $type_count = floor(get_meta_key_list_count($type->name) / 1000);
 
+    for ($offset = 0; $offset <= $type_count; $offset++)
+    {
+        $list = get_meta_key_list($type->name, $offset * 1000, 1000);
 
-        for ($offset = 0; $offset <= $type_count; $offset++)
+        foreach ($list as $elt)
         {
-            $list = get_meta_key_list($type->name, $offset * 1000, 1000);
+            $attributeObj = new stdClass();
+            $attributeObj->name = $elt;
+            $attributeObj->group = 'Meta: '.$type->name;
 
-            foreach ($list as $elt)
-            {
-                $attributeObj = new stdClass();
-                $attributeObj->name = $elt;
-                $attributeObj->group = 'Meta: '.$type->name;
-
-                $attributes[$elt] = $attributeObj;
-                $attributes_additionals_sections[$elt] = $attributeObj;
-            }
+            $attributes[$elt] = $attributeObj;
+            $attributes_additionals_sections[$elt] = $attributeObj;
         }
-    //}
+    }
 }
 
 $taxonomies = array_values(get_taxonomies());
@@ -101,7 +97,7 @@ foreach ($taxonomies as $taxonomy)
 
 $attributes_additionals_sections = $attributes;
 
-$extras = array("title","h1","h2","h3","h4","h5","h6","text","content", "author");
+$extras = array('title', 'h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'text', 'content', 'author', 'author_login', 'permalink', 'date', 'slug', 'modified', 'parent', 'type');
 
 foreach ($extras as $extra)
 {

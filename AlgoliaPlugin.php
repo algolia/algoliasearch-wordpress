@@ -52,13 +52,12 @@ class AlgoliaPlugin
 
     public function admin_view()
     {
-        $this->indexer->indexTaxonomies();
         include __DIR__ . '/admin/views/admin_menu.php';
     }
 
     public function wp_footer()
     {
-        include __DIR__ . '/templates/' . $this->algolia_registry->template . '/templates.php';
+        include __DIR__ . '/templates/' . $this->algolia_registry->template_dir . '/templates.php';
     }
 
     private function buildSettings()
