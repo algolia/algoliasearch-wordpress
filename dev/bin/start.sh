@@ -13,7 +13,7 @@ wp --allow-root option update home $BASE_URL
 curl -c cookiejar --data "log=admin&pwd=admin" -L $BASE_URL"wp-login.php"
 curl -b cookiejar -L $BASE_URL"wp-admin/admin.php?page=wc-settings&install_woocommerce_pages=true"
 
-mysql -u root -pP4ssw0rd wordpress -e "INSERT INTO wordpress.wp_options (option_id, option_name, option_value, autoload) VALUES (NULL, 'algolia', '`algolia-config-generator $APPLICATION_ID $SEARCH_ONLY_API_KEY $API_KEY $INDEX_PREFIX`', 'yes');"
+mysql -u root -pP4ssw0rd wordpress -e "INSERT INTO wordpress.wp_options (option_id, option_name, option_value, autoload) VALUES (NULL, 'algolia 1.0', '`algolia-config-generator $APPLICATION_ID $SEARCH_ONLY_API_KEY $API_KEY $INDEX_PREFIX`', 'yes');"
 
 curl -b cookiejar --data "action=reindex&subaction=handle_index_creation" -L $BASE_URL"wp-admin/admin-post.php"
 curl -b cookiejar --data "action=reindex&subaction=type__product__0" -L $BASE_URL"wp-admin/admin-post.php"
