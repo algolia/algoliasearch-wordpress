@@ -12,18 +12,22 @@
                     <th></th>
                 </tr>
 
-                <tr ng-repeat="attribute in attributesToIndex">
-                    <td style="width: 400px;">
-                        {{attribute.name}} ({{attribute.group}})
-                    </td>
-                    <td>
-                        <select ng-options="item.key as item.value for item in orderedTab" ng-model="attribute.ordered"></select>
-                    </td>
-                    <td>
-                        <button ng-click="up(attributesToIndex, attribute)">&#8593;</button> <button ng-click="down(attributesToIndex, attribute)">&#8595;</button>
-                        <button ng-show="isRemovable(attribute)" ng-click="remove(attributesToIndex, attribute)">x</button>
-                    </td>
-                </tr>
+                <tbody ui-sortable ng-model="attributesToIndex">
+                    <tr ng-repeat="attribute in attributesToIndex">
+                        <td style="width: 400px;">
+                            {{attribute.name}} ({{attribute.group}})
+                        </td>
+                        <td>
+                            <select ng-options="item.key as item.value for item in orderedTab" ng-model="attribute.ordered"></select>
+                        </td>
+                        <td>
+                            <div style="float: right;">
+                                <button ng-show="isRemovable(attribute)" ng-click="remove(attributesToIndex, attribute)">Remove</button>
+                                <img width="10" src="<?php echo $move_icon_url; ?>" style="margin-top: 10px; margin-left: 5px;" />
+                            </div>
+                        </td>
+                    </tr>
+                </tbody>
             </table>
             <div class="content-item">
                 <select ng-options="item as item.name group by item.group for item in attributes" ng-model="attribute_to_index_selected">
@@ -43,18 +47,22 @@
                     <th></th>
                 </tr>
 
-                <tr ng-repeat="attribute in customRankings">
-                    <td style="width: 400px;">
-                        {{attribute.name}} ({{attribute.group}})
-                    </td>
-                    <td>
-                        <select ng-options="item.key as item.value for item in sortTab" ng-model="attribute.sort"></select>
-                    </td>
-                    <td>
-                        <button ng-click="up(customRankings, attribute)">&#8593;</button> <button ng-click="down(customRankings, attribute)">&#8595;</button>
-                        <button ng-click="remove(customRankings, attribute)">x</button>
-                    </td>
-                </tr>
+                <tbody ui-sortable ng-model="customRankings">
+                    <tr ng-repeat="attribute in customRankings">
+                        <td style="width: 400px;">
+                            {{attribute.name}} ({{attribute.group}})
+                        </td>
+                        <td>
+                            <select ng-options="item.key as item.value for item in sortTab" ng-model="attribute.sort"></select>
+                        </td>
+                        <td>
+                            <div style="float: right;">
+                                <button ng-click="remove(customRankings, attribute)">Remove</button>
+                                <img width="10" src="<?php echo $move_icon_url; ?>" style="margin-top: 10px; margin-left: 5px;" />
+                            </div>
+                        </td>
+                    </tr>
+                </tbody>
             </table>
             <div class="content-item">
                 <select ng-options="item as item.name group by item.group for item in attributes" ng-model="custom_ranking_selected">

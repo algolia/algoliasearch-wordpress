@@ -381,5 +381,47 @@ if (function_exists('curl_version') == false)
 
             console.log(newSettings);
         };
-    }]);
+    }]).value('uiSortableConfig',{})
+        .directive('uiSortable', [
+            'uiSortableConfig', '$timeout', '$log',
+            function(uiSortableConfig, $timeout, $log) {
+
+                return {
+                    require: '?ngModel',
+                    scope: {
+                        ngModel: '=',
+                        uiSortable: '='
+                    },
+                    link: function(scope, element, attrs, ngModel) {
+
+                        var fixHelper = function(e, ui) {
+                            ui.children().each(function() {
+                                algoliaBundle.$(this).width(algoliaBundle.$(this).width());
+                            });
+                            return ui;
+                        };
+                        // Create sortable
+                        algoliaBundle.$(element).sortable({
+                            containment: "parent",
+                            helper: fixHelper,
+                            tolerance: 'pointer',
+                            update: function(event, ui) {
+                                console.log(ui.item.sortable.index, ui.item.index());
+                                console.log(ngModel);
+
+                                var item = ngModel.$modelValue.splice(ui.item.sortable.index, 1);
+
+                                if (ui.item.sortable.index < ui.item.index() - 1)
+                                    ngModel.$modelValue.splice(ui.item.index() - 1, 0, item[0]);
+                                else
+                                    ngModel.$modelValue.splice(ui.item.index(), 0, item[0]);
+                            },
+                            start: function(event, ui) {
+                                ui.item.sortable.index = ui.item.index();
+                            }
+                        });
+                    }
+                };
+            }
+        ]);
 </script>

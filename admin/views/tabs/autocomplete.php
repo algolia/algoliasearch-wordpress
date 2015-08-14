@@ -13,21 +13,25 @@
                     <th></th>
                 </tr>
 
-                <tr ng-repeat="type in autocompleteTypes">
-                    <td style="width: 400px;">
-                        {{type.name}} ({{type.count}})
-                    </td>
-                    <td>
-                        <input type="number" ng-model="type.nb_results_by_section">
-                    </td>
-                    <td style="white-space: nowrap;">
-                        <input type="text" ng-model="type.label">
-                    </td>
-                    <td>
-                        <button ng-click="up(autocompleteTypes, type)">&#8593;</button> <button ng-click="down(autocompleteTypes, type)">&#8595;</button>
-                        <button ng-click="remove(autocompleteTypes, type)">x</button>
-                    </td>
-                </tr>
+                <tbody ui-sortable ng-model="autocompleteTypes">
+                    <tr ng-repeat="type in autocompleteTypes">
+                        <td style="width: 400px;">
+                            {{type.name}} ({{type.count}})
+                        </td>
+                        <td>
+                            <input type="number" ng-model="type.nb_results_by_section">
+                        </td>
+                        <td style="white-space: nowrap;">
+                            <input type="text" ng-model="type.label">
+                        </td>
+                        <td>
+                            <div style="float: right;">
+                                <button ng-click="remove(autocompleteTypes, type)">Remove</button>
+                                <img width="10" src="<?php echo $move_icon_url; ?>" style="margin-top: 10px; margin-left: 5px;" />
+                            </div>
+                        </td>
+                    </tr>
+                </tbody>
             </table>
             <div class="content-item">
                 <select ng-options="item as item.label for item in types" ng-model="autocomplete_type_selected">
@@ -48,21 +52,25 @@
                     <th></th>
                 </tr>
 
-                <tr ng-repeat="attribute in additionalAttributes">
-                    <td style="width: 400px;">
-                        {{attribute.name}} ({{attribute.group}})
-                    </td>
-                    <td>
-                        <input type="number" ng-model="attribute.nb_results_by_section">
-                    </td>
-                    <td style="white-space: nowrap;">
-                        <input type="text" ng-model="attribute.label">
-                    </td>
-                    <td>
-                        <button ng-click="up(additionalAttributes, attribute)">&#8593;</button> <button ng-click="down(additionalAttributes, attribute)">&#8595;</button>
-                        <button ng-click="remove(additionalAttributes, attribute)">x</button>
-                    </td>
-                </tr>
+                <tbody ui-sortable ng-model="additionalAttributes">
+                    <tr ng-repeat="attribute in additionalAttributes">
+                        <td style="width: 400px;">
+                            {{attribute.name}} ({{attribute.group}})
+                        </td>
+                        <td>
+                            <input type="number" ng-model="attribute.nb_results_by_section">
+                        </td>
+                        <td style="white-space: nowrap;">
+                            <input type="text" ng-model="attribute.label">
+                        </td>
+                        <td>
+                            <div style="float: right;">
+                                <button ng-click="remove(additionalAttributes, attribute)">Remove</button>
+                                <img width="10" src="<?php echo $move_icon_url; ?>" style="margin-top: 10px; margin-left: 5px;" />
+                            </div>
+                        </td>
+                    </tr>
+                </tbody>
             </table>
             <div class="content-item">
                 <select ng-options="item as item.name group by item.group for item in attributes_additionals_sections" ng-model="additional_attribute_selected">

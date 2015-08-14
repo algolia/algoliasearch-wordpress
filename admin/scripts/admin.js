@@ -1,3 +1,4 @@
+
 var selectTab;
 
 algoliaBundle.$(document).ready(function($) {

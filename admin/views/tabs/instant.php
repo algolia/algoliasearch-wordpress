@@ -28,14 +28,19 @@
                     <th></th>
                 </tr>
 
-                <tr ng-repeat="type in instantTypes">
-                    <td style="width: 400px;">
-                        {{type.name}} ({{type.count}})
-                    </td>
-                    <td>
-                        <button ng-click="remove(instantTypes, type)">x</button>
-                    </td>
-                </tr>
+                <tbody ui-sortable ng-model="instantTypes">
+                    <tr ng-repeat="type in instantTypes">
+                        <td style="width: 400px;">
+                            {{type.name}} ({{type.count}})
+                        </td>
+                        <td>
+                            <div style="float: right;">
+                                <button ng-click="remove(instantTypes, type)">Remove</button>
+                                <img width="10" src="<?php echo $move_icon_url; ?>" style="margin-top: 10px; margin-left: 5px;" />
+                            </div>
+                        </td>
+                    </tr>
+                </tbody>
             </table>
             <div class="content-item">
                 <select ng-options="item as item.label for item in types" ng-model="instant_type_selected"></select>
@@ -54,21 +59,25 @@
                     <th></th>
                 </tr>
 
-                <tr ng-repeat="facet in facets">
-                    <td style="width: 400px;">
-                        {{facet.name}} ({{facet.group}})
-                    </td>
-                    <td>
-                        <select ng-options="item.key as item.value for item in facetTypes" ng-model="facet.type"></select>
-                    </td>
-                    <td style="white-space: nowrap;">
-                        <input type="text" ng-model="facet.label">
-                    </td>
-                    <td>
-                        <button ng-click="up(facets, facet)">&#8593;</button> <button ng-click="down(facets, facet)">&#8595;</button>
-                        <button ng-click="remove(facets, facet)">x</button>
-                    </td>
-                </tr>
+                <tbody ui-sortable ng-model="facets">
+                    <tr ng-repeat="facet in facets">
+                        <td style="width: 400px;">
+                            {{facet.name}} ({{facet.group}})
+                        </td>
+                        <td>
+                            <select ng-options="item.key as item.value for item in facetTypes" ng-model="facet.type"></select>
+                        </td>
+                        <td style="white-space: nowrap;">
+                            <input type="text" ng-model="facet.label">
+                        </td>
+                        <td>
+                            <div style="float: right;">
+                                <button ng-click="remove(facets, facet)">Remove</button>
+                                <img width="10" src="<?php echo $move_icon_url; ?>" style="margin-top: 10px; margin-left: 5px;" />
+                            </div>
+                        </td>
+                    </tr>
+                </tbody>
             </table>
             <div class="content-item">
                 <select ng-options="item as item.name group by item.group for item in attributes" ng-model="facet_selected">
@@ -89,21 +98,25 @@
                     <th></th>
                 </tr>
 
-                <tr ng-repeat="sort in sorts">
-                    <td style="width: 400px;">
-                        {{sort.name}} ({{sort.group}})
-                    </td>
-                    <td>
-                        <select ng-options="item.key as item.value for item in sortTab" ng-model="sort.sort"></select>
-                    </td>
-                    <td style="white-space: nowrap;">
-                        <input type="text" ng-model="sort.label">
-                    </td>
-                    <td>
-                        <button ng-click="up(sorts, sort)">&#8593;</button> <button ng-click="down(sorts, sort)">&#8595;</button>
-                        <button ng-click="remove(sorts, sort)">x</button>
-                    </td>
-                </tr>
+                <tbody ui-sortable ng-model="sorts">
+                    <tr ng-repeat="sort in sorts">
+                        <td style="width: 400px;">
+                            {{sort.name}} ({{sort.group}})
+                        </td>
+                        <td>
+                            <select ng-options="item.key as item.value for item in sortTab" ng-model="sort.sort"></select>
+                        </td>
+                        <td style="white-space: nowrap;">
+                            <input type="text" ng-model="sort.label">
+                        </td>
+                        <td>
+                            <div style="float: right;">
+                                <button ng-click="remove(sorts, sort)">Remove</button>
+                                <img width="10" src="<?php echo $move_icon_url; ?>" style="margin-top: 10px; margin-left: 5px;" />
+                            </div>
+                        </td>
+                    </tr>
+                </tbody>
             </table>
             <div class="content-item">
                 <select ng-options="item as item.name group by item.group for item in attributes" ng-model="sort_selected">
