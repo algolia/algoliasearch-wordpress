@@ -12,20 +12,21 @@ class AlgoliaPlugin
     {
         $this->algolia_registry = \Algolia\Core\Registry::getInstance();
 
-        if ($this->algolia_registry->validCredential)
+        if ($this->algolia_registry->validCredential && $this->algolia_registry->app_id && $this->algolia_registry->admin_key && $this->algolia_registry->search_key)
         {
             $this->algolia_helper   = new \Algolia\Core\AlgoliaHelper(
                 $this->algolia_registry->app_id,
                 $this->algolia_registry->search_key,
                 $this->algolia_registry->admin_key
             );
+
+            $this->indexer = new \Algolia\Core\Indexer();
         }
 
         $this->query_replacer = new \Algolia\Core\QueryReplacer();
 
         $this->template_helper = new \Algolia\Core\TemplateHelper();
 
-        $this->indexer = new \Algolia\Core\Indexer();
 
         add_action('admin_menu',                                array($this, 'add_admin_menu'));
 
@@ -148,25 +149,28 @@ class AlgoliaPlugin
 
     public function admin_post_update_account_info()
     {
-        if (isset($_POST['submit']) && $_POST['submit'] == 'Import configuration'
-            && isset($_FILES['import']) && isset($_FILES['import']['tmp_name']) && is_file($_FILES['import']['tmp_name']))
+        if (isset($_POST['submit']) && $_POST['submit'] == 'Import configuration')
         {
-            $content = file_get_contents($_FILES['import']['tmp_name']);
+            if (isset($_FILES['import']) && isset($_FILES['import']['tmp_name']) && is_file($_FILES['import']['tmp_name']))
+            {
+                $content = file_get_contents($_FILES['import']['tmp_name']);
 
-            try
-            {
-                $this->algolia_registry->import(json_decode($content, true));
-                wp_redirect('admin.php?page=algolia-settings#credentials');
-                return;
+                try
+                {
+                    $this->algolia_registry->import(json_decode($content, true));
+                }
+                catch(\Exception $e)
+                {
+                    echo $e->getMessage();
+                    echo '<pre>';
+                    echo $e->getTraceAsString();
+                    die();
+                }
             }
-            catch(\Exception $e)
-            {
-                echo $e->getMessage();
-                echo '<pre>';
-                echo $e->getTraceAsString();
-                die();
-            }
+            wp_redirect('admin.php?page=algolia-settings#credentials');
+            return;
         }
+
 
         $settings_name = [
             'autocompleteTypes', 'additionalAttributes', 'instantTypes', 'attributesToIndex',
