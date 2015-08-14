@@ -125,14 +125,14 @@ class Indexer
         }
     }
 
-    public function indexPost($post)
+    public function indexPost($post, $autocomplete, $instant)
     {
         $object = $this->wordpress_fetcher->getPostObj($post);
 
-        if (isset($this->algolia_registry->indexable_types[$post->post_type]) && $this->algolia_registry->indexable_types[$post->post_type]['autocompletable'])
+        if ($autocomplete)
             $this->algolia_helper->pushObject($this->algolia_registry->index_prefix.$post->post_type, $object);
 
-        if (isset($this->algolia_registry->indexable_types[$post->post_type]) && $this->algolia_registry->indexable_types[$post->post_type]['instantable'])
+        if ($instant)
             $this->algolia_helper->pushObject($this->algolia_registry->index_prefix.'all', $object);
     }
 
@@ -144,7 +144,9 @@ class Indexer
 
     public function indexTerm($term, $taxonomy)
     {
-        if (isset($this->algolia_registry->metas['tax'][$taxonomy]) && $this->algolia_registry->metas['tax'][$taxonomy]['autocompletable'])
+        $additionalAttributes = $this->algolia_registry->additionalAttributes;
+
+        if (count(array_filter($additionalAttributes, function($item) use($taxonomy) { return $item['group'] == 'Taxonomy' && $item['name'] == $taxonomy; })) > 0)
         {
             $object = $this->wordpress_fetcher->getTermObj($term);
 

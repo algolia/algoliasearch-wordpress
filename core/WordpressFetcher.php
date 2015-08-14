@@ -251,7 +251,7 @@ class WordpressFetcher
         {
             $obj = apply_filters('prepare_algolia_record', $obj);
         }
-
+        
         return (array) $obj;
     }
 }
