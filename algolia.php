@@ -94,17 +94,25 @@ add_filter(/**
 
         foreach ($algolia_registry->attributesToIndex as $value)
         {
+            if (isset($data->{$value['name']}))
+                continue;
+
             if (isset($product_attrs[$value['name']]))
-            {
                 $data->{$value['name']} = \Algolia\Core\WordpressFetcher::try_cast($product_attrs[$value['name']]);
-            }
 
             $name = $value['name'];
             if (($pos = strpos($value['name'], 'attribute_')) !== false)
                 $name = substr($name, 10);
 
-            if (! isset($data->{$value['name']}) && in_array($name, array_keys($attributes)))
-                $data->{$value['name']} = $attributes[$name]['value'];
+            if (in_array($name, array_keys($attributes)))
+                $data->{$value['name']} = \Algolia\Core\WordpressFetcher::try_cast($attributes[$name]['value']);
+            else
+            {
+                $meta = get_post_meta($data->objectID, $value['name'], true);
+
+                if ($meta !== null)
+                    $data->{$value['name']} = \Algolia\Core\WordpressFetcher::try_cast($meta);
+            }
         }
     }
 

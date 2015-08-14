@@ -70,11 +70,12 @@ class AlgoliaPlugin
         $settings = array();
 
         foreach ($settings_name as $name)
-            $settings[$name] = $this->algolia_registry->{$name};
+            $settings[$name] = str_replace("\\", "", $this->algolia_registry->{$name});
 
         $algoliaSettings = array_merge($settings, array(
             'template'                  => $this->template_helper->get_current_template(),
-            'is_search_page'            => isset($_GET['instant'])
+            'is_search_page'            => isset($_GET['instant']),
+            'plugin_url'                => plugin_dir_url(__FILE__)
         ));
 
         return $algoliaSettings;

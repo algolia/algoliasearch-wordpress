@@ -139,6 +139,8 @@ algoliaBundle.$(document).ready(function($) {
 
         $(this).hide();
 
+        actions.push({ subaction: "saveSettings", name: "Save settings", sup: "" })
+
         actions.push({ subaction: "handle_index_creation", name: "Setup indices", sup: "" });
 
         for (value in algoliaAdminSettings.types)

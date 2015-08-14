@@ -22,9 +22,9 @@ class QueryReplacer
 
         if (is_search() && ! is_admin() && $this->algolia_registry->validCredential && isset($_GET['instant']) === false)
         {
-            if ($this->algolia_registry->instant)
+            if (count($this->algolia_registry->instantTypes) > 0)
             {
-                $url = get_site_url().'/?instant=1&s='.$query->query['s'].'#q='.$query->query['s'].'&page=0&refinements=%5B%5D&numerics_refinements=%7B%7D&index_name=%22'.$this->algolia_registry->index_name.'all%22';
+                $url = get_site_url().'/?instant=1&s='.$query->query['s'].'#q='.$query->query['s'].'&page=0&refinements=%5B%5D&numerics_refinements=%7B%7D&index_name=%22'.$this->algolia_registry->index_prefix.'all%22';
                 header('Location: '.$url);
 
                 die();
@@ -43,7 +43,7 @@ class QueryReplacer
                 $this->algolia_registry->admin_key
             );
 
-            $results = $algolia_helper->search($algolia_query, $options, $this->algolia_registry->index_name.'all');
+            $results = $algolia_helper->search($algolia_query, $options, $this->algolia_registry->index_prefix.'all');
 
             foreach ($results['hits'] as $result)
                 $this->ids[] = $result['objectID'];

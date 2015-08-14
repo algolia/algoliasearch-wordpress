@@ -246,6 +246,7 @@ if (function_exists('curl_version') == false)
         $scope.number_by_page                   = <?php echo $algolia_registry->number_by_page; ?>;
         $scope.instant_jquery_selector          = "<?php echo $algolia_registry->instant_jquery_selector; ?>";
 
+
         $scope.autocompleteTypes                = <?php echo json_encode($algolia_registry->autocompleteTypes); ?>;
         $scope.autocomplete_type_selected       = null;
 

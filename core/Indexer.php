@@ -93,13 +93,13 @@ class Indexer
             $terms = array_map(function ($item) {
                 return array(
                     'objectID' => $item,
-                    'author'   => $item
+                    'author'   => $item,
+                    'title'    => $item
                 );
             }, $terms);
 
             $this->algolia_helper->pushObjects($this->algolia_registry->index_prefix.$attribute.'_temp', $terms);
         }
-
     }
 
     public function indexTaxonomie($tax)

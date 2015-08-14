@@ -150,20 +150,20 @@ $facets = $facets['facets'];
 
                 {{#type.menu}}
                 <div class="{{#checked}}checked {{/checked}}sub_facet conjunctive">
-                    <input style="display: none;" data-tax="{{tax}}" {{#checked}}checked{{/checked}} data-name="{{nameattr}}" class="facet_value" type="checkbox" />
+                    <input style="display: none;" data-facet="{{facet}}" {{#checked}}checked{{/checked}} data-value="{{value}}" class="facet_value" type="checkbox" />
                     {{name}} ({{count}})
                 </div>
                 {{/type.menu}}
 
                 {{#type.conjunctive}}
                 <div class="{{#checked}}checked {{/checked}}sub_facet conjunctive">
-                    <input style="display: none;" data-tax="{{tax}}" {{#checked}}checked{{/checked}} data-name="{{nameattr}}" class="facet_value" type="checkbox" />
+                    <input style="display: none;" data-facet="{{facet}}" {{#checked}}checked{{/checked}} data-value="{{value}}" class="facet_value" type="checkbox" />
                     {{name}} ({{count}})
                 </div>
                 {{/type.conjunctive}}
 
                 {{#type.slider}}
-                <div class="algolia-slider algolia-slider-true" data-tax="{{tax}}" data-min="{{min}}" data-max="{{max}}"></div>
+                <div class="algolia-slider algolia-slider-true" data-name="{{name}}" data-min="{{min}}" data-max="{{max}}"></div>
                 <div class="algolia-slider-info">
                     <div class="min" style="float: left;">{{current_min}}</div>
                     <div class="max" style="float: right;">{{current_max}}</div>
@@ -173,7 +173,7 @@ $facets = $facets['facets'];
 
                 {{#type.disjunctive}}
                 <div class="{{#checked}}checked {{/checked}}sub_facet disjunctive">
-                    <input data-tax="{{tax}}" {{#checked}}checked{{/checked}} data-name="{{nameattr}}" class="facet_value" type="checkbox" />
+                    <input data-facet="{{facet}}" {{#checked}}checked{{/checked}} data-value="{{value}}" class="facet_value" type="checkbox" />
                     {{name}} ({{count}})
                 </div>
                 {{/type.disjunctive}}
