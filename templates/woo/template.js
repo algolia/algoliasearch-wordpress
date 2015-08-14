@@ -633,24 +633,25 @@ algoliaBundle.$(document).ready(function ($) {
             var all_count = 0;
             var all_unchecked = true;
 
-            var content_facet = content.getFacetByName(facet.tax);
+            var content_facet = content.getFacetByName(facet.name);
 
             if (content_facet == undefined)
                 return data;
 
             for (var key in content_facet.data)
             {
-                var checked = helper.isRefined(facet.tax, key);
+                var checked = helper.isRefined(facet.name, key);
 
                 all_unchecked = all_unchecked && !checked;
 
                 var name = window.facetsLabels && window.facetsLabels[key] != undefined ? window.facetsLabels[key] : key;
-                var nameattr = key;
+                var value = key;
 
                 var params = {
                     type: {},
                     checked: checked,
-                    nameattr: nameattr,
+                    facet: facet.name,
+                    value: value,
                     name: name,
                     print_count: true,
                     count: content_facet.data[key]
@@ -666,13 +667,15 @@ algoliaBundle.$(document).ready(function ($) {
             var params = {
                 type: {},
                 checked: all_unchecked,
-                nameattr: 'all',
+                facet: facet.name,
                 name: 'All',
+                value: 'all',
                 print_count: false,
                 count: all_count
             };
 
             params.type[facet.type] = true;
+
 
             data.unshift(params);
 
@@ -686,17 +689,17 @@ algoliaBundle.$(document).ready(function ($) {
 
             e.stopImmediatePropagation();
 
-            if ($(this).attr("data-name") == "all")
-                helper.state.clearRefinements($(this).attr("data-tax"));
+            if ($(this).attr("data-value") == "all")
+                helper.clearRefinements($(this).attr("data-facet"));
 
             $(this).find("input[type='checkbox']").each(function (i) {
                 $(this).prop("checked", !$(this).prop("checked"));
 
-                if (false == helper.isRefined($(this).attr("data-tax"), $(this).attr("data-name")))
-                    helper.state.clearRefinements($(this).attr("data-tax"));
+                if (false == helper.isRefined($(this).attr("data-facet"), $(this).attr("data-value")))
+                    helper.clearRefinements($(this).attr("data-facet"));
 
-                if ($(this).attr("data-name") != "all")
-                    helper.toggleRefine($(this).attr("data-tax"), $(this).attr("data-name"));
+                if ($(this).attr("data-value") != "all")
+                    helper.toggleRefine($(this).attr("data-facet"), $(this).attr("data-value"));
             });
 
             performQueries(true);

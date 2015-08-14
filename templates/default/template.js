@@ -533,7 +533,7 @@ algoliaBundle.$(document).ready(function ($) {
                 disjunctive_facets.push(algoliaSettings.facets[i].name);
 
             if (algoliaSettings.facets[i].type == "menu")
-                conjunctive_facets.push(algoliaSettings.facets[i].name);
+                disjunctive_facets.push(algoliaSettings.facets[i].name);
         }
 
         /**
@@ -634,6 +634,85 @@ algoliaBundle.$(document).ready(function ($) {
 
             return [];
         };
+
+        custom_facets_types["menu"] = function (helper, content, facet) {
+
+            var data = [];
+
+            var all_count = 0;
+            var all_unchecked = true;
+
+            var content_facet = content.getFacetByName(facet.name);
+
+            if (content_facet == undefined)
+                return data;
+
+            for (var key in content_facet.data)
+            {
+                var checked = helper.isRefined(facet.name, key);
+
+                all_unchecked = all_unchecked && !checked;
+
+                var name = window.facetsLabels && window.facetsLabels[key] != undefined ? window.facetsLabels[key] : key;
+                var value = key;
+
+                var params = {
+                    type: {},
+                    checked: checked,
+                    facet: facet.name,
+                    value: value,
+                    name: name,
+                    print_count: true,
+                    count: content_facet.data[key]
+                };
+
+                all_count += content_facet.data[key];
+
+                params.type[facet.type] = true;
+
+                data.push(params);
+            }
+
+            var params = {
+                type: {},
+                checked: all_unchecked,
+                facet: facet.name,
+                name: 'All',
+                value: 'all',
+                print_count: false,
+                count: all_count
+            };
+
+            params.type[facet.type] = true;
+
+
+            data.unshift(params);
+
+            return data;
+        };
+
+        /**
+         * Handle click on menu custom facet
+         */
+        $("body").on("click", ".sub_facet.menu", function (e) {
+
+            e.stopImmediatePropagation();
+
+            if ($(this).attr("data-value") == "all")
+                helper.clearRefinements($(this).attr("data-facet"));
+
+            $(this).find("input[type='checkbox']").each(function (i) {
+                $(this).prop("checked", !$(this).prop("checked"));
+
+                if (false == helper.isRefined($(this).attr("data-facet"), $(this).attr("data-value")))
+                    helper.clearRefinements($(this).attr("data-facet"));
+
+                if ($(this).attr("data-value") != "all")
+                    helper.toggleRefine($(this).attr("data-facet"), $(this).attr("data-value"));
+            });
+
+            performQueries(true);
+        });
 
         /**
          * Handle click on conjunctive and disjunctive facet

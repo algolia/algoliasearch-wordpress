@@ -148,12 +148,12 @@ $facets = $facets['facets'];
         <div>
             {{#sub_facets}}
 
-                {{#type.menu}}
-                <div class="{{#checked}}checked {{/checked}}sub_facet conjunctive">
-                    <input style="display: none;" data-facet="{{facet}}" {{#checked}}checked{{/checked}} data-value="{{value}}" class="facet_value" type="checkbox" />
-                    {{name}} ({{count}})
-                </div>
-                {{/type.menu}}
+            {{#type.menu}}
+            <div class="{{#checked}}checked {{/checked}}sub_facet menu" data-value="{{value}}" data-facet="{{facet}}">
+                <input style="display: none;" data-facet="{{facet}}" {{#checked}}checked{{/checked}} data-value="{{value}}" class="facet_value" type="checkbox" />
+                {{name}} ({{count}})
+            </div>
+            {{/type.menu}}
 
                 {{#type.conjunctive}}
                 <div class="{{#checked}}checked {{/checked}}sub_facet conjunctive">
