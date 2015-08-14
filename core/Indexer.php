@@ -47,8 +47,6 @@ class Indexer
 
         foreach ($this->algolia_registry->autocompleteTypes as $value)
             $this->algolia_helper->move($this->algolia_registry->index_prefix . $value['name'] . "_temp", $this->algolia_registry->index_prefix . $value['name']);
-
-        $this->algolia_helper->handleIndexCreation();
     }
 
     private function getPosts($type, $limit)

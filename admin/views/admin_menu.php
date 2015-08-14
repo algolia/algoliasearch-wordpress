@@ -32,7 +32,7 @@ $types = array();
 
 foreach (get_post_types() as $type)
 {
-    if (in_array($type, $excluded_types))
+    if (in_array($type, $excluded_types) || $type === 'product_variation')
         continue;
 
     $count = wp_count_posts($type)->publish;
@@ -53,8 +53,17 @@ foreach (get_post_types() as $type)
  */
 $attributes = array();
 $attributes_additionals_sections = array();
+$typesForAttributes = $types;
 
-foreach ($types as $type)
+if (count(array_filter($types, function ($item) { return $item->name = 'product';})))
+{
+    $product_variation = new stdClass();
+    $product_variation->name = 'product_variation';
+    $typesForAttributes[] = $product_variation;
+}
+
+
+foreach ($typesForAttributes as $type)
 {
     //if (is_array($algolia_registry->indexable_types) && in_array($type, array_keys($algolia_registry->indexable_types)))
     //{

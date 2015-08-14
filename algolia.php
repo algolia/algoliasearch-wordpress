@@ -47,7 +47,11 @@ $attributesToSnippet    = array("content");
 $attributesToIndex      = array("title", "excerpt", "content", "author", "type");
 
 /** Woo Commerce Handling */
-add_filter('prepare_algolia_record', function ($data) {
+add_filter(/**
+ * @param $data
+ * @return mixed
+ */
+    'prepare_algolia_record', function ($data) {
 
     if (class_exists('WC_Product_Factory') && $data->type == 'product')
     {
@@ -55,8 +59,6 @@ add_filter('prepare_algolia_record', function ($data) {
 
         $factory = new WC_Product_Factory();
         $product = $factory->get_product($data->objectID);
-
-
 
         $product_attrs = array(
             'virtual'            => $product->is_virtual(),
@@ -88,26 +90,21 @@ add_filter('prepare_algolia_record', function ($data) {
             'purchase_note'      => wpautop(do_shortcode(wp_kses_post($product->purchase_note))),
         );
 
-        foreach ($product_attrs as $key => $value)
-        {
-            if (in_array($key, array_keys($algolia_registry->metas[$data->type])))
-            {
-                if ($algolia_registry->metas[$data->type][$key]["indexable"])
-                {
-                    $data->$key = \Algolia\Core\WordpressFetcher::try_cast($value);
-                }
-            }
-        }
+        $attributes = $product->get_attributes();
 
-        foreach ($product->get_attributes() as $attribute)
+        foreach ($algolia_registry->attributesToIndex as $value)
         {
-            if (in_array($attribute['name'], array_keys($algolia_registry->metas[$data->type])))
+            if (isset($product_attrs[$value['name']]))
             {
-                if ($algolia_registry->metas[$data->type][$attribute['name']]["indexable"])
-                {
-                    $product_attrs[$attribute['name']] = \Algolia\Core\WordpressFetcher::try_cast($attribute['value']);
-                }
+                $data->{$value['name']} = \Algolia\Core\WordpressFetcher::try_cast($product_attrs[$value['name']]);
             }
+
+            $name = $value['name'];
+            if (($pos = strpos($value['name'], 'attribute_')) !== false)
+                $name = substr($name, 10);
+
+            if (! isset($data->{$value['name']}) && in_array($name, array_keys($attributes)))
+                $data->{$value['name']} = $attributes[$name]['value'];
         }
     }
 

@@ -82,8 +82,11 @@
                 </div>
                 <h4 style="float: left; margin-right: 30px;">or</h4>
                 <div class="content-item" style="float: left; margin-right: 30px;">
-                    <input type="submit" name="submit" id="submit" class="button button-primary" value="Import configuration" />
-                    <input type="file" name="import" />
+                    <form action="<?php echo site_url(); ?>/wp-admin/admin-post.php" method="post" enctype="multipart/form-data">
+                        <input type="hidden" name="action" value="update_account_info">
+                        <input type="submit" name="submit" id="submit" class="button button-primary" value="Import configuration" />
+                        <input type="file" name="import" />
+                    </form>
                 </div>
                 <div class="content-item" style="float: right">
                     <div data-form="<?php echo site_url(); ?>/wp-admin/admin-post.php" data-value="reset_config_to_default" name="submit" id="reset-config" class="button button-primary">Reset configuration</div>

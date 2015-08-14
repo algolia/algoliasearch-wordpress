@@ -19,7 +19,7 @@ class Registry
         'search_input_selector'         => "[name='s']",
         'template_dir'                  => 'default',
 
-        'excluded_types'                => array('revision', 'nav_menu_item', 'acf', 'product_variation', 'shop_order', 'shop_order_refund', 'shop_coupon', 'shop_webhook', 'wooframework'),
+        'excluded_types'                => array('revision', 'nav_menu_item', 'acf', 'shop_order', 'shop_order_refund', 'shop_coupon', 'shop_webhook', 'wooframework'),
 
         'enable_truncating'             => true,
         'truncate_size'                 => 9000,

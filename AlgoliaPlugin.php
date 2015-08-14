@@ -32,7 +32,6 @@ class AlgoliaPlugin
         add_action('admin_post_update_account_info',            array($this, 'admin_post_update_account_info'));
         add_action('admin_post_reset_config_to_default',        array($this, 'admin_post_reset_config_to_default'));
         add_action('admin_post_export_config',                  array($this, 'admin_post_export_config'));
-        add_action('admin_post_update_advanced_settings',       array($this, 'admin_post_update_advanced_settings'));
 
         add_action('pre_get_posts',                             array($this, 'pre_get_posts'));
         add_filter('the_posts',                                 array($this, 'get_search_result_posts'));
@@ -149,7 +148,7 @@ class AlgoliaPlugin
 
     public function admin_post_update_account_info()
     {
-        if (isset($_POST['submit']) && $_POST['submit'] == 'Import'
+        if (isset($_POST['submit']) && $_POST['submit'] == 'Import configuration'
             && isset($_FILES['import']) && isset($_FILES['import']['tmp_name']) && is_file($_FILES['import']['tmp_name']))
         {
             $content = file_get_contents($_FILES['import']['tmp_name']);
