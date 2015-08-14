@@ -145,7 +145,12 @@ algoliaBundle.$(document).ready(function ($) {
 
                 for (var key in content_facet.data)
                 {
+                    console.log(key);
                     var checked = helper.isRefined(algoliaSettings.facets[i].name, key);
+
+                    console.log(checked);
+
+                    console.log(helper.state);
 
                     var name = window.facetsLabels && window.facetsLabels[key] != undefined ? window.facetsLabels[key] : key;
                     var value = key;

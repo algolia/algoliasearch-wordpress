@@ -8,7 +8,7 @@
     "update-bundle": "./scripts/build.sh"
   },
   "dependencies": {
-    "algoliasearch-extensions-bundle": "1.2.0"
+    "algoliasearch-extensions-bundle": "1.4.0"
   },
   "author": "Algolia <support@algolia.com>",
   "license": "ISC"
