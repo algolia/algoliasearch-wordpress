@@ -156,32 +156,32 @@ $facets = $facets['facets'];
 </script>
 
 <script type="text/template" id="instant-facets-template">
-<div class="facets">
-    {{#facets}}
-    {{#count}}
-    <div class="facet">
-        <div class="name">
-            {{ facet_categorie_name }}
-        </div>
-        <div>
-            {{#sub_facets}}
+    <div class="facets">
+        {{#facets}}
+        {{#count}}
+        <div class="facet">
+            <div class="name">
+                {{ facet_categorie_name }}
+            </div>
+            <div>
+                {{#sub_facets}}
 
                 {{#type.menu}}
-                <div data-tax="{{tax}}" data-name="{{nameattr}}" data-type="menu" class="{{#checked}}checked {{/checked}}sub_facet menu">
-                    <input style="display: none;" data-tax="{{tax}}" {{#checked}}checked{{/checked}} data-name="{{nameattr}}" class="facet_value" type="checkbox" />
-                    {{name}} {{#print_count}}({{count}}){{/print_count}}
+                <div class="{{#checked}}checked {{/checked}}sub_facet conjunctive">
+                    <input style="display: none;" data-facet="{{facet}}" {{#checked}}checked{{/checked}} data-value="{{value}}" class="facet_value" type="checkbox" />
+                    {{name}} ({{count}})
                 </div>
                 {{/type.menu}}
 
                 {{#type.conjunctive}}
-                <div data-name="{{tax}}" data-type="conjunctive" class="{{#checked}}checked {{/checked}}sub_facet conjunctive">
-                    <input style="display: none;" data-tax="{{tax}}" {{#checked}}checked{{/checked}} data-name="{{nameattr}}" class="facet_value" type="checkbox" />
+                <div class="{{#checked}}checked {{/checked}}sub_facet conjunctive">
+                    <input style="display: none;" data-facet="{{facet}}" {{#checked}}checked{{/checked}} data-value="{{value}}" class="facet_value" type="checkbox" />
                     {{name}} ({{count}})
                 </div>
                 {{/type.conjunctive}}
 
                 {{#type.slider}}
-                <div class="algolia-slider algolia-slider-true" data-tax="{{tax}}" data-min="{{min}}" data-max="{{max}}"></div>
+                <div class="algolia-slider algolia-slider-true" data-name="{{name}}" data-min="{{min}}" data-max="{{max}}"></div>
                 <div class="algolia-slider-info">
                     <div class="min" style="float: left;">{{current_min}}</div>
                     <div class="max" style="float: right;">{{current_max}}</div>
@@ -190,18 +190,18 @@ $facets = $facets['facets'];
                 {{/type.slider}}
 
                 {{#type.disjunctive}}
-                <div data-name="{{tax}}" data-type="disjunctive" class="{{#checked}}checked {{/checked}}sub_facet disjunctive">
-                    <input data-tax="{{tax}}" {{#checked}}checked{{/checked}} data-name="{{nameattr}}" class="facet_value" type="checkbox" />
+                <div class="{{#checked}}checked {{/checked}}sub_facet disjunctive">
+                    <input data-facet="{{facet}}" {{#checked}}checked{{/checked}} data-value="{{value}}" class="facet_value" type="checkbox" />
                     {{name}} ({{count}})
                 </div>
                 {{/type.disjunctive}}
 
-            {{/sub_facets}}
+                {{/sub_facets}}
+            </div>
         </div>
+        {{/count}}
+        {{/facets}}
     </div>
-    {{/count}}
-    {{/facets}}
-</div>
 </script>
 
 <script type="text/template" id="instant-pagination-template">
