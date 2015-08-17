@@ -179,25 +179,18 @@ class AlgoliaPlugin
             'sorts'
         ];
 
-        foreach ($settings_name as $name)
+        $datas = isset($_POST['data']) ? json_decode(str_replace("\\", "", $_POST['data']), true) : array();
+
+        foreach ($datas as $name => $data)
         {
-            if (isset($_POST['data']) && isset($_POST['data'][$name]))
-            {
-                $data = $_POST['data'][$name];
+            if (is_array($data))
+                foreach ($data as $key => &$value)
+                    if (is_array($value))
+                        foreach ($value as $sub_key => &$sub_value)
+                            $sub_value = \Algolia\Core\WordpressFetcher::try_cast($sub_value);
 
-                if (is_array($data))
-                    foreach ($data as $key => &$value)
-                        if (is_array($value))
-                            foreach ($value as $sub_key => &$sub_value)
-                                $sub_value = \Algolia\Core\WordpressFetcher::try_cast($sub_value);
-
-                $this->algolia_registry->{$name} = $data;
-
-            }
-            else
-                $this->algolia_registry->resetAttribute($name);
+            $this->algolia_registry->{$name} = $data;
         }
-
 
         $algolia_helper = new \Algolia\Core\AlgoliaHelper($this->algolia_registry->app_id, $this->algolia_registry->search_key, $this->algolia_registry->admin_key);
         $algolia_helper->checkRights();

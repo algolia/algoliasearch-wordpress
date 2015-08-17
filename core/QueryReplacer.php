@@ -20,6 +20,7 @@ class QueryReplacer
         if (function_exists('is_main_query') && ! $query->is_main_query())
             return $query;
 
+
         if (is_search() && ! is_admin() && $this->algolia_registry->validCredential && isset($_GET['instant']) === false)
         {
             if (count($this->algolia_registry->instantTypes) > 0)

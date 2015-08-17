@@ -224,6 +224,16 @@ if (function_exists('curl_version') == false)
         <?php endif; ?>
     </div>
 </div>
+<div>
+    <iframe id="search_input_grabber" src="<?php echo get_site_url(); ?>" width="100%;" height="600px;"></iframe>
+    <script>
+        algoliaBundle.$(document).ready(function () {
+            $('#search_input_grabber').on('click', function () {
+                alert('cool');
+            });
+        });
+    </script>
+</div>
 
 <script>
     angular.module('algoliaSettings', []).controller('algoliaController', ['$scope', function($scope) {
@@ -370,16 +380,15 @@ if (function_exists('curl_version') == false)
             for (var i = 0; i < settings_name.length; i++)
                 newSettings[settings_name[i]] = angular.copy($scope[settings_name[i]]);
 
-          algoliaBundle.$.ajax({
+            algoliaBundle.$.ajax({
                 method: "POST",
                 url: '<?php echo site_url(); ?>' + '/wp-admin/admin-post.php',
-                data: { action: "update_account_info", data: newSettings },
+                data: { action: "update_account_info", data: JSON.stringify(newSettings) },
+                dataType: "json",
                 success: function (result) {
                     window.location.reload();
                 }
             });
-
-            console.log(newSettings);
         };
     }]).value('uiSortableConfig',{})
         .directive('uiSortable', [
@@ -400,15 +409,12 @@ if (function_exists('curl_version') == false)
                             });
                             return ui;
                         };
-                        // Create sortable
+
                         algoliaBundle.$(element).sortable({
                             containment: "parent",
                             helper: fixHelper,
                             tolerance: 'pointer',
                             update: function(event, ui) {
-                                console.log(ui.item.sortable.index, ui.item.index());
-                                console.log(ngModel);
-
                                 var item = ngModel.$modelValue.splice(ui.item.sortable.index, 1);
 
                                 if (ui.item.sortable.index < ui.item.index() - 1)
