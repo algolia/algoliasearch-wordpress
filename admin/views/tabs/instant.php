@@ -8,7 +8,7 @@
             <div class="content-item">
                 <div>
                     <label for="instant_radio_instant_jquery_selector">DOM selector</label>
-                    <input type="text" ng-model="instant_jquery_selector" id="instant_radio_instant_jquery_selector" placeholder="#content"/>
+                    <input type="text" ng-model="instant_jquery_selector" id="instant_radio_instant_jquery_selector" placeholder="#content"/>  <button id="instant_jquery_selector_helper">Help me find this</button>
                     <p class="description">The jQuery selector used to inject the search results.</p>
                 </div>
                 <div>

@@ -6,7 +6,7 @@
                 <p class="help-block">Configure here the DOM selector used to customize your search input.</p>
                 <label for="search-input-selector">Search input</label>
                 <div>
-                    <input type="text" ng-model="search_input_selector" placeholder="[name='s']">
+                    <input type="text" ng-model="search_input_selector" placeholder="[name='s']"> <button id="search_input_selector_helper">Help me find this</button>
                     <p class="description">The jQuery selector used to select your search bar.</p>
                 </div>
             </div>

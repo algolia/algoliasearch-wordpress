@@ -136,6 +136,18 @@ if (function_exists('curl_version') == false)
 
 ?>
 
+<div>
+    <div style="display: none;" id="search_input_selector_helper_wrapper">
+        <iframe id="search_input_grabber" width="70%;" height="600px;" style="float: left; display: inline;"></iframe>
+        <div id="possible_inputs" style="width: 25%; float: left; display: inline;"></div>
+    </div>
+
+    <div style="display: none;" id="instant_jquery_selector_helper_wrapper">
+        <iframe id="instant_zone_grabber" width="70%;" height="600px;" style="float: left; display: inline;"></iframe>
+        <div id="possible_divs" style="width: 25%; float: left; display: inline;"></div>
+    </div>
+</div>
+
 <div id="algolia-settings" ng-app="algoliaSettings" class="wrap" ng-controller="algoliaController">
 
     <a target="_blank" href="//algolia.com/dashboard" class="header-button" id="dashboard-link">Go to Algolia dashboard</a>
@@ -223,16 +235,6 @@ if (function_exists('curl_version') == false)
 
         <?php endif; ?>
     </div>
-</div>
-<div>
-    <iframe id="search_input_grabber" src="<?php echo get_site_url(); ?>" width="100%;" height="600px;"></iframe>
-    <script>
-        algoliaBundle.$(document).ready(function () {
-            $('#search_input_grabber').on('click', function () {
-                alert('cool');
-            });
-        });
-    </script>
 </div>
 
 <script>
@@ -384,8 +386,8 @@ if (function_exists('curl_version') == false)
                 method: "POST",
                 url: '<?php echo site_url(); ?>' + '/wp-admin/admin-post.php',
                 data: { action: "update_account_info", data: JSON.stringify(newSettings) },
-                dataType: "json",
                 success: function (result) {
+                    console.log('ok');
                     window.location.reload();
                 }
             });

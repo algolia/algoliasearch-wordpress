@@ -245,3 +245,37 @@
 .menu-top.toplevel_page_algolia-settings .current .wp-menu-image img {
     top: -20px;
 }
+
+.possible-attribute, .possible-div
+{
+    margin: 3px;
+}
+
+.possible-attribute:hover, .possible-div:hover
+{
+    color: red;
+    cursor: pointer;
+}
+
+#search_input_selector_helper_wrapper, #instant_jquery_selector_helper_wrapper
+{
+    background-color: #F1F1F1;
+    position: absolute;
+    top: 0;
+    left: -20px;
+    width: 100%;
+    height: 100%;
+    z-index: 100;
+    padding: 30px;
+}
+
+#possible_divs
+{
+    height: 600px;
+    overflow: scroll;
+}
+
+#search_input_grabber
+{
+    margin-top: 10px;
+}

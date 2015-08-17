@@ -200,7 +200,7 @@ class AlgoliaPlugin
 
         $this->algolia_registry->need_to_reindex    = true;
 
-        wp_redirect('admin.php?page=algolia-settings#credentials');
+        die();
     }
 
     public function admin_post_reset_config_to_default()
