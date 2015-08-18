@@ -101,14 +101,24 @@ class AlgoliaHelper
         $attributesToIndex  = array();
 
         foreach ($this->algolia_registry->attributesToIndex as $value)
+        {
+            if ($value['name'] == 'content')
+            {
+                foreach (array('h1', 'h2', 'h3', 'h4', 'h5', 'h6') as $tag)
+                    $attributesToIndex[] = 'content.'.$tag;
+
+                $attributesToIndex[] = 'unordered(content.text)';
+            }
+
             if ($value['ordered'] == 'unordered')
                 $attributesToIndex[] = $value['ordered'].'('.$value['name'].')';
             else
                 $attributesToIndex[] = $value['name'];
+        }
+
 
         $defaultSettings = array(
             "attributesToIndex"     => $attributesToIndex,
-            "attributesToSnippet"   => $attributesToSnippet
         );
 
         /**
@@ -159,7 +169,6 @@ class AlgoliaHelper
         $settings = array(
             'attributesToIndex'     => $attributesToIndex,
             'attributesForFaceting' => array_values(array_unique($facets)),
-            'attributesToSnippet'   => $attributesToSnippet,
             'customRanking'         => $customRanking
         );
 

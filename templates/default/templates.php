@@ -22,7 +22,7 @@ $facets = $facets['facets'];
             </div>
             {{/featureImage}}
             <div class="info{{^featureImage}}-without-thumb{{/featureImage}}">
-                {{{ _highlightResult.title.value }}}
+                {{{ _highlightResult.post_title.value }}}
             </div>
             <div style="clear: both;"></div>
         </div>
@@ -110,12 +110,12 @@ $facets = $facets['facets'];
                     <div class="result-wrapper">
                         <h1 class="result-title">
                             <a href="{{permalink}}">
-                                {{{ _highlightResult.title.value }}}
+                                {{{ _highlightResult.post_title.value }}}
                             </a>
                         </h1>
 
                         <div class="result-excerpt">
-                            <div class="content">{{{ _highlightResult.content.value }}}</div>
+                            <div class="content">{{{ _highlightResult.post_content.value }}}</div>
                             <div>
                                 <a href="{{permalink}}" class="more-link">Continue reading…</a>
                             </div>

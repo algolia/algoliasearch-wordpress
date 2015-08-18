@@ -97,7 +97,9 @@ foreach ($taxonomies as $taxonomy)
 
 $attributes_additionals_sections = $attributes;
 
-$extras = array('title', 'h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'text', 'content', 'author', 'author_login', 'permalink', 'date', 'slug', 'modified', 'parent', 'type');
+$extras = array('post_title', 'post_content', 'display_name',
+    'post_author', 'post_date', 'post_excerpt', 'post_name', 'post_modified', 'post_parent', 'menu_order', 'post_type',
+    'first_name', 'last_name', 'user_login', 'permalink', 'featureImage');
 
 foreach ($extras as $extra)
 {
@@ -363,10 +365,6 @@ if (function_exists('curl_version') == false)
                 tab.splice(current_index, 1);
                 tab.splice(current_index + 1, 0, item);
             }
-        };
-
-        $scope.isRemovable = function (attribute) {
-            return attribute.group !== "Record attribute";
         };
 
         $scope.save = function () {

@@ -43,42 +43,7 @@ $config = '{
             "ordered": "ordered"
         },
         {
-            "name": "h1",
-            "group": "Record attribute",
-            "ordered": "ordered"
-        },
-        {
-            "name": "h2",
-            "group": "Record attribute",
-            "ordered": "ordered"
-        },
-        {
-            "name": "h3",
-            "group": "Record attribute",
-            "ordered": "ordered"
-        },
-        {
-            "name": "h4",
-            "group": "Record attribute",
-            "ordered": "ordered"
-        },
-        {
-            "name": "h5",
-            "group": "Record attribute",
-            "ordered": "ordered"
-        },
-        {
-            "name": "h6",
-            "group": "Record attribute",
-            "ordered": "ordered"
-        },
-        {
             "name": "content",
-            "group": "Record attribute",
-            "ordered": "ordered"
-        },
-        {
-            "name": "text",
             "group": "Record attribute",
             "ordered": "ordered"
         },

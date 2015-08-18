@@ -38,8 +38,6 @@ new AlgoliaPluginAuto();
 
 $batch_count = 100;
 
-$attributesToSnippet    = array("content");
-
 /**
  * Defaults Variables
  */

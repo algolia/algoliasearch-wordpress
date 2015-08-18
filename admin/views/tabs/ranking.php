@@ -22,7 +22,7 @@
                         </td>
                         <td>
                             <div style="float: right;">
-                                <button ng-show="isRemovable(attribute)" ng-click="remove(attributesToIndex, attribute)">Remove</button>
+                                <button ng-click="remove(attributesToIndex, attribute)">Remove</button>
                                 <img width="10" src="<?php echo $move_icon_url; ?>" style="margin-top: 10px; margin-left: 5px;" />
                             </div>
                         </td>

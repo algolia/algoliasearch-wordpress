@@ -15,17 +15,15 @@ class WordpressFetcher
     );
 
     private $contentFieldsNames = array (
-        'ID'			=> array ('label' => "objectID",   'type' => 'integer'),
-        'post_author'	=> array ('label' => "authorId",   'type' => 'integer'),
-        'post_date'		=> array ('label' => "date",       'type' => 'datetime'),
-        'post_content'	=> array ('label' => "content",    'type' => 'string'),
-        'post_title'	=> array ('label' => "title",      'type' => 'string'),
-        'post_excerpt'	=> array ('label' => "excerpt",    'type' => 'string'),
-        'post_name'		=> array ('label' => "slug",       'type' => 'string'),
-        'post_modified' => array ('label' => "modified",   'type' => 'datetime'),
-        'post_parent'	=> array ('label' => "parent",     'type' => 'integer'),
-        'menu_order'	=> array ('label' => "menu_order", 'type' => 'integer'),
-        'post_type'		=> array ('label' => "type",       'type' => 'string')
+        'post_author'	=> 'integer',
+        'post_date'		=> 'datetime',
+        'post_title'	=> 'string',
+        'post_excerpt'	=> 'string',
+        'post_name'		=> 'string',
+        'post_modified' => 'datetime',
+        'post_parent'	=> 'integer',
+        'menu_order'	=> 'integer',
+        'post_type'		=> 'string'
     );
 
     private function cast($value, $type)
@@ -117,19 +115,19 @@ class WordpressFetcher
         return (array) $obj;
     }
 
-    public function getContent($data, &$obj)
+    public function getContent($data)
     {
         if ($data->post_type != "post" && $data->post_type != "page")
-            return;
+            return $data->post_content;
 
         $algolia_registry = \Algolia\Core\Registry::getInstance();
 
-        $html = $obj->content;
+        $html = $data->post_content;
 
         if ($html == "")
             return;
 
-        unset($obj->content);
+        $content = array();
 
         $html = preg_replace( '/>(\s|\n|\r)+</', '><', $html);
 
@@ -140,15 +138,11 @@ class WordpressFetcher
         while (count($nodes) == 1 && count($nodes[0]->nodes) >= 1)
             $nodes = $nodes[0]->nodes;
 
-        $obj->h1 = array();
-        $obj->h2 = array();
-        $obj->h3 = array();
-        $obj->h4 = array();
-        $obj->h5 = array();
-        $obj->h6 = array();
-        $obj->text = array();
-
         $tags = array('h1', 'h2', 'h3', 'h4', 'h5', 'h6');
+
+        foreach ($tags as $tag)
+            $content[$tag] = array();
+
         $excludedTags = array('hr');
 
         $order = 0;
@@ -160,9 +154,9 @@ class WordpressFetcher
                 continue;
 
             if (in_array($child->tag, $tags))
-                $obj->{$child->tag}[] = array('order' => $order, 'value' => $this->strip($child->innertext()));
+                $content[$child->tag][] = array('order' => $order, 'value' => $this->strip($child->innertext()));
             else
-                $obj->text[] = array('order' => $order, 'value' => $this->strip($child->innertext()));
+                $content['text'][] = array('order' => $order, 'value' => $this->strip($child->innertext()));
 
             $order++;
         }
@@ -175,7 +169,7 @@ class WordpressFetcher
 
             foreach (array_merge($tags, array("text")) as $tag)
             {
-                foreach ($obj->$tag as $key => $tag_element)
+                foreach ($content[$tag] as $key => $tag_element)
                 {
                     if (! $too_much)
                     {
@@ -188,9 +182,57 @@ class WordpressFetcher
                     }
 
                     if ($too_much)
-                        unset($obj->{$tag}[$key]);
+                        unset($content[$tag][$key]);
                 }
             }
+        }
+
+        return $content;
+    }
+
+    private function getAttribute($attribute, $data)
+    {
+        if ($attribute['group'] == 'Record attribute')
+        {
+            if (isset($this->contentFieldsNames[$attribute['name']]))
+                return $this->cast($data->$attribute['name'], $this->contentFieldsNames[$attribute['name']]);
+
+            if (in_array($attribute['name'], array('display_name', 'first_name', 'last_name', 'user_login')))
+                return get_the_author_meta($attribute['name'], $data->post_author);
+
+            if ($attribute['name'] === 'permalink')
+                return get_permalink($data->ID);
+
+            if ($attribute['name'] === 'post_content')
+                return $this->getContent($data);
+
+            if ($attribute['name'] === 'featureImage')
+            {
+                $thumbnail_id = get_post_thumbnail_id($data->ID);
+
+                if ($thumbnail_id)
+                    return $this->getImage($thumbnail_id);
+            }
+
+            return '';
+        }
+
+        if ($attribute['group'] == 'Taxonomy')
+        {
+            $terms = wp_get_post_terms($data->ID, $attribute['name']);
+
+            if (count($terms) <= 0)
+                return array();
+
+            return array_map(function ($obj) {
+                return $obj->name;
+            }, $terms);
+        }
+
+        if (strpos($attribute['group'], 'Meta') !== false)
+        {
+            $value = get_post_meta($data->ID, $attribute['name']);
+            return $this->try_cast($value);
         }
     }
 
@@ -200,52 +242,13 @@ class WordpressFetcher
 
         $obj = new \stdClass();
 
-        foreach ($this->contentFieldsNames as $key => $value)
-        {
-            $name = $value["label"];
-            $obj->$name = $this->cast($data->$key, $value["type"]);
-        }
+        $obj->objectID = $data->ID;
 
-        $obj->author            = get_the_author_meta('display_name', $data->post_author);
-        $obj->author_first_name = get_the_author_meta('first_name', $data->post_author);
-        $obj->author_last_name  = get_the_author_meta('last_name', $data->post_author);
-        $obj->author_login      = get_the_author_meta('user_login', $data->post_author);
-        $obj->permalink         = get_permalink($data->ID);
-
-        $this->getContent($data, $obj);
-
-        unset($obj->excerpt);
-        //$obj->excerpt           = my_excerpt($data->post_content, get_the_excerpt());
-
-        $thumbnail_id = get_post_thumbnail_id($data->ID);
-
-        if ($thumbnail_id)
-            $obj->featureImage = $this->getImage($thumbnail_id);
+        foreach ($algolia_registry->attributesToIndex as $attribute)
+            $obj->{$attribute['name']} = $this->getAttribute($attribute, $data);
 
         foreach ($algolia_registry->additionalAttributes as $attribute)
-        {
-            if ($attribute['group'] == 'Taxonomy')
-            {
-                $terms = wp_get_post_terms($data->ID, $attribute['name']);
-
-                if (count($terms) <= 0)
-                    continue;
-
-                $obj->{$attribute['name']} = array_map(function ($obj) {
-                    return $obj->name;
-                }, $terms);
-            }
-
-            if (strpos($attribute['group'], 'Meta') !== false)
-            {
-                $value = get_post_meta($data->ID, $attribute['name']);
-                $obj->{$attribute['name']} = $this->try_cast($value);
-            }
-
-            /***
-             * Potential need to handle various post attribute if we add other than author
-             */
-        }
+            $obj->{$attribute['name']} = $this->getAttribute($attribute, $data);
 
         if (has_filter('prepare_algolia_record'))
         {

@@ -218,7 +218,7 @@ algoliaBundle.$(document).ready(function ($) {
 
         for (var l = 0; l < content.hits.length; l++)
         {
-            if (content.hits[l].type != 'page' && content.hits[l].type != 'post')
+            if (content.hits[l].post_type != 'page' && content.hits[l].post_type != 'post')
                 continue;
 
             /**
@@ -229,26 +229,26 @@ algoliaBundle.$(document).ready(function ($) {
 
             var noHighlights = false;
 
-            var highligth_hit = content.hits[l]._highlightResult;
+            var highlight_hit = content.hits[l]._highlightResult;
 
             for (var i = 0; i < fields.length; i++)
             {
-                if (highligth_hit[fields[i]] != undefined)
+                if (highlight_hit.post_content[fields[i]] != undefined)
                 {
-                    for (var j = 0; j < highligth_hit[fields[i]].length; j++)
+                    for (var j = 0; j < highlight_hit.post_content[fields[i]].length; j++)
                     {
-                        for (var k = 0; k < highligth_hit[fields[i]][j].value.matchedWords.length; k++)
+                        for (var k = 0; k < highlight_hit.post_content[fields[i]][j].value.matchedWords.length; k++)
                         {
-                            if (content_matches[highligth_hit[fields[i]][j].value.matchedWords[k]] == undefined)
+                            if (content_matches[highlight_hit.post_content[fields[i]][j].value.matchedWords[k]] == undefined)
                             {
-                                content_matches[highligth_hit[fields[i]][j].value.matchedWords[k]] = {i: i, type: fields[i], order: highligth_hit[fields[i]][j].order, count : highligth_hit[fields[i]][j].value.matchedWords.length, value: highligth_hit[fields[i]][j].value.value};
+                                content_matches[highlight_hit.post_content[fields[i]][j].value.matchedWords[k]] = {i: i, type: fields[i], order: highlight_hit.post_content[fields[i]][j].order, count : highlight_hit.post_content[fields[i]][j].value.matchedWords.length, value: highlight_hit.post_content[fields[i]][j].value.value};
                             }
                             else
                             {
-                                if (i == content_matches[highligth_hit[fields[i]][j].value.matchedWords[k]].i
-                                    && highligth_hit[fields[i]][j].value.matchedWords.length > content_matches[highligth_hit[fields[i]][j].value.matchedWords[k]].count)
+                                if (i == content_matches[highlight_hit.post_content[fields[i]][j].value.matchedWords[k]].i
+                                    && highlight_hit.post_content[fields[i]][j].value.matchedWords.length > content_matches[highlight_hit.post_content[fields[i]][j].value.matchedWords[k]].count)
                                 {
-                                    content_matches[highligth_hit[fields[i]][j].value.matchedWords[k]] = {i: i, type: fields[i], order: highligth_hit[fields[i]][j].order, count : highligth_hit[fields[i]][j].value.matchedWords.length, value: highligth_hit[fields[i]][j].value.value};
+                                    content_matches[highlight_hit.post_content[fields[i]][j].value.matchedWords[k]] = {i: i, type: fields[i], order: highlight_hit.post_content[fields[i]][j].order, count : highlight_hit.post_content[fields[i]][j].value.matchedWords.length, value: highlight_hit.post_content[fields[i]][j].value.value};
                                 }
                             }
                         }
@@ -270,8 +270,8 @@ algoliaBundle.$(document).ready(function ($) {
                     {
                         for (var j = 0; j < content.hits[l][fields[i]].length; j++)
                         {
-                            content.hits[l][fields[i]][j].type = fields[i];
-                            content_matches.push(content.hits[l][fields[i]][j]);
+                            content.hits[l].post_content[fields[i]][j].type = fields[i];
+                            content_matches.push(content.hits[l].post_content[fields[i]][j]);
                         }
                     }
                 }
@@ -286,10 +286,10 @@ algoliaBundle.$(document).ready(function ($) {
             if (content.hits[l]._highlightResult == undefined)
                 content.hits[l]._highlightResult = {};
 
-            if (content.hits[l]._highlightResult.content == undefined)
-                content.hits[l]._highlightResult.content = {};
+            if (content.hits[l]._highlightResult.post_content == undefined)
+                content.hits[l]._highlightResult.post_content = {};
 
-            content.hits[l]._highlightResult.content.value = "";
+            content.hits[l]._highlightResult.post_content.value = "";
 
             var separator = "<div>[...]</div>";
             var old_order = -1;
@@ -301,19 +301,22 @@ algoliaBundle.$(document).ready(function ($) {
 
                     var balise = content_matches[i].type != "text" ? content_matches[i].type : "div";
 
-                    content.hits[l]._highlightResult.content.value += "<div>";
-                    content.hits[l]._highlightResult.content.value += "<" + balise + '>';
-                    content.hits[l]._highlightResult.content.value += content_matches[i].value;
-                    content.hits[l]._highlightResult.content.value += "</" + balise + '>';
-                    content.hits[l]._highlightResult.content.value += "</div>";
+                    if (i == 0 && content_matches[i].order > 0)
+                        content.hits[l]._highlightResult.post_content.value += separator;
+
+                    content.hits[l]._highlightResult.post_content.value += "<div>";
+                    content.hits[l]._highlightResult.post_content.value += "<" + balise + '>';
+                    content.hits[l]._highlightResult.post_content.value += content_matches[i].value;
+                    content.hits[l]._highlightResult.post_content.value += "</" + balise + '>';
+                    content.hits[l]._highlightResult.post_content.value += "</div>";
 
                     if (noHighlights === false)
-                        content.hits[l]._highlightResult.content.value += separator;
+                        content.hits[l]._highlightResult.post_content.value += separator;
                 }
             }
 
             if (noHighlights == false)
-                content.hits[l]._highlightResult.content.value.substring(0, content.hits[l]._highlightResult.content.value.length - separator.length);
+                content.hits[l]._highlightResult.post_content.value.substring(0, content.hits[l]._highlightResult.post_content.value.length - separator.length);
         }
 
         var results_html = resultsTemplate.render({
