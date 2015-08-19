@@ -74,7 +74,7 @@ class AlgoliaPlugin
             $settings[$name] = str_replace("\\", "", $this->algolia_registry->{$name});
 
         $algoliaSettings = array_merge($settings, array(
-            'template'                  => $this->template_helper->get_current_template(),
+            'template'                  => $this->template_helper->getTemplate($this->algolia_registry->template_dir),
             'is_search_page'            => isset($_GET['instant']),
             'plugin_url'                => plugin_dir_url(__FILE__)
         ));

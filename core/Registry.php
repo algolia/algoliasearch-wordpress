@@ -4,6 +4,7 @@ class Registry
 {
     private static $instance;
     private $options = array();
+    private $default_theme_attributes = array();
     private static $setting_key = 'algolia 1.0';
 
     private $attributes = array(
@@ -27,32 +28,13 @@ class Registry
         'last_update'                   => '',
         'need_to_reindex'               => true,
 
-        'autocompleteTypes'             => [
-                ["name" => "page", "count" => 1, "nb_results_by_section" => 3, "label" => ""],
-                ["name" => "post", "count" => 1, "nb_results_by_section" => 3, "label" => ""]
-            ],
-        'additionalAttributes'          => [["name" => "category", "group" => "Taxonomy", "nb_results_by_section" => 3, "label" => ""]],
-        'instantTypes'                  => [["name" => "post", "count" => 1, "label" => ""], ["name" => "page", "count" => 1, "label" => ""]],
-        'attributesToIndex'             => [
-                ["name" => "post_title", "group" => "Record attribute", "ordered" => "ordered"],
-                ["name" => "post_content", "group" => "Record attribute", "ordered" => "unordered"],
-                ["name" => "category", "group" => "Taxonomy", "ordered" => "ordered"],
-                ["name" => "display_name", "group" => "Record attribute", "ordered" => "ordered"],
-                ["name" => "post_type", "group" => "Record attribute", "ordered" => "ordered"],
-                ["name" => "post_date", "group" => "Record attribute", "ordered" => "ordered"],
-                ["name" => "permalink", "group" => "Record attribute", "ordered" => "ordered"],
-                ["name" => "featureImage", "group" => "Record attribute", "ordered" => "ordered"],
-            ],
+        'autocompleteTypes'             => [],
+        'additionalAttributes'          => [],
+        'instantTypes'                  => [],
+        'attributesToIndex'             => [],
         'customRankings'                => [],
-        'facets'                        => [
-                ["name" => "display_name", "group" => "Record attribute", "type" => "conjunctive", "label" => "Author"],
-                ["name" => "post_type", "group" => "Record attribute", "type" => "menu", "label" => "Type"],
-                ["name" => "category", "group" => "Taxonomy", "type" => "disjunctive", "label" => ""]
-            ],
-        'sorts'                         => [
-                ["name" => "post_date", "group" => "Record attribute", "sort" => "asc", "label" => "Date asc"],
-                ["name" => "post_date", "group" => "Record attribute", "sort" => "desc", "label" => "Date desc"]
-            ]
+        'facets'                        => [],
+        'sorts'                         => []
     );
 
     public static function getInstance()
@@ -67,6 +49,13 @@ class Registry
     {
         $import_options = get_option(static::$setting_key);
         $this->options = $import_options == false ? array() : $import_options;
+
+        $template_helper = new TemplateHelper();
+
+        $current_template = $template_helper->getTemplate($this->template_dir);
+
+        if ($current_template !== null && is_array($current_template->attributes))
+            $this->default_theme_attributes = $current_template->attributes;
     }
 
     public function __get($name)
@@ -75,8 +64,11 @@ class Registry
         {
             if (isset($this->options[$name]))
                 return $this->options[$name];
-            else
-                return $this->attributes[$name];
+
+            if (isset($this->default_theme_attributes[$name]))
+                return $this->default_theme_attributes[$name];
+
+            return $this->attributes[$name];
         }
 
         try
@@ -88,7 +80,7 @@ class Registry
             echo '<pre>';
             echo $e->getMessage().'<br>';
             echo $e->getTraceAsString();
-            die('lol');
+            die();
         }
     }
 
@@ -146,8 +138,15 @@ class Registry
     public function reset_config_to_default()
     {
        foreach ($this->attributes as $key => $value)
+       {
            if (in_array($key, array('validCredential', 'app_id', 'search_key', 'admin_key', 'index_name')) == false)
-               $this->options[$key] = $value;
+           {
+               if (isset($this->default_theme_attributes[$key]))
+                   $this->options[$key] = $this->default_theme_attributes[$key];
+               else
+                   $this->options[$key] = $value;
+           }
+       }
 
        $this->save();
     }

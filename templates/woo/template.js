@@ -16,6 +16,11 @@ algoliaBundle.$(document).ready(function ($) {
      **
      *****************/
 
+
+    /**
+     * Instant search helpers
+     */
+
     window.indicesCompare = function (a, b) {
         if (a.order1 < b.order1)
             return -1;
@@ -25,16 +30,6 @@ algoliaBundle.$(document).ready(function ($) {
 
         return 1;
     };
-
-    /**
-     * Autocomplete helpers
-     */
-
-    function getBrandingHits() {
-        return function findMatches(q, cb) {
-            return cb(["algolia-branding"]);
-        }
-    }
 
     function updateUrl(push_state)
     {
@@ -112,10 +107,9 @@ algoliaBundle.$(document).ready(function ($) {
                     helper.addNumericRefinement(key, operator, numericsRefinements[key][operator]);
 
             helper.setIndex(indexName).setCurrentPage(page);
-
-            helper.search();
-
         }
+
+        helper.search();
     }
 
     function getFacets(content) {
@@ -159,11 +153,12 @@ algoliaBundle.$(document).ready(function ($) {
                     var params = {
                         type: {},
                         checked: checked,
+                        name: name,
                         facet: algoliaSettings.facets[i].name,
                         value: value,
-                        name: name,
                         count: content_facet.data[key]
                     };
+
                     params.type[algoliaSettings.facets[i].type] = true;
 
                     sub_facets.push(params);
@@ -200,7 +195,6 @@ algoliaBundle.$(document).ready(function ($) {
         return pages;
     }
 
-
     /*****************
      **
      ** RENDERING HELPERS
@@ -224,33 +218,37 @@ algoliaBundle.$(document).ready(function ($) {
 
         for (var l = 0; l < content.hits.length; l++)
         {
-            if (content.hits[l].type != 'page' && content.hits[l].type != 'post')
+            if (content.hits[l].post_type != 'page' && content.hits[l].post_type != 'post')
                 continue;
 
+            /**
+             * Reconstructing the content attribute
+             * that has been split at indexing time for better relevance
+             */
             var content_matches = {};
 
             var noHighlights = false;
 
-            var highligth_hit = content.hits[l]._highlightResult;
+            var highlight_hit = content.hits[l]._highlightResult;
 
             for (var i = 0; i < fields.length; i++)
             {
-                if (highligth_hit[fields[i]] != undefined)
+                if (highlight_hit.post_content[fields[i]] != undefined)
                 {
-                    for (var j = 0; j < highligth_hit[fields[i]].length; j++)
+                    for (var j = 0; j < highlight_hit.post_content[fields[i]].length; j++)
                     {
-                        for (var k = 0; k < highligth_hit[fields[i]][j].value.matchedWords.length; k++)
+                        for (var k = 0; k < highlight_hit.post_content[fields[i]][j].value.matchedWords.length; k++)
                         {
-                            if (content_matches[highligth_hit[fields[i]][j].value.matchedWords[k]] == undefined)
+                            if (content_matches[highlight_hit.post_content[fields[i]][j].value.matchedWords[k]] == undefined)
                             {
-                                content_matches[highligth_hit[fields[i]][j].value.matchedWords[k]] = {i: i, type: fields[i], order: highligth_hit[fields[i]][j].order, count : highligth_hit[fields[i]][j].value.matchedWords.length, value: highligth_hit[fields[i]][j].value.value};
+                                content_matches[highlight_hit.post_content[fields[i]][j].value.matchedWords[k]] = {i: i, type: fields[i], order: highlight_hit.post_content[fields[i]][j].order, count : highlight_hit.post_content[fields[i]][j].value.matchedWords.length, value: highlight_hit.post_content[fields[i]][j].value.value};
                             }
                             else
                             {
-                                if (i == content_matches[highligth_hit[fields[i]][j].value.matchedWords[k]].i
-                                    && highligth_hit[fields[i]][j].value.matchedWords.length > content_matches[highligth_hit[fields[i]][j].value.matchedWords[k]].count)
+                                if (i == content_matches[highlight_hit.post_content[fields[i]][j].value.matchedWords[k]].i
+                                    && highlight_hit.post_content[fields[i]][j].value.matchedWords.length > content_matches[highlight_hit.post_content[fields[i]][j].value.matchedWords[k]].count)
                                 {
-                                    content_matches[highligth_hit[fields[i]][j].value.matchedWords[k]] = {i: i, type: fields[i], order: highligth_hit[fields[i]][j].order, count : highligth_hit[fields[i]][j].value.matchedWords.length, value: highligth_hit[fields[i]][j].value.value};
+                                    content_matches[highlight_hit.post_content[fields[i]][j].value.matchedWords[k]] = {i: i, type: fields[i], order: highlight_hit.post_content[fields[i]][j].order, count : highlight_hit.post_content[fields[i]][j].value.matchedWords.length, value: highlight_hit.post_content[fields[i]][j].value.value};
                                 }
                             }
                         }
@@ -268,12 +266,12 @@ algoliaBundle.$(document).ready(function ($) {
 
                 for (var i = 0; i < fields.length; i++)
                 {
-                    if (content.hits[l][fields[i]] != undefined)
+                    if (content.hits[l].post_content[fields[i]] != undefined)
                     {
-                        for (var j = 0; j < content.hits[l][fields[i]].length; j++)
+                        for (var j = 0; j < content.hits[l].post_content[fields[i]].length; j++)
                         {
-                            content.hits[l][fields[i]][j].type = fields[i];
-                            content_matches.push(content.hits[l][fields[i]][j]);
+                            content.hits[l].post_content[fields[i]][j].type = fields[i];
+                            content_matches.push(content.hits[l].post_content[fields[i]][j]);
                         }
                     }
                 }
@@ -285,13 +283,30 @@ algoliaBundle.$(document).ready(function ($) {
                 return 1;
             });
 
+            if (noHighlights === true)
+            {
+                for (var i = 0; i < content_matches.length; i++)
+                {
+                    if (content_matches[i].type == 'text')
+                    {
+                        content_matches = content_matches.slice(0, i + 1);
+
+                        console.log(i, content_matches.length - 1);
+                        if (i === content_matches.length - 1)
+                            noHighlights = false;
+
+                        break;
+                    }
+                }
+            }
+
             if (content.hits[l]._highlightResult == undefined)
                 content.hits[l]._highlightResult = {};
 
-            if (content.hits[l]._highlightResult.content == undefined)
-                content.hits[l]._highlightResult.content = {};
+            if (content.hits[l]._highlightResult.post_content == undefined)
+                content.hits[l]._highlightResult.post_content = {};
 
-            content.hits[l]._highlightResult.content.value = "";
+            content.hits[l]._highlightResult.post_content.value = "";
 
             var separator = "<div>[...]</div>";
             var old_order = -1;
@@ -303,22 +318,19 @@ algoliaBundle.$(document).ready(function ($) {
 
                     var balise = content_matches[i].type != "text" ? content_matches[i].type : "div";
 
-                    content.hits[l]._highlightResult.content.value += "<div>";
-                    content.hits[l]._highlightResult.content.value += "<" + balise + '>';
-                    content.hits[l]._highlightResult.content.value += content_matches[i].value;
-                    content.hits[l]._highlightResult.content.value += "</" + balise + '>';
-                    content.hits[l]._highlightResult.content.value += "</div>";
+                    if (i == 0 && content_matches[i].order > 0)
+                        content.hits[l]._highlightResult.post_content.value += separator;
 
-                    if (noHighlights === false)
-                        content.hits[l]._highlightResult.content.value += separator;
+                    content.hits[l]._highlightResult.post_content.value += "<div>";
+                    content.hits[l]._highlightResult.post_content.value += "<" + balise + '>';
+                    content.hits[l]._highlightResult.post_content.value += content_matches[i].value;
+                    content.hits[l]._highlightResult.post_content.value += "</" + balise + '>';
+                    content.hits[l]._highlightResult.post_content.value += "</div>";
+
+                    content.hits[l]._highlightResult.post_content.value += separator;
                 }
             }
-
-            if (noHighlights == false)
-                content.hits[l]._highlightResult.content.value.substring(0, content.hits[l]._highlightResult.content.value.length - separator.length);
         }
-
-
 
         var results_html = resultsTemplate.render({
             facets_count: facets.length,
@@ -411,6 +423,12 @@ algoliaBundle.$(document).ready(function ($) {
         }
     }
 
+    function getBrandingHits() {
+        return function findMatches(q, cb) {
+            return cb(["algolia-branding"]);
+        }
+    }
+
     /*****************
      **
      ** AUTOCOMPLETE
@@ -456,6 +474,7 @@ algoliaBundle.$(document).ready(function ($) {
         });
 
         $(algoliaSettings.search_input_selector).each(function (i) {
+
             $(this).typeahead({hint: false}, hogan_objs);
 
             $(this).on('typeahead:selected', function (e, item) {
@@ -465,6 +484,7 @@ algoliaBundle.$(document).ready(function ($) {
             });
         });
     }
+
 
     /*****************
      **
@@ -491,7 +511,7 @@ algoliaBundle.$(document).ready(function ($) {
          * Variables Initialization
          */
 
-        var instant_selector    = algoliaSettings.autocompleteTypes.length <= 0 ? algoliaSettings.search_input_selector : "#instant-search-bar";
+        var instant_selector = algoliaSettings.autocompleteTypes.length <= 0 ? algoliaSettings.search_input_selector : "#instant-search-bar";
 
         var wrapperTemplate     = algoliaBundle.Hogan.compile($('#instant_wrapper_template').html());
 
@@ -511,6 +531,12 @@ algoliaBundle.$(document).ready(function ($) {
         for (var i = 0; i < algoliaSettings.sorts.length; i++)
             sorting_indices.push({index_name: algoliaSettings.index_prefix + 'all_' + algoliaSettings.sorts[i].name + '_' + algoliaSettings.sorts[i].sort, label: algoliaSettings.sorts[i].label});
 
+        /**
+         *  Foreach Type decide if it need to have a conjunctive or dijunctive faceting
+         *  When you create a custom facet type you need to add it here.
+         *  Example : 'menu'
+         */
+
         for (var i = 0; i < algoliaSettings.facets.length; i++)
         {
             if (algoliaSettings.facets[i].type == "conjunctive")
@@ -526,19 +552,19 @@ algoliaBundle.$(document).ready(function ($) {
                 disjunctive_facets.push(algoliaSettings.facets[i].name);
         }
 
+        /**
+         * Functions
+         */
+
         var helper = algoliaBundle.algoliasearchHelper(algolia_client, algoliaSettings.index_name + 'all', {
             facets: conjunctive_facets,
             disjunctiveFacets: disjunctive_facets,
             hitsPerPage: algoliaSettings.number_by_page
         });
 
-        /**
-         * Functions
-         */
-
         function performQueries(push_state)
         {
-            helper.search(helper.state.query, searchCallback);
+            helper.search(helper.state.query);
 
             updateUrl(push_state);
         }
@@ -585,7 +611,6 @@ algoliaBundle.$(document).ready(function ($) {
                 instant_search_bar.val(helper.state.query);
             }
         }
-
 
         helper.on('result', searchCallback);
 
@@ -709,7 +734,6 @@ algoliaBundle.$(document).ready(function ($) {
          * Handle click on conjunctive and disjunctive facet
          */
         $("body").on("click", ".sub_facet", function () {
-
             $(this).find("input[type='checkbox']").each(function (i) {
                 $(this).prop("checked", !$(this).prop("checked"));
 
@@ -726,16 +750,15 @@ algoliaBundle.$(document).ready(function ($) {
             updateSlideInfos(ui);
         });
 
-
         /**
          * Handle sort change
          */
         $("body").on("change", "#index_to_use", function () {
             helper.setIndex($(this).val());
 
-            helper.setCurrentPage(0);
-
             performQueries(true);
+
+            helper.setPage(0);
         });
 
         /**
@@ -825,7 +848,7 @@ algoliaBundle.$(document).ready(function ($) {
                     values: [min, max]
                 });
             });
-        }
+        };
 
         function updateSlideInfos(ui)
         {
