@@ -283,8 +283,9 @@ if (function_exists('curl_version') == false)
         $scope.sorts                            = <?php echo json_encode($algolia_registry->sorts); ?>;
         $scope.sort_selected                    = null;
 
-        $scope.orderedTab   = [{key: 'ordered',value: 'Ordered'},{key: 'unordered',value: 'Unordered'}];
-        $scope.sortTab      = [{key: 'asc',value: 'Ascending'},{key: 'desc',value: 'Descending'}];
+        $scope.orderedTab   = [{key: 'ordered', value: 'Ordered'},{key: 'unordered', value: 'Unordered'}];
+        $scope.sortTab      = [{key: 'asc',  value: 'Ascending'},{key: 'desc', value: 'Descending'}];
+        $scope.yesNo        = [{key: true, value: 'Yes'},{key: false, value: 'No'}];
         $scope.facetTypes   = <?php echo json_encode($facetTypes); ?>;
 
         $scope.validCredential = Boolean(<?php echo $algolia_registry->validCredential; ?>);
@@ -315,7 +316,7 @@ if (function_exists('curl_version') == false)
             }
 
             if (type == 'attribute_to_index') {
-                obj = { name: item.name, group: item.group, ordered: 'ordered' };
+                obj = { name: item.name, group: item.group, ordered: 'ordered', retrievable: true, searchable: true };
             }
 
             if (type == 'custom_ranking') {

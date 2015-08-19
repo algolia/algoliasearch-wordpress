@@ -232,6 +232,10 @@ class WordpressFetcher
         if (strpos($attribute['group'], 'Meta') !== false)
         {
             $value = get_post_meta($data->ID, $attribute['name']);
+
+            if ($value == false)
+                $value = '';
+            
             return $this->try_cast($value);
         }
     }

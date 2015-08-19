@@ -3,22 +3,30 @@
         <div class="content">
             <h3>Attributes To index</h3>
             <p class="help-block">
-                Attributes To index
+                Attributes
             </p>
             <table>
                 <tr data-order="-1">
                     <th style="width: 400px;">Name</th>
+                    <th>Searchable</th>
                     <th>Ordered</th>
+                    <th>Retrievable</th>
                     <th></th>
                 </tr>
 
-                <tbody ui-sortable ng-model="attributesToIndex">
+                <tbody ui-sortable ng-model="attributes">
                     <tr ng-repeat="attribute in attributesToIndex">
                         <td style="width: 400px;">
                             {{attribute.name}} ({{attribute.group}})
                         </td>
                         <td>
-                            <select ng-options="item.key as item.value for item in orderedTab" ng-model="attribute.ordered"></select>
+                            <select ng-options="item.key as item.value for item in yesNo" ng-model="attribute.searchable"></select>
+                        </td>
+                        <td>
+                            <select ng-show="attribute.searchable" ng-options="item.key as item.value for item in orderedTab" ng-model="attribute.ordered"></select>
+                        </td>
+                        <td>
+                            <select ng-options="item.key as item.value for item in yesNo" ng-model="attribute.retrievable"></select>
                         </td>
                         <td>
                             <div style="float: right;">

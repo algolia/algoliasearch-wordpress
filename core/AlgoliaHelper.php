@@ -99,26 +99,36 @@ class AlgoliaHelper
         global $attributesToSnippet;
 
         $attributesToIndex  = array();
+        $unretrievableAttributes = array();
 
         foreach ($this->algolia_registry->attributesToIndex as $value)
         {
-            if ($value['name'] == 'content')
+            if ($value['retrievable'] === false)
             {
-                foreach (array('h1', 'h2', 'h3', 'h4', 'h5', 'h6') as $tag)
-                    $attributesToIndex[] = 'content.'.$tag;
-
-                $attributesToIndex[] = 'unordered(content.text)';
+                $unretrievableAttributes[] = $value['name'];
+                continue;
             }
 
-            if ($value['ordered'] == 'unordered')
-                $attributesToIndex[] = $value['ordered'].'('.$value['name'].')';
-            else
-                $attributesToIndex[] = $value['name'];
-        }
+            if ($value['searchable'] === true)
+            {
+                if ($value['name'] == 'content')
+                {
+                    foreach (array('h1', 'h2', 'h3', 'h4', 'h5', 'h6') as $tag)
+                        $attributesToIndex[] = 'content.'.$tag;
 
+                    $attributesToIndex[] = 'unordered(content.text)';
+                }
+
+                if ($value['ordered'] == 'unordered')
+                    $attributesToIndex[] = $value['ordered'].'('.$value['name'].')';
+                else
+                    $attributesToIndex[] = $value['name'];
+            }
+        }
 
         $defaultSettings = array(
             "attributesToIndex"     => $attributesToIndex,
+            "unretrievableAttributes" => $unretrievableAttributes
         );
 
         /**
@@ -167,9 +177,10 @@ class AlgoliaHelper
             $customRanking[] = $value['sort'] . '(' . $value['name'] . ')';
 
         $settings = array(
-            'attributesToIndex'     => $attributesToIndex,
-            'attributesForFaceting' => array_values(array_unique($facets)),
-            'customRanking'         => $customRanking
+            'attributesToIndex'         => $attributesToIndex,
+            "unretrievableAttributes"   => $unretrievableAttributes,
+            'attributesForFaceting'     => array_values(array_unique($facets)),
+            'customRanking'             => $customRanking,
         );
 
         /**
