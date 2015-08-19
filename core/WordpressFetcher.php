@@ -235,7 +235,7 @@ class WordpressFetcher
 
             if ($value == false)
                 $value = '';
-            
+
             return $this->try_cast($value);
         }
     }

@@ -266,9 +266,9 @@ algoliaBundle.$(document).ready(function ($) {
 
                 for (var i = 0; i < fields.length; i++)
                 {
-                    if (content.hits[l][fields[i]] != undefined)
+                    if (content.hits[l].post_content[fields[i]] != undefined)
                     {
-                        for (var j = 0; j < content.hits[l][fields[i]].length; j++)
+                        for (var j = 0; j < content.hits[l].post_content[fields[i]].length; j++)
                         {
                             content.hits[l].post_content[fields[i]][j].type = fields[i];
                             content_matches.push(content.hits[l].post_content[fields[i]][j]);
@@ -282,6 +282,23 @@ algoliaBundle.$(document).ready(function ($) {
                     return -1;
                 return 1;
             });
+
+            if (noHighlights === true)
+            {
+                for (var i = 0; i < content_matches.length; i++)
+                {
+                    if (content_matches[i].type == 'text')
+                    {
+                        content_matches = content_matches.slice(0, i + 1);
+
+                        console.log(i, content_matches.length - 1);
+                        if (i === content_matches.length - 1)
+                            noHighlights = false;
+
+                        break;
+                    }
+                }
+            }
 
             if (content.hits[l]._highlightResult == undefined)
                 content.hits[l]._highlightResult = {};
@@ -310,13 +327,9 @@ algoliaBundle.$(document).ready(function ($) {
                     content.hits[l]._highlightResult.post_content.value += "</" + balise + '>';
                     content.hits[l]._highlightResult.post_content.value += "</div>";
 
-                    if (noHighlights === false)
-                        content.hits[l]._highlightResult.post_content.value += separator;
+                    content.hits[l]._highlightResult.post_content.value += separator;
                 }
             }
-
-            if (noHighlights == false)
-                content.hits[l]._highlightResult.post_content.value.substring(0, content.hits[l]._highlightResult.post_content.value.length - separator.length);
         }
 
         var results_html = resultsTemplate.render({
