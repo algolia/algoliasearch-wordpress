@@ -4,15 +4,20 @@ class TemplateHelper
 {
     private $templates_dir;
     private $algolia_registry;
+    private $templates;
 
     public function __construct()
     {
         $this->templates_dir = plugin_dir_path(__DIR__).'templates/';
         $this->algolia_registry = Registry::getInstance();
+        $this->templates = null;
     }
 
     public function available_templates()
     {
+        if ($this->templates !== null)
+            return $this->templates;
+
         $templates = array();
 
         foreach (scandir($this->templates_dir) as $dir)
@@ -50,6 +55,8 @@ class TemplateHelper
                 $templates[] = $template;
             }
         }
+
+        $this->templates = $templates;
 
         return $templates;
     }
