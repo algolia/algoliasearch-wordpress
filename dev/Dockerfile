@@ -52,7 +52,7 @@ RUN service mysql start && \
 
 ##### WOOCOMMERCE
 
-RUN cd /tmp; curl -O http://downloads.wordpress.org/plugin/woocommerce.zip; unzip woocommerce.zip; mv woocommerce/ /var/www/htdocs/wp-content/plugins/
+RUN cd /tmp; curl -O https://downloads.wordpress.org/plugin/woocommerce.zip; unzip woocommerce.zip; mv woocommerce/ /var/www/htdocs/wp-content/plugins/
 RUN service mysql start && wp --allow-root plugin activate woocommerce && service mysql stop
 RUN cd /tmp; curl -O http://demos.algolia.com/downloads/mystile-wordpress-theme.zip; unzip mystile-wordpress-theme.zip; mv mystile/ /var/www/htdocs/wp-content/themes/
 RUN service mysql start && wp --allow-root theme activate mystile && service mysql stop
