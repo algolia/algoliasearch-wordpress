@@ -83,7 +83,7 @@
                 <h4 style="float: left; margin-right: 30px;">or</h4>
                 <div class="content-item" style="float: left; margin-right: 30px;">
                     <form action="<?php echo site_url(); ?>/wp-admin/admin-post.php" method="post" enctype="multipart/form-data">
-                        <input type="hidden" name="action" value="update_account_info">
+                        <input type="hidden" name="action" value="update_settings">
                         <input type="submit" name="submit" id="submit" class="button button-primary" value="Import configuration" />
                         <input type="file" name="import" />
                     </form>

@@ -1,5 +1,8 @@
 <?php
 
+/*
+ * This class specifies all admin & frontend hooks
+ */
 class AlgoliaPlugin
 {
     private $algolia_registry;
@@ -28,20 +31,24 @@ class AlgoliaPlugin
         $this->template_helper = new \Algolia\Core\TemplateHelper();
 
 
+        // WP administration menu
         add_action('admin_menu',                                array($this, 'add_admin_menu'));
 
-        add_action('admin_post_update_account_info',            array($this, 'admin_post_update_account_info'));
+        // Custom hooks (administration purpose)
+        add_action('admin_post_update_settings',                array($this, 'admin_post_update_settings'));
         add_action('admin_post_reset_config_to_default',        array($this, 'admin_post_reset_config_to_default'));
         add_action('admin_post_export_config',                  array($this, 'admin_post_export_config'));
 
+        // WP hooks (SEO purpose)
         add_action('pre_get_posts',                             array($this, 'pre_get_posts'));
         add_filter('the_posts',                                 array($this, 'get_search_result_posts'));
 
+        // Custom hook handling the full reindexing
         add_action('admin_post_reindex',                        array($this, 'admin_post_reindex'));
 
+        // WP hooks (look & feel purpose)
         add_action('admin_enqueue_scripts',                     array($this, 'admin_scripts'));
         add_action('wp_enqueue_scripts',                        array($this, 'scripts'));
-
         add_action('wp_footer',                                 array($this, 'wp_footer'));
     }
 
@@ -147,7 +154,7 @@ class AlgoliaPlugin
         return $posts;
     }
 
-    public function admin_post_update_account_info()
+    public function admin_post_update_settings()
     {
         if (isset($_POST['submit']) && $_POST['submit'] == 'Import configuration')
         {

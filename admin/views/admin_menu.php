@@ -384,7 +384,7 @@ if (function_exists('curl_version') == false)
             algoliaBundle.$.ajax({
                 method: "POST",
                 url: '<?php echo site_url(); ?>' + '/wp-admin/admin-post.php',
-                data: { action: "update_account_info", data: JSON.stringify(newSettings) },
+                data: { action: "update_settings", data: JSON.stringify(newSettings) },
                 success: function (result) {
                     console.log('ok');
                     window.location.reload();

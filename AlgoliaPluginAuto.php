@@ -1,5 +1,15 @@
 <?php
 
+/*
+ * This class is responsible of the following events:
+ *  - before_delete_post
+ *  - transition_post_status
+ *  - save_post
+ *  - edited_term_taxonomy
+ *  - created_term
+ *  - delete_term
+ * and triggers the indexer to make sure the DB is synchronized with Algolia
+ */
 class AlgoliaPluginAuto
 {
     private $algolia_registry;
