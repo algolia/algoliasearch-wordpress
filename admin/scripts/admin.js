@@ -127,6 +127,7 @@ algoliaBundle.$(document).ready(function($) {
         $("#results-wrapper").hide();
         $(this).hide();
         $("#algolia_reindex").removeClass('button-primary').addClass('button-secondary').html('<i class="dashicons dashicons-upload"></i> Reindex data <span class="record-count"></span>').show();
+        $('#algolia_reindex_hint').hide();
         countNumberOfRecords();
     });
 

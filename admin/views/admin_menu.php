@@ -159,17 +159,18 @@ if (function_exists('curl_version') == false)
         Algolia Search
         <button type="button" class="button <?php echo (! $need_to_reindex ? "button-secondary" : "button-primary"); ?> " id="algolia_reindex" name="algolia_reindex">
             <i class="dashicons dashicons-upload"></i>
-            <?php echo (! $need_to_reindex ? "Reindex data" : "Reindexing Needed"); ?>
+            Reindex data
             <span class="record-count"></span>
         </button>
-        <em id='last-update' style="color: #444;font-family: 'Open Sans',sans-serif;font-size: 13px;line-height: 1.4em;">
-            Last update:
-            <?php if ($algolia_registry->last_update): ?>
-                <?php echo date('Y-m-d H:i:s', $algolia_registry->last_update); ?>
-            <?php else: ?>
-                <span style="color: red">Never: please re-index your data.</span>
-            <?php endif; ?>
+        <?php if ($need_to_reindex): ?>
+            <span id="algolia_reindex_hint" style="color: red; font-size: 13px;">Reindexing required</span>
+        <?php endif; ?>
+        <?php if ($algolia_registry->last_update): ?>
+        <em id='last-update' style="color: #444; font-size: 13px;">
+            Last indexing:
+            <?php echo date('Y-m-d H:i:s', $algolia_registry->last_update); ?>
         </em>
+        <?php endif; ?>
     </h2>
 
     <div class="wrapper">
@@ -215,11 +216,10 @@ if (function_exists('curl_version') == false)
     <div class="wrapper">
         <div class="tabs myclearfix">
 
-            <div ng-click="changeTab('credentials')"                            class="title {{current_tab == 'credentials' ? 'selected' :''}}">Credentials</div>
-            <div ng-show="validCredential" ng-click="changeTab('ui')"           class="title {{current_tab == 'ui' ? 'selected' :''}}">UI</div>
-            <div ng-show="validCredential" ng-click="changeTab('autocomplete')" class="title {{current_tab == 'autocomplete' ? 'selected' :''}}">Autocomplete</div>
-            <div ng-show="validCredential" ng-click="changeTab('instant')"      class="title {{current_tab == 'instant' ? 'selected' :''}}">Instant</div>
-            <div ng-show="validCredential" ng-click="changeTab('ranking')"      class="title {{current_tab == 'ranking' ? 'selected' :''}}">Ranking</div>
+            <div ng-click="changeTab('credentials')"                            class="title {{current_tab == 'credentials' ? 'selected' :''}}">Credentials &amp; Template</div>
+            <div ng-show="validCredential" ng-click="changeTab('ranking')"      class="title {{current_tab == 'ranking' ? 'selected' :''}}">Attributes &amp; Ranking</div>
+            <div ng-show="validCredential" ng-click="changeTab('autocomplete')" class="title {{current_tab == 'autocomplete' ? 'selected' :''}}">Auto-complete Menu</div>
+            <div ng-show="validCredential" ng-click="changeTab('instant')"      class="title {{current_tab == 'instant' ? 'selected' :''}}">Search Results Page</div>
             <div ng-show="validCredential" ng-click="changeTab('advanced')"     class="title {{current_tab == 'advanced' ? 'selected' :''}}">Advanced</div>
 
             <div style="clear:both"></div>
@@ -229,7 +229,6 @@ if (function_exists('curl_version') == false)
 
         <?php if ($algolia_registry->validCredential) : ?>
 
-            <?php include __DIR__ . '/tabs/ui.php'; ?>
             <?php include __DIR__ . '/tabs/autocomplete.php'; ?>
             <?php include __DIR__ . '/tabs/instant.php'; ?>
             <?php include __DIR__ . '/tabs/ranking.php'; ?>
@@ -298,7 +297,7 @@ if (function_exists('curl_version') == false)
             location.hash = tab;
         };
 
-        $scope.changeTab(window.location.hash != "" ? location.hash.substring(1) : "ui");
+        $scope.changeTab(window.location.hash != "" ? location.hash.substring(1) : "credentials");
 
         $scope.add = function (tab, item, type) {
             var obj = undefined;

@@ -3,7 +3,7 @@
         <div class="content">
             <div class="content-item">
                 <h3>Search Results Page</h3>
-                <p class="help-block">Configure here your instant search results page.</p>
+                <p class="help-block">Configure here the DOM selector used to inject the search results.</p>
             </div>
             <div class="content-item">
                 <div>
@@ -18,9 +18,9 @@
                 </div>
             </div>
 
-            <h3>Instant Types</h3>
+            <h3>Enabled Types</h3>
             <p class="help-block">
-                Configure here the Wordpress types you want autocomplete in. The order of this setting reflects the order of the sections in the auto-completion menu.
+                Configure here the Wordpress types you want to search in and display on the search results page.
             </p>
             <table>
                 <tr data-order="-1">
@@ -31,12 +31,12 @@
                 <tbody ui-sortable ng-model="instantTypes">
                     <tr ng-repeat="type in instantTypes">
                         <td style="width: 400px;">
+                            <img width="10" src="<?php echo $move_icon_url; ?>" style="margin-top: 10px; margin-left: 5px;" />
                             {{type.name}} ({{type.count}})
                         </td>
                         <td>
                             <div style="float: right;">
                                 <button ng-click="remove(instantTypes, type)">Remove</button>
-                                <img width="10" src="<?php echo $move_icon_url; ?>" style="margin-top: 10px; margin-left: 5px;" />
                             </div>
                         </td>
                     </tr>
@@ -47,14 +47,14 @@
                 <button  ng-click="add(instantTypes, instant_type_selected, 'instant_type')">Add</button>
             </div>
 
-            <h3>Facets</h3>
+            <h3>Faceting</h3>
             <p class="help-block">
-                Configure here the Facets
+                Configure here the filtering options you want to display on your search results page.
             </p>
             <table>
                 <tr data-order="-1">
                     <th style="width: 400px;">Name</th>
-                    <th>Facet type</th>
+                    <th>Type</th>
                     <th>Label</th>
                     <th></th>
                 </tr>
@@ -62,6 +62,7 @@
                 <tbody ui-sortable ng-model="facets">
                     <tr ng-repeat="facet in facets">
                         <td style="width: 400px;">
+                            <img width="10" src="<?php echo $move_icon_url; ?>" style="margin-top: 10px; margin-left: 5px;" />
                             {{facet.name}} ({{facet.group}})
                         </td>
                         <td>
@@ -73,7 +74,6 @@
                         <td>
                             <div style="float: right;">
                                 <button ng-click="remove(facets, facet)">Remove</button>
-                                <img width="10" src="<?php echo $move_icon_url; ?>" style="margin-top: 10px; margin-left: 5px;" />
                             </div>
                         </td>
                     </tr>
@@ -88,7 +88,7 @@
 
             <h3>Sorts</h3>
             <p class="help-block">
-                Configure here the Sorts
+                Configure here the different sorting options you want to offer.
             </p>
             <table>
                 <tr data-order="-1">
@@ -101,6 +101,7 @@
                 <tbody ui-sortable ng-model="sorts">
                     <tr ng-repeat="sort in sorts">
                         <td style="width: 400px;">
+                            <img width="10" src="<?php echo $move_icon_url; ?>" style="margin-top: 10px; margin-left: 5px;" />
                             {{sort.name}} ({{sort.group}})
                         </td>
                         <td>
@@ -112,7 +113,6 @@
                         <td>
                             <div style="float: right;">
                                 <button ng-click="remove(sorts, sort)">Remove</button>
-                                <img width="10" src="<?php echo $move_icon_url; ?>" style="margin-top: 10px; margin-left: 5px;" />
                             </div>
                         </td>
                     </tr>

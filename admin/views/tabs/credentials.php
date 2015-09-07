@@ -3,7 +3,7 @@
         <div class="content">
             <div style="float: left;">
                 <div style="padding: 0px 10px;">
-                    <h3>Algolia account</h3>
+                    <h3>Algolia Account</h3>
                     <p class="help-block">Configure here your <a href="https://www.algolia.com">Algolia</a> credentials. You can find them in the "<a href="https://www.algolia.com/licensing">Credentials</a>" section of your dashboard. Don't have an Algolia account yet? <a href="http://www.algolia.com/users/sign_up" target="_blank">Create one here</a>.</p>
                     <?php if ($algolia_registry->validCredential == false && ($algolia_registry->app_id || $algolia_registry->search_key || $algolia_registry->admin_key)) : ?>
                         <p class="warning">Your credentials are not valid</p>
@@ -35,9 +35,6 @@
                             <input type="text" ng-model="index_prefix" placeholder="wordpress_">
                         </div>
                         <p class="description">This value will prepend all the index names.</p>
-                    </div>
-                    <div class="content-item">
-                        <button ng-click="save()" class="button button-primary">Save Changes</button>
                     </div>
                 </div>
             </div>
@@ -73,6 +70,34 @@
             </div>-->
 
             <div style="clear: both;"></div>
+
+            <div style="padding: 0px 10px;" ng-show="validCredential">
+                <h3>Template <span class="h3-info">(includes html, js and css needed to display the results for both the auto-completion menu and the instant search results page)</span></h3>
+                <p class="help-block">Select the template you want to use to display the search results. You can either use one of the 2 sample templates or build your own.</p>
+                <div class="content-item">
+                    <div class="theme-browser">
+                        <div class="themes">
+                            <div class="theme active" ng-repeat="template in templates">
+                                <label for="{{template.dir}}">
+                                    <div class="theme-screenshot">
+                                            <img class="screenshot instant" ng-show="template.screenshot" ng-src="{{template.screenshot}}">
+                                            <div class="no-screenshot screenshot instant" ng-hide="template.screenshot">No screenshot</div>
+                                    </div>
+                                    <div class="theme-name">
+                                        {{template.name}}
+                                        <input type="radio" id="{{template.dir}}" value="{{template.dir}}" ng-model="$parent.template_dir" name='template'/>
+                                    </div>
+                                    <div>{{template.description}}</div>
+                                </label>
+                            </div>
+                        </div>
+                        <div style="clear: both"></div>
+                    </div>
+                    <div class="content-item">
+                        <button ng-click="save()" class="button button-primary">Save Changes</button>
+                    </div>
+                </div>
+            </div>
 
             <div style="padding: 0px 10px;">
                 <h3>Administration</h3>
