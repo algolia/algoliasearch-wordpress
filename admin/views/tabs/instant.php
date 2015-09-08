@@ -2,7 +2,7 @@
     <div class="content-wrapper" id="customization">
         <div class="content">
             <div class="content-item">
-                <h3>Search Results Page</h3>
+                <h3>Container</h3>
                 <p class="help-block">Configure here the DOM selector used to inject the search results.</p>
             </div>
             <div class="content-item">
