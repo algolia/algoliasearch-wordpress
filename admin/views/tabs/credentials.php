@@ -37,6 +37,10 @@
                         <p class="description">This value will prepend all the index names.</p>
                     </div>
                 </div>
+
+                <div class="content-item">
+                    <button ng-click="save()" class="button button-primary">Save Changes</button>
+                </div>
             </div>
             <!--<div style="float: left; width: 50%; box-sizing:border-box; border-left: solid 1px #DDDDDD">
                 <div style="padding: 0px 10px;">
@@ -71,7 +75,7 @@
 
             <div style="clear: both;"></div>
 
-            <div style="padding: 0px 10px;" ng-show="validCredential">
+            <div style="padding: 0px 10px;">
                 <h3>Template <span class="h3-info">(includes html, js and css needed to display the results for both the auto-completion menu and the instant search results page)</span></h3>
                 <p class="help-block">Select the template you want to use to display the search results. You can either use one of the 2 sample templates or build your own.</p>
                 <div class="content-item">
