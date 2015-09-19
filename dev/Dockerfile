@@ -1,28 +1,37 @@
 FROM ubuntu:14.04
 
-RUN apt-get update
-RUN apt-get -y install apache2
-RUN apt-get -y install php5 libapache2-mod-php5 php5-mcrypt php5-curl php5-gd php5-mysql
+# MYSQL conf
+RUN echo 'mysql-server mysql-server/root_password password P4ssw0rd' | debconf-set-selections
+RUN echo 'mysql-server mysql-server/root_password_again password P4ssw0rd' | debconf-set-selections
+
+RUN apt-get update && apt-get install -y \
+  apache2 \
+  php5 \
+  libapache2-mod-php5 \
+  php5-mcrypt \
+  php5-curl \
+  php5-gd \
+  php5-mysql \
+  mysql-client-5.5 \
+  mysql-server  \
+  libxml2-dev \
+  libpng12-dev \
+  libjpeg-dev \
+  vim \
+  emacs24-nox \
+  git-core \
+  wget \
+  curl \
+  zsh \
+  zip
 
 RUN sed -i -e 's/\/var\/www/\/var\/www\/htdocs/' /etc/apache2/apache2.conf
 RUN sed -i -e 's/\/var\/www\/html/\/var\/www\/htdocs/' /etc/apache2/sites-available/000-default.conf
 
-##### PHP/MYSQL
-
-RUN echo 'mysql-server mysql-server/root_password password P4ssw0rd' | debconf-set-selections
-RUN echo 'mysql-server mysql-server/root_password_again password P4ssw0rd' | debconf-set-selections
-
 WORKDIR /var/www/htdocs
-
-# packages/dependencies installation
-RUN apt-get install -y mysql-client-5.5 mysql-server
 
 COPY bin/php.ini /usr/local/etc/php/php.ini
 
-RUN apt-get install -y libxml2-dev
-RUN apt-get update && apt-get install -y libpng12-dev libjpeg-dev
-
-RUN apt-get update && apt-get install -y vim emacs24-nox git-core wget curl zsh zip
 RUN chsh -s /bin/zsh
 
 RUN sh -c "$(curl -fsSL https://raw.github.com/robbyrussell/oh-my-zsh/master/tools/install.sh)" || true
@@ -54,7 +63,7 @@ RUN service mysql start && \
 
 RUN cd /tmp; curl -O https://downloads.wordpress.org/plugin/woocommerce.zip; unzip woocommerce.zip; mv woocommerce/ /var/www/htdocs/wp-content/plugins/
 RUN service mysql start && wp --allow-root plugin activate woocommerce && service mysql stop
-RUN cd /tmp; curl -O http://demos.algolia.com/downloads/mystile-wordpress-theme.zip; unzip mystile-wordpress-theme.zip; mv mystile/ /var/www/htdocs/wp-content/themes/
+RUN cd /tmp; curl -O https://demos.algolia.com/downloads/mystile-wordpress-theme.zip; ls -la /tmp/; unzip mystile-wordpress-theme.zip; mv mystile/ /var/www/htdocs/wp-content/themes/
 RUN service mysql start && wp --allow-root theme activate mystile && service mysql stop
 
 RUN cd /tmp; curl -O https://downloads.wordpress.org/plugin/wordpress-importer.0.6.1.zip; unzip wordpress-importer.0.6.1.zip; mv wordpress-importer/ /var/www/htdocs/wp-content/plugins/
@@ -66,7 +75,7 @@ RUN service mysql start && wp --allow-root media --yes regenerate && service mys
 
 ##### PHPMYADMIN
 
-RUN cd /tmp && curl -O http://demos.algolia.com/downloads/phpMyAdmin-4.4.9-english.tar.gz && tar xvf phpMyAdmin-4.4.9-english.tar.gz > /dev/null && mv phpMyAdmin-4.4.9-english /var/www/htdocs/phpmyadmin
+RUN cd /tmp && curl -O https://demos.algolia.com/downloads/phpMyAdmin-4.4.9-english.tar.gz && tar xvf phpMyAdmin-4.4.9-english.tar.gz > /dev/null && mv phpMyAdmin-4.4.9-english /var/www/htdocs/phpmyadmin
 COPY bin/config.inc.php /var/www/htdocs/phpmyadmin/
 
 
