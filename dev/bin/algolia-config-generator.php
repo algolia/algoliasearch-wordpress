@@ -38,59 +38,60 @@ $config = '{
     ],
     "attributesToIndex": [
         {
-            "name": "title",
+            "name": "post_title",
             "group": "Record attribute",
-            "ordered": "ordered"
+            "ordered": "ordered",
+            "searchable": true,
+            "retrievable": true
         },
         {
-            "name": "content",
+            "name": "post_content",
             "group": "Record attribute",
-            "ordered": "ordered"
+            "ordered": "unordered",
+            "searchable": true,
+            "retrievable": true
         },
         {
             "name": "category",
             "group": "Taxonomy",
-            "ordered": "ordered"
+            "ordered": "ordered",
+            "searchable": true,
+            "retrievable": true
         },
         {
-            "name": "author",
+            "name": "display_name",
             "group": "Record attribute",
-            "ordered": "ordered"
+            "ordered": "ordered",
+            "searchable": true,
+            "retrievable": true
         },
         {
-            "name": "type",
+            "name": "post_type",
             "group": "Record attribute",
-            "ordered": "ordered"
+            "ordered": "ordered",
+            "searchable": true,
+            "retrievable": true
         },
         {
-            "name": "date",
+            "name": "post_date",
             "group": "Record attribute",
-            "ordered": "ordered"
-        },
-        {
-            "name": "author_login",
-            "group": "Record attribute",
-            "ordered": "ordered"
-        },
-        {
-            "name": "modified",
-            "group": "Record attribute",
-            "ordered": "ordered"
-        },
-        {
-            "name": "parent",
-            "group": "Record attribute",
-            "ordered": "ordered"
+            "ordered": "ordered",
+            "searchable": true,
+            "retrievable": true
         },
         {
             "name": "permalink",
             "group": "Record attribute",
-            "ordered": "ordered"
+            "ordered": "ordered",
+            "searchable": true,
+            "retrievable": true
         },
         {
-            "name": "slug",
+            "name": "featureImage",
             "group": "Record attribute",
-            "ordered": "ordered"
+            "ordered": "ordered",
+            "searchable": true,
+            "retrievable": true
         }
     ],
     "customRankings": [],
