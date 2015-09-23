@@ -23,7 +23,7 @@ $facets = $facets['facets'];
             </div>
             {{/featureImage}}
             <div class="info{{^featureImage}}-without-thumb{{/featureImage}}">
-            {{{ _highlightResult.title.value }}}
+            {{{ _highlightResult.post_title.value }}}
             </div>
             <div style="clear: both;"></div>
         </div>
@@ -113,7 +113,7 @@ $facets = $facets['facets'];
                     </div>
                     <div class="result-sub-content">
                         <h3 class="result-title text-ellipsis">
-                            {{{ _highlightResult.title.value }}}
+                            {{{ _highlightResult.post_title.value }}}
                         </h3>
                         <div class="ratings">
                             <div class="rating-box">
@@ -128,7 +128,7 @@ $facets = $facets['facets'];
                             </div>
                         </div>
                         <div class="result-description text-ellipsis">
-                            {{{ _highlightResult.description.value }}}
+                            {{{ _highlightResult.post_content.value }}}
                         </div>
 
                         {{#isAddToCartEnabled}}
