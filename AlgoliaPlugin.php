@@ -127,10 +127,12 @@ class AlgoliaPlugin
             'site_url'      => site_url()
         );
 
-
         foreach ($this->algolia_registry->autocompleteTypes as $value)
             $algoliaAdminSettings["types"][$value['name']] = array('type' => $value['name'], 'count' => wp_count_posts($value['name'])->publish);
 
+        foreach ($this->algolia_registry->instantTypes as $value)
+            if (! isset($algoliaAdminSettings['types'][$value['name']]))
+                $algoliaAdminSettings["types"][$value['name']] = array('type' => $value['name'], 'count' => wp_count_posts($value['name'])->publish);
 
         foreach (get_taxonomies() as $tax)
             $algoliaAdminSettings['taxonomies'][$tax] = array('count' => wp_count_terms($tax, array('hide_empty' => false)));

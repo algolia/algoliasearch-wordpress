@@ -127,9 +127,6 @@ $facets = $facets['facets'];
                                 </div>
                             </div>
                         </div>
-                        <div class="result-description text-ellipsis">
-                            {{{ _highlightResult.post_content.value }}}
-                        </div>
 
                         {{#isAddToCartEnabled}}
                         <form action="/checkout/cart/add/product/{{objectID}}" method="post">
