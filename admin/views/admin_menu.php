@@ -2,7 +2,6 @@
 $langDomain         = "algolia";
 $algolia_registry   = \Algolia\Core\Registry::getInstance();
 $template_helper    = new Algolia\Core\TemplateHelper();
-$current_template   = $template_helper->getTemplate($algolia_registry->template_dir);
 
 $move_icon_url      = plugin_dir_url(__FILE__) . '../imgs/move.png';
 
@@ -13,7 +12,7 @@ $need_to_reindex    = $algolia_registry->need_to_reindex;
  */
 
 $excluded_types = $algolia_registry->excluded_types;
-$facet_types = array_merge(array("conjunctive" => "Conjunctive", "disjunctive" => "Disjunctive"), $current_template->facet_types);
+$facet_types = array_merge(array("conjunctive" => "Conjunctive", "disjunctive" => "Disjunctive", "slider" => "Slider"));
 $facetTypes = array();
 $templates = $template_helper->availableTemplates();
 
@@ -338,6 +337,7 @@ if (function_exists('curl_version') == false)
             }
 
             if (type == 'facet') {
+                console.log(item);
                 obj = { name: item.name, group: item.group, type: "conjunctive", label: ""};
                 $scope.add($scope.attributesToIndex, obj, 'attribute_to_index');
             }

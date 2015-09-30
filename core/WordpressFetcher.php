@@ -236,6 +236,9 @@ class WordpressFetcher
             if ($value == false)
                 $value = '';
 
+            if (is_array($value) && count($value) === 1)
+                $value = $value[0];
+
             return $this->try_cast($value);
         }
     }
@@ -255,10 +258,8 @@ class WordpressFetcher
             $obj->{$attribute['name']} = $this->getAttribute($attribute, $data);
 
         if (has_filter('prepare_algolia_record'))
-        {
             $obj = apply_filters('prepare_algolia_record', $obj);
-        }
-        
+
         return (array) $obj;
     }
 }

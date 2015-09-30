@@ -3,7 +3,6 @@
 return array(
     'name'                      => 'Woo Default',
     'screenshot'                => 'screenshot.png',
-    'facet_types'               => array('slider' => 'Slider', 'menu' => 'Menu'),
     'attributes'                => array(
         'autocompleteTypes'             => [
             ["name" => "page", "count" => 1, "nb_results_by_section" => 3, "label" => "Pages"],
@@ -20,7 +19,7 @@ return array(
             ["name" => "post_type", "group" => "Record attribute", "ordered" => "ordered", "searchable" => true, "retrievable" => true],
             ["name" => "post_date", "group" => "Record attribute", "ordered" => "ordered", "searchable" => true, "retrievable" => true],
             ["name" => "permalink", "group" => "Record attribute", "ordered" => "ordered", "searchable" => true, "retrievable" => true],
-            ["name" => "_price", "group" => "Record attribute", "ordered" => "ordered", "searchable" => false, "retrievable" => true],
+            ["name" => "_price", "group" => "Meta: product_variation", "ordered" => "ordered", "searchable" => false, "retrievable" => true],
         ],
         'customRankings'                => [],
         'facets'                        => [

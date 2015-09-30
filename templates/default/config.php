@@ -3,7 +3,6 @@
 return array(
     'name'                      => 'Default',
     'screenshot'                => 'screenshot.png',
-    'facet_types'               => array('slider' => 'Slider', 'menu' => 'Menu'),
     'attributes'                => array(
         'autocompleteTypes'             => [
             ["name" => "page", "count" => 1, "nb_results_by_section" => 3, "label" => "Pages"],

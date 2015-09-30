@@ -210,7 +210,7 @@ class AlgoliaHelper
             $slaves = array();
 
             foreach ($this->algolia_registry->sorts as $values)
-                $slaves[] = $index_name.'all_'.$values['name'].'_'.$values['sort'];
+                $slaves[] = $index_name.$values['name'].'_'.$values['sort'];
 
             $settings = array('slaves' => $slaves);
 
@@ -227,10 +227,10 @@ class AlgoliaHelper
 
                 if (has_filter('prepare_algolia_set_settings'))
                 {
-                    $mergeSettings = apply_filters('prepare_algolia_set_settings', $index_name.'all_'.$values['name'].'_'.$values['sort'], $mergeSettings);
+                    $mergeSettings = apply_filters('prepare_algolia_set_settings', $index_name.$values['name'].'_'.$values['sort'], $mergeSettings);
                 }
 
-                $this->setSettings($index_name.'all_'.$values['name'].'_'.$values['sort'], $mergeSettings);
+                $this->setSettings($index_name.$values['name'].'_'.$values['sort'], $mergeSettings);
             }
         }
     }

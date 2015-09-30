@@ -40,16 +40,7 @@ class TemplateHelper
                 else
                     $template->screenshot = null;
 
-                $template->screenshot_autocomplete  = isset($configs['screenshot-autocomplete']) ? $configs['screenshot-autocomplete'] : 'screenshot-autocomplete.png';
-
-                if (file_exists($this->templates_dir.$dir.'/'.$template->screenshot_autocomplete))
-                    $template->screenshot_autocomplete = plugin_dir_url(__FILE__).'../templates/'.$dir.'/'.$template->screenshot_autocomplete;
-                else
-                    $template->screenshot_autocomplete = null;
-
                 $template->description = isset($configs['description']) ? $configs['description'] : '';
-
-                $template->facet_types = isset($configs['facet_types']) ? $configs['facet_types'] : array();
 
                 $templates[] = $template;
             }

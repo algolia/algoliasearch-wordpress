@@ -80,13 +80,13 @@ class AlgoliaPlugin
         foreach ($settings_name as $name)
             $settings[$name] = str_replace("\\", "", $this->algolia_registry->{$name});
 
-        $algoliaSettings = array_merge($settings, array(
+        $algoliaConfig = array_merge($settings, array(
             'template'                  => $this->template_helper->getTemplate($this->algolia_registry->template_dir),
             'is_search_page'            => isset($_GET['instant']),
             'plugin_url'                => plugin_dir_url(__FILE__)
         ));
 
-        return $algoliaSettings;
+        return $algoliaConfig;
     }
 
     public function scripts()
@@ -97,12 +97,13 @@ class AlgoliaPlugin
         wp_enqueue_style('algolia_bundle', plugin_dir_url(__FILE__) . 'templates/' . $this->algolia_registry->template_dir . '/bundle.css');
         wp_enqueue_style('algolia_styles', plugin_dir_url(__FILE__) . 'templates/' . $this->algolia_registry->template_dir . '/styles.css');
 
-
+        wp_register_script('lib/instantsearch.js', plugin_dir_url(__FILE__) . 'lib/instantsearch.js', array());
+        wp_register_script('lib/helper.js', plugin_dir_url(__FILE__) . 'lib/helper.js', array());
 
         wp_register_script('lib/bundle.min.js', plugin_dir_url(__FILE__) . 'lib/bundle.min.js', array());
-        wp_localize_script('lib/bundle.min.js', 'algoliaSettings', $this->buildSettings());
+        wp_localize_script('lib/bundle.min.js', 'algoliaConfig', $this->buildSettings());
 
-        wp_register_script('template.js',  plugin_dir_url(__FILE__) . 'templates/' . $this->algolia_registry->template_dir . '/template.js', array('lib/bundle.min.js'), array());
+        wp_register_script('template.js',  plugin_dir_url(__FILE__) . 'templates/' . $this->algolia_registry->template_dir . '/template.js', array('lib/instantsearch.js', 'lib/bundle.min.js', 'lib/helper.js'), array());
 
         wp_enqueue_script('template.js');
 
@@ -179,14 +180,6 @@ class AlgoliaPlugin
             wp_redirect('admin.php?page=algolia-settings#credentials');
             return;
         }
-
-
-        $settings_name = [
-            'autocompleteTypes', 'additionalAttributes', 'instantTypes', 'attributesToIndex',
-            'customRankings', 'facets', 'app_id', 'search_key', 'admin_key', 'index_prefix', 'enable_truncating',
-            'truncate_size', 'search_input_selector', 'template_dir', 'number_by_page', 'instant_jquery_selector',
-            'sorts'
-        ];
 
         $datas = isset($_POST['data']) ? json_decode(str_replace("\\", "", $_POST['data']), true) : array();
 
