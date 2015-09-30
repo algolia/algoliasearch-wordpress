@@ -97,15 +97,15 @@ $config = '{
     "customRankings": [],
     "facets": [
         {
-            "name": "author",
+            "name": "display_name",
             "group": "Record attribute",
             "type": "conjunctive",
             "label": ""
         },
         {
-            "name": "type",
+            "name": "post_type",
             "group": "Record attribute",
-            "type": "menu",
+            "type": "conjunctive",
             "label": ""
         },
         {
