@@ -94,16 +94,14 @@ class AlgoliaPlugin
         if (is_admin())
             return;
 
-        wp_enqueue_style('algolia_bundle', plugin_dir_url(__FILE__) . 'templates/' . $this->algolia_registry->template_dir . '/bundle.css');
         wp_enqueue_style('algolia_styles', plugin_dir_url(__FILE__) . 'templates/' . $this->algolia_registry->template_dir . '/styles.css');
 
-        wp_register_script('lib/instantsearch.js', plugin_dir_url(__FILE__) . 'lib/instantsearch.js', array());
         wp_register_script('lib/helper.js', plugin_dir_url(__FILE__) . 'lib/helper.js', array());
 
-        wp_register_script('lib/bundle.min.js', plugin_dir_url(__FILE__) . 'lib/bundle.min.js', array());
-        wp_localize_script('lib/bundle.min.js', 'algoliaConfig', $this->buildSettings());
+        wp_register_script('lib/algoliaBundle.min.js', plugin_dir_url(__FILE__) . 'lib/algoliaBundle.min.js', array());
+        wp_localize_script('lib/algoliaBundle.min.js', 'algoliaConfig', $this->buildSettings());
 
-        wp_register_script('template.js',  plugin_dir_url(__FILE__) . 'templates/' . $this->algolia_registry->template_dir . '/template.js', array('lib/instantsearch.js', 'lib/bundle.min.js', 'lib/helper.js'), array());
+        wp_register_script('template.js',  plugin_dir_url(__FILE__) . 'templates/' . $this->algolia_registry->template_dir . '/template.js', array('lib/algoliaBundle.min.js', 'lib/helper.js'), array());
 
         wp_enqueue_script('template.js');
 
@@ -112,7 +110,6 @@ class AlgoliaPlugin
     public function admin_scripts($hook)
     {
         wp_enqueue_style('styles-admin', plugin_dir_url(__FILE__) . 'admin/styles/styles.css');
-        wp_enqueue_style('algolia_bundle', plugin_dir_url(__FILE__) . 'templates/' . $this->algolia_registry->template_dir . '/bundle.css');
 
         // Only load these scripts on the Algolia admin page
         if ( 'toplevel_page_algolia-settings' != $hook ) {
@@ -138,9 +135,9 @@ class AlgoliaPlugin
         foreach (get_taxonomies() as $tax)
             $algoliaAdminSettings['taxonomies'][$tax] = array('count' => wp_count_terms($tax, array('hide_empty' => false)));
 
-        wp_register_script('lib/bundle.min.js', plugin_dir_url(__FILE__) . 'lib/bundle.min.js', array());
+        wp_register_script('lib/algoliaBundle.min.js', plugin_dir_url(__FILE__) . 'lib/algoliaBundle.min.js', array());
         wp_register_script('angular.min.js', plugin_dir_url(__FILE__) . 'admin/scripts/angular.min.js', array());
-        wp_register_script('admin.js', plugin_dir_url(__FILE__) . 'admin/scripts/admin.js', array('lib/bundle.min.js', 'angular.min.js'));
+        wp_register_script('admin.js', plugin_dir_url(__FILE__) . 'admin/scripts/admin.js', array('lib/algoliaBundle.min.js', 'angular.min.js'));
         wp_localize_script('admin.js', 'algoliaAdminSettings', $algoliaAdminSettings);
         wp_enqueue_script('admin.js');
     }
