@@ -96,7 +96,7 @@ class AlgoliaPlugin
         echo <<<EOT
 <meta http-equiv="X-UA-Compatible" content="IE=Edge">
 <!--[if lte IE 9]>
-  <script src="https://cdn.polyfill.io/v1/polyfill.min.js"></script>
+  <script src="https://cdn.polyfill.io/v2/polyfill.min.js"></script>
 <![endif]-->
 EOT;
     }
