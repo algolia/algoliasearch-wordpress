@@ -383,9 +383,8 @@ if (function_exists('curl_version') == false)
             algoliaBundle.$.ajax({
                 method: "POST",
                 url: '<?php echo site_url(); ?>' + '/wp-admin/admin-post.php',
-                data: { action: "update_settings", data: JSON.stringify(newSettings) },
+                data: { action: "update_settings", data: JSON.stringify(newSettings), algolia_submit_admin_form: "<?php echo wp_create_nonce('algolia_submit_admin_form'); ?>" },
                 success: function (result) {
-                    console.log('ok');
                     window.location.reload();
                 }
             });

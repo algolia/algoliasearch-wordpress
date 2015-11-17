@@ -159,6 +159,13 @@ class AlgoliaPlugin
 
     public function admin_post_update_settings()
     {
+        // CSRF protection
+        if (isset($_POST['algolia_submit_admin_form']) === false || wp_verify_nonce($_POST['algolia_submit_admin_form'], 'algolia_submit_admin_form') === false)
+        {
+            return;
+        }
+
+
         if (isset($_POST['submit']) && $_POST['submit'] == 'Import configuration')
         {
             if (isset($_FILES['import']) && isset($_FILES['import']['tmp_name']) && is_file($_FILES['import']['tmp_name']))

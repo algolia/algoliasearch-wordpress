@@ -24,14 +24,14 @@ algoliaBundle.$(document).ready(function($) {
     });
 
     $('.do-submit').click(function (e) {
-        var url = $(this).attr('data-form');
+        var url = algoliaAdminSettings.site_url + "/wp-admin/admin-post.php";
         var value = $(this).attr('data-value');
 
         $(this).parent().append('<iframe id="createdIframe"></iframe>');
 
         $(this).parent().find('#createdIframe').hide();
 
-        var iframedoc = $(this).parent().find('#createdIframe').contents().find('html').html('<form id="to-submit" action="' + url + '" method="post" style="display:none;">' +
+        $(this).parent().find('#createdIframe').contents().find('html').html('<form id="to-submit" action="' + url + '" method="post" style="display:none;">' +
                 '<input type="text" name="action" value="' + value+ '" />' +
             '</form>'
         );

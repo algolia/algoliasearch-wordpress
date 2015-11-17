@@ -107,7 +107,7 @@
                 <h3>Administration</h3>
                 <p class="help-block">Use this section to export, import or reset your configuration.</p>
                 <div class="content-item" style="float: left; margin-right: 30px;">
-                    <div data-form="<?php echo site_url(); ?>/wp-admin/admin-post.php" data-value="export_config" name="submit" id="export" class="do-submit button button-primary">Export configuration</div>
+                    <div data-value="export_config" name="submit" id="export" class="do-submit button button-primary">Export configuration</div>
                 </div>
                 <h4 style="float: left; margin-right: 30px;">or</h4>
                 <div class="content-item" style="float: left; margin-right: 30px;">
