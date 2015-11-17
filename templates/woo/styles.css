@@ -43,14 +43,14 @@
 **
 ******************/
 
-.twitter-typeahead
+.algolia-autocomplete
 {
     width: 100%;
     color: #000000;
     font-family: "Raleway", "Helvetica Neue", Verdana, Arial, sans-serif;
 }
 
-.twitter-typeahead .tt-input, .twitter-typeahead .tt-hint
+.algolia-autocomplete .aa-input, .algolia-autocomplete .aa-hint
 {
     width: 100%;
     margin: 0px;
@@ -58,12 +58,12 @@
     outline: none;
 }
 
-.twitter-typeahead .tt-input:focus
+.algolia-autocomplete .aa-input:focus
 {
     border: 2px solid #0097cf;
 }
 
-.twitter-typeahead .category
+.algolia-autocomplete .category
 {
     background-color: #F5F5F5;
     text-align: center;
@@ -71,24 +71,24 @@
     padding: 5px 0;
 }
 
-.twitter-typeahead .tt-hint
+.algolia-autocomplete .aa-hint
 {
     color: #999;
 }
 
-.twitter-typeahead .thumb {
+.algolia-autocomplete .thumb {
     float: left;
 }
 
-.twitter-typeahead .thumb img {
+.algolia-autocomplete .thumb img {
     width: 50px;
 }
 
-.twitter-typeahead .info {
+.algolia-autocomplete .info {
     margin-left: 60px;
 }
 
-.twitter-typeahead .tt-dropdown-menu
+.algolia-autocomplete .aa-dropdown-menu
 {
     width: 100%;
     min-width: 210px;
@@ -97,7 +97,7 @@
     border-bottom: solid 1px #DDDDDD;
 }
 
-.twitter-typeahead .tt-dropdown-menu .tt-suggestion
+.algolia-autocomplete .aa-dropdown-menu .aa-suggestion
 {
     text-align: left;
     padding: 10px 10px;
@@ -105,38 +105,38 @@
     border-right: solid 1px #DDDDDD;
 }
 
-.twitter-typeahead .tt-dropdown-menu .tt-suggestion:not(:last-child)
+.algolia-autocomplete .aa-dropdown-menu .aa-suggestion:not(:last-child)
 {
     border-bottom: solid 1px #F5F5F5;
 }
 
-.twitter-typeahead .tt-dropdown-menu .tt-suggestion.tt-cursor
+.algolia-autocomplete .aa-dropdown-menu .aa-suggestion.aa-cursor
 {
     background-color: #E5E5E5;
     cursor: pointer;
 }
 
-.twitter-typeahead .tt-dropdown-menu .tt-suggestion p
+.algolia-autocomplete .aa-dropdown-menu .aa-suggestion p
 {
     margin: 0;
 }
-.twitter-typeahead .tt-dropdown-menu .tt-suggestion a
+.algolia-autocomplete .aa-dropdown-menu .aa-suggestion a
 {
     color: #000;
     text-decoration: none;
 }
-.twitter-typeahead .tt-dropdown-menu .tt-suggestion em
+.algolia-autocomplete .aa-dropdown-menu .aa-suggestion em
 {
     font-style: normal;
     font-weight: bold;
 }
 
-.twitter-typeahead .footer:not(:last-child)
+.algolia-autocomplete .footer:not(:last-child)
 {
     display: none;
 }
 
-.twitter-typeahead .footer
+.algolia-autocomplete .footer
 {
     font-size: 10px;
     text-align: right;

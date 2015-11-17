@@ -5,10 +5,10 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "update-bundle": "./scripts/build.sh"
+    "build": "./scripts/build.sh"
   },
   "dependencies": {
-    "algoliasearch-extensions-bundle": "1.4.0"
+    "algoliasearch-extensions-bundle": "^2.2.4"
   },
   "author": "Algolia <support@algolia.com>",
   "license": "ISC"

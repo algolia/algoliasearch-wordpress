@@ -66,9 +66,9 @@ algoliaBundle.$(document).ready(function ($) {
 
         $(algoliaConfig.search_input_selector).each(function (i) {
 
-            $(this).typeahead({hint: false}, hogan_objs);
+            $(this).autocomplete({hint: false}, hogan_objs);
 
-            $(this).on('typeahead:selected', function (e, item) {
+            $(this).on('autocomplete:selected', function (e, item) {
                 autocomplete = false;
                 instant = false;
                 window.location.href = item.permalink;
@@ -91,14 +91,14 @@ algoliaBundle.$(document).ready(function ($) {
         $(algoliaConfig.instant_jquery_selector).html(wrapperTemplate.render({ second_bar: (algoliaConfig.autocompleteTypes.length > 0) })).show();
 
         /** Initialise instant search **/
-        var search = instantsearch({
+        var search = algoliaBundle.instantsearch({
             appId: algoliaConfig.app_id,
             apiKey: algoliaConfig.search_key,
             indexName: algoliaConfig.index_prefix + 'all'
         });
         /** Search bar **/
         search.addWidget(
-            instantsearch.widgets.searchBox({
+            algoliaBundle.instantsearch.widgets.searchBox({
                 container: instant_selector,
                 placeholder: 'Search for products'
             })
@@ -106,7 +106,7 @@ algoliaBundle.$(document).ready(function ($) {
         /** Stats **/
         var instantStatsTemplate = $('#instant-stats-template').html();
         search.addWidget(
-            instantsearch.widgets.stats({
+            algoliaBundle.instantsearch.widgets.stats({
                 container: '#algolia-stats',
                 template: instantStatsTemplate
             })
@@ -119,7 +119,7 @@ algoliaBundle.$(document).ready(function ($) {
         sorting_indices.unshift({name: algoliaConfig.index_prefix + 'all', label: 'Relevance'});
 
         search.addWidget(
-            instantsearch.widgets.indexSelector({
+            algoliaBundle.instantsearch.widgets.indexSelector({
                 container: '#algolia-sorts',
                 indices: sorting_indices,
                 cssClass: 'form-control'
@@ -128,7 +128,7 @@ algoliaBundle.$(document).ready(function ($) {
         /** Hits **/
         var instantHitTemplate = $('#instant-hit-template').html();
         search.addWidget(
-            instantsearch.widgets.hits({
+            algoliaBundle.instantsearch.widgets.hits({
                 container: '#instant-search-results-container',
                 templates: {
                     empty: '<div class="no-results">No results found matching "<strong>{{query}}</strong>". <span class="button clear-button">Clear query and filters</span> </div>',
@@ -158,7 +158,7 @@ algoliaBundle.$(document).ready(function ($) {
 
         /** Pagination **/
         search.addWidget(
-            instantsearch.widgets.pagination({
+            algoliaBundle.instantsearch.widgets.pagination({
                 container: '#instant-search-pagination-container',
                 cssClass: 'algolia-pagination',
                 showFirstLast: false,
@@ -172,7 +172,7 @@ algoliaBundle.$(document).ready(function ($) {
         );
         /** Url sync **/
         search.addWidget(
-            instantsearch.widgets.urlSync({
+            algoliaBundle.instantsearch.widgets.urlSync({
                 useHash: true,
                 threshold: 5000,
                 trackedParameters: ['query', 'page', 'attribute:*', 'index']
