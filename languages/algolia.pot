@@ -5,7 +5,7 @@ msgstr ""
 "Project-Id-Version: Algolia Realtime Search\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: Tue Jan 12 2016 15:02:12 GMT-0500 (EST)\n"
-"POT-Revision-Date: Tue Jan 12 2016 15:09:21 GMT-0500 (EST)\n"
+"POT-Revision-Date: Tue Jan 12 2016 15:28:39 GMT-0500 (EST)\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: \n"
 "Language-Team: \n"
@@ -45,36 +45,40 @@ msgstr ""
 msgid "http://www.algolia.com"
 msgstr ""
 
-#: ../templates/default/templates.php:56
+#: ../templates/woo/templates.php:56 ../templates/default/templates.php:56
 msgid "Search :"
 msgstr ""
 
-#: ../templates/default/templates.php:60
+#: ../templates/woo/templates.php:60 ../templates/default/templates.php:60
 msgid "Search for products"
 msgstr ""
 
-#: ../templates/default/templates.php:84
+#: ../templates/woo/templates.php:85 ../templates/default/templates.php:84
 msgid ""
 "{{nbHits}} result{{^nbHits_one}}s{{/nbHits_one}} found {{#query}}matching "
 "\"<strong>{{query}}</strong>\" {{/query}}in {{processingTimeMS}} ms"
 msgstr ""
 
-#: ../templates/default/templates.php:88
+#: ../templates/woo/templates.php:89 ../templates/default/templates.php:88
 msgid "Order by"
 msgstr ""
 
-#: ../templates/default/templates.php:90
+#: ../templates/woo/templates.php:91 ../templates/default/templates.php:90
 msgid "relevance"
+msgstr ""
+
+#: ../templates/woo/templates.php:126
+msgid "{{_price}}€"
+msgstr ""
+
+#: ../templates/woo/templates.php:151 ../templates/default/templates.php:131
+msgid "No results found matching \"<strong>{{query}}</strong>\"."
+msgstr ""
+
+#: ../templates/woo/templates.php:151 ../templates/default/templates.php:131
+msgid "Clear query and filters"
 msgstr ""
 
 #: ../templates/default/templates.php:120
 msgid "Continue reading…"
-msgstr ""
-
-#: ../templates/default/templates.php:131
-msgid "No results found matching \"<strong>{{query}}</strong>\"."
-msgstr ""
-
-#: ../templates/default/templates.php:131
-msgid "Clear query and filters"
 msgstr ""
