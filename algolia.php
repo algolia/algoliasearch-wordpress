@@ -8,9 +8,19 @@
   Author: Algolia
   Author URI: http://www.algolia.com
   Copyright: Algolia
- */
+  Text Domain: algolia
+  Domain Path: /languages/ 
+*/
 
 defined( 'ABSPATH' ) or die( 'Not Allowed' );
+
+/**
+ * Load text domain for language switching
+ */
+function algolia_language_setup() {
+  load_plugin_textdomain( 'algolia', false, plugin_basename( dirname( __FILE__ ) ) . '/languages' );
+}
+add_action( 'after_setup_theme', 'algolia_language_setup' );
 
 require_once(plugin_dir_path(__FILE__).'/lib/algolia/algoliasearch.php');
 require_once(plugin_dir_path(__FILE__).'/lib/dom/simple_html_dom.php');
