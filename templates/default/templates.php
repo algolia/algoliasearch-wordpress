@@ -53,11 +53,11 @@ $facets = $facets['facets'];
             <div id="instant-search-bar-container">
                 <div id="instant-search-box">
                     <label for="instant-search-bar">
-                        Search :
+                        <?php _e('Search :', 'algolia'); ?>
                     </label>
 
                     <?php $s = isset($_GET['s']) ? $_GET['s'] : "" ?>
-                    <input value="<?php echo $s; ?>" placeholder="Search for products" id="instant-search-bar" type="text" autocomplete="off" spellcheck="false" autocorrect="off" autocapitalize="off" />
+                    <input value="<?php echo $s; ?>" placeholder="<?php _e('Search for products', 'algolia'); ?>" id="instant-search-bar" type="text" autocomplete="off" spellcheck="false" autocorrect="off" autocapitalize="off" />
 
                     <svg xmlns="http://www.w3.org/2000/svg" class="magnifying-glass" width="24" height="24" viewBox="0 0 128 128">
                         <g transform="scale(4)">
@@ -81,13 +81,13 @@ $facets = $facets['facets'];
         {{#hits.length}}
         <div class="infos">
             <div style="float: left">
-                {{nbHits}} result{{^nbHits_one}}s{{/nbHits_one}} found {{#query}}matching "<strong>{{query}}</strong>" {{/query}}in {{processingTimeMS}} ms
+                <?php _e('{{nbHits}} result{{^nbHits_one}}s{{/nbHits_one}} found {{#query}}matching "<strong>{{query}}</strong>" {{/query}}in {{processingTimeMS}} ms', 'algolia'); ?>
             </div>
             {{#sorting_indices.length}}
             <div style="float: right; margin-right: 10px;">
-                Order by
+                <?php _e('Order by', 'algolia'); ?>
                 <select id="index_to_use">
-                    <option {{#sortSelected}}{{relevance_index_name}}{{/sortSelected}} value="{{relevance_index_name}}">relevance</option>
+                    <option {{#sortSelected}}{{relevance_index_name}}{{/sortSelected}} value="{{relevance_index_name}}"><?php _e('relevance', 'algolia'); ?></option>
                     {{#sorting_indices}}
                     <option {{#sortSelected}}{{index_name}}{{/sortSelected}} value="{{index_name}}">{{label}}</option>
                     {{/sorting_indices}}
@@ -117,7 +117,7 @@ $facets = $facets['facets'];
                         <div class="result-excerpt">
                             <div class="content">{{{ _highlightResult.content.value }}}</div>
                             <div>
-                                <a href="{{permalink}}" class="more-link">Continue reading…</a>
+                                <a href="{{permalink}}" class="more-link"><?php _e('Continue reading…', 'algolia'); ?></a>
                             </div>
                         </div>
                     </div>
@@ -128,7 +128,7 @@ $facets = $facets['facets'];
         {{/hits}}
         {{^hits.length}}
         <div class="infos">
-            No results found matching "<strong>{{query}}</strong>".  <span class="button clear-button">Clear query and filters</span>
+            <?php _e('No results found matching "<strong>{{query}}</strong>".', 'algolia'); ?>  <span class="button clear-button"><?php _e('Clear query and filters', 'algolia'); ?></span>
         </div>
         {{/hits.length}}
     </div>
