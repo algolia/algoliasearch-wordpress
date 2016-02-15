@@ -180,7 +180,7 @@ EOT;
 
         if (isset($_POST['submit']) && $_POST['submit'] == 'Import configuration')
         {
-            if (isset($_FILES['import']) && isset($_FILES['import']['tmp_name']) && is_file($_FILES['import']['tmp_name']))
+            if (isset($_FILES['import']) && isset($_FILES['import']['tmp_name']) && is_uploaded_file($_FILES['import']['tmp_name'])) && is_file($_FILES['import']['tmp_name']))
             {
                 $content = file_get_contents($_FILES['import']['tmp_name']);
 
