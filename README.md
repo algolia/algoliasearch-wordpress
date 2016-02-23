@@ -1,3 +1,7 @@
+# WARNING
+
+This extension is currently in **beta**. You can download it and play with it as much as you want, but we would only recommend its usage to experienced developers
+
 # Algolia Realtime Search Wordpress Plugin
 
 [Algolia Search](http://www.algolia.com) is a hosted full-text, numerical, and faceted search engine capable of delivering realtime results from the first keystroke.
