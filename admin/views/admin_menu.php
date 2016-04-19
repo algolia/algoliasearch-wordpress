@@ -54,7 +54,7 @@ $attributes = array();
 $attributes_additionals_sections = array();
 $typesForAttributes = $types;
 
-if (count(array_filter($types, function ($item) { return $item->name = 'product';})))
+if (count(array_filter($types, function ($item) { return $item->name === 'product';})))
 {
     $product_variation = new stdClass();
     $product_variation->name = 'product_variation';
