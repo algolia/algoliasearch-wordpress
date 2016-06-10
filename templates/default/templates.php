@@ -83,7 +83,7 @@ $facets = $facets['facets'];
                                 <div class="pull-right" id="algolia-sorts"></div>
                                 <div class="clearfix"></div>
                             </div>
-                            <div id="instant-search-results-container"
+                            <div id="instant-search-results-container"></div>
                         </div>
                     </div>
                     <div class="clearfix"></div>
