@@ -96,7 +96,7 @@ foreach ($taxonomies as $taxonomy)
 
 $attributes_additionals_sections = $attributes;
 
-$extras = array('post_title', 'post_content', 'display_name',
+$extras = array('post_title', 'title', 'post_content', 'display_name',
     'post_author', 'post_date', 'post_excerpt', 'post_name', 'post_modified', 'post_parent', 'menu_order', 'post_type',
     'first_name', 'last_name', 'user_login', 'permalink', 'featureImage');
 
