@@ -1,0 +1,42 @@
+/**
+ * All of the CSS for your admin-specific functionality should be
+ * included in this file.
+ */
+.form-table .table-autocomplete th {
+    padding: 8px 10px !important;
+
+}
+
+.form-table .table-autocomplete {
+    width: auto;
+}
+
+
+/* Override admin menu styles for the algolia icon */
+@font-face {
+    font-family: 'algolia';
+    src:    url('../fonts/algolia.eot?nqrd9q');
+    src:    url('../fonts/algolia.eot?nqrd9q#iefix') format('embedded-opentype'),
+    url('../fonts/algolia.ttf?nqrd9q') format('truetype'),
+    url('../fonts/algolia.woff?nqrd9q') format('woff'),
+    url('../fonts/algolia.svg?nqrd9q#algolia') format('svg');
+    font-weight: normal;
+    font-style: normal;
+}
+
+#adminmenu #toplevel_page_algolia .menu-icon-generic div.wp-menu-image:before,
+#adminmenu #toplevel_page_algolia-account-settings .menu-icon-generic div.wp-menu-image:before {
+    font-family: algolia !important;
+    content: "\e900";
+}
+
+/* Logs page */
+.log-details {
+    background-color: #32373c;
+    color: #FFF;
+    padding: 30px;
+    border-radius: 3px;
+    display: none;
+}
+
+

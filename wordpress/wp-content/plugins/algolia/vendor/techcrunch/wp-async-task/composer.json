@@ -1,0 +1,37 @@
+{
+	"name"             : "techcrunch/wp-async-task",
+	"description"      : "Run asynchronous tasks for long-running operations in WordPress",
+	"minimum-stability": "dev",
+	"license"          : "MIT",
+	"type"             : "wordpress-plugin",
+	"authors"          : [
+		{
+			"name": "Alex Khadiwala",
+			"role": "developer"
+		},
+		{
+			"name": "Nicolas Vincent",
+			"role": "developer"
+		},
+		{
+			"name" : "Eric Mann",
+			"email": "eric.mann@10up.com",
+			"role" : "developer"
+		},
+		{
+			"name" : "John P. Bloch",
+			"email": "john.bloch@10up.com",
+			"role" : "developer"
+		}
+	],
+	"require-dev"      : {
+		"10up/wp_mock"   : "dev-master",
+		"phpunit/phpunit": "*@stable"
+	},
+	"autoload"         : {
+		"classmap": ["wp-async-task.php"]
+	},
+	"autoload-dev"     : {
+		"classmap": ["tests/phpunit/mocks/"]
+	}
+}

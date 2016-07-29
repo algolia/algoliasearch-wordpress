@@ -1,0 +1,45 @@
+.heading-anchor {
+  height: 20px;
+  width: 20px;
+  display: block;
+  padding-right: 6px;
+  padding-left: 30px;
+  margin-left: -30px;
+  cursor: pointer;
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  text-decoration: none;
+  height: 50px;
+  background: transparent;
+  color: $secondary-color !important;
+  vertical-align: bottom;
+  bottom: 0;
+
+}
+h1,h2,h3,h4,h5,h6 {
+  position: relative;
+}
+
+h1:hover .heading-anchor span:before,
+h2:hover .heading-anchor span:before,
+h3:hover .heading-anchor span:before,
+h4:hover .heading-anchor span:before,
+h5:hover .heading-anchor span:before,
+h6:hover .heading-anchor span:before {
+  content: "#";
+  position: absolute;
+  left: 0px;
+  top: 0px;
+  bottom: 0px;
+}
+
+.columns h2:before {
+  content: '';
+  display: block;
+  width: 100%;
+  height: 60px;
+  position: relative;
+  padding-top: 60px;
+  margin-top: -60px;
+}

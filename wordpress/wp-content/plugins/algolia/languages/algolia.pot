@@ -1,0 +1,384 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR Algolia
+# This file is distributed under the same license as the algolia package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: algolia\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2016-07-29 16:47+0200\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: admin/class-algolia-admin-page-autocomplete.php:54
+#: admin/class-algolia-admin-page-autocomplete.php:55
+msgid "Autocomplete"
+msgstr ""
+
+#: admin/class-algolia-admin-page-autocomplete.php:65
+msgid "Algolia Autocomplete"
+msgstr ""
+
+#: admin/class-algolia-admin-page-autocomplete.php:72
+msgid "Enable autocomplete"
+msgstr ""
+
+#: admin/class-algolia-admin-page-autocomplete.php:80
+msgid "Configuration"
+msgstr ""
+
+#: admin/class-algolia-admin-page-autocomplete.php:110
+msgid "Autocomplete configuration has been saved."
+msgstr ""
+
+#: admin/class-algolia-admin-page-autocomplete.php:145
+msgid ""
+"The autocomplete options adds a find-as-you-type dropdown menu to your "
+"search bar(s)."
+msgstr ""
+
+#: admin/class-algolia-admin-page-indexing.php:102
+msgid "All indices were queued for re-indexing."
+msgstr ""
+
+#: admin/class-algolia-admin-page-indexing.php:109
+#: admin/class-algolia-admin-page-indexing.php:110
+msgid "Indexing"
+msgstr ""
+
+#: admin/class-algolia-admin-page-indexing.php:120
+msgid "Content Types"
+msgstr ""
+
+#: admin/class-algolia-admin-page-indexing.php:127
+msgid "Index name prefix"
+msgstr ""
+
+#: admin/class-algolia-admin-page-indexing.php:135
+msgid "Indices"
+msgstr ""
+
+#: admin/class-algolia-admin-page-indexing.php:165
+msgid ""
+"Each Content type is pushed to its own Algolia index. Configure here the "
+"list of indices you want to use."
+msgstr ""
+
+#: admin/class-algolia-admin-page-indexing.php:176
+msgid "This prefix will be added to your index names."
+msgstr ""
+
+#: admin/class-algolia-admin-page-indexing.php:213
+msgid ""
+"Indices prefix can only contain alphanumeric characters and underscores."
+msgstr ""
+
+#: admin/class-algolia-admin-page-indexing.php:269
+#, php-format
+msgid "Queued re-indexing of: %s."
+msgstr ""
+
+#: admin/class-algolia-admin-page-indexing.php:272
+#, php-format
+msgid "Queued de-indexing of: %s."
+msgstr ""
+
+#: admin/class-algolia-admin-page-indexing.php:303
+msgid "Your indices are being moved to reflect the new indices prefix."
+msgstr ""
+
+#: admin/class-algolia-admin-page-indexing.php:335
+msgid "Configure here the content types you want to push to Algolia."
+msgstr ""
+
+#: admin/class-algolia-admin-page-indexing.php:336
+msgid ""
+"Changing configuration will automatically schedule a new indexation task."
+msgstr ""
+
+#: admin/class-algolia-admin-page-logs.php:69
+msgid "The logs have been cleared."
+msgstr ""
+
+#: admin/class-algolia-admin-page-logs.php:75
+msgid "Logging has been disabled."
+msgstr ""
+
+#: admin/class-algolia-admin-page-logs.php:81
+msgid "Logging has been enabled."
+msgstr ""
+
+#: admin/class-algolia-admin-page-logs.php:88
+msgid ""
+"Logging is currently turned off which means you are still able to navigate "
+"through existing entries but no additional ones will be added."
+msgstr ""
+
+#: admin/class-algolia-admin-page-logs.php:95
+#: admin/class-algolia-admin-page-logs.php:96
+msgid "Logs"
+msgstr ""
+
+#: admin/class-algolia-admin-page-native-search.php:44
+msgid "Algolia Search"
+msgstr ""
+
+#: admin/class-algolia-admin-page-native-search.php:53
+#: admin/class-algolia-admin-page-native-search.php:54
+#: admin/class-algolia-admin-page-native-search.php:64
+msgid "Native Search"
+msgstr ""
+
+#: admin/class-algolia-admin-page-native-search.php:71
+msgid "Override native search"
+msgstr ""
+
+#: admin/class-algolia-admin-page-native-search.php:79
+msgid "Search on"
+msgstr ""
+
+#: admin/class-algolia-admin-page-native-search.php:119
+msgid ""
+"Configure the index used to replace the native search.<br />Wordpress uses "
+"\"Searchable posts\" by default."
+msgstr ""
+
+#: admin/class-algolia-admin-page-native-search.php:133
+msgid "WordPress search is now based on Algolia!"
+msgstr ""
+
+#: admin/class-algolia-admin-page-native-search.php:140
+msgid ""
+"You chose to keep the WordPress native search instead of Algolia. If you are "
+"using the autocomplete feature of the plugin we highly recommend you turn "
+"Algolia search on instead of the WordPress native search."
+msgstr ""
+
+#: admin/class-algolia-admin-page-native-search.php:154
+msgid "The index you have chosen does not seem to be synced anymore."
+msgstr ""
+
+#: admin/class-algolia-admin-page-native-search.php:181
+msgid ""
+"By enabling this plugin to override the native WordPress search, your search "
+"results will be powered by Algolia's typo-tolerant & relevant search "
+"algorithms."
+msgstr ""
+
+#: admin/class-algolia-admin-page-settings.php:51
+#: admin/class-algolia-admin-page-settings.php:72
+#: admin/class-algolia-admin-page-settings.php:73
+msgid "Settings"
+msgstr ""
+
+#: admin/class-algolia-admin-page-settings.php:61
+msgid "Algolia search"
+msgstr ""
+
+#: admin/class-algolia-admin-page-settings.php:83
+msgid "Algolia account"
+msgstr ""
+
+#: admin/class-algolia-admin-page-settings.php:90
+msgid "Application ID"
+msgstr ""
+
+#: admin/class-algolia-admin-page-settings.php:98
+msgid "Search-only API key"
+msgstr ""
+
+#: admin/class-algolia-admin-page-settings.php:106
+msgid "Admin API key"
+msgstr ""
+
+#: admin/class-algolia-admin-page-settings.php:120
+msgid "Your Algolia Application ID."
+msgstr ""
+
+#: admin/class-algolia-admin-page-settings.php:126
+msgid "Your Algolia Search-only API key (public)."
+msgstr ""
+
+#: admin/class-algolia-admin-page-settings.php:132
+msgid "Your Algolia ADMIN API key (kept private)."
+msgstr ""
+
+#: admin/class-algolia-admin-page-settings.php:142
+msgid "Application ID should not be empty."
+msgstr ""
+
+#: admin/class-algolia-admin-page-settings.php:157
+msgid "Search-only API key should not be empty."
+msgstr ""
+
+#: admin/class-algolia-admin-page-settings.php:172
+msgid "API key should not be empty"
+msgstr ""
+
+#: admin/class-algolia-admin-page-settings.php:195
+msgid ""
+"We were unable to authenticate you against the Algolia servers with the "
+"provided information. Please ensure that you used an the Admin API key and a "
+"valid Application ID."
+msgstr ""
+
+#: admin/class-algolia-admin-page-settings.php:206
+msgid ""
+"It looks like your search API key is wrong. Ensure that the key you entered "
+"has only the search capability and nothing else. Also ensure that the key "
+"has no limited time validity."
+msgstr ""
+
+#: admin/class-algolia-admin-page-settings.php:215
+msgid ""
+"We succesfully managed to connect to the Algolia servers with the provided "
+"information. Your search API key has also been checked and is OK."
+msgstr ""
+
+#: admin/class-algolia-admin-page-settings.php:236
+msgid ""
+"Configure here your Algolia credentials. You can find them in the \"API Keys"
+"\" section of your Algolia dashboard."
+msgstr ""
+
+#: admin/class-algolia-admin-page-settings.php:237
+msgid ""
+"Once you provide your Algolia Application ID and API key, this plugin will "
+"be able to securely communicate with Algolia servers."
+msgstr ""
+
+#: admin/class-algolia-admin-page-settings.php:237
+msgid ""
+"We ensure your information is correct by testing them against the Algolia "
+"servers upon save."
+msgstr ""
+
+#: admin/class-algolia-admin-page-settings.php:238
+#, php-format
+msgid ""
+"No Algolia account yet? <a href=\"%s\">Follow this link</a> to create one "
+"for free in a couple of minutes!."
+msgstr ""
+
+#: admin/class-algolia-admin.php:49
+msgid "Algolia Search requires the \"mbstring\" PHP extension to be enabled."
+msgstr ""
+
+#: admin/class-algolia-admin.php:55
+msgid "Algolia Search requires the \"cURL\" PHP extension to be enabled."
+msgstr ""
+
+#: admin/class-algolia-admin.php:81
+msgid ""
+"wp_remote_post() failed, indexing won't work. Checkout the logs for more "
+"details."
+msgstr ""
+
+#. Silence is golden
+#: admin/partials/page-autocomplete-config.php:2
+msgid ""
+"You have no indexed content yet. Please index some content on the `Indexing` "
+"page."
+msgstr ""
+
+#: admin/partials/page-autocomplete-config.php:8
+msgid "Enable"
+msgstr ""
+
+#: admin/partials/page-autocomplete-config.php:9
+msgid "Index"
+msgstr ""
+
+#: admin/partials/page-autocomplete-config.php:10
+msgid "Max. Suggestions"
+msgstr ""
+
+#: admin/partials/page-autocomplete-config.php:11
+msgid "Position"
+msgstr ""
+
+#: admin/partials/page-autocomplete-config.php:34
+msgid "Configure here the indices you want to display in the dropdown menu."
+msgstr ""
+
+#: admin/partials/page-autocomplete-config.php:36
+msgid ""
+"Use the `Max. Suggestions` column to configure the number of entries that "
+"will be displayed by section."
+msgstr ""
+
+#: admin/partials/page-autocomplete-config.php:38
+msgid ""
+"Use the `Position` column to reflect the order of the sections in the "
+"dropdown menu."
+msgstr ""
+
+#: admin/partials/page-indexing.php:4
+msgid "Re-index everything"
+msgstr ""
+
+#: admin/partials/page-indexing.php:9
+msgid "Task Queue pending tasks"
+msgstr ""
+
+#: admin/partials/page-indexing.php:13
+msgid "Task Queue status"
+msgstr ""
+
+#: admin/partials/page-indexing.php:15
+msgid "Running"
+msgstr ""
+
+#: admin/partials/page-indexing.php:18
+msgid "Idle"
+msgstr ""
+
+#: admin/partials/page-indexing.php:20
+msgid "Process queue"
+msgstr ""
+
+#: admin/partials/page-indexing.php:26
+msgid "Current task"
+msgstr ""
+
+#: algolia.php:24
+#, php-format
+msgid "Algolia plugin requires PHP 5.3 or higher. You’re still on %s."
+msgstr ""
+
+#: algolia.php:30
+#, php-format
+msgid ""
+"Algolia plugin requires at least WordPress in version 3.7.14., You are on %s"
+msgstr ""
+
+#: includes/class-algolia-plugin.php:68
+msgid "Algolia Logs"
+msgstr ""
+
+#: includes/class-algolia-plugin.php:69
+msgid "Algolia Log"
+msgstr ""
+
+#: includes/class-algolia-plugin.php:82
+msgid "Algolia Tasks"
+msgstr ""
+
+#: includes/class-algolia-plugin.php:83
+msgid "Algolia Task"
+msgstr ""
+
+#: includes/indices/class-algolia-searchable-posts-index.php:47
+msgid "Searchable posts"
+msgstr ""
+
+#: includes/indices/class-algolia-users-index.php:15
+msgid "Users"
+msgstr ""

@@ -1,0 +1,261 @@
+@charset 'utf-8';
+
+@import 'settings/settings';
+@import 'foundation';
+
+@include foundation-global-styles;
+@include foundation-grid;
+// @include foundation-flex-grid;
+@include foundation-typography;
+@include foundation-button;
+// @include foundation-forms;
+// @include foundation-range-input;
+// @include foundation-accordion;
+// @include foundation-accordion-menu;
+// @include foundation-badge;
+// @include foundation-breadcrumbs;
+// @include foundation-button-group;
+// @include foundation-callout;
+// @include foundation-close-button;
+@include foundation-menu;
+// @include foundation-menu-icon;
+// @include foundation-drilldown-menu;
+// @include foundation-dropdown;
+// @include foundation-dropdown-menu;
+// @include foundation-flex-video;
+// @include foundation-label;
+// @include foundation-media-object;
+// @include foundation-off-canvas;
+// @include foundation-orbit;
+// @include foundation-pagination;
+// @include foundation-progress-bar;
+// @include foundation-progress-element;
+// @include foundation-meter-element;
+// @include foundation-slider;
+@include foundation-sticky;
+// @include foundation-reveal;
+// @include foundation-switch;
+ @include foundation-table;
+// @include foundation-tabs;
+@include foundation-thumbnail;
+// @include foundation-title-bar;
+// @include foundation-tooltip;
+// @include foundation-top-bar;
+@include foundation-visibility-classes;
+// @include foundation-float-classes;
+// @include foundation-flex-classes;
+//
+// @include motion-ui-transitions;
+// @include motion-ui-animations;
+
+
+// Custom components.
+@import "components/anchor";
+@import "components/header";
+@import "components/footer";
+
+
+/* General Rules */
+body {
+ padding-top: 50px;
+ background: #FAFAFA;
+}
+
+.hljs {
+ border: none;
+ border-radius: 3px;
+ padding: 1rem;
+ background-color: #FFF;
+ border: 1px solid #EEF2F4;
+}
+
+code {
+ color: $primary-color;
+ border-radius: 3px;
+}
+
+.expanded.row .row {
+ @include grid-row-nest;
+}
+
+pre {
+ margin-bottom: 1.5rem;
+}
+
+#toc .active {
+ background: $primary-color;
+ color: $white;
+}
+
+hr {
+ max-width: none;
+ display: block;
+ height: 1px;
+ border: 0;
+ border-top: 1px solid #EEF2F4;
+
+}
+
+/* Table */
+table thead tr, #content table tbody tr {
+ background-color: #FFF;
+}
+
+#content table tbody tr {
+ border-bottom: 1px solid #EEF2F4;
+}
+
+/* Responsive adjustments */
+@include breakpoint(small down) {
+ h1, h2, h3, h4, h5, h6 {
+  font-weight: bold;
+ }
+ #main-nav {
+  display: none;
+ }
+ #top-section {
+  text-align: center;
+ }
+}
+
+/* Main nav */
+#main-nav .plugin-version {
+ @include menu-text;
+ font-weight: normal;
+}
+
+#main-nav {
+ li a {
+  border-left: 2px solid #EEF2F4;
+  background: none;
+  color: #4a4a4c;
+  transition: all .3s;
+  &:hover {
+   color: inherit;
+   font-weight: bold;
+   border-color: $secondary-color;
+  }
+ }
+ li.active a {
+  color: inherit;
+  font-weight: bold;
+  border-color: $secondary-color;
+ }
+
+
+ .menu-text {
+
+  margin-top: 2rem;
+  padding-left: 0;
+  font-size: 1.2rem;
+  margin-bottom: .5rem;
+  &:first-child {
+   margin-top: 0;
+  }
+ }
+
+}
+
+/* Header */
+#top-section {
+ padding: 1.3rem 0 0.2rem;
+ background-color: #2b2c31;
+ color: $white;
+ margin-bottom: rem-calc(50px);
+ background: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAGQAAABkAgMAAAANjH3HAAAACVBMVEUaGhohISElJSUh9lebAAAB20lEQVRIx4XWuZXDMAwE0C0SAQtggIIYoAAEU+aKOHhYojTrYP2+QfOW/5QIJOih/q8HwF/pb3EX+UPIveYcQGgEHiu9hI+ihEc5Jz5KBIlRRRaJ1JtoSAl5Hw96hLB1/up1tnIXOck5jZQy+3iU2hAOKSH1JvwxHsp+5TLF5MOl1/MQXsVs1miXc+KDbYydyMeUgpPQreZ7fWidbNhkXNJSeAhc6qHmHD8AYovunYyEACWEbyIhNeB9fRrH3hFi0bGPLuEW7xCNaohw1vAlS805nfsrTspclB/hVdoqusg53eH7FWot+wjYpOViX8KbFFKTwlnzvj65P9H/vD0/hibYBGhPwlPO8TmxRsaxsNnrUmUXpNhirlJMPr6Hqq9k5Xn/8iYQHYIuQsWFC6Z87IOxLxHphSY4SpuiU87xJnJr5axfeRd+lnMExXpEWPpuZ1v7qZdNBOjiHzDREHX5fs5Zz9p6X0vVKbKKchlSl5rv+3p//FJ/PYvoKryI8vs+2G9lzRmnEKkh+BU8yDk515jDj/HAswu7CCz6U/Mxb/PnC9N41ndpU4hUU7JGk/C9PmP/M2xZYdvBW2PObyf1IUiIzoHmHW9yTncliYs9A9tVNppdShfgQaTLMf+j3X723tLeHgAAAABJRU5ErkJggg==);
+}
+
+.header-logo {
+ width: 130px;
+}
+
+.header-lead span {
+ font-weight: bold;
+ margin-bottom: 0;
+}
+
+/* Footer */
+.ac-footer {
+ margin-top: 4rem;
+}
+
+
+/* Content */
+#content {
+ padding-bottom: 3rem;
+}
+#content img {
+ @include thumbnail;
+}
+#content a {
+ text-decoration: underline;
+ color: #21A4D7;
+}
+
+#content {
+ h2, h3, h4, h5, h6 {
+  margin-top: 5rem;
+ }
+
+ h2:first-child {
+  margin-top: 0;
+ }
+}
+
+/* Home */
+
+.home {
+ #top-section {
+  text-align: center;
+  padding: 60px 0;
+  font-size: 190%;
+ }
+ .header-logo {
+  width: 170px;
+  margin-right: 10px;
+ }
+ .wordpress-logo {
+  width: 242px;
+  margin-right: 0;
+  margin-left: 10px;
+ }
+ .ac-footer {
+  margin-top: 0;
+ }
+}
+
+.punchline {
+ font-style: italic;
+}
+
+.top-buttons {
+ margin-top: 3rem;
+}
+
+.section {
+ padding: 7rem 0;
+ &.alternate {
+  background: #FFF;
+ }
+
+}
+
+.open-source {
+ text-align: center;
+ background: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAGQAAABkAgMAAAANjH3HAAAACVBMVEUaGhohISElJSUh9lebAAAB20lEQVRIx4XWuZXDMAwE0C0SAQtggIIYoAAEU+aKOHhYojTrYP2+QfOW/5QIJOih/q8HwF/pb3EX+UPIveYcQGgEHiu9hI+ihEc5Jz5KBIlRRRaJ1JtoSAl5Hw96hLB1/up1tnIXOck5jZQy+3iU2hAOKSH1JvwxHsp+5TLF5MOl1/MQXsVs1miXc+KDbYydyMeUgpPQreZ7fWidbNhkXNJSeAhc6qHmHD8AYovunYyEACWEbyIhNeB9fRrH3hFi0bGPLuEW7xCNaohw1vAlS805nfsrTspclB/hVdoqusg53eH7FWot+wjYpOViX8KbFFKTwlnzvj65P9H/vD0/hibYBGhPwlPO8TmxRsaxsNnrUmUXpNhirlJMPr6Hqq9k5Xn/8iYQHYIuQsWFC6Z87IOxLxHphSY4SpuiU87xJnJr5axfeRd+lnMExXpEWPpuZ1v7qZdNBOjiHzDREHX5fs5Zz9p6X0vVKbKKchlSl5rv+3p//FJ/PYvoKryI8vs+2G9lzRmnEKkh+BU8yDk515jDj/HAswu7CCz6U/Mxb/PnC9N41ndpU4hUU7JGk/C9PmP/M2xZYdvBW2PObyf1IUiIzoHmHW9yTncliYs9A9tVNppdShfgQaTLMf+j3X723tLeHgAAAABJRU5ErkJggg==) !important;
+ color: #FFF;
+ h3 {
+ }
+ a {
+  color: $secondary-color;
+  &:hover {
+   text-decoration: underline;
+  }
+ }
+ i.fi-social-github {
+  font-size: 80px;
+  color: #FFF;
+ }
+}
+
+

@@ -1,0 +1,26 @@
+{
+  "name": "algoliasearch-wordpress-plugin-docs",
+  "private": true,
+  "dependencies": {
+    "cheerio": "^0.20.0",
+    "foundation-sites": "^6.2.3",
+    "gh-pages": "^0.11.0",
+    "handlebars": "^4.0.5",
+    "jquery": "^2.2.4",
+    "lodash": "^4.13.1",
+    "metalsmith": "^2.1.0",
+    "metalsmith-headings": "^0.1.0",
+    "metalsmith-headings-identifier": "0.0.11",
+    "metalsmith-layouts": "^1.6.5",
+    "metalsmith-mapsite": "^1.0.4",
+    "metalsmith-markdown": "^0.2.1",
+    "metalsmith-metallic": "^1.0.0",
+    "metalsmith-permalinks": "^0.5.0",
+    "metalsmith-register-helpers": "^0.1.2",
+    "metalsmith-rootpath": "^0.1.7",
+    "metalsmith-sass": "^1.3.0",
+    "metalsmith-serve": "0.0.7",
+    "metalsmith-static": "0.0.5",
+    "metalsmith-watch": "^1.0.2"
+  }
+}

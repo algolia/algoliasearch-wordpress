@@ -1,0 +1,15 @@
+{
+  "name": "algolia/algoliasearch-wordpress-plugin",
+  "description": "Algolia Search for Wordpress",
+  "config": {
+    "vendor-dir": "wordpress/wp-content/plugins/algolia/vendor"
+  },
+  "require": {
+    "php": ">=5.3",
+    "algolia/algoliasearch-client-php": "^1.9",
+    "algolia/php-dom-parser": "^0.1.0",
+    "techcrunch/wp-async-task": "dev-master"
+  },
+  "minimum-stability": "dev",
+  "prefer-stable": true
+}

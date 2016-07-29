@@ -1,0 +1,28 @@
+{
+  "name": "algoliasearch-wordpress-plugin",
+  "version": "0.2.5",
+  "description": "Requirements: - docker - docker-compose",
+  "main": "index.js",
+  "directories": {
+    "doc": "docs"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/algolia/algoliasearch-wordpress-plugin.git"
+  },
+  "author": "",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/algolia/algoliasearch-wordpress-plugin/issues"
+  },
+  "homepage": "https://github.com/algolia/algoliasearch-wordpress-plugin#readme",
+  "dependencies": {
+    "algoliasearch": "^3.14.6",
+    "autocomplete.js": "^0.19.1",
+    "tether": "^1.3.2",
+    "instantsearch.js": "^1.6.1"
+  }
+}
