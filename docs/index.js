@@ -12,6 +12,8 @@ var asset       = require('metalsmith-static');
 var helpers     = require('metalsmith-register-helpers');
 var headings    = require('metalsmith-headings');
 var headingsid  = require('metalsmith-headings-identifier');
+var partial     = require('metalsmith-partial');
+var define      = require('metalsmith-define');
 var file        = require('./plugins/file/index.js');
 var magellan    = require('./plugins/magellan/index.js');
 
@@ -48,6 +50,12 @@ var siteBuild = Metalsmith(__dirname)
     .use(asset({
         src: './node_modules/foundation-sites/dist',
         dest: './vendor/foundation-sites'
+    }))
+
+    // partials
+    .use(partial({
+        directory: './partials',
+        engine: 'handlebars'
     }))
 
     // Add Highlight.js for code snippets.
@@ -91,6 +99,10 @@ var siteBuild = Metalsmith(__dirname)
 if (process.env.NODE_ENV !== 'production') {
     siteBuild
 
+    .use(define({
+        development: true
+    }))
+
     // Serve on localhost:8080.
     .use(serve())
 
@@ -100,6 +112,7 @@ if (process.env.NODE_ENV !== 'production') {
             paths: {
                 '${source}/**/*.md': true,
                 '${source}/sass/**/*.scss': 'sass/app.scss',
+                'partials/**/*.html': '**/*.md',
                 'layouts/**/*.html': '**/*.md'
             },
             livereload: true,
