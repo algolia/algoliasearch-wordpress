@@ -1,7 +1,21 @@
+.beta-banner {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  background: $red-pink;
+  height: $beta-banner-height;
+  box-sizing: border-box;
+  padding-top: 5px;
+  text-align: center;
+  font-weight: bold;
+  color: white;
+  z-index: 101;
+}
 
 .ac-nav {
   position: fixed;
-  top: 0;
+  top: $beta-banner-height;
   left: 0;
   width: 100%;
   height: $navigation-height;
