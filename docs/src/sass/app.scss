@@ -197,6 +197,12 @@ table thead tr, #content table tbody tr {
     position: relative;
     z-index: 5;
 
+    margin-top: 5rem;
+
+    &:first-child {
+     margin-top: 0rem;
+    }
+
     &:before {
       content: "";
       display: block;
