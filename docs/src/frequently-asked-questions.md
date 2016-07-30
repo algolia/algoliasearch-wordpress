@@ -65,5 +65,7 @@ If you have any kind of issue related to default appearance, please send us a li
 
 Sometimes your WordPress content gets out of sync with Algolia. For example if you are changing your permalink templates, all your URLs will change and Algolia will not know about it.
 
-In that case you can simply de-index your out of sync content types and re-index them.
+Content also gets inconsistent when you use filters to change settings or attributes to push to Algolia.
+
+In that case you can simply re-index your content.
 
