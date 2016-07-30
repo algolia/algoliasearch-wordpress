@@ -7,7 +7,7 @@ layout: page.html
 
 By default, this plugin is shipped with a way to override the default WordPress search and also provides an as you type experience called "autocomplete".
 
-In your case you pay want to provide some very specific search experience depending of the data you have, in the UI you want to build.
+In your case you may want to provide some very specific search experience depending of the data you have, in the UI you want to build.
 
 Here we are not going to show you the whole process of creating a full featured custom search experience, because it would probably not be useful for your needs.
 
