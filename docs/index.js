@@ -2,7 +2,6 @@ var Metalsmith  = require('metalsmith');
 var sass        = require('metalsmith-sass');
 var markdown    = require('metalsmith-markdown');
 var layouts     = require('metalsmith-layouts');
-var permalinks  = require('metalsmith-permalinks');
 var rootPath    = require('metalsmith-rootpath');
 var serve       = require('metalsmith-serve');
 var watch       = require('metalsmith-watch');
@@ -65,13 +64,6 @@ var siteBuild = Metalsmith(__dirname)
 
     // Extract all the headings to build the sidebar.
     .use(headings('h2'))
-
-
-
-    // .use(permalinks({
-    //     pattern: ':title',
-    //     relative: false
-    // }))
 
     // Inject rootPath in every file metadata to be able to make all urls relative.
     // Allows to deploy the website in a directory.
