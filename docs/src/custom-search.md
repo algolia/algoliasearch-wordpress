@@ -21,10 +21,9 @@ This plugin ships with several javascript libraries that can be used for impleme
 |-|-
 |algolia-search|The official Algolia Javascript API Client: https://www.algolia.com/doc/javascript
 |algolia-autocomplete|The official autocomplete.js library: https://github.com/algolia/autocomplete.js
+|algolia-instantsearch|The official instantsearch.js library: https://community.algolia.com/instantsearch.js/
 
-By default these scripts are only loaded when the autocomplete should be displayed.
-
-If you want to create your custom search experience, you should take care to "enqueue" the required scripts regardless of the autocomplete presence.
+If you want to create your custom search experience, you should take care of "enqueuing" scripts.
 
 The best way would be to declare the scripts as required dependencies:
 
@@ -37,10 +36,10 @@ function register_custom_search_assets() {
 
 add_action( 'wp_enqueue_scripts', 'register_custom_search_assets' );
 ```
-This code will ensure that the 'algolia-search' and 'algolia-autocomplete' scripts are also happened to the page.
+This code will ensure that the 'algolia-search' and 'algolia-autocomplete' scripts are also added to the page.
 
 In this example, you can now use the Algolia JS client and the autocomplete library in your custom search script.
-Please consult the documentation of these libraries by following the links shared above.
+Please take a look at the documentation of the underlying libraries by following the links shared above.
 
 ## Work With The Existing Indices
 
