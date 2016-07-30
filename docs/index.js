@@ -2,7 +2,6 @@ var Metalsmith  = require('metalsmith');
 var sass        = require('metalsmith-sass');
 var markdown    = require('metalsmith-markdown');
 var layouts     = require('metalsmith-layouts');
-var permalinks  = require('metalsmith-permalinks');
 var rootPath    = require('metalsmith-rootpath');
 var serve       = require('metalsmith-serve');
 var watch       = require('metalsmith-watch');
@@ -13,7 +12,6 @@ var helpers     = require('metalsmith-register-helpers');
 var headings    = require('metalsmith-headings');
 var headingsid  = require('metalsmith-headings-identifier');
 var file        = require('./plugins/file/index.js');
-var magellan    = require('./plugins/magellan/index.js');
 
 var sassPaths = [
     'node_modules/foundation-sites/scss'
@@ -64,17 +62,8 @@ var siteBuild = Metalsmith(__dirname)
 
     .use(headingsid())
 
-    .use(magellan())
-
     // Extract all the headings to build the sidebar.
     .use(headings('h2'))
-
-
-
-    // .use(permalinks({
-    //     pattern: ':title',
-    //     relative: false
-    // }))
 
     // Inject rootPath in every file metadata to be able to make all urls relative.
     // Allows to deploy the website in a directory.
