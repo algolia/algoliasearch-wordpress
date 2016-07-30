@@ -158,7 +158,7 @@ table thead tr, #content table tbody tr {
 
 /* Header */
 #top-section {
- padding: 1.3rem 0 0.2rem;
+ padding: ($navigation-height) 0 0.2rem;
  background-color: #2b2c31;
  color: $white;
  margin-bottom: rem-calc(50px);
@@ -193,13 +193,30 @@ table thead tr, #content table tbody tr {
 }
 
 #content {
- h2, h3, h4, h5, h6 {
-  margin-top: 5rem;
- }
+  h2[id], h3[id], h4[id], h5[id], h6[id] {
+    position: relative;
+    z-index: 5;
 
- h2:first-child {
-  margin-top: 2rem;
- }
+    margin-top: 5rem;
+
+    &:first-child {
+     margin-top: 0rem;
+    }
+
+    &:before {
+      content: "";
+      display: block;
+      height: ($navigation-height + $beta-banner-height + 30px);
+      margin: -($navigation-height + $beta-banner-height + 30px) 0 0;
+    }
+  }
+}
+
+#content, header {
+  a:not(.heading-anchor), p {
+    position: relative;
+    z-index: 10;
+  }
 }
 
 /* Home */
