@@ -1,5 +1,12 @@
-{{^development}}
-<!-- GA -->
+var Handlebars = require('handlebars');
+
+module.exports = function (){
+    if(process.env.NODE_ENV !== 'production') {
+        return '';
+    }
+
+    return new Handlebars.SafeString(`
+    <!-- GA -->
 <script>
   (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
   (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
@@ -56,4 +63,5 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
     else {window.attachEvent('onload', _onload)}
   }());
 </script>
-{{/development}}
+    `);
+}

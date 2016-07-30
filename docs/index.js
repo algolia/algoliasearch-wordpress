@@ -12,10 +12,7 @@ var asset       = require('metalsmith-static');
 var helpers     = require('metalsmith-register-helpers');
 var headings    = require('metalsmith-headings');
 var headingsid  = require('metalsmith-headings-identifier');
-var partial     = require('metalsmith-partial');
-var define      = require('metalsmith-define');
 var file        = require('./plugins/file/index.js');
-var magellan    = require('./plugins/magellan/index.js');
 
 var sassPaths = [
     'node_modules/foundation-sites/scss'
@@ -52,12 +49,6 @@ var siteBuild = Metalsmith(__dirname)
         dest: './vendor/foundation-sites'
     }))
 
-    // partials
-    .use(partial({
-        directory: './partials',
-        engine: 'handlebars'
-    }))
-
     // Add Highlight.js for code snippets.
     .use(metallic())
 
@@ -71,8 +62,6 @@ var siteBuild = Metalsmith(__dirname)
 
 
     .use(headingsid())
-
-    .use(magellan())
 
     // Extract all the headings to build the sidebar.
     .use(headings('h2'))
@@ -99,10 +88,6 @@ var siteBuild = Metalsmith(__dirname)
 if (process.env.NODE_ENV !== 'production') {
     siteBuild
 
-    .use(define({
-        development: true
-    }))
-
     // Serve on localhost:8080.
     .use(serve())
 
@@ -112,7 +97,6 @@ if (process.env.NODE_ENV !== 'production') {
             paths: {
                 '${source}/**/*.md': true,
                 '${source}/sass/**/*.scss': 'sass/app.scss',
-                'partials/**/*.html': '**/*.md',
                 'layouts/**/*.html': '**/*.md'
             },
             livereload: true,
