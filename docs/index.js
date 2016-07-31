@@ -9,7 +9,6 @@ var metallic    = require('metalsmith-metallic');
 var sitemap     = require('metalsmith-mapsite');
 var asset       = require('metalsmith-static');
 var helpers     = require('metalsmith-register-helpers');
-var headings    = require('metalsmith-headings');
 var headingsid  = require('metalsmith-headings-identifier');
 var file        = require('./plugins/file/index.js');
 
@@ -26,6 +25,9 @@ var siteBuild = Metalsmith(__dirname)
         version: '0.2.5',
         time: new Date().getTime(),
     })
+
+
+
     .source('./src')
     .destination('./build')
 
@@ -54,6 +56,7 @@ var siteBuild = Metalsmith(__dirname)
     // Parse Markdown.
     .use(markdown())
 
+
     // Register custom handlebars helpers.
     .use(helpers({
         directory: 'helpers'
@@ -62,16 +65,13 @@ var siteBuild = Metalsmith(__dirname)
 
     .use(headingsid())
 
-    // Extract all the headings to build the sidebar.
-    .use(headings('h2'))
-
     // Inject rootPath in every file metadata to be able to make all urls relative.
     // Allows to deploy the website in a directory.
     .use(rootPath())
 
-
     .use(layouts({
-        engine: 'handlebars'
+        engine: 'handlebars',
+        partials: 'partials'
     }))
 
     // Generate a sitemap.xml.
@@ -89,7 +89,8 @@ if (process.env.NODE_ENV !== 'production') {
             paths: {
                 '${source}/**/*.md': true,
                 '${source}/sass/**/*.scss': 'sass/app.scss',
-                'layouts/**/*.html': '**/*.md'
+                'layouts/**/*.html': '**/*.md',
+                'partials/**/*.html': '**/*.md'
             },
             livereload: true,
         })
