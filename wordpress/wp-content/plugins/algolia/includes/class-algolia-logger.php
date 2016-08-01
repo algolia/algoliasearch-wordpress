@@ -28,8 +28,8 @@ class Algolia_Logger
 	 * @param string $level
 	 */
 	public function log( $message, $data = null, $level = self::LEVEL_INFO ) {
-		// Do not log if we are not in debug mode.
-		if ( false === $this->logging_enabled ) {
+		// Only log if logging is enabled or if we are dealing with an error.
+		if ( false === $this->logging_enabled && self::LEVEL_ERROR !== $level ) {
 			return;
 		}
 
