@@ -86,8 +86,7 @@ class Algolia_Admin_Page_Native_Search
 		register_setting( $this->option_group, 'algolia_native_search_index_id', array( $this, 'sanitize_native_search_index_id' ) );
 	}
 
-	public function override_native_search_callback()
-	{
+	public function override_native_search_callback() {
 		$indices = $this->plugin->get_indices( array(
 			'enabled'  => true,
 			'contains' => 'posts',
@@ -100,8 +99,7 @@ class Algolia_Admin_Page_Native_Search
 		echo "<input type='checkbox' name='algolia_override_native_search' value='yes' $checked $disabled/>";
 	}
 
-	public function native_search_index_id_callback()
-	{
+	public function native_search_index_id_callback() {
 		$indices = $this->plugin->get_indices( array(
 			'enabled'  => true,
 			'contains' => 'posts',
