@@ -86,6 +86,7 @@ class Algolia_Admin_Page_Logs
 	public function no_logs_notice() {
 		echo '<div class="error notice">
 			      <p>' . esc_html__( 'Logging is currently turned off which means you are still able to navigate through existing entries but no additional ones will be added.', 'algolia' ) . '</p>
+			      <p>' . esc_html__( 'Note however that errors will be logged even if logging is turned off.', 'algolia' ) . '</p>
 			  </div>';
 	}
 
