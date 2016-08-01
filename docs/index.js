@@ -22,7 +22,7 @@ var siteBuild = Metalsmith(__dirname)
     .metadata({
         title: 'Algolia Search Plugin for WordPress',
         url: 'https://github.com/algolia/algoliasearch-wordpress-plugin',
-        version: '0.2.5',
+        version: '0.2.6',
         time: new Date().getTime(),
     })
 

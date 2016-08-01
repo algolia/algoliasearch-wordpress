@@ -1,5 +1,5 @@
 {
-  "name": "algolia/algoliasearch-wordpress-plugin",
+  "name": "algolia/algoliasearch-wordpress",
   "description": "Algolia Search for Wordpress",
   "config": {
     "vendor-dir": "wordpress/wp-content/plugins/algolia/vendor"
