@@ -76,7 +76,7 @@ class Algolia_Admin_Page_Native_Search
 
 		add_settings_field(
 			'algolia_native_search_index_id',
-			__( 'Search on', 'algolia' ),
+			__( 'Search index to use', 'algolia' ),
 			array( $this, 'native_search_index_id_callback' ),
 			$this->slug,
 			$this->section
@@ -88,10 +88,16 @@ class Algolia_Admin_Page_Native_Search
 
 	public function override_native_search_callback()
 	{
+		$indices = $this->plugin->get_indices( array(
+			'enabled'  => true,
+			'contains' => 'posts',
+		) );
+
 		$value = $this->plugin->get_settings()->get_override_native_search();
 		$checked = 'yes' === $value ? 'checked ' : '';
+		$disabled = empty( $indices ) ? 'disabled ' : '';
 
-		echo "<input type='checkbox' name='algolia_override_native_search' value='yes' $checked/>";
+		echo "<input type='checkbox' name='algolia_override_native_search' value='yes' $checked $disabled/>";
 	}
 
 	public function native_search_index_id_callback()
@@ -101,21 +107,18 @@ class Algolia_Admin_Page_Native_Search
 			'contains' => 'posts',
 		) );
 
-		$index_id = $this->plugin->get_settings()->get_native_search_index_id();
-
-		if ( empty( $indices ) ) {
-			esc_html_e( 'You have no index containing only posts yet. Please index some content on the `Indexing` page.', 'algolia' );
-
-			return;
-		}
+		$disabled = empty( $indices ) ? 'disabled ' : '';
 
 		$options = '';
-		foreach ( $indices as $index ) {
-			$selected = $index_id === $index->get_id() ? ' selected="selected"': '';
-			$options .= '<option value="' . esc_attr( $index->get_id() ) . '" ' . $selected . '>' . esc_html( $index->get_admin_name() ) . '</option>';
+		if ( !empty( $indices ) ) {
+			$index_id = $this->plugin->get_settings()->get_native_search_index_id();
+			foreach ( $indices as $index ) {
+				$selected = $index_id === $index->get_id() ? ' selected="selected"': '';
+				$options .= '<option value="' . esc_attr( $index->get_id() ) . '" ' . $selected . '>' . esc_html( $index->get_admin_name() ) . '</option>';
+			}
 		}
 
-		echo '<select name="algolia_native_search_index_id">' . $options . '</select><br />' .
+		echo "<select name=\"algolia_native_search_index_id\" $disabled>" . $options . '</select><br />' .
 			'<p class="description" id="home-description">' . __( 'Configure the index used to replace the native search.<br />Wordpress uses "Searchable posts" by default.', 'algolia' ) . '</p>';
 	}
 
@@ -179,5 +182,16 @@ class Algolia_Admin_Page_Native_Search
 	 */
 	public function print_section_settings() {
 		echo '<p>' . esc_html__( 'By enabling this plugin to override the native WordPress search, your search results will be powered by Algolia\'s typo-tolerant & relevant search algorithms.', 'algolia' ) . '</p>';
+
+		$indices = $this->plugin->get_indices( array(
+			'enabled'  => true,
+			'contains' => 'posts',
+		) );
+
+		if ( empty( $indices ) ) {
+			echo '<div class="error-message">' .
+					__( 'You have no index containing only posts yet. Please index some content on the `Indexing` page.', 'algolia' ) .
+					'</div>';
+		}
 	}
 }
