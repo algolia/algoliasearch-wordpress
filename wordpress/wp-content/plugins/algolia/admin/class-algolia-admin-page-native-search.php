@@ -117,7 +117,7 @@ class Algolia_Admin_Page_Native_Search
 		}
 
 		echo "<select name=\"algolia_native_search_index_id\" $disabled>" . $options . '</select><br />' .
-			'<p class="description" id="home-description">' . __( 'Configure the index used to replace the native search.<br />Wordpress uses "Searchable posts" by default.', 'algolia' ) . '</p>';
+			'<p class="description" id="home-description">' . __( 'Configure the index used to replace the native search.<br />WordPress uses "Searchable posts" by default.', 'algolia' ) . '</p>';
 	}
 
 	/**
@@ -173,6 +173,20 @@ class Algolia_Admin_Page_Native_Search
 	 */
 	public function display_errors() {
 		settings_errors( $this->option_group );
+
+		// Here we display an admin notice on every page if we detect a wrong configuration of the native search feature.
+		$is_enabled = 'yes' === $this->plugin->get_settings()->get_override_native_search();
+		if ( true === $is_enabled ) {
+			$index_id = $this->plugin->get_settings()->get_native_search_index_id();
+			$index = $this->plugin->get_index( $index_id );
+
+			if ( null === $index || ! $index->contains_only( 'posts' ) || ! $index->is_enabled() ) {
+				echo '<div class="error notice">
+						  <p>' . esc_html__( 'You chose to power your search with Algolia but the selected index to base your search on does not exist.', 'algolia' ) . '</p>
+						  <p>' . sprintf( __( 'Please select a new index on the <a href="%s">Algolia Native Search configuration page</a> and hit the save changes button.', 'algolia' ), admin_url( 'admin.php?page=' . $this->slug ) ) . '</p>
+					  </div>';
+			}
+		}
 	}
 
 	/**
