@@ -17,7 +17,7 @@
 
 		function refresh_native_search_post_type_display()
 		{
-			if ($override_native_search.is(':checked')) {
+			if ($override_native_search.is(':checked') || $override_native_search.is(':disabled')) {
 				show_native_search_post_type();
 			} else {
 				hide_native_search_post_type();
@@ -43,7 +43,7 @@
 
 		function refresh_autocomplete_display()
 		{
-			if ($autocomplete_enabled.is(':checked')) {
+			if ($autocomplete_enabled.is(':checked') || $autocomplete_enabled.is(':disabled')) {
 				show_autocomplete_settings();
 			} else {
 				hide_autocomplete_settings();

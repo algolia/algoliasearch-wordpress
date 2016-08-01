@@ -1,7 +1,3 @@
-<?php if ( empty( $indices ) ) : ?>
-	<?php _e( 'You have no indexed content yet. Please index some content on the `Indexing` page.', 'algolia' ); ?>
-<?php else : ?>
-
 <table class="widefat table-autocomplete">
 	<thead>
 		<tr>
@@ -28,6 +24,13 @@
 			</td>
 		</tr>
 		<?php endforeach; ?>
+		<?php if ( empty( $indices ) ) : ?>
+			<tr>
+				<td colspan="4" class="column-comments">
+					<em>You have no indexed content yet.</em>
+				</td>
+			</tr>
+		<?php endif; ?>
 	</tbody>
 </table>
 <p class="description" id="home-description">
@@ -37,5 +40,3 @@
 	<br />
 	<?php _e( 'Use the `Position` column to reflect the order of the sections in the dropdown menu.', 'algolia' ); ?>
 </p>
-
-<?php endif; ?>

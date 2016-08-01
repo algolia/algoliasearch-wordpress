@@ -92,9 +92,11 @@ class Algolia_Admin_Page_Autocomplete
 	 */
 	public function autocomplete_enabled_callback() {
 		$value = $this->settings->get_autocomplete_enabled();
+		$indices = $this->autocomplete_config->get_form_data();
 		$checked = 'yes' === $value ? 'checked ' : '';
+		$disabled = empty( $indices ) ? 'disabled ' : '';
 
-		echo "<input type='checkbox' name='algolia_autocomplete_enabled' value='yes' $checked/>";
+		echo "<input type='checkbox' name='algolia_autocomplete_enabled' value='yes' $checked $disabled/>";
 	}
 
 	/**
@@ -143,5 +145,13 @@ class Algolia_Admin_Page_Autocomplete
 	 */
 	public function print_section_settings() {
 		echo '<p>' . esc_html__( 'The autocomplete options adds a find-as-you-type dropdown menu to your search bar(s).', 'algolia' ) . '</p>';
+
+		$indices = $this->autocomplete_config->get_form_data();
+
+		if ( empty( $indices ) ) {
+			echo '<div class="error-message">' .
+				__( 'You have no indexed content yet. Please index some content on the `Indexing` page.', 'algolia' ) .
+				'</div>';
+		}
 	}
 }
