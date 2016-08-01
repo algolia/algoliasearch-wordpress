@@ -7,13 +7,14 @@
 
         // Implement an empty template once helped obtained here: footerTmpl
         // var emptyTmpl = wp.template('autocomplete-empty');
+
         var client = algoliasearch(algolia.application_id, algolia.search_api_key);
 
         var sources = [];
         for(var index in algolia.autocomplete.sources) {
             var config = algolia.autocomplete.sources[index];
             sources.push({
-                source: sourceCallback(client.initIndex(config['index_name']), config['max_suggestions'], config['template']),
+                source: sourceCallback(client.initIndex(config['index_name']), config['max_suggestions']),
                 templates: {
                     header: function (label, template) {
                         return function() {
@@ -29,12 +30,22 @@
             });
         }
 
+
         function sourceCallback( index, max_suggestions ) {
             return function (q, cb) {
                 index.search(
                     q,
                     {
-                        hitsPerPage: max_suggestions
+                        hitsPerPage: max_suggestions,
+                        attributesToSnippet: [
+                            'content:10',
+                            'title1:10',
+                            'title2:10',
+                            'title3:10',
+                            'title4:10',
+                            'title5:10',
+                            'title6:10'
+                        ]
                     },
                     function (error, content) {
                         if (error) {
@@ -64,7 +75,8 @@
         ).on('autocomplete:selected', function(e, suggestion, datasetName) {
             // Redirect the user when we detect a suggestion selection.
             window.location.href = suggestion.permalink;
-        });;
+        });
+
 
         // This ensures that when the dropdown overflows the window, Thether can reposition it.
         $('body').css('overflow-x', 'hidden');
@@ -89,27 +101,43 @@
                     }
                 ]
             };
-            var tether = new Tether(config);
 
+            // This will make sure the dropdown is no longer part of the same container as
+            // the search input container.
+            // It ensures styles are not overridden and limits theme breaking.
+            var tether = new Tether(config);
             tether.on('update', function(item) {
                 // todo: fix the inverse of this: https://github.com/HubSpot/tether/issues/182
                 if (item.attachment.left == 'right' && item.attachment.top == 'top' && item.targetAttachment.left == 'left' && item.targetAttachment.top == 'bottom') {
-                    config.attachment = 'top right';
-                    config.targetAttachment = 'bottom right';
+                        config.attachment = 'top right';
+                        config.targetAttachment = 'bottom right';
 
-                    tether.setOptions(config, false);
+                        tether.setOptions(config, false);
                 }
-
             });
-
-            // Trick to ensure the autocomplete is always above all.
-            $menu.css('z-index', '99999');
 
             searchInput.on('autocomplete:updated', function() {
                 tether.position();
             });
 
-            tether.position();
+
+            // Trick to ensure the autocomplete is always above all.
+            $menu.css('z-index', '99999');
+
+            var dropdownMinWidth = 280;
+
+            // Makes dropdown match the input size.
+            function updateDropdownWidth() {
+                var inputWidth = $item.outerWidth();
+                if (inputWidth >= dropdownMinWidth) {
+                    $menu.css('width', $item.outerWidth());
+                } else {
+                    $menu.css('width', dropdownMinWidth);
+                }
+                tether.position();
+            }
+            $(window).on('resize', updateDropdownWidth);
+            updateDropdownWidth()
         } );
 
         $(document).on("click", ".algolia-powered-by-link", function(e) {
