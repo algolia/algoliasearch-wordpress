@@ -138,6 +138,16 @@ class Algolia_Admin_Page_Autocomplete
 	 */
 	public function display_errors() {
 		settings_errors( $this->option_group );
+
+		$is_enabled = 'yes' === $this->settings->get_autocomplete_enabled();
+		$indices = $this->autocomplete_config->get_config();
+
+		if ( true === $is_enabled && empty( $indices ) ) {
+			echo '<div class="error notice">
+					  <p>' . esc_html__( 'You have enabled the Algolia Autocomplete feature but did not choose any index to search in.', 'algolia' ) . '</p>
+					  <p>' . sprintf( __( 'Please select one or multiple indices on the <a href="%s">Algolia Autocomplete configuration page</a>.', 'algolia' ), admin_url( 'admin.php?page=' . $this->slug ) ) . '</p>
+				  </div>';
+		}
 	}
 
 	/**
