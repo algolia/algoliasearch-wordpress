@@ -1,3 +1,8 @@
+# 0.2.6
+- Make sure we detect custom post types before loading indices
+- Log errors even when logging is turned off
+- Add some contextual help in the admin UI
+
 # 0.2.5
 - Mainly wording adjustments
 
