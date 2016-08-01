@@ -55,7 +55,7 @@ class Algolia_Plugin {
 		$this->api = new Algolia_API( $this->settings );
 
 		add_action( 'init', array( $this, 'register_post_types'), 5 );
-		add_action( 'init', array( $this, 'load' ) );
+		add_action( 'init', array( $this, 'load' ), 20 );
 	}
 
 	/**
