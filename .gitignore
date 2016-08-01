@@ -1,21 +1,13 @@
 node_modules
 /dist
-/wordpress/*
 
-!/wordpress/wp-content
-/wordpress/wp-content/*
+# wordpress files
+wordpress/*
+!wordpress/wp-content
 
-!/wordpress/wp-content/plugins
-/wordpress/wp-content/plugins/*
+wordpress/wp-content/*
+!wordpress/wp-content/plugins
 
-!/wordpress/wp-content/plugins/visitsmatters
-
-!/wordpress/wp-content/plugins/algolia
-/wordpress/wp-content/plugins/algolia/*
-!/wordpress/wp-content/plugins/algolia/classmap.php
-
-!/wordpress/wp-content/plugins/algolia/admin
-!/wordpress/wp-content/plugins/algolia/includes
-!/wordpress/wp-content/plugins/algolia/languages
-!/wordpress/wp-content/plugins/algolia/public
-!/wordpress/wp-content/plugins/algolia/vendor
+wordpress/wp-content/plugins/*
+!wordpress/wp-content/plugins/algolia/
+!wordpress/wp-content/plugins/visitsmatters/
