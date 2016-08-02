@@ -1,22 +1,22 @@
 ---
-title: Indexing Settings
-description: Understand the ranking and other settings.
+title: Indices Settings
+description: Understand the indices default settings and how to customize the ranking.
 layout: page.html
 ---
 
 ## Introduction
 
-Algolia allows you to configure a lot settings to improve your search results relevancy.
+Algolia allows you to configure your indices to improve the relevancy of your search results.
 
-[A complete list of these settings can be found here](https://www.algolia.com/doc/php#index-settings).
+Each index comes with its own customizable settings and [a complete list of the settings parameters can be found here](https://www.algolia.com/doc/php#index-settings).
 
-This plugin automatically sets the settings for every index, and you will find detailed information about each configuration in the next sections of this page.
+This plugin automatically configures each index with some sensible default settings, that being said, you can of course [customize the settings by using some filters](#custom-index-settings).
 
-**Every time an index is re-indexed, the settings will be pushed and override existing ones. This means that you should not edit your settings directly in the Algolia Dashboard. Instead, you should hook into this plugin to alter the settings.**
+**Every time an index is re-indexed, the settings will be pushed and override existing ones. This means that you should not edit your settings directly in the Algolia Dashboard. Instead, you should use `filters`  to hook into this plugin and alter the settings.**
 
 ## Settings Anatomy
 
-Before telling you about the default settings per content type and how to customize them, let's have a quick overview of the settings anatomy.
+Before telling you about the default settings per content type and how to customize them, let's have a quick overview of a few parameters.
 
 **attributesToIndex**:
 Refers to the attributes that the search will be based on. By default we will generally list here all the text attributes that the user would like to search in.
@@ -39,7 +39,7 @@ Even though we do not yet provide out of the box usage of faceting in the plugin
 
 Feel free to dig further into the Algolia Search engine to optimize even more your search relevancy: [Relevancy in Algolia's documentation](https://www.algolia.com/doc#relevance).
 
-## Searchable Posts Settings
+## Searchable Posts Index Settings
 
 **Default searchable posts settings:**
 ```php
@@ -81,7 +81,7 @@ $settings = array(
 );
 ```
 
-## Posts Settings
+## Posts Index Settings
 
 **Default posts settings:**
 ```php
@@ -122,7 +122,7 @@ $settings = array(
 );
 ```
 
-## Terms Settings
+## Terms Index Settings
 
 **Default terms settings:**
 ```php
@@ -138,7 +138,7 @@ $settings = array(
 );
 ```
 
-## Users Settings
+## Users Index Settings
 
 **Default users settings:**
 ```php
@@ -153,7 +153,7 @@ $settings = array(
 );
 ```
 
-## Custom Settings
+## Custom Index Settings
 
 You can customize the settings pushed to Algolia for every content type.
 To do so simply use the available filters:
@@ -167,7 +167,7 @@ To do so simply use the available filters:
 |algolia_users_index_settings|`$settings`, the users index settings.
 
 
-## Custom Settings Example
+## Custom Index Settings Example
 
 Let's say you have some custom metric named `visits_count` and you would like to add a custom ranking rule on that one:
 
