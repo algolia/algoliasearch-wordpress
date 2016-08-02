@@ -41,3 +41,14 @@ The user documentation is generated with MetalSmith. To build the doc simply run
 This will also make the documentation available on `localhost:8080`.
 
 To contribute, simply edit the markdown formatted files located in `docs/src/*.md`
+
+### Release instructions
+
+1. Update [CHANGELOG.md](https://github.com/algolia/algoliasearch-wordpress/blob/master/CHANGELOG.md)
+2. Update version number in [package.json](https://github.com/algolia/algoliasearch-wordpress/blob/master/package.json)
+3. Update version number in [docs/index.js](https://github.com/algolia/algoliasearch-wordpress/blob/master/docs/index.js#L25)
+4. Update version number (x2) in [wordpress/wp-content/plugins/algolia/algolia.php](https://github.com/algolia/algoliasearch-wordpress/blob/master/wordpress/wp-content/plugins/algolia/algolia.php)
+5. Create a PR and merge it once it has been re-checked
+6. Create a release on GitHub
+7. Run `$ dev/build-zip.sh` and attache the `dist/algolia.zip` to the release
+8. Publish the docs `cd docs && make release`
