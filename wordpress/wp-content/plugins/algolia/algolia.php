@@ -5,7 +5,7 @@
  * Plugin Name:       Algolia Search
  * Plugin URI:        https://community.algolia.com/wordpress
  * Description:       Algolia Search plugin for WordPress is a drop in replacement for WordPress search. It also provides an optional "as you type" auto-complete experience.
- * Version:           0.2.6
+ * Version:           0.2.7
  * Author:            Algolia
  * Author URI:        https://www.algolia.com/
  * License:           MIT
@@ -31,7 +31,7 @@ if ( version_compare( $wp_version, '3.7.14', '<' ) ) {
 }
 
 // The Algolia Search plugin version.
-define( 'ALGOLIA_VERSION', '0.2.6' );
+define( 'ALGOLIA_VERSION', '0.2.7' );
 
 if ( ! defined( 'ALGOLIA_PATH' ) ) {
 	define( 'ALGOLIA_PATH', plugin_dir_path( __FILE__ ) );

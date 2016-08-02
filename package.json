@@ -1,6 +1,6 @@
 {
   "name": "algoliasearch-wordpress-plugin",
-  "version": "0.2.6",
+  "version": "0.2.7",
   "description": "Requirements: - docker - docker-compose",
   "main": "index.js",
   "directories": {
