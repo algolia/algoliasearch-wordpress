@@ -61,7 +61,7 @@ function vm_get_post_visit_count( $post_id ) {
 
 function vm_increment_post_visit_count( $post_id ) {
 	$visits_count = vm_get_post_visit_count( $post_id );
-	update_post_meta( $post_id, 'vm_visits_counter', (string) ++$visits_count, (string) --$visits_count );
+	update_post_meta( $post_id, 'vm_visits_counter', (string) ++$visits_count, (string) --$visits_count);
 }
 
 add_filter( 'wp', 'vm_increment_post_counter' );
@@ -76,6 +76,8 @@ We also prepared an easy way to get the current post visits count: `vm_get_post_
 Now that we have a way to retrieve visits count for every post, let's add it to every Algolia post records.
 
 ```php
+<?php
+
 function vm_post_shared_attributes( array $shared_attributes, WP_Post $post) {
 	$shared_attributes['visits_count'] = vm_get_post_visit_count( $post->ID );
 
@@ -121,8 +123,8 @@ Let's implement the settings adjustment:
 
 function vm_posts_index_settings( array $settings ) {
 	$custom_ranking = $settings['customRanking'];
-	array_unshift( $custom_ranking, 'desc(visits_count)' );
-	$settings['customRanking'] = $custom_ranking;
+    array_unshift( $custom_ranking, 'desc(visits_count)' );
+    $settings['customRanking'] = $custom_ranking;
 
 	return $settings;
 }
@@ -145,7 +147,7 @@ Here we adjust our settings:
 ```php
 <?php
 
-function vm_post_index_settings( array $settings ) {
+function vm_posts_index_settings( array $settings ) {
 	$custom_ranking = $settings['customRanking'];
 	array_unshift( $custom_ranking, 'desc(visits_count)' );
 	$settings['customRanking'] = $custom_ranking;
@@ -278,16 +280,19 @@ function vm_re_index_posts() {
 
 	$task_queue = $algolia->get_task_queue();
 
-	$post_types = $algolia->get_settings()->get_indexed_post_types();
-	foreach ( $post_types as $post_type ) {
-		$task_queue->queue( 're_index_posts', array( 'post_type' => $post_type ) );
+	$indices = $algolia->get_indices( array(
+		'enabled' => true,
+		'contains' => 'posts',
+	) );
+	foreach ( $indices as $index ) {
+		$task_queue->queue( 're_index_items', array( 'index_id' => $index->get_id() ) );
 	}
 }
-// This action is needed to so that the vm_re_index_posts method can be bound to the wp_schedule_event method.
+// This action is required for wp_schedule_event binding.
 add_action( 'vm_re_index_posts', 'vm_re_index_posts' );
 
 
-// Registers the recurring re_index_posts event.
+// Registers the recurring vm_re_index_posts event.
 function wp_register_re_index_posts() {
 	if ( ! wp_next_scheduled( 'vm_re_index_posts' ) ) {
 		wp_schedule_event( time(), 'daily', 'vm_re_index_posts' );
@@ -296,5 +301,6 @@ function wp_register_re_index_posts() {
 
 // Only register the event on WordPress init.
 add_action( 'init', 'wp_register_re_index_posts' );
+
 
 ```
