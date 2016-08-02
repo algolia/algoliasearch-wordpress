@@ -50,5 +50,5 @@ To contribute, simply edit the markdown formatted files located in `docs/src/*.m
 4. Update version number (x2) in [wordpress/wp-content/plugins/algolia/algolia.php](https://github.com/algolia/algoliasearch-wordpress/blob/master/wordpress/wp-content/plugins/algolia/algolia.php)
 5. Create a PR and merge it once it has been re-checked
 6. Create a release on GitHub
-7. Run `$ dev/build-zip.sh` and attache the `dist/algolia.zip` to the release
+7. Run `$ dev/build-zip.sh` and attach the `dist/algolia.zip` to the release
 8. Publish the docs `cd docs && make release`
