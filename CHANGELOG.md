@@ -1,3 +1,7 @@
+# 0.2.7
+- Fix the user agent so that the analytics API can detect required updates
+- Add more contextual help if we detect incorrect configuration
+
 # 0.2.6
 - Make sure we detect custom post types before loading indices
 - Log errors even when logging is turned off
