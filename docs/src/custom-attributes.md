@@ -192,9 +192,12 @@ function vm_re_index_posts() {
 
 	$task_queue = $algolia->get_task_queue();
 
-	$post_types = $algolia->get_settings()->get_indexed_post_types();
-	foreach ( $post_types as $post_type ) {
-		$task_queue->queue( 're_index_posts', array( 'post_type' => $post_type ) );
+	$indices = $algolia->get_indices( array(
+		'enabled' => true,
+		'contains' => 'posts',
+	) );
+	foreach ( $indices as $index ) {
+		$task_queue->queue( 're_index_items', array( 'index_id' => $index->get_id() ) );
 	}
 }
 // This action is required for wp_schedule_event binding.
