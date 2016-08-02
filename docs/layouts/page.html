@@ -14,6 +14,13 @@
 
 <div class="row">
     <div class="medium-9 large-9 medium-push-3 large-push-3 columns">
+
+        <div id="algolia-search">
+            <input type="text" id="algolia-search-input" placeholder="Search anywhere in the documentation...">
+            <svg id="search-icon" width="40" height="40" viewBox="0 0 40 40" xmlns="http://www.w3.org/2000/svg"><path d="M26.424 31.143a2 2 0 0 1 .004-2.824l1.12-1.12a2 2 0 0 1 2.824-.005l-3.948 3.948zm5.01-2.886l7.02 7.018a2 2 0 0 1 0 2.83l-1.12 1.12a2 2 0 0 1-2.83 0l-7.018-7.02 3.95-3.948zm-16.012 2.587c8.517 0 15.422-6.905 15.422-15.422S23.94 0 15.422 0 0 6.905 0 15.422s6.905 15.422 15.422 15.422zm0-3.856c6.388 0 11.566-5.178 11.566-11.566 0-6.388-5.178-11.567-11.566-11.567-6.388 0-11.567 5.18-11.567 11.567 0 6.388 5.18 11.566 11.567 11.566z" fill-rule="evenodd"/></svg>
+            <svg id="search-clear-icon"width="40" height="40" viewBox="0 0 40 40" xmlns="http://www.w3.org/2000/svg"><path d="M16.228 20L1.886 5.657 0 3.772 3.772 0l1.885 1.886L20 16.228 34.343 1.886 36.228 0 40 3.772l-1.886 1.885L23.772 20l14.342 14.343L40 36.228 36.228 40l-1.885-1.886L20 23.772 5.657 38.114 3.772 40 0 36.228l1.886-1.885L16.228 20z" fill-rule="evenodd"/></svg>
+        </div>
+
         <article>
             <header>
                 <h1>{{ title }}</h1>
@@ -59,6 +66,9 @@
             <li {{ activeClass "extend-basics.md" }}><a href="{{ rootPath }}extend-basics.html">Basics</a></li>
             <li {{ activeClass "customize-autocomplete.md" }}><a href="{{ rootPath }}customize-autocomplete.html">Autocomplete</a></li>
             <li {{ activeClass "custom-search.md" }}><a href="{{ rootPath }}custom-search.html">Custom Search</a></li>
+
+            <li class="menu-text">Debugging</li>
+            <li {{ activeClass "logs.md" }}><a href="{{ rootPath }}logs.html">Logs</a></li>
 
             <li class="menu-text">Integrations</li>
             <li {{ activeClass "advanced-custom-fields.md" }}><a href="{{ rootPath }}advanced-custom-fields.html">Advanced Custom Fields</a></li>

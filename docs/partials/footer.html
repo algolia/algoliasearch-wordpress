@@ -5,5 +5,38 @@
         {{livereload}}
         {{marketing}}
 
+        <script type="text/javascript">
+            var myDocsearch = docsearch({
+                apiKey: '52641df1ce4919ba42eb84595f4825c7',
+                indexName: 'wordpress_algolia',
+                inputSelector: '#algolia-search-input',
+                debug: false, // Set debug to true if you want to inspect the dropdown
+                autocompleteOptions: {
+                    openOnFocus: true
+                }
+
+            });
+
+            var $clearIcon = $("#search-clear-icon");
+            var $searchIcon = $("#search-icon");
+            var $searchInput = $("#algolia-search-input");
+
+            $clearIcon.on("click", function() {
+                $(".aa-input").focus();
+                $clearIcon.hide();
+                $searchIcon.fadeIn();
+                myDocsearch.autocomplete.autocomplete.setVal("");
+            });
+
+            $searchInput.on("keyup", function() {
+                if ($searchInput.val().length === 0){
+                    $clearIcon.hide();
+                    $searchIcon.fadeIn();
+                } else {
+                    $searchIcon.hide();
+                    $clearIcon.fadeIn();
+                }
+            });
+        </script>
     </body>
 </html>
