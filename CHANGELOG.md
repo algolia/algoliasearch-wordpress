@@ -1,3 +1,7 @@
+# 0.2.8
+- Make the autocomplete dropdown match the width of the search input
+- Display the snippet of content that matched in the autocomplete dropdown
+
 # 0.2.7
 - Fix the user agent so that the analytics API can detect required updates
 - Add more contextual help if we detect incorrect configuration
