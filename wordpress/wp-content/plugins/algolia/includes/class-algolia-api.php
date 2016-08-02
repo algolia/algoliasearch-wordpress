@@ -37,9 +37,9 @@ class Algolia_API
 		global $wp_version;
 
 		// Build the UserAgent.
-		$ua = '; WordPress integration (' . ALGOLIA_VERSION . ')'
+		$ua = '; Wordpress integration (' . ALGOLIA_VERSION . ')'
 			. '; PHP (' . phpversion() . ')'
-			. '; WordPress (' . $wp_version . ')';
+			. '; Wordpress (' . $wp_version . ')';
 
 		Version::$custom_value = $ua;
 
