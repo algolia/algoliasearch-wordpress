@@ -157,6 +157,7 @@ final class Algolia_Posts_Index extends Algolia_Index
 				'user_id'       => (int) $post->post_author,
 				'display_name'  => $author->display_name,
 				'user_url'      => $author->user_url,
+				'user_login'    => $author->user_login,
 			);
 		}
 
