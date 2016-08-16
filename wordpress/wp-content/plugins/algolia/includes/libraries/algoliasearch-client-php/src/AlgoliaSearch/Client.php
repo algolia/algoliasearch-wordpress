@@ -248,9 +248,9 @@ class Client
         return $this->request(
             $this->context,
             'POST',
-            '/1/indexes/*/queries?strategy='.$strategy,
+            '/1/indexes/*/queries',
             array(),
-            array('requests' => $requests),
+            array('requests' => $requests, 'strategy' => $strategy),
             $this->context->readHostsArray,
             $this->context->connectTimeout,
             $this->context->searchTimeout
@@ -832,7 +832,7 @@ class Client
 
         curl_setopt($curlHandle, CURLOPT_HTTPHEADER, $curlHeaders);
 
-        curl_setopt($curlHandle, CURLOPT_USERAGENT, 'Algolia for PHP '.Version::get());
+        curl_setopt($curlHandle, CURLOPT_USERAGENT, Version::getUserAgent());
         //Return the output instead of printing it
         curl_setopt($curlHandle, CURLOPT_RETURNTRANSFER, true);
         curl_setopt($curlHandle, CURLOPT_FAILONERROR, true);
