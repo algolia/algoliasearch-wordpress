@@ -1,8 +1,8 @@
 <?php
 
 $finder = Symfony\CS\Finder\DefaultFinder::create()
-	->in( './wordpress/wp-content/plugins/algolia' )
-	->exclude( './wordpress/wp-content/plugins/algolia/vendor' );
+	->exclude( 'includes/libraries' )
+	->in( __DIR__ );
 
 return Symfony\CS\Config\Config::create()
 	->level( Symfony\CS\FixerInterface::NONE_LEVEL )
