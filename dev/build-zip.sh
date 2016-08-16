@@ -3,10 +3,12 @@ set -eu
 
 rm -rf ./dist
 mkdir ./dist
+zip -r dist/algolia.zip . \
+	--exclude=.git*  \
+	--exclude=dev/*  \
+	--exclude=docs/*  \
+	--exclude=dist/*  \
+	--exclude=.idea/*  \
+	--exclude=.DS_Store
 
-cp -R ./wordpress/wp-content/plugins/algolia ./dist/algolia
 
-cd ./dist
-zip -r algolia.zip algolia
-rm -rf ./algolia
-cd ..
