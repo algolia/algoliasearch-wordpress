@@ -5,7 +5,7 @@ rm -rf ./dist
 mkdir ./dist
 zip -r dist/algolia.zip . \
 	--exclude=.git*  \
-	--exclude=dev/*  \
+	--exclude=bin/*  \
 	--exclude=docs/*  \
 	--exclude=dist/*  \
 	--exclude=.idea/*  \
