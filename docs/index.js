@@ -21,8 +21,8 @@ var siteBuild = Metalsmith(__dirname)
     // Allow for relative url generation.
     .metadata({
         title: 'Algolia Search Plugin for WordPress',
-        url: 'https://github.com/algolia/algoliasearch-wordpress-plugin',
-        version: '0.2.8',
+        url: 'https://github.com/algolia/algoliasearch-wordpress',
+        version: '0.3.0',
         time: new Date().getTime(),
     })
 

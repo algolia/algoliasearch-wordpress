@@ -1,3 +1,7 @@
+# 0.3.0
+- Cleanup the codebase
+- Support install through composer
+
 # 0.2.8
 - Make the autocomplete dropdown match the width of the search input
 - Display the snippet of content that matched in the autocomplete dropdown
