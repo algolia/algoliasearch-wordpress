@@ -1,5 +1,6 @@
 {
   "name": "algolia/algoliasearch-wordpress",
+  "homepage": "https://community.algolia.com/wordpress/",
   "description": "Algolia Search plugin for Wordpress",
   "type": "wordpress-plugin",
   "require": {
