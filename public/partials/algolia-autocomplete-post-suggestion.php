@@ -15,13 +15,11 @@
 				if ( data._highlightResult[ attribute_name ].matchedWords.length > 0 ) {
 					relevant_content = data._snippetResult[ attribute_name ].value;
 					break;
+				} else if( data._snippetResult[ attribute_name ].value !== '' ) {
+					relevant_content = data._snippetResult[ attribute_name ].value;
 				}
 			}
-
-			if ( relevant_content === '') {
-				relevant_content = data._snippetResult[ attributes[ 0 ] ].value;
-			}
-		#>
+			#>
 		<span class="suggestion-post-content">{{{ relevant_content }}}</span>
     </div>
 	</a>
