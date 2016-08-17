@@ -3,6 +3,7 @@
   "homepage": "https://community.algolia.com/wordpress/",
   "description": "Algolia Search plugin for Wordpress",
   "type": "wordpress-plugin",
+  "license": "MIT",
   "require": {
     "php": ">=5.3",
     "composer/installers": "~1.0"
