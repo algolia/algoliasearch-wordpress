@@ -1,13 +1,3 @@
 node_modules
-/dist
-
-# wordpress files
-wordpress/*
-!wordpress/wp-content
-
-wordpress/wp-content/*
-!wordpress/wp-content/plugins
-
-wordpress/wp-content/plugins/*
-!wordpress/wp-content/plugins/algolia/
-!wordpress/wp-content/plugins/visitsmatters/
+dist
+composer.lock
