@@ -1,21 +1,8 @@
-.beta-banner {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  background: $red-pink;
-  height: $beta-banner-height;
-  box-sizing: border-box;
-  padding-top: 5px;
-  text-align: center;
-  font-weight: bold;
-  color: white;
-  z-index: 101;
-}
+
 
 .ac-nav {
   position: fixed;
-  top: $beta-banner-height;
+  top: 0;
   left: 0;
   width: 100%;
   height: $navigation-height;
@@ -171,13 +158,17 @@
     }
   }
 
-  // Responsive nav
+ // Responsive nav
   select {
     display: none;
     visibility: hidden;
     position: absolute;
-    top: 16px;
+    top: 12px;
     right: 8px;
+    color: #000;
+    max-width: 200px;
+    float: right;
+
 
     &:not(.device) {
       background: linear-gradient(#efefef, #ccc);

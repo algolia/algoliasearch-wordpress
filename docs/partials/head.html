@@ -3,7 +3,26 @@
 <head>
     <meta charset="UTF-8"/>
     <title>{{title}}</title>
+    <meta content="IE=edge" http-equiv="X-UA-Compatible">
+    <meta charset="utf-8">
+    <meta content="width=device-width,initial-scale=1.0,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no" name="viewport">
 
+    <meta content='#' name='description'>
+    <meta content='width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0' name='viewport'>
+    <!-- / Twitter card -->
+    <meta content='summary_large_image' name='twitter:card'>
+    <meta content='@Algolia' name='twitter:site'>
+    <meta content='@Algolia' name='twitter:creator'>
+    <meta content="Algolia Product" name="twitter:title">
+    <meta content="Algolia Product description" name="twitter:description">
+    <meta content="Algolia Product image" name="twitter:image">
+    <!-- / OG meta -->
+    <meta content='#' property='og:url'>
+    <meta content='#' property='og:title'>
+    <meta content='#' property='og:image'>
+    <meta content='article' property='og:type'>
+    <meta content='#' property='og:description'>
+    <meta content='IMDb' property='og:site_name'>
     <link rel="icon" type="image/x-icon" href="favicon.ico">
 
     <meta name="description" content="{{description}}">
@@ -18,10 +37,6 @@
     <script type="text/javascript" src="https://cdn.jsdelivr.net/docsearch.js/2/docsearch.min.js"></script>
 </head>
 <body class="{{bodyClass}}">
-
-    <div class="beta-banner">
-        BETA PREVIEW - Work in progress...
-    </div>
     <div class='ac-nav'>
         <div class="row">
             <div class="large-12 columns">
@@ -45,16 +60,16 @@
                         </div>
                         <ul class='ac-nav-menu-list'>
                             <li {{ activeNav "index.md" }}>
-                                <a href="./">Home</a>
+                                <a href="./" data-path="./" title="Home">Home</a>
                             </li>
                             <li {{ activeNav "docs" }}>
-                                <a href="installation.html">Documentation</a>
+                                <a href="installation.html" data-path="installation.html" title="Documentation">Documentation</a>
                             </li>
                             <li {{ activeNav "frequently-asked-questions.md" }}>
-                                <a href="frequently-asked-questions.html">FAQ</a>
+                                <a href="frequently-asked-questions.html" data-path="frequently-asked-questions.html" title="FAQ">FAQ</a>
                             </li>
                             <li class='ac-nav-menu-list-icon'>
-                                <a class='ac-icon' href='https://github.com/algolia/algoliasearch-wordpress/' title='GitHub repository'>
+                                <a class='ac-icon' href='https://github.com/algolia/algoliasearch-wordpress/' data-path="https://github.com/algolia/algoliasearch-wordpress/" title='GitHub repository'>
                                     <span class='ac-icon ac-icon-github'></span>
                                 </a>
                             </li>
