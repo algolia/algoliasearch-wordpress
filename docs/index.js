@@ -16,7 +16,6 @@ var sassPaths = [
     'node_modules/foundation-sites/scss'
 ];
 
-
 var siteBuild = Metalsmith(__dirname)
     // Allow for relative url generation.
     .metadata({
@@ -25,9 +24,7 @@ var siteBuild = Metalsmith(__dirname)
         version: '0.3.0',
         time: new Date().getTime(),
     })
-
-
-
+    
     .source('./src')
     .destination('./build')
 
