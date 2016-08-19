@@ -346,9 +346,13 @@ final class Algolia_Posts_Index extends Algolia_Index
 	 */
 	protected function get_re_index_items_count()
 	{
-		$posts_count = wp_count_posts( $this->post_type );
+		$query = new WP_Query( array(
+			'post_type'   		=> $this->post_type,
+			'post_status' 		=> 'any', // Let the `should_index` take care of the filtering.
+			'suppress_filters' 	=> true,
+		) );
 
-		return (int) array_sum( get_object_vars( $posts_count ) );
+		return (int) $query->found_posts;
 	}
 	
 	/**
@@ -360,12 +364,13 @@ final class Algolia_Posts_Index extends Algolia_Index
 	protected function get_items( $page, $batch_size )
 	{
 		$query = new WP_Query( array(
-			'post_type'      => $this->post_type,
-			'posts_per_page' => $batch_size,
-			'post_status'    => 'any',
-			'order'          => 'ASC',
-			'orderby'        => 'ID',
-			'paged'			       => $page,
+			'post_type'      	=> $this->post_type,
+			'posts_per_page' 	=> $batch_size,
+			'post_status'    	=> 'any',
+			'order'          	=> 'ASC',
+			'orderby'        	=> 'ID',
+			'paged'			 	=> $page,
+			'suppress_filters' 	=> true
 		) );
 
 		return $query->posts;
