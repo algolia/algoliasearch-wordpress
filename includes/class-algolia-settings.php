@@ -18,6 +18,7 @@ class Algolia_Settings
 		add_option( 'algolia_native_search_index_id', 'post' );
 		add_option( 'algolia_index_name_prefix', 'wp_' );
 		add_option( 'algolia_logging_enabled', 'no' );
+		add_option( 'algolia_instantsearch_enabled', 'no' );
 	}
 
 	/**
@@ -125,9 +126,27 @@ class Algolia_Settings
 	/**
 	 * @param bool $flag
 	 */
-	public function set_logging_enabled($flag) {
+	public function set_logging_enabled( $flag ) {
 		$enabled = (bool) $flag === true ? 'yes' : 'no';
 		
 		update_option( 'algolia_logging_enabled', $enabled );
+	}
+
+	/**
+	 * @return bool
+	 */
+	public function get_instantsearch_enabled() {
+		$enabled = get_option( 'algolia_instantsearch_enabled', 'no' );
+
+		return $enabled === 'yes';
+	}
+
+	/**
+	* @param bool $flag
+	*/
+	public function set_instantsearch_enabled( $flag ) {
+		$enabled = (bool) $flag === true ? 'yes' : 'no';
+
+		update_option( 'algolia_instantsearch_enabled', $enabled );
 	}
 }

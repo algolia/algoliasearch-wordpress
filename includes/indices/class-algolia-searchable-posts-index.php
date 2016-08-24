@@ -176,6 +176,7 @@ final class Algolia_Searchable_Posts_Index extends Algolia_Index
 		$categories = get_the_terms( $post->ID, 'category' );
 		$categories = is_array( $categories ) ? $categories : array();
 		$shared_attributes['taxonomy_category'] = wp_list_pluck( $categories, 'name' );
+		$shared_attributes['category_tree'] = $this->get_category_tree( $categories );
 
 		$shared_attributes['is_sticky'] = is_sticky( $post->ID ) ? 1 : 0;
 
@@ -183,6 +184,49 @@ final class Algolia_Searchable_Posts_Index extends Algolia_Index
 		$shared_attributes = (array) apply_filters( 'algolia_searchable_post_' . $post->post_type . '_shared_attributes', $shared_attributes, $post );
 
 		return $shared_attributes;
+	}
+
+	/**
+	 * Returns an array like:
+	 * array(
+	 *	'lvl0' => ['Sales', 'Marketing'],
+	 *  'lvl1' => ['Sales > Strategies', 'Marketing > Tips & Tricks']
+	 * 	...
+	 * );
+	 *
+	 * This is useful when building hierarchical menus.
+	 * @see https://community.algolia.com/instantsearch.js/documentation/#hierarchicalmenu
+	 *
+	 * @param array $categories
+	 *
+	 * @return array
+	 */
+	protected function get_category_tree( array $categories ) {
+		$termIds = wp_list_pluck( $categories, 'term_id' );
+
+		$parents = [];
+		foreach ( $termIds as $termId ) {
+
+			$path = get_category_parents( $termId, false, ' > ' );
+			$parents[] = rtrim( $path, ' >' );
+		}
+
+		$categories = [];
+		foreach ( $parents as $parent ) {
+			$levels = explode( ' > ', $parent );
+
+			$previousLvl = '';
+			foreach ( $levels as $index => $level ) {
+				$categories[ 'lvl' . $index ][] = $previousLvl . $level;
+				$previousLvl .= $level . ' > ';
+
+				// Make sure we have not duplicate.
+				// The call to `array_values` ensures that we do not end up with an object in JSON.
+				$categories[ 'lvl' . $index ] = array_values( array_unique( $categories[ 'lvl' . $index ] ) );
+			}
+		}
+
+		return $categories;
 	}
 	
 	/**
@@ -212,6 +256,7 @@ final class Algolia_Searchable_Posts_Index extends Algolia_Index
 				'taxonomy_category',
 				'post_author.display_name',
 				'post_type_label',
+				'category_tree',
 			),
 			'attributesToSnippet' => array(
 				'post_title:30',
