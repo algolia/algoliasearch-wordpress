@@ -66,7 +66,7 @@ class Algolia_Public {
 		// Javascript.
 		wp_enqueue_script( 'algolia-autocomplete' );
 		wp_enqueue_script( 'algolia-search' );
-		wp_enqueue_script( 'algolia-public-autocomplete' );
+		wp_enqueue_script( 'algolia-frontend-autocomplete' );
 		wp_enqueue_script( 'tether' );
 		
 		do_action( 'algolia_autocomplete_assets' );

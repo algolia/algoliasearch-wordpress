@@ -42,6 +42,7 @@ class Algolia_Template_Loader {
 
 			add_action( 'wp_enqueue_scripts', function () {
 				wp_enqueue_script( 'algolia-instantsearch' );
+				wp_enqueue_style( 'algolia-instantsearch' );
 			} );
 		}
 
