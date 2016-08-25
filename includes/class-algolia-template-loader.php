@@ -35,7 +35,9 @@ class Algolia_Template_Loader {
 			return $template;
 		}*/
 
-		if ( is_search() /*&& enabled instantsearch experience*/ ) {
+		$settings = $this->plugin->get_settings();
+
+		if ( is_search() && $settings->should_override_search_with_instantsearch() ) {
 			$file = 'instantsearch.php';
 			$find[] = $file;
 			$find[] = $this->plugin->get_templates_path() . $file;

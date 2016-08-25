@@ -6,7 +6,7 @@ find . -iname "*.php" > list
 # xgettext --from-code=utf-8 --copyright-holder="Algolia" --package-name=algolia --language=PHP --add-comments -f list --keyword=esc_html__ --keyword=__ --keyword=_e -o languages/algolia.pot
 
 # update template
-xgettext --from-code=utf-8 --copyright-holder="Algolia" --package-name=algolia --language=PHP --add-comments -f list --keyword=esc_html__ --keyword=__ --keyword=_e --join-existing -o languages/algolia.pot
+xgettext --from-code=utf-8 --copyright-holder="Algolia" --package-name=algolia --language=PHP --add-comments -f list --keyword=esc_html_e --keyword=esc_html__ --keyword=__ --keyword=_e --join-existing -o languages/algolia.pot
 rm list
 
 

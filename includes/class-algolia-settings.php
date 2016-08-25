@@ -14,8 +14,7 @@ class Algolia_Settings
 		add_option( 'algolia_synced_indices_ids', array() );
 		add_option( 'algolia_autocomplete_enabled', 'no' );
 		add_option( 'algolia_autocomplete_config', array() );
-		add_option( 'algolia_override_native_search', 'no' );
-		add_option( 'algolia_native_search_index_id', 'post' );
+		add_option( 'algolia_override_native_search', 'native' );
 		add_option( 'algolia_index_name_prefix', 'wp_' );
 		add_option( 'algolia_logging_enabled', 'no' );
 		add_option( 'algolia_instantsearch_enabled', 'no' );
@@ -97,14 +96,28 @@ class Algolia_Settings
 	 * @return string Can be 'yes' or 'no'.
 	 */
 	public function get_override_native_search() {
-		return get_option( 'algolia_override_native_search', 'no' );
+		return get_option( 'algolia_override_native_search', 'native' );
+	}
+
+	/**
+	 * @return bool
+	 */
+	public function should_override_search_in_backend() {
+		return $this->get_override_native_search() === 'backend';
+	}
+
+	/**
+	 * @return bool
+	 */
+	public function should_override_search_with_instantsearch() {
+		return $this->get_override_native_search() === 'instantsearch';
 	}
 
 	/**
 	 * @return bool
 	 */
 	public function get_native_search_index_id() {
-		return (string) get_option( 'algolia_native_search_index_id', 'post' );
+		return 'searchable_posts';
 	}
 
 	/**

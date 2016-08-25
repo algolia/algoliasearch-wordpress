@@ -164,7 +164,7 @@ class Algolia_Plugin {
 	 */
 	private function override_wordpress_search() {
 		// Do not override native search if the feature is not enabled.
-		if ( 'yes' !== $this->settings->get_override_native_search() ) {
+		if ( ! $this->settings->should_override_search_in_backend() ) {
 			return;
 		}
 

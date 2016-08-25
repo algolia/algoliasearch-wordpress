@@ -102,7 +102,7 @@
 						sortBy: ['isRefined:desc', 'count:desc', 'name:asc'],
 						limit: 10,
 						templates: {
-							header: '<h3 class="widgettitle">Type</h3>'
+							header: '<h3 class="widgettitle">Post Type</h3>'
 						},
 					})
 				);
