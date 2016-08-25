@@ -114,7 +114,6 @@ class Algolia_Admin_Page_Native_Search
 			);
 		}
 
-
 		return $value;
 	}
 

@@ -192,7 +192,7 @@ final class Algolia_Searchable_Posts_Index extends Algolia_Index
 	 *	'lvl0' => ['Sales', 'Marketing'],
 	 *  'lvl1' => ['Sales > Strategies', 'Marketing > Tips & Tricks']
 	 * 	...
-	 * );
+	 * );.
 	 *
 	 * This is useful when building hierarchical menus.
 	 * @see https://community.algolia.com/instantsearch.js/documentation/#hierarchicalmenu
@@ -204,14 +204,14 @@ final class Algolia_Searchable_Posts_Index extends Algolia_Index
 	protected function get_category_tree( array $categories ) {
 		$termIds = wp_list_pluck( $categories, 'term_id' );
 
-		$parents = [];
+		$parents = array();
 		foreach ( $termIds as $termId ) {
 
 			$path = get_category_parents( $termId, false, ' > ' );
 			$parents[] = rtrim( $path, ' >' );
 		}
 
-		$categories = [];
+		$categories = array();
 		foreach ( $parents as $parent ) {
 			$levels = explode( ' > ', $parent );
 
@@ -379,8 +379,8 @@ final class Algolia_Searchable_Posts_Index extends Algolia_Index
 	protected function get_re_index_items_count()
 	{
 		$query = new WP_Query( array(
-			'post_type'   		=> $this->post_types,
-			'post_status' 		=> 'any', // Let the `should_index` take care of the filtering.
+			'post_type'   		    => $this->post_types,
+			'post_status' 		    => 'any', // Let the `should_index` take care of the filtering.
 			'suppress_filters' 	=> true,
 		) );
 		
@@ -396,12 +396,12 @@ final class Algolia_Searchable_Posts_Index extends Algolia_Index
 	protected function get_items( $page, $batch_size )
 	{
 		$query = new WP_Query( array(
-			'post_type'      	=> $this->post_types,
-			'posts_per_page' 	=> $batch_size,
-			'post_status'    	=> 'any',
-			'order'          	=> 'ASC',
-			'orderby'        	=> 'ID',
-			'paged'			 	=> $page,
+			'post_type'      	  => $this->post_types,
+			'posts_per_page' 	  => $batch_size,
+			'post_status'    	  => 'any',
+			'order'          	  => 'ASC',
+			'orderby'        	  => 'ID',
+			'paged'			 	        => $page,
 			'suppress_filters' 	=> true,
 		) );
 
