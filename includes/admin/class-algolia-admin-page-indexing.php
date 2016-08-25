@@ -5,7 +5,7 @@ class Algolia_Admin_Page_Indexing
 	/**
 	 * @var string
 	 */
-	private $slug = 'indexing';
+	private $slug = 'algolia-indexing';
 
 	/**
 	 * @var string

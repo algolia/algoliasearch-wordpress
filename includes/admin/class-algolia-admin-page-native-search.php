@@ -130,6 +130,19 @@ class Algolia_Admin_Page_Native_Search
 	 */
 	public function display_errors() {
 		settings_errors( $this->option_group );
+
+		$settings = $this->plugin->get_settings();
+
+		if ( ! $settings->should_override_search_in_backend() && ! $settings->should_override_search_with_instantsearch() ) {
+			return;
+		}
+
+		$searchable_posts_index = $this->plugin->get_index( 'searchable_posts' );
+		if ( false === $searchable_posts_index->is_enabled() ) {
+			echo '<div class="error notice">
+					  <p>' . sprintf( __( 'Searchable posts index needs to be checked on the <a href="%s">Algolia: Indexing page</a> for the search results to be powered by Algolia.', 'algolia' ), admin_url( 'admin.php?page=algolia-indexing' ) ) . '</p>
+				  </div>';
+		}
 	}
 
 	/**
