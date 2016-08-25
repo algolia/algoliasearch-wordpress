@@ -197,6 +197,7 @@ class Algolia_Admin_Page_Settings
 					'algolia'
 				)
 			);
+			$settings->set_api_is_reachable( false );
 		} else {
 			if ( ! Algolia_API::is_valid_search_api_key( $settings->get_application_id(), $value, $settings->get_search_api_key() ) ) {
 				add_settings_error(
@@ -208,6 +209,7 @@ class Algolia_Admin_Page_Settings
 						'algolia'
 					)
 				);
+				$settings->set_api_is_reachable( false );
 			} else {
 				add_settings_error(
 					$this->option_group,
@@ -215,6 +217,7 @@ class Algolia_Admin_Page_Settings
 					__( 'We succesfully managed to connect to the Algolia servers with the provided information. Your search API key has also been checked and is OK.', 'algolia' ),
 					'updated'
 				);
+				$settings->set_api_is_reachable( true );
 			}
 		}
 

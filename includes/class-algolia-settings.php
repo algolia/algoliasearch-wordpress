@@ -17,6 +17,7 @@ class Algolia_Settings
 		add_option( 'algolia_override_native_search', 'native' );
 		add_option( 'algolia_index_name_prefix', 'wp_' );
 		add_option( 'algolia_logging_enabled', 'no' );
+		add_option( 'algolia_api_is_reachable', 'no' );
 	}
 
 	/**
@@ -92,10 +93,17 @@ class Algolia_Settings
 	}
 
 	/**
-	 * @return string Can be 'yes' or 'no'.
+	 * @return string Can be 'native' 'backend' or 'instantsearch'.
 	 */
 	public function get_override_native_search() {
-		return get_option( 'algolia_override_native_search', 'native' );
+		$search_type = get_option( 'algolia_override_native_search', 'native' );
+
+		// BC compatibility.
+		if ( 'yes' === $search_type ) {
+			$search_type = 'backend';
+		}
+
+		return $search_type;
 	}
 
 	/**
@@ -142,5 +150,22 @@ class Algolia_Settings
 		$enabled = (bool) $flag === true ? 'yes' : 'no';
 		
 		update_option( 'algolia_logging_enabled', $enabled );
+	}
+
+	/**
+	 * @return bool
+	 */
+	public function get_api_is_reachable() {
+		$enabled = get_option( 'algolia_api_is_reachable', 'no' );
+
+		return $enabled === 'yes';
+	}
+
+	/**
+	 * @param bool $flag
+	 */
+	public function set_api_is_reachable( $flag ) {
+		$value = (bool) $flag === true ? 'yes' : 'no';
+		update_option( 'algolia_api_is_reachable', $value );
 	}
 }
