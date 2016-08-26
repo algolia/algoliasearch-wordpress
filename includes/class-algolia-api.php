@@ -24,10 +24,7 @@ class Algolia_API
 	}
 	
 	public function is_reachable() {
-		
-		// Todo: We should do this on a option value that tracks down the connection success on every credentials change.
-		
-		return null !== $this->get_client();
+		return $this->settings->get_api_is_reachable();
 	}
 
 	/**

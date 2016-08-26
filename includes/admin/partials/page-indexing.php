@@ -1,7 +1,9 @@
 <div class="wrap">
 	<h1>
 		<?php echo esc_html( get_admin_page_title() ); ?>
-		<a href="<?php echo admin_url( 'admin-post.php?action=algolia_re_index_all' ); ?>" class="page-title-action"><?php _e( 'Re-index everything', 'algolia' ); ?></a>
+		<?php if ( ! empty( $enabled_indices ) ): ?>
+			<a href="<?php echo admin_url( 'admin-post.php?action=algolia_re_index_all' ); ?>" class="page-title-action"><?php _e( 'Re-index everything', 'algolia' ); ?></a>
+		<?php endif; ?>
 	</h1>
 
 	<div class="queue-status">

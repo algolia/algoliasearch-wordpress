@@ -5,7 +5,7 @@ class Algolia_Admin_Page_Indexing
 	/**
 	 * @var string
 	 */
-	private $slug = 'indexing';
+	private $slug = 'algolia-indexing';
 
 	/**
 	 * @var string
@@ -317,6 +317,7 @@ class Algolia_Admin_Page_Indexing
 	 */
 	public function display_page() {
 		$queue = $this->plugin->get_task_queue();
+		$enabled_indices = $this->plugin->get_indices( array( 'enabled' => true ) );
 
 		require_once dirname( __FILE__ ) . '/partials/page-indexing.php';
 	}
@@ -326,6 +327,14 @@ class Algolia_Admin_Page_Indexing
 	 */
 	public function display_errors() {
 		settings_errors( $this->option_group );
+
+		$indices = $this->plugin->get_indices( array( 'enabled' => true ) );
+
+		if ( empty( $indices ) ) {
+			echo '<div class="error notice">
+					<p>' . sprintf( __( 'You have no indexed content in Algolia. Please index some content on the <a href="%s">Algolia: Indexing page</a>.', 'algolia' ), admin_url( 'admin.php?page=' . $this->slug ) ) . '</p>
+				</div>';
+		}
 	}
 
 	/**

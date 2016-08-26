@@ -66,7 +66,7 @@ class Algolia_Public {
 		// Javascript.
 		wp_enqueue_script( 'algolia-autocomplete' );
 		wp_enqueue_script( 'algolia-search' );
-		wp_enqueue_script( 'algolia-public-autocomplete' );
+		wp_enqueue_script( 'algolia-frontend-autocomplete' );
 		wp_enqueue_script( 'tether' );
 		
 		do_action( 'algolia_autocomplete_assets' );
@@ -116,12 +116,12 @@ class Algolia_Public {
 	public function inject_autocomplete_templates() {
 
 		$templates = array(
-			'header'          => plugin_dir_path( __FILE__ ) . 'partials/algolia-autocomplete-header.php',
-			'post-suggestion' => plugin_dir_path( __FILE__ ) . 'partials/algolia-autocomplete-post-suggestion.php',
-			'term-suggestion' => plugin_dir_path( __FILE__ ) . 'partials/algolia-autocomplete-term-suggestion.php',
-			'user-suggestion' => plugin_dir_path( __FILE__ ) . 'partials/algolia-autocomplete-user-suggestion.php',
-			'footer'          => plugin_dir_path( __FILE__ ) . 'partials/algolia-autocomplete-footer.php',
-			'empty'           => plugin_dir_path( __FILE__ ) . 'partials/algolia-autocomplete-empty.php',
+			'header'          => plugin_dir_path( __FILE__ ) . '../templates/autocomplete-header.php',
+			'post-suggestion' => plugin_dir_path( __FILE__ ) . '../templates/autocomplete-post-suggestion.php',
+			'term-suggestion' => plugin_dir_path( __FILE__ ) . '../templates/autocomplete-term-suggestion.php',
+			'user-suggestion' => plugin_dir_path( __FILE__ ) . '../templates/autocomplete-user-suggestion.php',
+			'footer'          => plugin_dir_path( __FILE__ ) . '../templates/autocomplete-footer.php',
+			'empty'           => plugin_dir_path( __FILE__ ) . '../templates/autocomplete-empty.php',
 		);
 
 		$templates = (array) apply_filters( 'algolia_autocomplete_templates', $templates );

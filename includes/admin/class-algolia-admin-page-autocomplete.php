@@ -145,7 +145,7 @@ class Algolia_Admin_Page_Autocomplete
 		if ( true === $is_enabled && empty( $indices ) ) {
 			echo '<div class="error notice">
 					  <p>' . esc_html__( 'You have enabled the Algolia Autocomplete feature but did not choose any index to search in.', 'algolia' ) . '</p>
-					  <p>' . sprintf( __( 'Please select one or multiple indices on the <a href="%s">Algolia Autocomplete configuration page</a>.', 'algolia' ), admin_url( 'admin.php?page=' . $this->slug ) ) . '</p>
+					  <p>' . sprintf( __( 'Please select one or multiple indices on the <a href="%s">Algolia: Autocomplete configuration page</a>.', 'algolia' ), admin_url( 'admin.php?page=' . $this->slug ) ) . '</p>
 				  </div>';
 		}
 	}
@@ -155,13 +155,5 @@ class Algolia_Admin_Page_Autocomplete
 	 */
 	public function print_section_settings() {
 		echo '<p>' . esc_html__( 'The autocomplete options adds a find-as-you-type dropdown menu to your search bar(s).', 'algolia' ) . '</p>';
-
-		$indices = $this->autocomplete_config->get_form_data();
-
-		if ( empty( $indices ) ) {
-			echo '<div class="error-message">' .
-				__( 'You have no indexed content yet. Please index some content on the `Indexing` page.', 'algolia' ) .
-				'</div>';
-		}
 	}
 }

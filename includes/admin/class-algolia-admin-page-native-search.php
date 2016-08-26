@@ -50,8 +50,8 @@ class Algolia_Admin_Page_Native_Search
 		);
 		add_submenu_page(
 			'algolia',
-			__( 'Native Search', 'algolia' ),
-			__( 'Native Search', 'algolia' ),
+			__( 'Search Page', 'algolia' ),
+			__( 'Search Page', 'algolia' ),
 			$this->capability,
 			$this->slug,
 			array( $this, 'display_page' )
@@ -61,63 +61,26 @@ class Algolia_Admin_Page_Native_Search
 	public function add_settings() {
 		add_settings_section(
 			$this->section,
-			__( 'Native Search', 'algolia' ),
+			__( 'Customize search results page', 'algolia' ),
 			array( $this, 'print_section_settings' ),
 			$this->slug
 		);
 
 		add_settings_field(
 			'algolia_override_native_search',
-			__( 'Override native search', 'algolia' ),
+			__( 'Search results', 'algolia' ),
 			array( $this, 'override_native_search_callback' ),
 			$this->slug,
 			$this->section
 		);
 
-		add_settings_field(
-			'algolia_native_search_index_id',
-			__( 'Search index to use', 'algolia' ),
-			array( $this, 'native_search_index_id_callback' ),
-			$this->slug,
-			$this->section
-		);
-
 		register_setting( $this->option_group, 'algolia_override_native_search', array( $this, 'sanitize_override_native_search' ) );
-		register_setting( $this->option_group, 'algolia_native_search_index_id', array( $this, 'sanitize_native_search_index_id' ) );
 	}
 
 	public function override_native_search_callback() {
-		$indices = $this->plugin->get_indices( array(
-			'enabled'  => true,
-			'contains' => 'posts',
-		) );
-
 		$value = $this->plugin->get_settings()->get_override_native_search();
-		$checked = 'yes' === $value ? 'checked ' : '';
-		$disabled = empty( $indices ) ? 'disabled ' : '';
 
-		echo "<input type='checkbox' name='algolia_override_native_search' value='yes' $checked $disabled/>";
-	}
-
-	public function native_search_index_id_callback() {
-		$indices = $this->plugin->get_indices( array(
-			'enabled'  => true,
-			'contains' => 'posts',
-		) );
-
-		$disabled = empty( $indices ) ? 'disabled ' : '';
-
-		$options = '';
-		if ( !empty( $indices ) ) {
-			$index_id = $this->plugin->get_settings()->get_native_search_index_id();
-			foreach ( $indices as $index ) {
-				$selected = $index_id === $index->get_id() ? ' selected="selected"': '';
-				$options .= '<option value="' . esc_attr( $index->get_id() ) . '" ' . $selected . '>' . esc_html( $index->get_admin_name() ) . '</option>';
-			}
-		}
-
-		echo "<select name=\"algolia_native_search_index_id\" $disabled>" . $options . '</select><br />' .
-			'<p class="description" id="home-description">' . __( 'Configure the index used to replace the native search.<br />WordPress uses "Searchable posts" by default.', 'algolia' ) . '</p>';
+		require_once dirname( __FILE__ ) . '/partials/form-override-search-option.php';
 	}
 
 	/**
@@ -127,35 +90,28 @@ class Algolia_Admin_Page_Native_Search
 	 */
 	public function sanitize_override_native_search( $value ) {
 
-		if ( 'yes' === $value ) {
+		if ( 'backend' === $value ) {
 			add_settings_error(
 				$this->option_group,
 				'native_search_enabled',
 				__( 'WordPress search is now based on Algolia!', 'algolia' ),
 				'updated'
 			);
+		} elseif ( 'instantsearch' === $value ) {
+			add_settings_error(
+				$this->option_group,
+				'native_search_enabled',
+				__( 'WordPress search is now based on Algolia instantsearch.js!', 'algolia' ),
+				'updated'
+			);
 		} else {
+			$value = 'native';
 			add_settings_error(
 				$this->option_group,
 				'native_search_disabled',
 				__( 'You chose to keep the WordPress native search instead of Algolia. If you are using the autocomplete feature of the plugin we highly recommend you turn Algolia search on instead of the WordPress native search.', 'algolia' ),
 				'updated'
 			);
-		}
-
-		return 'yes' === $value ? 'yes' : 'no';
-	}
-
-	public function sanitize_native_search_index_id( $value ) {
-		$index = $this->plugin->get_index( $value );
-		if ( null === $index || ! $index->contains_only( 'posts' ) ) {
-			add_settings_error(
-				$this->option_group,
-				'wrong_index_id',
-				__( 'The index you have chosen does not seem to be synced anymore.', 'algolia' )
-			);
-
-			return '';
 		}
 
 		return $value;
@@ -174,18 +130,17 @@ class Algolia_Admin_Page_Native_Search
 	public function display_errors() {
 		settings_errors( $this->option_group );
 
-		// Here we display an admin notice on every page if we detect a wrong configuration of the native search feature.
-		$is_enabled = 'yes' === $this->plugin->get_settings()->get_override_native_search();
-		if ( true === $is_enabled ) {
-			$index_id = $this->plugin->get_settings()->get_native_search_index_id();
-			$index = $this->plugin->get_index( $index_id );
+		$settings = $this->plugin->get_settings();
 
-			if ( null === $index || ! $index->contains_only( 'posts' ) || ! $index->is_enabled() ) {
-				echo '<div class="error notice">
-						  <p>' . esc_html__( 'You chose to power your search with Algolia but the selected index to base your search on does not exist.', 'algolia' ) . '</p>
-						  <p>' . sprintf( __( 'Please select a new index on the <a href="%s">Algolia Native Search configuration page</a> and hit the save changes button.', 'algolia' ), admin_url( 'admin.php?page=' . $this->slug ) ) . '</p>
-					  </div>';
-			}
+		if ( ! $settings->should_override_search_in_backend() && ! $settings->should_override_search_with_instantsearch() ) {
+			return;
+		}
+
+		$searchable_posts_index = $this->plugin->get_index( 'searchable_posts' );
+		if ( false === $searchable_posts_index->is_enabled() ) {
+			echo '<div class="error notice">
+					  <p>' . sprintf( __( 'Searchable posts index needs to be checked on the <a href="%s">Algolia: Indexing page</a> for the search results to be powered by Algolia.', 'algolia' ), admin_url( 'admin.php?page=algolia-indexing' ) ) . '</p>
+				  </div>';
 		}
 	}
 
@@ -195,6 +150,7 @@ class Algolia_Admin_Page_Native_Search
 	public function print_section_settings() {
 		echo '<p>' . esc_html__( 'By enabling this plugin to override the native WordPress search, your search results will be powered by Algolia\'s typo-tolerant & relevant search algorithms.', 'algolia' ) . '</p>';
 
+		// todo: replace this with a check on the searchable_posts_index
 		$indices = $this->plugin->get_indices( array(
 			'enabled'  => true,
 			'contains' => 'posts',
