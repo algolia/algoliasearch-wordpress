@@ -8,8 +8,8 @@
  * Version:           0.4.0
  * Author:            Algolia
  * Author URI:        https://www.algolia.com/
- * License:           MIT
- * License URI:       https://opensource.org/licenses/MIT
+ * License: 		  MIT License, GNU General Public License v2.0
+ * License URI:       MIT-LICENSE.txt, GPL-LICENSE.txt
  * Text Domain:       algolia
  * Domain Path:       /languages/
  */
