@@ -1,3 +1,9 @@
+# 0.4.0
+- Add instantsearch.js integration as plug & play feature
+- Improve autocomplete suggestion template
+- Make sure we index everything even when WP_Query filters are introduced by plugins like WPML
+- Index categories as a tree for usage in instantsearch.js hierarchicalMenu widget
+
 # 0.3.0
 - Cleanup the codebase
 - Support install through composer
