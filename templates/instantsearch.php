@@ -136,7 +136,7 @@
 					instantsearch.widgets.menu({
 						container: '#facet-users',
 						attributeName: 'post_author.display_name',
-						sortBy: ['isRefined', 'count:desc', 'name:asc'],
+						sortBy: ['isRefined:desc', 'count:desc', 'name:asc'],
 						limit: 10,
 						templates: {
 							header: '<h3 class="widgettitle">Auteurs</h3>'
