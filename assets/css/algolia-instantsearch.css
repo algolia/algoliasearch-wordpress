@@ -97,9 +97,7 @@
 
 .ais-hits--item em, .ais-hits--item a em {
     font-style: normal;
-    background: #21A4D7;
-    color: #FFFFFF;
-    padding: 0 1px;
+    background: #FFFBCC;
     border-radius: 2px;
 }
 
