@@ -317,6 +317,7 @@ class Algolia_Admin_Page_Indexing
 	 */
 	public function display_page() {
 		$queue = $this->plugin->get_task_queue();
+		$enabled_indices = $this->plugin->get_indices( array( 'enabled' => true ) );
 
 		require_once dirname( __FILE__ ) . '/partials/page-indexing.php';
 	}

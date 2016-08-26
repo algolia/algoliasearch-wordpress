@@ -156,7 +156,6 @@ class Algolia_Admin_Page_Settings
 				'empty',
 				__( 'Search-only API key should not be empty.', 'algolia' )
 			);
-
 		}
 
 		return $value;
