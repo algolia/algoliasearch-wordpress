@@ -120,6 +120,10 @@
                 tether.position();
             });
 
+            searchInput.on('autocomplete:opened', function() {
+                updateDropdownWidth();
+            });
+
 
             // Trick to ensure the autocomplete is always above all.
             $menu.css('z-index', '99999');
@@ -137,7 +141,6 @@
                 tether.position();
             }
             $(window).on('resize', updateDropdownWidth);
-            updateDropdownWidth()
         } );
 
         $(document).on("click", ".algolia-powered-by-link", function(e) {
