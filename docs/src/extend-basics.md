@@ -26,6 +26,15 @@ Then you should be able to enable that plugin from your WordPress admin panel.
 
 You can now hook into the Algolia Search for WordPress plugin!
 
+## Extend from a theme
+
+Every theme contains a `functions.php` file where you can also extend the Algolia Search plugin.
+
+If you choose to use your theme files to extend the plugin, please consider creating a child theme so that you can update your theme
+without loosing your changes.
+
+You can read more about [child themes in the official documentation](https://codex.wordpress.org/Child_Themes).
+
 ## Filters
 
 Filters are a way to alter data during the lifecycle of a request. The idea is simple: you listen for a filter to be called by using `add_filter`, you edit your data and return it modified.
