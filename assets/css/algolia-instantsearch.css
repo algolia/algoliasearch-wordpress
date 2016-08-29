@@ -133,19 +133,9 @@
     font-weight: bold;
 }
 
-.ais-refinement-list--count {
-    /* item count */
-    display: none;
-}
-
 .ais-menu--item__active {
     /* active list item */
     font-weight: bold;
-}
-
-.ais-menu--count {
-    /* item count */
-    display: none;
 }
 
 .ais-hierarchical-menu--list__lvl1 {

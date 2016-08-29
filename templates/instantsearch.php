@@ -56,8 +56,13 @@
 					urlSync: {
 						mapping: {'q': 's'},
 						trackedParameters: ['query']
+					},
+					searchParameters: {
+						facetingAfterDistinct: true
 					}
 				});
+
+
 
 				search.addWidget(
 					instantsearch.widgets.searchBox({
