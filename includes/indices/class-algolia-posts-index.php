@@ -436,6 +436,7 @@ final class Algolia_Posts_Index extends Algolia_Index
 	 */
 	protected function extract_item(Algolia_Task $task)
 	{
+		
 		$data = $task->get_data();
 		if ( ! isset( $data['post_id'] ) ) {
 			return;

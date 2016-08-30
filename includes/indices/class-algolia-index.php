@@ -246,6 +246,7 @@ abstract class Algolia_Index
 
 		if ( $page === $max_num_pages ) {
 			$this->deploy_tmp_index();
+			$this->sync_replicas();
 			do_action( 'algolia_re_indexed_items', $this->get_id() );
 		}
 	}
@@ -430,5 +431,55 @@ abstract class Algolia_Index
 			'id'   		  => $this->get_id(),
 			'enabled' 	=> $this->enabled,
 		);
+	}
+
+	/**
+	 * @return array
+	 */
+	protected function get_replicas() {
+		$replicas = apply_filters( 'algolia_index_replicas', array(), $this );
+
+		$filtered = array();
+		// Filter out invalid inputs.
+		foreach ( $replicas as $replica ) {
+			if ( ! $replica instanceof Algolia_Index_Replica ) {
+				continue;
+			}
+			$filtered[] = $replica;
+		}
+
+		return $filtered;
+	}
+
+	private function sync_replicas() {
+		$index_name = $this->get_name();
+
+		$replicas = $this->get_replicas();
+		if ( empty( $replicas ) ) {
+			// No need to go further if there are no replicas!
+			return;
+		}
+
+		$replica_index_names = array();
+		foreach ( $replicas as $replica ) {
+			/** @var Algolia_Index_Replica $replica */
+			$replica_index_names[] = $replica->get_index_name( $index_name );
+		}
+
+		$this->get_index()->setSettings( array(
+			'slaves' => $replica_index_names
+		), false );
+
+		$client = $this->get_client();
+		foreach ( $replicas as $replica ) {
+			/** @var Algolia_Index_Replica $replica */
+			$replica_index_name = $replica->get_index_name( $index_name );
+			$index = $client->initIndex( $replica_index_name );
+			$index->setSettings( array( 'ranking' => $replica->get_ranking() ) );
+
+			$this->logger->log_operation( sprintf( '[1] Updated index replica %s settings.', $replica_index_name ) );
+		}
+
+		$this->logger->log_operation( sprintf( '[1] Updated index %s settings to sync replicas.', $index_name ) );
 	}
 }

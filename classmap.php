@@ -30,6 +30,7 @@ require_once ALGOLIA_PATH . 'includes/class-algolia-task-queue-loopback-async.ph
 require_once ALGOLIA_PATH . 'includes/class-algolia-template-loader.php';
 
 require_once ALGOLIA_PATH . 'includes/indices/class-algolia-index.php';
+require_once ALGOLIA_PATH . 'includes/indices/class-algolia-index-replica.php';
 require_once ALGOLIA_PATH . 'includes/indices/class-algolia-searchable-posts-index.php';
 require_once ALGOLIA_PATH . 'includes/indices/class-algolia-posts-index.php';
 require_once ALGOLIA_PATH . 'includes/indices/class-algolia-terms-index.php';
