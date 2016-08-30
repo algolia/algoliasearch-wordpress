@@ -69,3 +69,9 @@ Content also gets inconsistent when you use filters to change settings or attrib
 
 In that case you can simply re-index your content.
 
+### Can I use one Algolia account for multiple WordPress sites?
+
+Definitely! In the same fashion that WordPress lets you prefix all database tables, we allow you to prefix every indices in Algolia.
+
+This can be configured on the `Indexing` section of the plugin.
+
