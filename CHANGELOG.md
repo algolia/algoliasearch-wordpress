@@ -1,3 +1,11 @@
+# 0.5.0
+- Fix a bug where autocomplete dropdown would not have the correct width after window resizing
+- Exclude post content contained inside `<script>` tags by default
+- Display facet counts which are now accurate thanks to the use of `facetingAfterDistinct`
+- Ship instantsearch.js built on preact which highly reduces the size of the library
+- Catch eventual PHP API Client exception raised when requirements were unmet
+- Improved instantsearch.js default UI experience
+
 # 0.4.0
 - Add instantsearch.js integration as plug & play feature
 - Improve autocomplete suggestion template
