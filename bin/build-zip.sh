@@ -10,6 +10,7 @@ zip -r dist/algolia.zip . \
 	--exclude=dist/*  \
 	--exclude=.idea/*  \
 	--exclude=.DS_Store \
+	--exclude=node_modules/* \
 	--exclude=.github/*
 
 
