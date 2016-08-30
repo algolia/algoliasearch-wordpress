@@ -24,7 +24,19 @@ class Algolia_API
 	}
 	
 	public function is_reachable() {
-		return $this->settings->get_api_is_reachable();
+		if ( ! $this->settings->get_api_is_reachable() ) {
+			return false;
+		}
+
+		try {
+			// Here we check that all requirements for the PHP API Client are met
+			// If they are not, instantiating the client will throw exceptions.
+			$client = $this->get_client();
+		} catch ( Exception $e ) {
+			return false;
+		}
+
+		return null !== $client;
 	}
 
 	/**
