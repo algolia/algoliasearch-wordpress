@@ -315,9 +315,6 @@
 .ais-hierarchical-menu--item__active > div > a {
     font-weight: bold;
 }
-.ais-hierarchical-menu--count {
-    display: none;
-}
 
 /* Responsive */
 @media only screen and (max-width: 1000px) {
