@@ -23,8 +23,8 @@ cp node_modules/algoliasearch/dist/algoliasearch.jquery.min.js assets/js/algolia
 cp node_modules/autocomplete.js/dist/autocomplete.js assets/js/autocomplete.js/
 cp node_modules/autocomplete.js/dist/autocomplete.min.js assets/js/autocomplete.js/
 
-cp node_modules/instantsearch.js/dist/instantsearch.js assets/js/instantsearch.js/
-cp node_modules/instantsearch.js/dist/instantsearch.min.js assets/js/instantsearch.js/
+cp node_modules/instantsearch.js/dist/instantsearch-preact.js assets/js/instantsearch.js/
+cp node_modules/instantsearch.js/dist/instantsearch-preact.min.js assets/js/instantsearch.js/
 
 cp node_modules/tether/dist/js/tether.js assets/js/tether/
 cp node_modules/tether/dist/js/tether.min.js assets/js/tether/
