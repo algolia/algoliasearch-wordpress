@@ -38,6 +38,7 @@
     font-weight: 200;
     box-sizing: border-box;
     outline: none;
+    box-shadow: none;
 }
 
 #algolia-search-box .search-icon {
