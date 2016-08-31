@@ -1,9 +1,10 @@
 === Algolia Search ===
-Contributors: rayrutjes
-Tags: search, better search, algolia search, algolia, faceted search, autocomplete, instant-search, search highlight, as you type search, relevant search, advanced search, typeahead, ajax search, suggest, auto-suggest, custom search, advanced search, search by tag, search by category, search users, search authors
+Contributors: Algolia
+Tags: algolia, search, better search, faceted search, autocomplete, instant-search, search highlight, as you type search, relevant search, advanced search, typeahead, ajax search
 Requires at least: 3.7.14
-Tested up to: 4.5.3
-License: MIT
+Tested up to: 4.5.6
+License: MIT License, GNU General Public License v2.0
+License URI: MIT-LICENSE.txt, GPL-LICENSE.txt
 
 Algolia Search plugin for WordPress is a drop in replacement for WordPress search. It also provides an optional "as you type" auto-complete experience.
 
@@ -32,6 +33,6 @@ Fully extensible by the means of WordPress filters and hooks for building your c
 
 == Changelog ==
 
-As we believe in the Don't Repeat Yourself principle!
+As we believe in the Don't Repeat Yourself principle, checkout the changelog on the GitHub repository!
 
 [CHANGELOG](https://github.com/algolia/algoliasearch-wordpress/blob/master/CHANGELOG.md)
