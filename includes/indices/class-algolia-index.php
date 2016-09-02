@@ -246,6 +246,7 @@ abstract class Algolia_Index
 
 		if ( $page === $max_num_pages ) {
 			$this->deploy_tmp_index();
+			$this->sync_replicas();
 			do_action( 'algolia_re_indexed_items', $this->get_id() );
 		}
 	}
@@ -381,8 +382,7 @@ abstract class Algolia_Index
 	 *
 	 * @return bool
 	 */
-	final public function handle_task( Algolia_Task $task )
-	{
+	final public function handle_task( Algolia_Task $task ) {
 		$data = $task->get_data();
 
 		switch ( $task->get_name() ) {
@@ -430,5 +430,60 @@ abstract class Algolia_Index
 			'id'   		  => $this->get_id(),
 			'enabled' 	=> $this->enabled,
 		);
+	}
+
+	/**
+	 * @return array
+	 */
+	protected function get_replicas() {
+		$replicas = (array) apply_filters( 'algolia_index_replicas', array(), $this );
+		$replicas = (array) apply_filters( 'algolia_' . $this->get_id() . '_index_replicas', $replicas, $this );
+
+		$filtered = array();
+		// Filter out invalid inputs.
+		foreach ( $replicas as $replica ) {
+			if ( ! $replica instanceof Algolia_Index_Replica ) {
+				continue;
+			}
+			$filtered[] = $replica;
+		}
+
+		return $filtered;
+	}
+
+	private function sync_replicas() {
+		$index_name = $this->get_name();
+
+		$replicas = $this->get_replicas();
+		if ( empty( $replicas ) ) {
+			// No need to go further if there are no replicas!
+			return;
+		}
+
+		$replica_index_names = array();
+		foreach ( $replicas as $replica ) {
+			/** @var Algolia_Index_Replica $replica */
+			$replica_index_names[] = $replica->get_replica_index_name( $this );
+		}
+
+		$this->get_index()->setSettings( array(
+			'slaves' => $replica_index_names
+		), false );
+
+		$client = $this->get_client();
+
+		// Ensure we re-push the master index settings each time.
+		$settings = $this->get_settings();
+		foreach ( $replicas as $replica ) {
+			/** @var Algolia_Index_Replica $replica */
+			$settings['ranking'] = $replica->get_ranking();
+			$replica_index_name = $replica->get_replica_index_name( $this );
+			$index = $client->initIndex( $replica_index_name );
+			$index->setSettings( $settings );
+
+			$this->logger->log_operation( sprintf( '[1] Updated index replica %s settings.', $replica_index_name ) );
+		}
+
+		$this->logger->log_operation( sprintf( '[1] Updated index %s settings to sync replicas.', $index_name ) );
 	}
 }

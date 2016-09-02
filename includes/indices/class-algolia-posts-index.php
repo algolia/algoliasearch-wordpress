@@ -12,8 +12,7 @@ final class Algolia_Posts_Index extends Algolia_Index
 	/**
 	 * @param string $post_type
 	 */
-	public function __construct( $post_type )
-	{
+	public function __construct( $post_type ) {
 		$this->post_type = (string) $post_type;
 	}
 
@@ -29,8 +28,7 @@ final class Algolia_Posts_Index extends Algolia_Index
 	/**
 	 * @return string The name displayed in the admin UI.
 	 */
-	public function get_admin_name()
-	{
+	public function get_admin_name() {
 		$post_type = get_post_type_object( $this->post_type );
 		if( null === $post_type ) {
 			throw new RuntimeException( 'Unable to fetch the post type information.' );
@@ -44,8 +42,7 @@ final class Algolia_Posts_Index extends Algolia_Index
 	 *
 	 * @return bool
 	 */
-	protected function should_index( $item )
-	{
+	protected function should_index( $item ) {
 		return $this->should_index_post( $item );
 	}
 
@@ -80,8 +77,7 @@ final class Algolia_Posts_Index extends Algolia_Index
 	 *
 	 * @return array
 	 */
-	protected function get_records( $item )
-	{
+	protected function get_records( $item ) {
 		return $this->get_post_records( $item );
 	}
 
@@ -291,8 +287,7 @@ final class Algolia_Posts_Index extends Algolia_Index
 	/**
 	 * @return array
 	 */
-	protected function get_synonyms()
-	{
+	protected function get_synonyms() {
 		$synonyms = (array) apply_filters( 'algolia_posts_index_synonyms', array(), $this->post_type );
 		$synonyms = (array) apply_filters( 'algolia_posts_' . $this->post_type . '_index_synonyms', $synonyms );
 
@@ -325,8 +320,7 @@ final class Algolia_Posts_Index extends Algolia_Index
 	 *
 	 * @return string
 	 */
-	private function get_post_object_id( $post_id, $record_index )
-	{
+	private function get_post_object_id( $post_id, $record_index ) {
 		return $post_id . '-' . $record_index;
 	}
 
@@ -335,8 +329,7 @@ final class Algolia_Posts_Index extends Algolia_Index
 	 *
 	 * @return int
 	 */
-	private function get_post_records_count( $post_id )
-	{
+	private function get_post_records_count( $post_id ) {
 		return (int) get_post_meta( (int) $post_id, 'algolia_' . $this->get_id() . '_records_count', true );
 	}
 
@@ -352,8 +345,7 @@ final class Algolia_Posts_Index extends Algolia_Index
 	 * @param mixed $item
 	 * @param array $records
 	 */
-	protected function update_records( $item, array $records )
-	{
+	protected function update_records( $item, array $records ) {
 		$this->update_post_records( $item, $records );
 	}
 
@@ -381,16 +373,14 @@ final class Algolia_Posts_Index extends Algolia_Index
 	/**
 	 * @return string
 	 */
-	public function get_id()
-	{
+	public function get_id() {
 		return 'posts_' . $this->post_type;
 	}
 
 	/**
 	 * @return int
 	 */
-	protected function get_re_index_items_count()
-	{
+	protected function get_re_index_items_count() {
 		$query = new WP_Query( array(
 			'post_type'   		    => $this->post_type,
 			'post_status' 		    => 'any', // Let the `should_index` take care of the filtering.
@@ -406,8 +396,7 @@ final class Algolia_Posts_Index extends Algolia_Index
 	 *
 	 * @return array
 	 */
-	protected function get_items( $page, $batch_size )
-	{
+	protected function get_items( $page, $batch_size ) {
 		$query = new WP_Query( array(
 			'post_type'      	  => $this->post_type,
 			'posts_per_page' 	  => $batch_size,
@@ -421,8 +410,7 @@ final class Algolia_Posts_Index extends Algolia_Index
 		return $query->posts;
 	}
 
-	public function de_index_items()
-	{
+	public function de_index_items() {
 		parent::de_index_items();
 
 		// Remove all the records count for the post type in one call.
@@ -434,8 +422,7 @@ final class Algolia_Posts_Index extends Algolia_Index
 	 *
 	 * @return mixed
 	 */
-	protected function extract_item(Algolia_Task $task)
-	{
+	protected function extract_item(Algolia_Task $task) {
 		$data = $task->get_data();
 		if ( ! isset( $data['post_id'] ) ) {
 			return;
