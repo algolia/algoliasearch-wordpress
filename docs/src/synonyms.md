@@ -59,4 +59,4 @@ add_filter( 'algolia_posts_page_index_synonyms', 'custom_posts_page_index_synony
 
 To fully understand the synonyms arguments please check out the [official documentation about synonyms](https://www.algolia.com/doc/relevance/synonyms).
 
-**As for index settings, synonyms will be reset by WordPress every time you re-index your content. You should NOT configure your synonyms via the Algolia Dashboard. Instead create a plugin as explained in [the documentation page about extending this plugin](extend-basics.html).**
+<div class="alert alert-warning">As for index settings, synonyms will be reset by the WordPress plugin each time you re-index your content. You should NOT configure your synonyms via the Algolia Dashboard. Instead create a plugin as explained in [the documentation page about extending this plugin](extend-basics.html).</div>

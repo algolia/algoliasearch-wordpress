@@ -38,15 +38,13 @@ We try as much as possible to automate the indexing for you. That means that we 
 - A post was created or updated
 - A post was deleted
 
-**We synchronize without trying to detect if the updates has lead to real changes. This ensures consistency and easier extensibility.**
+<div class="alert alert-warning">We synchronize without trying to detect if the updates has lead to real changes. This ensures consistency and easier extensibility.</div>
 
 ## Indexing Decision
 
 The existence of an indexing task, does not necessarily mean that the data will be pushed to Algolia.
 
-Indeed, before each post, term and user indexing, we decide if the item should be indexed or not.
-
-If it should, then we re-push the data for the item otherwise we remove it from the index.
+Indeed, before each post, term and user indexing, we decide if the item should be indexed or not. If it should, then we re-push the data for the item otherwise we remove it from the index.
 
 **Default decisions:**
 
@@ -89,16 +87,6 @@ Also note how we return `false` early on if the decision has already been taken 
 
 Every time an indexing task is triggered, see [previous section](#triggers), we queue a synchronization task with the minimum required information for the task to be handled.
 
-Every time one or multiple tasks are queued, we automatically trigger the processing of the queue.
+Every time one or multiple tasks are queued, we automatically trigger the processing of the queue. The queue is then processed with a FIFO logic, and ensures there is only one task handled at the same time. For scalability reasons, each task handling is done in its own process and triggered by an asynchronous http call.
 
-The queue is then processed with a FIFO logic, and ensures there is only one task handled at the same time.
-
-For scalability reasons, each task handling is done in its own process and triggered by an asynchronous http call.
-
-**By default WordPress will ensure that your ssl certificate is valid on every remote call. If you have an invalid ssl certificate, the queue processing won't work.**
-
-
-
-
-
-
+<div class="alert alert-warning">By default WordPress will ensure that your ssl certificate is valid on every remote call. If you have an invalid ssl certificate, the queue processing won't work.</div>

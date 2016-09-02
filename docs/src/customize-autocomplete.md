@@ -1,5 +1,5 @@
 ---
-title: Customize Autocomplete
+title: Extend Autocomplete
 description: Learn how to customize the Algolia Search for WordPress autocomplete search experience.
 layout: page.html
 ---
@@ -190,6 +190,7 @@ span.algolia-autocomplete {
 .aa-dropdown-menu a.suggestion-link svg {
     vertical-align: middle;
     fill: rgba(0,0,0,.3);
+    float: left;
 }
 
 .aa-dropdown-menu .suggestion-post-thumbnail {
@@ -381,12 +382,30 @@ Here is what the post suggestion template looks like:
 
 ```html
 <script type="text/html" id="tmpl-autocomplete-post-suggestion">
-	<a class="suggestion-link" href="{{ data.permalink }}">
-		<# if ( data.thumbnail_url ) { #>
-			<img class="suggestion-post-thumbnail" src="{{ data.thumbnail_url }}" width="32" height="32" alt="{{ data.post_title }}">
-		<# } #>
-		<span class="suggestion-post-title">{{{ data._highlightResult.post_title.value }}}</span>
-	</a>
+    <a class="suggestion-link" href="{{ data.permalink }}">
+        <# if ( data.thumbnail_url ) { #>
+            <img class="suggestion-post-thumbnail" src="{{ data.thumbnail_url }}" alt="{{ data.post_title }}">
+        <# } #>
+    <div class="suggestion-post-attributes">
+        <span class="suggestion-post-title">{{{ data._highlightResult.post_title.value }}}</span>
+
+        <#
+            var attributes = ['content', 'title6', 'title5', 'title4', 'title3', 'title2', 'title1'];
+            var attribute_name;
+            var relevant_content = '';
+            for ( var index in attributes ) {
+                attribute_name = attributes[ index ];
+                if ( data._highlightResult[ attribute_name ].matchedWords.length > 0 ) {
+                    relevant_content = data._snippetResult[ attribute_name ].value;
+                    break;
+                } else if( data._snippetResult[ attribute_name ].value !== '' ) {
+                    relevant_content = data._snippetResult[ attribute_name ].value;
+                }
+            }
+            #>
+        <span class="suggestion-post-content">{{{ relevant_content }}}</span>
+    </div>
+    </a>
 </script>
 ```
 
@@ -404,6 +423,7 @@ Let's say that you now want to add the content excerpt of posts in the suggestio
 To replace the default templates with yours you can use the `algolia_autocomplete_templates` filter.
 
 By default, here is the list of templates we use:
+
 ```php
 <?php
 
@@ -448,7 +468,7 @@ Now lets replace the post template with your custom one:
 </style>
 ```
 
-**Note that we have inlined the styles for the sake of briefness. In your project, inject your CSS properly as explained previously on this page.**
+<div class="alert alert-warning">Note that we have inlined the styles for the sake of briefness. In your project, inject your CSS properly as explained previously on this page.</div>
 
 Now let's override the default template:
 

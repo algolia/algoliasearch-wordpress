@@ -5,7 +5,7 @@ class Algolia_Admin_Page_Autocomplete
 	/**
 	 * @var string
 	 */
-	private $slug = 'algolia-autocomplete';
+	private $slug = 'algolia';
 
 	/**
 	 * @var string
@@ -48,7 +48,15 @@ class Algolia_Admin_Page_Autocomplete
 	}
 
 	public function add_page() {
-
+		add_menu_page(
+			'Algolia Search',
+			__( 'Algolia Search', 'algolia' ),
+			'manage_options',
+			'algolia',
+			array( $this, 'display_page' ),
+			'',
+			30
+		);
 		add_submenu_page(
 			'algolia',
 			__( 'Autocomplete', 'algolia' ),
@@ -62,7 +70,7 @@ class Algolia_Admin_Page_Autocomplete
 	public function add_settings() {
 		add_settings_section(
 			$this->section,
-			__( 'Algolia Autocomplete', 'algolia' ),
+			null,
 			array( $this, 'print_section_settings' ),
 			$this->slug
 		);
@@ -154,6 +162,6 @@ class Algolia_Admin_Page_Autocomplete
 	 * Prints the section text.
 	 */
 	public function print_section_settings() {
-		echo '<p>' . esc_html__( 'The autocomplete options adds a find-as-you-type dropdown menu to your search bar(s).', 'algolia' ) . '</p>';
+		echo '<p>' . esc_html__( 'The autocomplete feature adds a find-as-you-type dropdown menu to your search bar(s).', 'algolia' ) . '</p>';
 	}
 }

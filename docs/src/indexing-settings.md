@@ -12,7 +12,7 @@ Each index comes with its own customizable settings and [a complete list of the 
 
 This plugin automatically configures each index with some sensible default settings, that being said, you can of course [customize the settings by using some filters](#custom-index-settings).
 
-**Every time an index is re-indexed, the settings will be pushed and override existing ones. This means that you should not edit your settings directly in the Algolia Dashboard. Instead, you should use `filters`  to hook into this plugin and alter the settings.**
+<div class="alert alert-warning">Every time an index is re-indexed, the settings will be pushed and override existing ones. This means that you should not edit your settings directly in the Algolia Dashboard. Instead, you should use `filters`  to hook into this plugin and alter the settings.</div>
 
 ## Settings Anatomy
 
@@ -36,8 +36,7 @@ By using this feature, the search engine will only return the most relevant reco
 Algolia allows to prepare your records for faceting. Faceting is the feature allowing you for example to list all posts of a category.
 Even though we do not yet provide out of the box usage of faceting in the plugin, we tried to already push some sensible default values for the `attributesForFaceting`.
 
-
-Feel free to dig further into the Algolia Search engine to optimize even more your search relevancy: [Relevancy in Algolia's documentation](https://www.algolia.com/doc#relevance).
+<div class="alert alert-info">Feel free to dig further into the Algolia Search engine to optimize even more your search relevancy: [Relevancy in Algolia's documentation](https://www.algolia.com/doc#relevance).</div>
 
 ## Searchable Posts Index Settings
 

@@ -85,6 +85,7 @@ if (process.env.NODE_ENV !== 'production') {
         watch({
             paths: {
                 '${source}/**/*.md': true,
+                '${source}/img/**/*.*': true,
                 '${source}/sass/**/*.scss': 'sass/app.scss',
                 'layouts/**/*.html': '**/*.md',
                 'partials/**/*.html': '**/*.md'

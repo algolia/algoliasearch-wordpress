@@ -80,7 +80,7 @@ class Algolia_Admin_Page_Settings
 	public function add_settings() {
 		add_settings_section(
 			$this->section,
-			__( 'Algolia account', 'algolia' ),
+			null,
 			array( $this, 'print_section_settings' ),
 			$this->slug
 		);

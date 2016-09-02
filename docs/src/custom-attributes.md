@@ -40,7 +40,7 @@ Head to your WordPress admin panel and go enable your freshly created plugin.
 
 ## Count Page Visits
 
-**This is a very trivial way of counting visits, do not use this implementation on a production website which has a lot of traffic.**
+This is a very trivial way of counting visits, do not use this implementation on a production website which has a lot of traffic.
 
 Here is our little plugin code to be able to track visits.
 ```php
@@ -165,7 +165,7 @@ function vm_posts_index_settings( array $settings ) {
 }
 ```
 
-**After making changes to settings, you need to re-index the indices. To do so, simply click on the `Re-index everything` button on the `Indexing` admin page of this plugin:**
+<div class="alert alert-warning">After making changes to settings, you need to re-index the indices. To do so, simply click on the `Re-index everything` button on the `Indexing` admin page of this plugin:</div>
 
 ![Re-index everything button](img/custom-attributes/re-index-everything.png)
 

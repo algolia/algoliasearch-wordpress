@@ -7,7 +7,7 @@ layout: page.html
 
 The plugin has been built with extensibility in mind. We have tried to wisely integrate `filters` and `actions`.
 
-**You should never modify files inside the `wp-content/plugins` directory. If you find yourself in a situation where you require to hack the plugin, let us know so that we can improve the plugin.**
+<div class="alert alert-warning">You should never modify files inside the `wp-content/plugins` directory. If you find yourself in a situation where you require to hack the plugin, let us know so that we can improve the plugin.</div>
 
 ## Create your Custom Plugin
 

@@ -54,6 +54,7 @@
 @import "components/header";
 @import "components/footer";
 @import "components/search";
+@import "components/docs";
 
 
 // Mixin background
@@ -261,8 +262,7 @@ table thead tr, #content table tbody tr {
   h2[id], h3[id], h4[id], h5[id], h6[id] {
     position: relative;
     z-index: 5;
-
-    margin-top: 5rem;
+    margin-top: 3rem;
 
     &:first-child {
       margin-top: 0rem;
@@ -427,7 +427,7 @@ table thead tr, #content table tbody tr {
  padding: 7rem 0;
  &.alternate {
   background: #FFF;
-}
+ }
 
 }
 

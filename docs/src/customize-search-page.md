@@ -1,5 +1,5 @@
 ---
-title: Custom Search
+title: Extend Search Page
 description: Discover how to build your custom WordPress search experience with the Algolia plugin.
 layout: page.html
 ---
@@ -60,7 +60,7 @@ function custom_algolia_usage() {
 add_action( 'plugins_loaded', 'custom_algolia_usage' );
 ```
 
-**You should always access the variable once the plugins are loaded. Otherwise, depending on the order in which the user enabled the plugins it could fail.**
+<div class="alert alert-warning">You should always access the variable once the plugins are loaded. Otherwise, depending on the order in which the user enabled the plugins it could fail.</div>
 
 Now that you have access to the `Algolia_Plugin` instance, you can start using it.
 
