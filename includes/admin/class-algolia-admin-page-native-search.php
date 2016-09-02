@@ -5,7 +5,7 @@ class Algolia_Admin_Page_Native_Search
 	/**
 	 * @var string
 	 */
-	private $slug = 'algolia';
+	private $slug = 'algolia-search-page';
 
 	/**
 	 * @var string
@@ -39,15 +39,6 @@ class Algolia_Admin_Page_Native_Search
 	}
 
 	public function add_page() {
-		add_menu_page(
-			'Algolia search',
-			__( 'Algolia Search', 'algolia' ),
-			'manage_options',
-			'algolia',
-			array( $this, 'display_page' ),
-			'',
-			30
-		);
 		add_submenu_page(
 			'algolia',
 			__( 'Search Page', 'algolia' ),
@@ -61,7 +52,7 @@ class Algolia_Admin_Page_Native_Search
 	public function add_settings() {
 		add_settings_section(
 			$this->section,
-			__( 'Customize search results page', 'algolia' ),
+			null,
 			array( $this, 'print_section_settings' ),
 			$this->slug
 		);

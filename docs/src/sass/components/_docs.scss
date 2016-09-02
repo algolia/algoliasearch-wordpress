@@ -1,0 +1,65 @@
+article {
+  background: white;
+  padding: 20px;
+
+  ul {
+    margin-left: 2.5rem;
+  }
+}
+
+.alert {
+  border-left: 5px solid black;
+  border-top-left-radius: 5px;
+  border-bottom-left-radius: 5px;
+  padding: 6px 12px;
+  margin: 12px 0;
+
+  &::before {
+    font-size: 8px;
+    display: block;
+  }
+
+  &.alert-warning {
+    border-color: $orange;
+    color: darken($orange, 40%);
+
+    &::before {
+      content: 'WARNING';
+      color: darken($orange, 30%);
+    }
+  }
+
+  &.alert-info {
+    border-color: $blue;
+    color: darken($blue, 40%);
+
+    &::before {
+      content: 'INFO';
+      color: darken($blue, 30%);
+    }
+  }
+}
+
+.wp-btn {
+  display: inline-block;
+  background: #0085ba;
+  border-color: #0073aa #006799 #006799;
+  -webkit-box-shadow: 0 1px 0 #006799;
+  box-shadow: 0 1px 0 #006799;
+  color: #fff;
+  font-weight: bold;
+  text-decoration: none;
+  text-shadow: 0 -1px 1px #006799,1px 0 1px #006799,0 1px 1px #006799,-1px 0 1px #006799;
+  margin: 0;
+  padding: 0 10px 1px;
+  cursor: default;
+  border-width: 1px;
+  border-style: solid;
+  -webkit-appearance: none;
+  -webkit-border-radius: 3px;
+  border-radius: 3px;
+  white-space: nowrap;
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+}

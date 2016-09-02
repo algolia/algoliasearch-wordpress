@@ -15,7 +15,7 @@ You will need to make sure your server meets the following requirements:
 
 You will also need at least **WordPress in version 3.7.14**.
 
-**You will not be able to install the plugin if one of this requirement is not met.**
+<div class="alert alert-warning">You will not be able to install the plugin if one of this requirement is not met.</div>
 
 ## Plugin Installation
 

@@ -18,8 +18,8 @@ class Algolia_Admin {
 
 		$api = $plugin->get_api();
 		if ( $api->is_reachable() ) {
-			new Algolia_Admin_Page_Native_Search( $plugin );
 			new Algolia_Admin_Page_Autocomplete( $plugin->get_settings(), $this->plugin->get_autocomplete_config() );
+			new Algolia_Admin_Page_Native_Search( $plugin );
 			new Algolia_Admin_Page_Indexing( $plugin );
 			new Algolia_Admin_Page_Logs( $plugin->get_logger(), $plugin->get_settings() );
 		}

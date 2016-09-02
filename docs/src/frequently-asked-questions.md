@@ -9,9 +9,7 @@ This is a living `common questions & answers` section.
 
 Please ask your question on Stack Overflow: http://stackoverflow.com/questions/tagged/algolia+wordpress
 
-If you are a developer, you can also open an issue on github at: https://github.com/algolia/algoliasearch-wordpress
-
-**We will regularly add the most frequently asked questions and answers found on Stack Overflow and Github about the Algolia Search plugin for WordPress, and append them to this very page.**
+If you are a developer, you can also open an issue on github at: https://github.com/algolia/algoliasearch-wordpress. We will regularly add the most frequently asked questions and answers found on Stack Overflow and Github about the Algolia Search plugin for WordPress, and append them to this very page.
 
 If you are desperate and your deadline was yesterday, send us an email at [support+wordpress@algolia.com](mailto:support+wordpress@algolia.com).
 
