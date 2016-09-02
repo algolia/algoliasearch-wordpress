@@ -463,7 +463,7 @@ abstract class Algolia_Index
 		$replica_index_names = array();
 		foreach ( $replicas as $replica ) {
 			/** @var Algolia_Index_Replica $replica */
-			$replica_index_names[] = $replica->get_index_name( $index_name );
+			$replica_index_names[] = $replica->get_replica_index_name( $this );
 		}
 
 		$this->get_index()->setSettings( array(
@@ -471,11 +471,15 @@ abstract class Algolia_Index
 		), false );
 
 		$client = $this->get_client();
+
+		// Ensure we re-push the master index settings each time.
+		$settings = $this->get_settings();
 		foreach ( $replicas as $replica ) {
 			/** @var Algolia_Index_Replica $replica */
-			$replica_index_name = $replica->get_index_name( $index_name );
+			$settings['ranking'] = $replica->get_ranking();
+			$replica_index_name = $replica->get_replica_index_name( $this );
 			$index = $client->initIndex( $replica_index_name );
-			$index->setSettings( array( 'ranking' => $replica->get_ranking() ) );
+			$index->setSettings( $settings );
 
 			$this->logger->log_operation( sprintf( '[1] Updated index replica %s settings.', $replica_index_name ) );
 		}
