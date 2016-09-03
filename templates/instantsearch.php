@@ -81,7 +81,7 @@
 
 				var hitTemplate = jQuery("#tmpl-hit").html();
 
-				var noResultsTemplate = 'No result was found for "<strong>{{query}}</strong>".';
+				var noResultsTemplate = 'No results were found for "<strong>{{query}}</strong>".';
 
 				search.addWidget(
 					instantsearch.widgets.hits({
