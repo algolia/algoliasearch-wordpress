@@ -3,7 +3,9 @@
 <header id="top-section" class="doc-header">
     <div class="row row-doc">
         <div class="large-12 columns">
-            <img class="header-logo" src="https://res.cloudinary.com/hilnmyskv/image/upload/logo-algolia-dark.png">
+            <a href="./">
+                <img class="header-logo" src="https://res.cloudinary.com/hilnmyskv/image/upload/logo-algolia-dark.png">
+            </a>
             <p class="lead header-lead">
                 Plugin for
                 <span>WordPress</span>
@@ -31,11 +33,9 @@
             <hr>
 
             <div class="row">
-
                 <div class="large-12 columns" id="content">
                     {{{ contents }}}
                 </div>
-
             </div>
 
             <ul class="menu simple text-center">
@@ -60,6 +60,7 @@
             <li {{ activeClass "indexing-flow.md" }}><a href="{{ rootPath }}indexing-flow.html">Flow</a></li>
             <li {{ activeClass "synonyms.md" }}><a href="{{ rootPath }}synonyms.html">Synonyms</a></li>
             <li {{ activeClass "custom-attributes.md" }}><a href="{{ rootPath }}custom-attributes.html">Custom Attributes</a></li>
+            <li {{ activeClass "replicas.md" }}><a href="{{ rootPath }}replicas.html">Index Replicas</a></li>
 
             <li class="menu-text">Extend</li>
             <li {{ activeClass "extend-basics.md" }}><a href="{{ rootPath }}extend-basics.html">Basics</a></li>
