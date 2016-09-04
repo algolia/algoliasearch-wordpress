@@ -80,6 +80,12 @@ Here is the list of all available Filters.
 |algolia_autocomplete_config|$config
 |algolia_post_types_blacklist|array $blacklist, defaults to array( 'nav_menu_item', revision' )
 |algolia_taxonomies_blacklist|array $blacklist, defaults to array( 'nav_menu', link_category', 'post_format' )
+|algolia_should_index_searchable_post|bool $should_index, WP_Post $post
+|algolia_searchable_post_parser|Algolia\DOMParser $parser
+|algolia_searchable\_post\_{$post_type}_shared_attributes|array $shared_attributes, WP_Post $post
+|algolia_searchable_posts_index_settings|array $settings
+|algolia_searchable_post_shared_attributes|array $shared_attributes, WP_Post $post
+|algolia_searchable_posts_index_synonyms|array $synonyms
 |algolia_should_index_post|bool $should_index, WP_Post $post
 |algolia_post_parser|Algolia\DOMParser $parser
 |algolia_post_shared_attributes|array $shared_attributes, WP_Post $post
