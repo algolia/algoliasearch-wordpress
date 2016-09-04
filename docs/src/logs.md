@@ -7,6 +7,8 @@ layout: page.html
 
 There is a lot going on behind the scenes of the Algolia Search plugin for WordPress which is precisely why we provide you with some logs.
 
+<div class="alert alert-warning">If the plugin does not work for you and you have no errors logged on the Logs page of this plugin, please be sure to check for [PHP logs](#php-logs).</div>
+
 ## Log Levels
 
 Each log entry is attributed a `Log Level` to ease the audit log reading.
@@ -30,4 +32,26 @@ When you are asking for support on [Stack Overflow](http://stackoverflow.com/que
 
 This way, people will get a better sense of what is happening in your WordPress website.
 
+## PHP logs
 
+Most of the job done by this plugin is done asynchronously which makes debugging a bit harder.
+For that reason we introduced our custom logs like explained in the previous sections of this page.
+
+When you are unable to debug your issues with the provided logs, it probably means you have PHP exceptions that are being raised behind the scenes.
+
+**To access your PHP logs you should:**
+
+1. Turn WordPress debug mode on:
+
+	Simply add the following line to your `wp-config.php`:
+
+	```
+	define( 'WP_DEBUG', true );
+	```
+
+	<div class="alert alert-warning">If the line is already there, be sure it is defined to `true`.</div>
+
+2. Re-try the operations you expect to go wrong, like hitting the <span class="wp-btn">Process queue</span> button on the Indexing page of the plugin.
+3. Check what has been logged in the `wp-content/debug.log` file.
+
+<div class="alert alert-info">If none of that helped, please head to the [frequently asked questions](frequently-asked-questions.html) to get help.</div>
