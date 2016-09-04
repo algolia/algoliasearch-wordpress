@@ -1,18 +1,16 @@
 ---
-title: Indexing Flow
+title: Automated Synchronization
 description: Understand the indexing flow and the generated operations.
 layout: page.html
 ---
 
 ## Introduction
 
-The objectives of this plugin are:
-- To offer webmasters a way to easily provide a better search experience to their visitors,
-- To offer developers a way to easily adapt the search experience by extending this plugin with actions and filters.
+By default, this plugin will ensure your WordPress content flagged for indexing stays in sync with Algolia.
 
-This page aims to explain how we index your data.
+<div class="alert alert-info">This behaviour does not rely on CRON, but uses a custom private post_type `algolia_task`. </div>
 
-As for now we support the indexing of 3 types of content:
+We support the automatic synchronization of 3 types of content:
 - Post Types,
 - Taxonomies,
 - Users.
@@ -21,22 +19,22 @@ Each content type has its own indexing flow.
 
 ## Triggers
 
-We try as much as possible to automate the indexing for you. That means that we listen for events like 'post was saved' to push the new data to Algolia's API.
+We try as much as possible to automate the indexing for you. That means that we listen for events like 'post was saved' to push the new data to Algolia.
 
 **We synchronize posts when:**
-- A post was created or updated
-- A post was deleted
-- The featured image was changed
+- A post was created or updated,
+- A post was deleted,
+- The featured image was changed.
 
 **We synchronize taxonomy terms when:**
-- A term was created or updated
-- A term was deleted
+- A term was created or updated,
+- A term was deleted.
 
 **We synchronize users when:**
-- A user was created or updated
-- A term was deleted
-- A post was created or updated
-- A post was deleted
+- A user was created or updated,
+- A term was deleted,
+- A post was created or updated,
+- A post was deleted.
 
 <div class="alert alert-warning">We synchronize without trying to detect if the updates has lead to real changes. This ensures consistency and easier extensibility.</div>
 
@@ -83,10 +81,19 @@ Also note how we return `false` early on if the decision has already been taken 
 
 
 
-## Queue Tasks
+## Queue processing
 
-Every time an indexing task is triggered, see [previous section](#triggers), we queue a synchronization task with the minimum required information for the task to be handled.
+Every time a change of your content is detected, see [previous section](#triggers), we queue a synchronization task with the minimum required information for the task to be handled.
 
-Every time one or multiple tasks are queued, we automatically trigger the processing of the queue. The queue is then processed with a FIFO logic, and ensures there is only one task handled at the same time. For scalability reasons, each task handling is done in its own process and triggered by an asynchronous http call.
+When that happens, we directly try to trigger the processing of the queue. The queue follows the FIFO logic, and ensures there is only one task handled at the same time. For scalability reasons, each task handling is done in its own PHP process and triggered by an asynchronous http call.
 
 <div class="alert alert-warning">By default WordPress will ensure that your ssl certificate is valid on every remote call. If you have an invalid ssl certificate, the queue processing won't work.</div>
+
+## Queue processing troubleshooting
+
+Queue processing is the most critical part of the plugin. If the queue processing doesn't work, then the whole plugin becomes un-usable.
+
+If you have queue processing problems, please:
+- Make sure you take advantage of built in logs and WordPress logs, see the [Debugging](logs.html) section of the docs,
+- Check out the [FAQ](frequently-asked-questions.html) for answers,
+- If you don't manage to solve the issue by yourself, ask for help, see: [FAQ](frequently-asked-questions.html).
