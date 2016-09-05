@@ -176,3 +176,13 @@ span.algolia-autocomplete {
 .aa-dropdown-menu .clear {
     clear: both;
 }
+
+/* Empty */
+.autocomplete-empty {
+    clear: both;
+    padding: 15px;
+}
+
+.autocomplete-empty .empty-query {
+    font-weight: bold;
+}

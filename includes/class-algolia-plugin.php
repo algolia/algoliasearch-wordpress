@@ -44,6 +44,11 @@ class Algolia_Plugin {
 	 */
 	private $changes_watchers;
 
+	/**
+	 * @var Algolia_Template_Loader
+	 */
+	private $template_loader;
+
 	public function __construct() {
 		// Register the assets so that they can be used in other plugins outside of the context of the core features.
 		add_action( 'wp_enqueue_scripts', array( $this, 'register_assets' ) );
@@ -59,9 +64,8 @@ class Algolia_Plugin {
 
 		$this->settings = new Algolia_Settings();
 		$this->logger = new Algolia_Logger( $this->settings->get_logging_enabled() );
-		
+
 		$this->api = new Algolia_API( $this->settings );
-		$this->templateLoader = new Algolia_Template_Loader( $this );
 
 		add_action( 'init', array( $this, 'register_post_types'), 5 );
 		add_action( 'init', array( $this, 'load' ), 20 );
@@ -110,11 +114,11 @@ class Algolia_Plugin {
 			$this->autocomplete_config = new Algolia_Autocomplete_Config( $this );
 		}
 
+		$this->template_loader = new Algolia_Template_Loader( $this );
+
 		// Load admin or public part of the plugin.
 		if ( is_admin() ) {
 			new Algolia_Admin( $this );
-		} else {
-			new Algolia_Public( $this );
 		}
 	}
 
@@ -178,7 +182,7 @@ class Algolia_Plugin {
 
 		$index_id = $this->settings->get_native_search_index_id();
 		$index = $this->get_index( $index_id );
-		
+
 		if ( null == $index ) {
 			return;
 		}
@@ -205,14 +209,12 @@ class Algolia_Plugin {
 		// CSS.
 		wp_register_style( 'algolia-autocomplete', plugin_dir_url( __FILE__ ) . '../assets/css/algolia-autocomplete.css', array(), ALGOLIA_VERSION, 'screen' );
 		wp_register_style( 'algolia-instantsearch', plugin_dir_url( __FILE__ ) . '../assets/css/algolia-instantsearch.css', array(), ALGOLIA_VERSION, 'screen' );
-		
+
 		// JS.
 		wp_register_script( 'algolia-search', plugin_dir_url( __FILE__ ) . '../assets/js/algoliasearch/algoliasearch.jquery.min.js', array( 'jquery' ), ALGOLIA_VERSION );
 		wp_register_script( 'algolia-autocomplete', plugin_dir_url( __FILE__ ) . '../assets/js/autocomplete.js/autocomplete.min.js', array(), ALGOLIA_VERSION );
 		wp_register_script( 'algolia-instantsearch', plugin_dir_url( __FILE__ ) . '../assets/js/instantsearch.js/instantsearch-preact.min.js', array(), ALGOLIA_VERSION );
 
-		wp_register_script( 'algolia-frontend-autocomplete', plugin_dir_url( __FILE__ ) . '../assets/js/frontend/autocomplete.js', array( 'algolia-search', 'algolia-autocomplete', 'wp-util' ), ALGOLIA_VERSION );
-		
 		// Vendor JS.
 		wp_register_script( 'tether', plugin_dir_url( __FILE__ ) . '../assets/js/tether/tether.min.js', array(), ALGOLIA_VERSION );
 	}
@@ -229,7 +231,7 @@ class Algolia_Plugin {
 		// Add a searchable posts index.
 		$searchable_post_types = get_post_types( array( 'exclude_from_search' => false ), 'names' );
 		$this->indices[] = new Algolia_Searchable_Posts_Index( $searchable_post_types );
-		
+
 		// Add one posts index per post type.
 		$post_types = get_post_types();
 
@@ -280,7 +282,7 @@ class Algolia_Plugin {
 		}
 
 		$this->changes_watchers = (array) apply_filters( 'algolia_changes_watchers', $this->changes_watchers );
-		
+
 		foreach ( $this->changes_watchers as $watcher ) {
 			$watcher->watch();
 		}
@@ -310,7 +312,7 @@ class Algolia_Plugin {
 				return $index->contains_only( $contains );
 			} );
 		}
-		
+
 		return $indices;
 	}
 
@@ -325,19 +327,19 @@ class Algolia_Plugin {
 				return $index;
 			}
 		}
-		
+
 		return;
 	}
 
 	/**
 	 * Get the plugin path.
-	 * 
+	 *
 	 * @return string
 	 */
 	public function get_path() {
 		return untrailingslashit( ALGOLIA_PATH );
 	}
-	
+
 	/**
 	 * @return string
 	 */

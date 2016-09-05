@@ -1,5 +1,5 @@
 /*!
- * autocomplete.js 0.19.1
+ * autocomplete.js 0.21.4
  * https://github.com/algolia/autocomplete.js
  * Copyright 2016 Algolia, Inc. and other contributors; Licensed MIT
  */
@@ -117,7 +117,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	      templates: options.templates,
 	      debug: options.debug,
 	      cssClasses: options.cssClasses,
-	      datasets: datasets
+	      datasets: datasets,
+	      keyboardShortcuts: options.keyboardShortcuts
 	    });
 
 	    $input.data(typeaheadKey, typeahead);
@@ -128,10 +129,12 @@ return /******/ (function(modules) { // webpackBootstrap
 	  _.each(['open', 'close', 'getVal', 'setVal', 'destroy'], function(method) {
 	    inputs.autocomplete[method] = function() {
 	      var methodArguments = arguments;
+	      var result;
 	      inputs.each(function(j, input) {
 	        var typeahead = zepto(input).data(typeaheadKey);
-	        typeahead[method].apply(typeahead, methodArguments);
+	        result = typeahead[method].apply(typeahead, methodArguments);
 	      });
+	      return result;
 	    };
 	  });
 
@@ -145,14 +148,17 @@ return /******/ (function(modules) { // webpackBootstrap
 
 /***/ },
 /* 2 */
-/***/ function(module, exports) {
+/***/ function(module, exports, __webpack_require__) {
 
-	/*! Zepto 1.1.6 (generated with Zepto Builder) - zepto event assets data ie - zeptojs.com/license */
-	//     Zepto.js
-	//     (c) 2010-2016 Thomas Fuchs
-	//     Zepto.js may be freely distributed under the MIT license.
-
-	var Zepto = (function() {
+	var __WEBPACK_AMD_DEFINE_RESULT__;/* istanbul ignore next */
+	/* Zepto v1.2.0 - zepto event assets data - zeptojs.com/license */
+	(function(global, factory) {
+	  if (true)
+	    !(__WEBPACK_AMD_DEFINE_RESULT__ = function() { return factory(global) }.call(exports, __webpack_require__, exports, module), __WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__))
+	  else
+	    factory(global)
+	}(/* this ##### UPDATED: here we want to use window/global instead of this which is the current file context ##### */ window, function(window) {  
+	  var Zepto = (function() {
 	  var undefined, key, $, classList, emptyArray = [], concat = emptyArray.concat, filter = emptyArray.filter, slice = emptyArray.slice,
 	    document = window.document,
 	    elementDisplay = {}, classCache = {},
@@ -201,8 +207,9 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	  zepto.matches = function(element, selector) {
 	    if (!selector || !element || element.nodeType !== 1) return false
-	    var matchesSelector = element.webkitMatchesSelector || element.mozMatchesSelector ||
-	                          element.oMatchesSelector || element.matchesSelector
+	    var matchesSelector = element.matches || element.webkitMatchesSelector ||
+	                          element.mozMatchesSelector || element.oMatchesSelector ||
+	                          element.matchesSelector
 	    if (matchesSelector) return matchesSelector.call(element, selector)
 	    // fall back to performing a selector:
 	    var match, parent = element.parentNode, temp = !parent
@@ -224,7 +231,16 @@ return /******/ (function(modules) { // webpackBootstrap
 	  function isPlainObject(obj) {
 	    return isObject(obj) && !isWindow(obj) && Object.getPrototypeOf(obj) == Object.prototype
 	  }
-	  function likeArray(obj) { return typeof obj.length == 'number' }
+
+	  function likeArray(obj) {
+	    var length = !!obj && 'length' in obj && obj.length,
+	      type = $.type(obj)
+
+	    return 'function' != type && !isWindow(obj) && (
+	      'array' == type || length === 0 ||
+	        (typeof length == 'number' && length > 0 && (length - 1) in obj)
+	    )
+	  }
 
 	  function compact(array) { return filter.call(array, function(item){ return item != null }) }
 	  function flatten(array) { return array.length > 0 ? $.fn.concat.apply([], array) : array }
@@ -483,6 +499,13 @@ return /******/ (function(modules) { // webpackBootstrap
 	    return true
 	  }
 
+	  $.isNumeric = function(val) {
+	    var num = Number(val), type = typeof val
+	    return val != null && type != 'boolean' &&
+	      (type != 'string' || val.length) &&
+	      !isNaN(num) && isFinite(num) || false
+	  }
+
 	  $.inArray = function(elem, array, i){
 	    return emptyArray.indexOf.call(array, elem, i)
 	  }
@@ -655,11 +678,13 @@ return /******/ (function(modules) { // webpackBootstrap
 	      return result
 	    },
 	    closest: function(selector, context){
-	      var node = this[0], collection = false
-	      if (typeof selector == 'object') collection = $(selector)
-	      while (node && !(collection ? collection.indexOf(node) >= 0 : zepto.matches(node, selector)))
-	        node = node !== context && !isDocument(node) && node.parentNode
-	      return $(node)
+	      var nodes = [], collection = typeof selector == 'object' && $(selector)
+	      this.each(function(_, node){
+	        while (node && !(collection ? collection.indexOf(node) >= 0 : zepto.matches(node, selector)))
+	          node = node !== context && !isDocument(node) && node.parentNode
+	        if (node && nodes.indexOf(node) < 0) nodes.push(node)
+	      })
+	      return $(nodes)
 	    },
 	    parents: function(selector){
 	      var ancestors = [], nodes = this
@@ -773,9 +798,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    attr: function(name, value){
 	      var result
 	      return (typeof name == 'string' && !(1 in arguments)) ?
-	        (!this.length || this[0].nodeType !== 1 ? undefined :
-	          (!(result = this[0].getAttribute(name)) && name in this[0]) ? this[0][name] : result
-	        ) :
+	        (0 in this && this[0].nodeType == 1 && (result = this[0].getAttribute(name)) != null ? result : undefined) :
 	        this.each(function(idx){
 	          if (this.nodeType !== 1) return
 	          if (isObject(name)) for (key in name) setAttribute(this, key, name[key])
@@ -795,6 +818,10 @@ return /******/ (function(modules) { // webpackBootstrap
 	        }) :
 	        (this[0] && this[0][name])
 	    },
+	    removeProp: function(name){
+	      name = propMap[name] || name
+	      return this.each(function(){ delete this[name] })
+	    },
 	    data: function(name, value){
 	      var attrName = 'data-' + name.replace(capitalRE, '-$1').toLowerCase()
 
@@ -805,14 +832,16 @@ return /******/ (function(modules) { // webpackBootstrap
 	      return data !== null ? deserializeValue(data) : undefined
 	    },
 	    val: function(value){
-	      return 0 in arguments ?
-	        this.each(function(idx){
+	      if (0 in arguments) {
+	        if (value == null) value = ""
+	        return this.each(function(idx){
 	          this.value = funcArg(this, value, idx, this.value)
-	        }) :
-	        (this[0] && (this[0].multiple ?
+	        })
+	      } else {
+	        return this[0] && (this[0].multiple ?
 	           $(this[0]).find('option').filter(function(){ return this.selected }).pluck('value') :
 	           this[0].value)
-	        )
+	      }
 	    },
 	    offset: function(coordinates){
 	      if (coordinates) return this.each(function(index){
@@ -828,7 +857,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	        $this.css(props)
 	      })
 	      if (!this.length) return null
-	      if (!$.contains(document.documentElement, this[0]))
+	      if (document.documentElement !== this[0] && !$.contains(document.documentElement, this[0]))
 	        return {top: 0, left: 0}
 	      var obj = this[0].getBoundingClientRect()
 	      return {
@@ -840,13 +869,14 @@ return /******/ (function(modules) { // webpackBootstrap
 	    },
 	    css: function(property, value){
 	      if (arguments.length < 2) {
-	        var computedStyle, element = this[0]
-	        if(!element) return
-	        computedStyle = getComputedStyle(element, '')
-	        if (typeof property == 'string')
-	          return element.style[camelize(property)] || computedStyle.getPropertyValue(property)
-	        else if (isArray(property)) {
+	        var element = this[0]
+	        if (typeof property == 'string') {
+	          if (!element) return
+	          return element.style[camelize(property)] || getComputedStyle(element, '').getPropertyValue(property)
+	        } else if (isArray(property)) {
+	          if (!element) return
 	          var props = {}
+	          var computedStyle = getComputedStyle(element, '')
 	          $.each(property, function(_, prop){
 	            props[prop] = (element.style[camelize(prop)] || computedStyle.getPropertyValue(prop))
 	          })
@@ -998,8 +1028,17 @@ return /******/ (function(modules) { // webpackBootstrap
 	    $.fn[operator] = function(){
 	      // arguments can be nodes, arrays of nodes, Zepto objects and HTML strings
 	      var argType, nodes = $.map(arguments, function(arg) {
+	            var arr = []
 	            argType = type(arg)
-	            return argType == "object" || argType == "array" || arg == null ?
+	            if (argType == "array") {
+	              arg.forEach(function(el) {
+	                if (el.nodeType !== undefined) return arr.push(el)
+	                else if ($.zepto.isZ(el)) return arr = arr.concat(el.get())
+	                arr = arr.concat(zepto.fragment(el))
+	              })
+	              return arr
+	            }
+	            return argType == "object" || arg == null ?
 	              arg : zepto.fragment(arg)
 	          }),
 	          parent, copyByClone = this.length > 1
@@ -1023,8 +1062,10 @@ return /******/ (function(modules) { // webpackBootstrap
 	          parent.insertBefore(node, target)
 	          if (parentInDocument) traverseNode(node, function(el){
 	            if (el.nodeName != null && el.nodeName.toUpperCase() === 'SCRIPT' &&
-	               (!el.type || el.type === 'text/javascript') && !el.src)
-	              window['eval'].call(window, el.innerHTML)
+	               (!el.type || el.type === 'text/javascript') && !el.src){
+	              var target = el.ownerDocument ? el.ownerDocument.defaultView : window
+	              target['eval'].call(target, el.innerHTML)
+	            }
 	          })
 	        })
 	      })
@@ -1050,113 +1091,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	  return $
 	})()
 
-	// If `$` is not yet defined, point it to `Zepto`
 	window.Zepto = Zepto
 	window.$ === undefined && (window.$ = Zepto)
-	//     Zepto.js
-	//     (c) 2010-2016 Thomas Fuchs
-	//     Zepto.js may be freely distributed under the MIT license.
-
-	;(function($){
-	  var cache = [], timeout
-
-	  $.fn.remove = function(){
-	    return this.each(function(){
-	      if(this.parentNode){
-	        if(this.tagName === 'IMG'){
-	          cache.push(this)
-	          this.src = 'data:image/gif;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs='
-	          if (timeout) clearTimeout(timeout)
-	          timeout = setTimeout(function(){ cache = [] }, 60000)
-	        }
-	        this.parentNode.removeChild(this)
-	      }
-	    })
-	  }
-	})(Zepto)
-	//     Zepto.js
-	//     (c) 2010-2016 Thomas Fuchs
-	//     Zepto.js may be freely distributed under the MIT license.
-
-	// The following code is heavily inspired by jQuery's $.fn.data()
-
-	;(function($){
-	  var data = {}, dataAttr = $.fn.data, camelize = $.camelCase,
-	    exp = $.expando = 'Zepto' + (+new Date()), emptyArray = []
-
-	  // Get value from node:
-	  // 1. first try key as given,
-	  // 2. then try camelized key,
-	  // 3. fall back to reading "data-*" attribute.
-	  function getData(node, name) {
-	    var id = node[exp], store = id && data[id]
-	    if (name === undefined) return store || setData(node)
-	    else {
-	      if (store) {
-	        if (name in store) return store[name]
-	        var camelName = camelize(name)
-	        if (camelName in store) return store[camelName]
-	      }
-	      return dataAttr.call($(node), name)
-	    }
-	  }
-
-	  // Store value under camelized key on node
-	  function setData(node, name, value) {
-	    var id = node[exp] || (node[exp] = ++$.uuid),
-	      store = data[id] || (data[id] = attributeData(node))
-	    if (name !== undefined) store[camelize(name)] = value
-	    return store
-	  }
-
-	  // Read all "data-*" attributes from a node
-	  function attributeData(node) {
-	    var store = {}
-	    $.each(node.attributes || emptyArray, function(i, attr){
-	      if (attr.name.indexOf('data-') == 0)
-	        store[camelize(attr.name.replace('data-', ''))] =
-	          $.zepto.deserializeValue(attr.value)
-	    })
-	    return store
-	  }
-
-	  $.fn.data = function(name, value) {
-	    return value === undefined ?
-	      // set multiple values via object
-	      $.isPlainObject(name) ?
-	        this.each(function(i, node){
-	          $.each(name, function(key, value){ setData(node, key, value) })
-	        }) :
-	        // get value from first element
-	        (0 in this ? getData(this[0], name) : undefined) :
-	      // set value on all elements
-	      this.each(function(){ setData(this, name, value) })
-	  }
-
-	  $.fn.removeData = function(names) {
-	    if (typeof names == 'string') names = names.split(/\s+/)
-	    return this.each(function(){
-	      var id = this[exp], store = id && data[id]
-	      if (store) $.each(names || store, function(key){
-	        delete store[names ? camelize(this) : key]
-	      })
-	    })
-	  }
-
-	  // Generate extended `remove` and `empty` functions
-	  ;['remove', 'empty'].forEach(function(methodName){
-	    var origFn = $.fn[methodName]
-	    $.fn[methodName] = function() {
-	      var elements = this.find('*')
-	      if (methodName === 'remove') elements = elements.add(this)
-	      elements.removeData()
-	      return origFn.call(this)
-	    }
-	  })
-	})(Zepto)
-	//     Zepto.js
-	//     (c) 2010-2016 Thomas Fuchs
-	//     Zepto.js may be freely distributed under the MIT license.
 
 	;(function($){
 	  var _zid = 1, undefined,
@@ -1275,7 +1211,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	  var returnTrue = function(){return true},
 	      returnFalse = function(){return false},
-	      ignoreProperties = /^([A-Z]|returnValue$|layer[XY]$)/,
+	      ignoreProperties = /^([A-Z]|returnValue$|layer[XY]$|webkitMovement[XY]$)/,
 	      eventMethods = {
 	        preventDefault: 'isDefaultPrevented',
 	        stopImmediatePropagation: 'isImmediatePropagationStopped',
@@ -1294,6 +1230,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	        }
 	        event[predicate] = returnFalse
 	      })
+
+	      event.timeStamp || (event.timeStamp = Date.now())
 
 	      if (source.defaultPrevented !== undefined ? source.defaultPrevented :
 	          'returnValue' in source ? source.returnValue === false :
@@ -1427,26 +1365,110 @@ return /******/ (function(modules) { // webpackBootstrap
 	  }
 
 	})(Zepto)
-	//     Zepto.js
-	//     (c) 2010-2016 Thomas Fuchs
-	//     Zepto.js may be freely distributed under the MIT license.
 
-	;(function(){
-	  // getComputedStyle shouldn't freak out when called
-	  // without a valid element as argument
-	  try {
-	    getComputedStyle(undefined)
-	  } catch(e) {
-	    var nativeGetComputedStyle = getComputedStyle;
-	    window.getComputedStyle = function(element){
-	      try {
-	        return nativeGetComputedStyle(element)
-	      } catch(e) {
-	        return null
+	;(function($){
+	  var cache = [], timeout
+
+	  $.fn.remove = function(){
+	    return this.each(function(){
+	      if(this.parentNode){
+	        if(this.tagName === 'IMG'){
+	          cache.push(this)
+	          this.src = 'data:image/gif;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs='
+	          if (timeout) clearTimeout(timeout)
+	          timeout = setTimeout(function(){ cache = [] }, 60000)
+	        }
+	        this.parentNode.removeChild(this)
 	      }
+	    })
+	  }
+	})(Zepto)
+
+	;(function($){
+	  var data = {}, dataAttr = $.fn.data, camelize = $.camelCase,
+	    exp = $.expando = 'Zepto' + (+new Date()), emptyArray = []
+
+	  // Get value from node:
+	  // 1. first try key as given,
+	  // 2. then try camelized key,
+	  // 3. fall back to reading "data-*" attribute.
+	  function getData(node, name) {
+	    var id = node[exp], store = id && data[id]
+	    if (name === undefined) return store || setData(node)
+	    else {
+	      if (store) {
+	        if (name in store) return store[name]
+	        var camelName = camelize(name)
+	        if (camelName in store) return store[camelName]
+	      }
+	      return dataAttr.call($(node), name)
 	    }
 	  }
-	})()
+
+	  // Store value under camelized key on node
+	  function setData(node, name, value) {
+	    var id = node[exp] || (node[exp] = ++$.uuid),
+	      store = data[id] || (data[id] = attributeData(node))
+	    if (name !== undefined) store[camelize(name)] = value
+	    return store
+	  }
+
+	  // Read all "data-*" attributes from a node
+	  function attributeData(node) {
+	    var store = {}
+	    $.each(node.attributes || emptyArray, function(i, attr){
+	      if (attr.name.indexOf('data-') == 0)
+	        store[camelize(attr.name.replace('data-', ''))] =
+	          $.zepto.deserializeValue(attr.value)
+	    })
+	    return store
+	  }
+
+	  $.fn.data = function(name, value) {
+	    return value === undefined ?
+	      // set multiple values via object
+	      $.isPlainObject(name) ?
+	        this.each(function(i, node){
+	          $.each(name, function(key, value){ setData(node, key, value) })
+	        }) :
+	        // get value from first element
+	        (0 in this ? getData(this[0], name) : undefined) :
+	      // set value on all elements
+	      this.each(function(){ setData(this, name, value) })
+	  }
+
+	  $.data = function(elem, name, value) {
+	    return $(elem).data(name, value)
+	  }
+
+	  $.hasData = function(elem) {
+	    var id = elem[exp], store = id && data[id]
+	    return store ? !$.isEmptyObject(store) : false
+	  }
+
+	  $.fn.removeData = function(names) {
+	    if (typeof names == 'string') names = names.split(/\s+/)
+	    return this.each(function(){
+	      var id = this[exp], store = id && data[id]
+	      if (store) $.each(names || store, function(key){
+	        delete store[names ? camelize(this) : key]
+	      })
+	    })
+	  }
+
+	  // Generate extended `remove` and `empty` functions
+	  ;['remove', 'empty'].forEach(function(methodName){
+	    var origFn = $.fn[methodName]
+	    $.fn[methodName] = function() {
+	      var elements = this.find('*')
+	      if (methodName === 'remove') elements = elements.add(this)
+	      elements.removeData()
+	      return origFn.call(this)
+	    }
+	  })
+	})(Zepto)
+	  return Zepto
+	}))
 
 
 /***/ },
@@ -1625,13 +1647,14 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	  this.eventBus = o.eventBus || new EventBus({el: $input});
 
-	  this.dropdown = new Typeahead.Dropdown({menu: $menu, datasets: o.datasets, templates: o.templates, cssClasses: this.cssClasses})
+	  this.dropdown = new Typeahead.Dropdown({menu: $menu, datasets: o.datasets, templates: o.templates, cssClasses: this.cssClasses, minLength: this.minLength})
 	    .onSync('suggestionClicked', this._onSuggestionClicked, this)
 	    .onSync('cursorMoved', this._onCursorMoved, this)
 	    .onSync('cursorRemoved', this._onCursorRemoved, this)
 	    .onSync('opened', this._onOpened, this)
 	    .onSync('closed', this._onClosed, this)
 	    .onSync('shown', this._onShown, this)
+	    .onSync('empty', this._onEmpty, this)
 	    .onAsync('datasetRendered', this._onDatasetRendered, this);
 
 	  this.input = new Typeahead.Input({input: $input, hint: $hint})
@@ -1647,6 +1670,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	    .onSync('queryChanged', this._onQueryChanged, this)
 	    .onSync('whitespaceChanged', this._onWhitespaceChanged, this);
 
+	  this._bindKeyboardShortcuts($input, o);
+
 	  this._setLanguageDirection();
 	}
 
@@ -1654,8 +1679,38 @@ return /******/ (function(modules) { // webpackBootstrap
 	// ----------------
 
 	_.mixin(Typeahead.prototype, {
-
 	  // ### private
+
+	  _bindKeyboardShortcuts: function($input, options) {
+	    if (!options.keyboardShortcuts) {
+	      return;
+	    }
+	    var keyboardShortcuts = [];
+	    _.each(options.keyboardShortcuts, function(key) {
+	      if (typeof key === 'string') {
+	        key = key.toUpperCase().charCodeAt(0);
+	      }
+	      keyboardShortcuts.push(key);
+	    });
+	    DOM.element(document).keydown(function(event) {
+	      var elt = (event.target || event.srcElement);
+	      var tagName = elt.tagName;
+	      if (elt.isContentEditable || tagName === 'INPUT' || tagName === 'SELECT' || tagName === 'TEXTAREA') {
+	        // already in an input
+	        return;
+	      }
+
+	      var which = event.which || event.keyCode;
+	      if (keyboardShortcuts.indexOf(which) === -1) {
+	        // not the right shortcut
+	        return;
+	      }
+
+	      $input.focus();
+	      event.stopPropagation();
+	      event.preventDefault();
+	    });
+	  },
 
 	  _onSuggestionClicked: function onSuggestionClicked(type, $el) {
 	    var datum;
@@ -1665,10 +1720,12 @@ return /******/ (function(modules) { // webpackBootstrap
 	    }
 	  },
 
-	  _onCursorMoved: function onCursorMoved() {
+	  _onCursorMoved: function onCursorMoved(event, updateInput) {
 	    var datum = this.dropdown.getDatumForCursor();
 
-	    this.input.setInputValue(datum.value, true);
+	    if (updateInput) {
+	      this.input.setInputValue(datum.value, true);
+	    }
 
 	    this.eventBus.trigger('cursorchanged', datum.raw, datum.datasetName);
 	  },
@@ -1690,8 +1747,15 @@ return /******/ (function(modules) { // webpackBootstrap
 	    this.eventBus.trigger('opened');
 	  },
 
+	  _onEmpty: function onEmpty() {
+	    this.eventBus.trigger('empty');
+	  },
+
 	  _onShown: function onShown() {
 	    this.eventBus.trigger('shown');
+	    if (this.autoselect) {
+	      this.dropdown.cursorTopSuggestion();
+	    }
 	  },
 
 	  _onClosed: function onClosed() {
@@ -2754,7 +2818,9 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	  this.isOpen = false;
 	  this.isEmpty = true;
+	  this.minLength = o.minLength || 0;
 	  this.cssClasses = _.mixin({}, css.defaultClasses, o.cssClasses || {});
+	  this.templates = {};
 
 	  // bound functions
 	  onSuggestionClick = _.bind(this._onSuggestionClick, this);
@@ -2768,10 +2834,13 @@ return /******/ (function(modules) { // webpackBootstrap
 	    .on('mouseleave.aa', cssClass, onSuggestionMouseLeave);
 
 	  if (o.templates && o.templates.header) {
-	    this.$menu.prepend(_.templatify(o.templates.header)());
+	    this.templates.header = _.templatify(o.templates.header);
+	    this.$menu.prepend(this.templates.header());
 	  }
 
-	  this.datasets = _.map(o.datasets, function(oDataset) { return initializeDataset(that.$menu, oDataset, o.cssClasses); });
+	  this.datasets = _.map(o.datasets, function(oDataset) {
+	    return initializeDataset(that.$menu, oDataset, o.cssClasses);
+	  });
 	  _.each(this.datasets, function(dataset) {
 	    var root = dataset.getRoot();
 	    if (root && root.parent().length === 0) {
@@ -2781,7 +2850,16 @@ return /******/ (function(modules) { // webpackBootstrap
 	  });
 
 	  if (o.templates && o.templates.footer) {
-	    this.$menu.append(_.templatify(o.templates.footer)());
+	    this.templates.footer = _.templatify(o.templates.footer);
+	    this.$menu.append(this.templates.footer());
+	  }
+
+	  if (o.templates && o.templates.empty) {
+	    this.templates.empty = _.templatify(o.templates.empty);
+	    this.$empty = DOM.element('<div class="' +
+	      _.className(this.cssClasses.prefix, this.cssClasses.empty, true) + '">' +
+	      '</div>');
+	    this.$menu.append(this.$empty);
 	  }
 	}
 
@@ -2804,7 +2882,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	      return;
 	    }
 	    this._removeCursor();
-	    this._setCursor(elt);
+	    this._setCursor(elt, false);
 	  },
 
 	  _onSuggestionMouseLeave: function onSuggestionMouseLeave($e) {
@@ -2821,13 +2899,37 @@ return /******/ (function(modules) { // webpackBootstrap
 	    this.trigger('cursorRemoved');
 	  },
 
-	  _onRendered: function onRendered() {
+	  _onRendered: function onRendered(e, query) {
 	    this.isEmpty = _.every(this.datasets, isDatasetEmpty);
 
 	    if (this.isEmpty) {
-	      this._hide();
+	      if (query.length >= this.minLength) {
+	        this.trigger('empty');
+	      }
+
+	      if (this.$empty) {
+	        if (query.length < this.minLength) {
+	          this._hide();
+	        } else {
+	          var html = this.templates.empty({
+	            query: this.datasets[0] && this.datasets[0].query
+	          });
+	          this.$empty.html(html);
+	          this._show();
+	        }
+	      } else {
+	        this._hide();
+	      }
 	    } else if (this.isOpen) {
-	      this._show();
+	      if (this.$empty) {
+	        this.$empty.empty();
+	      }
+
+	      if (query.length >= this.minLength) {
+	        this._show();
+	      } else {
+	        this._hide();
+	      }
 	    }
 
 	    this.trigger('datasetRendered');
@@ -2857,9 +2959,9 @@ return /******/ (function(modules) { // webpackBootstrap
 	    return this.$menu.find(_.className(this.cssClasses.prefix, this.cssClasses.cursor)).first();
 	  },
 
-	  _setCursor: function setCursor($el) {
+	  _setCursor: function setCursor($el, updateInput) {
 	    $el.first().addClass(_.className(this.cssClasses.prefix, this.cssClasses.cursor, true));
-	    this.trigger('cursorMoved');
+	    this.trigger('cursorMoved', updateInput);
 	  },
 
 	  _removeCursor: function removeCursor() {
@@ -2893,7 +2995,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	      newCursorIndex = $suggestions.length - 1;
 	    }
 
-	    this._setCursor($newCursor = $suggestions.eq(newCursorIndex));
+	    this._setCursor($newCursor = $suggestions.eq(newCursorIndex), true);
 
 	    // in the case of scrollable overflow
 	    // make sure the cursor is visible in the menu
@@ -2981,6 +3083,10 @@ return /******/ (function(modules) { // webpackBootstrap
 	    return this.getDatumForSuggestion(this._getSuggestions().first());
 	  },
 
+	  cursorTopSuggestion: function cursorTopSuggestion() {
+	    this._setCursor(this._getSuggestions().first(), true);
+	  },
+
 	  update: function update(query) {
 	    _.each(this.datasets, updateDataset);
 
@@ -3059,6 +3165,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	  // tracks the last query the dataset was updated for
 	  this.query = null;
+	  this._isEmpty = true;
 
 	  this.highlight = !!o.highlight;
 	  this.name = typeof o.name === 'undefined' || o.name === null ? _.getUniqueId() : o.name;
@@ -3114,13 +3221,14 @@ return /******/ (function(modules) { // webpackBootstrap
 	    if (!this.$el) {
 	      return;
 	    }
-
 	    var that = this;
+
 	    var hasSuggestions;
 	    var renderArgs = [].slice.call(arguments, 2);
-
 	    this.$el.empty();
+
 	    hasSuggestions = suggestions && suggestions.length;
+	    this._isEmpty = !hasSuggestions;
 
 	    if (!hasSuggestions && this.templates.empty) {
 	      this.$el
@@ -3139,7 +3247,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	        .removeClass(this.cssClasses.prefix + '-' + (hasSuggestions ? 'without' : 'with') + '-' + this.name);
 	    }
 
-	    this.trigger('rendered');
+	    this.trigger('rendered', query);
 
 	    function getEmptyHtml() {
 	      var args = [].slice.call(arguments, 0);
@@ -3229,11 +3337,11 @@ return /******/ (function(modules) { // webpackBootstrap
 	  clear: function clear() {
 	    this.cancel();
 	    this.$el.empty();
-	    this.trigger('rendered');
+	    this.trigger('rendered', '');
 	  },
 
 	  isEmpty: function isEmpty() {
-	    return this.$el.is(':empty');
+	    return this._isEmpty;
 	  },
 
 	  destroy: function destroy() {
@@ -3355,7 +3463,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	    suggestions: 'suggestions',
 	    suggestion: 'suggestion',
 	    cursor: 'cursor',
-	    dataset: 'dataset'
+	    dataset: 'dataset',
+	    empty: 'empty'
 	  }
 	};
 
