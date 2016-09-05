@@ -43,13 +43,14 @@ When you are unable to debug your issues with the provided logs, it probably mea
 
 1. Turn WordPress debug mode on:
 
-	Simply add the following line to your `wp-config.php`:
+	Simply add the following lines to your `wp-config.php`:
 
 	```
 	define( 'WP_DEBUG', true );
+	define( 'WP_DEBUG_LOG', true );
 	```
 
-	<div class="alert alert-warning">If the line is already there, be sure it is defined to `true`.</div>
+	<div class="alert alert-warning">If these lines are already there, be sure they are defined to `true`.</div>
 
 2. Re-try the operations you expect to go wrong, like hitting the <span class="wp-btn">Process queue</span> button on the Indexing page of the plugin.
 3. Check what has been logged in the `wp-content/debug.log` file.
