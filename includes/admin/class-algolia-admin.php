@@ -46,13 +46,17 @@ class Algolia_Admin {
 	public function display_unmet_requirements_notices() {
 		if ( ! extension_loaded('mbstring') ) {
 			echo '<div class="error notice">
-					  <p>' . esc_html__( 'Algolia Search requires the "mbstring" PHP extension to be enabled.', 'algolia' ) . '</p>
+					  <p>' . esc_html__( 'Algolia Search requires the "mbstring" PHP extension to be enabled. Please contact your hosting provider.', 'algolia' ) . '</p>
+				  </div>';
+		} elseif ( ! function_exists( 'mb_ereg_replace' ) ) {
+			echo '<div class="error notice">
+					  <p>' . esc_html__( 'Algolia needs "mbregex" NOT to be disabled. Please contact your hosting provider.', 'algolia' ) . '</p>
 				  </div>';
 		}
 
 		if ( ! extension_loaded('curl') ) {
 			echo '<div class="error notice">
-					  <p>' . esc_html__( 'Algolia Search requires the "cURL" PHP extension to be enabled.', 'algolia' ) . '</p>
+					  <p>' . esc_html__( 'Algolia Search requires the "cURL" PHP extension to be enabled. Please contact your hosting provider.', 'algolia' ) . '</p>
 				  </div>';
 
 			return;
