@@ -34,14 +34,7 @@ To start customizing your dropdown menu and instant-search results pages, copy/p
 
 Edit the files in your `algolia` folder to customize the look & feel and the overall search experience of your autocomplete and instant search results page.
 
- * `autocomplete-empty.php`: The template of the empty dropdown menu (when no results).
- * `autocomplete-footer.php`: The template of the dropdown menu footer.
- * `autocomplete-header.php`: The template of the dropdown menu header.
- * `autocomplete-post-suggestion.php`: The template of the `Post` suggestions.
- * `autocomplete-term-suggestion.php`: The template of the `Term` suggestions.
- * `autocomplete-user-suggestion.php`: The template of the `User` suggestions.
-
-
+ * `autocomplete.php`: The autocomplete dropdown menu (suggestions, header, footer) templates & JavaScript code.
  * `instantsearch.php`: The instantsearch (hits, filters, search bar & pagination) templates & JavaScript code.
 
 <div class="alert alert-info">Whatever changes you make, be sure to understand how the autocomplete.js & instantsearch.js library work by checking out their official documentations.</div>
