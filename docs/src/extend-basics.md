@@ -147,6 +147,7 @@ Here is the list of all available Actions.
 |-|-|
 |algolia_re_indexed_items|string $index_id
 |algolia_de_indexed_items|string $index_id
-|algolia_autocomplete_assets|*none*
+|algolia_autocomplete_scripts|*none*
+|algolia_instantsearch_scripts|*none*
 |algolia_task_handled|WP_Post $task
 

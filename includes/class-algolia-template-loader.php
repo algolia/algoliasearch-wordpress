@@ -139,7 +139,7 @@ class Algolia_Template_Loader {
 			wp_enqueue_script( 'wp-util' );
 
 			// Allow users to easily enqueue custom styles and scripts.
-			do_action( 'algolia_instantsearch_assets' );
+			do_action( 'algolia_instantsearch_scripts' );
 		} );
 
 		return $this->locate_template( 'instantsearch.php' );
