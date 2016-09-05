@@ -46,8 +46,11 @@ When you are unable to debug your issues with the provided logs, it probably mea
 	Simply add the following lines to your `wp-config.php`:
 
 	```
+	<?php
+	// [...]
 	define( 'WP_DEBUG', true );
 	define( 'WP_DEBUG_LOG', true );
+	// [...]
 	```
 
 	<div class="alert alert-warning">If these lines are already there, be sure they are defined to `true`.</div>
