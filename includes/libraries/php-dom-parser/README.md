@@ -8,6 +8,9 @@ but the tool is now abstracted enough to be re-used on other type of projects.
 For now the parsed DOM will result in the minimum possible number of records, meaning that if a node
 has at least one child, it will never have a record on its own. If we need such a behaviour, we could easily add it.
 
+## Requirements
+
+This lib needs `mbstring` PHP extension to be enabled. Also make sure `mbregex` is **NOT** disabled.
 
 ## Installation
 

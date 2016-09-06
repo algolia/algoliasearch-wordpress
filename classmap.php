@@ -20,7 +20,6 @@ require_once ALGOLIA_PATH . 'includes/class-algolia-api.php';
 require_once ALGOLIA_PATH . 'includes/class-algolia-autocomplete-config.php';
 require_once ALGOLIA_PATH . 'includes/class-algolia-logger.php';
 require_once ALGOLIA_PATH . 'includes/class-algolia-plugin.php';
-require_once ALGOLIA_PATH . 'includes/class-algolia-public.php';
 require_once ALGOLIA_PATH . 'includes/class-algolia-search.php';
 require_once ALGOLIA_PATH . 'includes/class-algolia-settings.php';
 require_once ALGOLIA_PATH . 'includes/class-algolia-task.php';

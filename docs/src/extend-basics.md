@@ -108,7 +108,6 @@ Here is the list of all available Filters.
 |algolia_index_replicas|array $replicas, Algolia_Index $index
 |algolia\_{$index_id}_index_replicas|array $replicas, Algolia_Index $index
 |algolia_config|array $config
-|algolia_autocomplete_templates|array $templates
 |algolia_task_queue_lock_ttl|int $ttl
 |algolia_searchable_posts_indexing_batch_size|int $batch_size
 |algolia_posts_indexing_batch_size|int $batch_size
@@ -148,6 +147,7 @@ Here is the list of all available Actions.
 |-|-|
 |algolia_re_indexed_items|string $index_id
 |algolia_de_indexed_items|string $index_id
-|algolia_autocomplete_assets|*none*
+|algolia_autocomplete_scripts|*none*
+|algolia_instantsearch_scripts|*none*
 |algolia_task_handled|WP_Post $task
 
