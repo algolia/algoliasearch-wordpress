@@ -1,5 +1,5 @@
 ---
-title: Installation
+title: Algolia Search plugin for WordPress Installation
 description: Algolia Search for WordPress system requirements and plugin installation.
 layout: page.html
 ---
@@ -23,7 +23,13 @@ If you are not familiar with the way you install plugins on WordPress, you can r
 
 The official name of the plugin is: **Algolia Search for WordPress**.
 
+## Conflicting plugins
 
+Here is a list of known incompatibilities with other plugins. Be sure you go through them as you are installing the plugin:
 
+**W3 Total Cache:**
+- The autocomplete experience will not work if JavaScript is minified with W3 Total Cache
+- It looks like the queue processing does not work with object caching turned on. (We have been unable to reproduce this one yet).
 
-
+**Post Type Switcher**
+- This plugin will trigger an infinite loop upon updating/creating/saving a post because it will convert 'algolia_task' post types to the one provided on the post form instead.
