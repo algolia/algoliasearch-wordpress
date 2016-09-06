@@ -37,8 +37,6 @@ class Algolia_Template_Loader {
 			'application_id'       => $settings->get_application_id(),
 			'search_api_key'       => $settings->get_search_api_key(),
 			'autocomplete'         => array(
-				'tmpl_empty'  => 'autocomplete-empty',
-				'tmpl_footer' => 'autocomplete-footer',
 				'sources'     => $autocomplete_config->get_config(),
 			),
 			'indices' => array(),

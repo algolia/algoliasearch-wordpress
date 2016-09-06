@@ -17,26 +17,39 @@
 		</aside>
 	</div>
 
-	<script type="text/html" id="tmpl-hit">
+	<script type="text/html" id="tmpl-instantsearch-hit">
 		<article itemtype="http://schema.org/Article">
-			{{#thumbnail_url}}
+			<# if ( data.thumbnail_url ) { #>
 			<div class="ais-hits--thumbnail">
-				<a href="{{ permalink }}" title="{{ post_title }}">
-					<img src="{{ thumbnail_url }}" alt="{{{ post_title }}}" title="{{{ post_title }}}" itemprop="image">
+				<a href="{{ data.permalink }}" title="{{ data.post_title }}">
+					<img src="{{ data.thumbnail_url }}" alt="{{ data.post_title }}" title="{{ data.post_title }}" itemprop="image" />
 				</a>
 			</div>
-			{{/thumbnail_url}}
+			<# } #>
 
 			<div class="ais-hits--content">
-				<h2 itemprop="name headline"><a href="{{ permalink }}" title="{{ post_title }}" itemprop="url">{{{ _highlightResult.post_title.value }}}</a></h2>
+				<h2 itemprop="name headline"><a href="{{ data.permalink }}" title="{{ data.post_title }}" itemprop="url">{{{ data._highlightResult.post_title.value }}}</a></h2>
 				<div class="ais-hits--tags">
-					{{#taxonomy_post_tag}}
-					<span class="ais-hits--tag">{{.}}</span>
-					{{/taxonomy_post_tag}}
+					<# for (var index in data.taxonomy_post_tag) { #>
+					<span class="ais-hits--tag">{{ data.taxonomy_post_tag[index] }}</span>
+					<# } #>
 				</div>
 				<div class="excerpt">
 					<p>
-						{{#helpers.relevantContent}}{{/helpers.relevantContent}}
+						<#
+						var attributes = ['content', 'title6', 'title5', 'title4', 'title3', 'title2', 'title1'];
+						var attribute_name;
+						var relevant_content = '';
+						for ( var index in attributes ) {
+							attribute_name = attributes[ index ];
+							if ( data._highlightResult[ attribute_name ].matchedWords.length > 0 ) {
+								relevant_content = data._snippetResult[ attribute_name ].value;
+							}
+						}
+
+						relevant_content = data._snippetResult[ attributes[ 0 ] ].value;
+						#>
+						{{{ relevant_content }}}
 					</p>
 				</div>
 			</div>
@@ -53,7 +66,7 @@
 					alert('It looks like you haven\'t indexed the searchable posts index. Please head to the Indexing page of the Algolia Search plugin and index it.');
 				}
 
-				/* global instantsearch */
+				// Instantiate instantsearch.js
 				var search = instantsearch({
 					appId: algolia.application_id,
 					apiKey: algolia.search_api_key,
@@ -67,8 +80,7 @@
 					}
 				});
 
-
-
+				// Search box widget
 				search.addWidget(
 					instantsearch.widgets.searchBox({
 						container: '#algolia-search-box',
@@ -78,33 +90,33 @@
 					})
 				);
 
+				// Stats widget
 				search.addWidget(
 					instantsearch.widgets.stats({
 						container: '#algolia-stats'
 					})
 				);
 
-				var hitTemplate = jQuery("#tmpl-hit").html();
-
-				var noResultsTemplate = 'No results were found for "<strong>{{query}}</strong>".';
-
+				// Hits widget
 				search.addWidget(
 					instantsearch.widgets.hits({
 						container: '#algolia-hits',
 						hitsPerPage: 10,
 						templates: {
-							empty: noResultsTemplate,
-							item: hitTemplate
+							empty: 'No results were found for "<strong>{{query}}</strong>".',
+							item: wp.template('instantsearch-hit')
 						}
 					})
 				);
 
+				// Pagination widget
 				search.addWidget(
 					instantsearch.widgets.pagination({
 						container: '#algolia-pagination'
 					})
 				);
 
+				// Post types refinement widget
 				search.addWidget(
 					instantsearch.widgets.menu({
 						container: '#facet-post-types',
@@ -117,6 +129,7 @@
 					})
 				);
 
+				// Categories refinement widget
 				search.addWidget(
 					instantsearch.widgets.hierarchicalMenu({
 						container: '#facet-categories',
@@ -129,6 +142,7 @@
 					})
 				);
 
+				// Tags refinement widget
 				search.addWidget(
 					instantsearch.widgets.refinementList({
 						container: '#facet-tags',
@@ -142,6 +156,7 @@
 					})
 				);
 
+				// Users refinement widget
 				search.addWidget(
 					instantsearch.widgets.menu({
 						container: '#facet-users',
@@ -154,19 +169,7 @@
 					})
 				);
 
-				search.templatesConfig.helpers.relevantContent = function() {
-					var attributes = ['content', 'title6', 'title5', 'title4', 'title3', 'title2', 'title1'];
-					var attribute_name;
-					for ( var index in attributes ) {
-						attribute_name = attributes[ index ];
-						if ( this._highlightResult[ attribute_name ].matchedWords.length > 0 ) {
-							return this._snippetResult[ attribute_name ].value;
-						}
-					}
-
-					return this._snippetResult[ attributes[ 0 ] ].value;
-				};
-
+				// Start
 				search.start();
 
 				jQuery('#algolia-search-box input').attr('type', 'search').select();

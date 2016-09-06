@@ -365,8 +365,7 @@ abstract class Algolia_Index
 			'label'           => $this->get_admin_name(),
 			'position'        => 10,
 			'max_suggestions' => 5,
-			'tmpl_suggestion' => 'autocomplete-post-suggestion',
-			'tmpl_header' 	   => 'autocomplete-header',
+			'tmpl_suggestion' => 'autocomplete-post-suggestion'
 		);
 	}
 
