@@ -49,6 +49,14 @@ class Algolia_Plugin {
 		add_action( 'wp_enqueue_scripts', array( $this, 'register_assets' ) );
 		add_action( 'admin_enqueue_scripts', array( $this, 'register_assets' ) );
 
+		/**
+		 * WP Header.
+		 *
+		 * @see  wc_generator_tag()
+		 */
+		add_action( 'get_the_generator_html', array( $this, 'append_generator_tag' ), 10, 2 );
+		add_action( 'get_the_generator_xhtml', array( $this, 'append_generator_tag' ), 10, 2 );
+
 		$this->settings = new Algolia_Settings();
 		$this->logger = new Algolia_Logger( $this->settings->get_logging_enabled() );
 		
@@ -335,5 +343,29 @@ class Algolia_Plugin {
 	 */
 	public function get_templates_path() {
 		return (string) apply_filters( 'algolia_templates_path', 'algolia/' );
+	}
+
+	/**
+	 * @return Algolia_Template_Loader
+	 */
+	public function get_template_loader() {
+		return $this->template_loader;
+	}
+
+	/**
+	 * Output generator tag to aid debugging.
+	 *
+	 * @access public
+	 */
+	public function append_generator_tag( $gen, $type ) {
+		switch ( $type ) {
+			case 'html':
+				$gen .= "\n" . '<meta name="generator" content="Algolia ' . esc_attr( ALGOLIA_VERSION ) . '">';
+				break;
+			case 'xhtml':
+				$gen .= "\n" . '<meta name="generator" content="Algolia ' . esc_attr( ALGOLIA_VERSION ) . '" />';
+				break;
+		}
+		return $gen;
 	}
 }
