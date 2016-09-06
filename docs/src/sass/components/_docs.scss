@@ -11,6 +11,12 @@ article {
     color: $blue;
     border-color: lighten($blue, 30%);
   }
+
+  pre {
+    code {
+      white-space: pre;
+    }
+  }
 }
 
 .alert {
