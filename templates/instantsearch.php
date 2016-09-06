@@ -48,6 +48,11 @@
 	<script type="text/javascript">
 		jQuery(function() {
 			if(jQuery('#algolia-search-box').length > 0) {
+
+				if (algolia.indices.searchable_posts === undefined && jQuery('.admin-bar').length > 0) {
+					alert('It looks like you haven\'t indexed the searchable posts index. Please head to the Indexing page of the Algolia Search plugin and index it.');
+				}
+
 				/* global instantsearch */
 				var search = instantsearch({
 					appId: algolia.application_id,
