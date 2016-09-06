@@ -100,7 +100,7 @@ span.algolia-autocomplete {
 .aa-dropdown-menu .aa-suggestion .suggestion-post-title {
     font-weight: bold;
     display: block;
-    white-space: nowrap !important;
+    white-space: nowrap;
     text-overflow: ellipsis;
     overflow: hidden;
 }
@@ -108,7 +108,7 @@ span.algolia-autocomplete {
 .aa-dropdown-menu .aa-suggestion .suggestion-post-content {
     color: #63676d;
     display: block;
-    white-space: nowrap !important;
+    white-space: nowrap;
     text-overflow: ellipsis;
     overflow: hidden;
 }
