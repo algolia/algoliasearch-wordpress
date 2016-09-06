@@ -125,10 +125,6 @@ span.algolia-autocomplete {
 
 }
 
-.aa-dropdown-menu .aa-suggestion.aa-cursor .suggestion-post-title{
-    text-decoration: underline;
-}
-
 .aa-dropdown-menu a.suggestion-link {
     display: block;
     padding: 0 14px;
