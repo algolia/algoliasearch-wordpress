@@ -22,8 +22,7 @@ article {
 
 .alert {
   border-left: 5px solid black;
-  border-top-left-radius: 5px;
-  border-bottom-left-radius: 5px;
+  border-radius: 5px;
   padding: 6px 12px;
   margin: 12px 0;
 
@@ -35,16 +34,18 @@ article {
   &.alert-warning {
     border-color: $orange;
     color: darken($orange, 40%);
+    background: lighten($orange, 31%);
 
     &::before {
       content: 'WARNING';
-      color: darken($orange, 30%);
+      color: darken($orange, 40%);
     }
   }
 
   &.alert-info {
     border-color: $blue;
     color: darken($blue, 40%);
+    background: lighten($blue, 40%);
 
     &::before {
       content: 'INFO';
