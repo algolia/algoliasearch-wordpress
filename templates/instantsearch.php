@@ -49,7 +49,7 @@
 		jQuery(function() {
 			if(jQuery('#algolia-search-box').length > 0) {
 
-				if(algolia.indices.searchable_posts === undefined) {
+				if (algolia.indices.searchable_posts === undefined && jQuery('.admin-bar').length > 0) {
 					alert('It looks like you haven\'t indexed the searchable posts index. Please head to the Indexing page of the Algolia Search plugin and index it.');
 				}
 
