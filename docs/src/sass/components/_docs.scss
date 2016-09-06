@@ -5,6 +5,13 @@ article {
   ul {
     margin-left: 2.5rem;
   }
+
+  code {
+    white-space: nowrap;
+    background-color: $gray-lighter;
+    color: $blue;
+    border-color: lighten($blue, 30%);
+  }
 }
 
 .alert {

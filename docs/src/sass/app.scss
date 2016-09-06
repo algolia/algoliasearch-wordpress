@@ -87,11 +87,6 @@ body {
  border: 1px solid #EEF2F4;
 }
 
-code {
- color: $primary-color;
- border-radius: 3px;
-}
-
 .expanded.row .row {
  @include grid-row-nest;
 }
