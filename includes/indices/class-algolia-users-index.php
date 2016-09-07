@@ -177,4 +177,18 @@ final class Algolia_Users_Index extends Algolia_Index
 	protected function get_re_index_batch_size() {
 		return (int) apply_filters( 'algolia_users_indexing_batch_size', 50 );
 	}
+
+	/**
+	 * @param Algolia_Task $task
+	 */
+	public function delete_item( Algolia_Task $task ) {
+		$data = $task->get_data();
+		if ( ! isset( $data['user_id'] ) || ! is_int( $data['user_id'] ) ) {
+			return;
+		}
+
+		$index = $this->get_index();
+		$index->deleteObject( $data['user_id'] );
+		$this->get_logger()->log_operation( sprintf( '[1] Deleted 1 record from index %s', $index->indexName ) );
+	}
 }

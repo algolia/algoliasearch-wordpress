@@ -430,4 +430,18 @@ final class Algolia_Posts_Index extends Algolia_Index
 			
 		return get_post( $data['post_id'] );
 	}
+
+	/**
+	 * @param Algolia_Task $task
+	 */
+	public function delete_item( Algolia_Task $task ) {
+		$data = $task->get_data();
+		if ( ! isset( $data['post_id'] ) || ! is_int( $data['post_id'] ) ) {
+			return;
+		}
+
+		$index = $this->get_index();
+		$deleted_item_count = $index->deleteByQuery( '', array( 'filters' => 'post_id=' . $data['post_id'] ) );
+		$this->get_logger()->log_operation( sprintf( '[%d] Deleted %d records from index %s', $deleted_item_count, $deleted_item_count, $index->indexName ) );
+	}
 }
