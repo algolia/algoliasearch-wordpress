@@ -6,16 +6,16 @@ Tested up to: 4.5.6
 License: MIT License, GNU General Public License v2.0
 License URI: MIT-LICENSE.txt, GPL-LICENSE.txt
 
-Algolia Search plugin for WordPress is a drop in replacement for WordPress search. It provides a find-as-you-type search results page and adds an autocomplete dropdown menu to your search bars.
+Algolia Search plugin for WordPress is a drop in replacement for WordPress search. It provides a find-as-you-type search results page and adds an autocomplete dropdown menu to your search bar.
 
 == Description ==
 
-Drop in replacement of WordPress search. This plugin provides a find-as-you-type search results page and adds an autocomplete dropdown menu to your search bars.
+Drop in replacement of WordPress search. This plugin provides a find-as-you-type search results page and adds an autocomplete dropdown menu to your search bar.
 Fully extensible by the means of WordPress filters and hooks for building your custom search experience based on Algolia.
 
 * Replace default WordPress search functionality with Algolia. Compatible with every theme.
 * Increase the overall search relevance with Algolia's fuzzy search algorithms (typo-tolerance, prefix search, synonyms...)
-* Enhance your searchbars with an autocomplete dropdown menu.
+* Enhance your search bar with an autocomplete dropdown menu.
 * Enhance your search results page with a find-as-you-type search experience.
 * Automatically synchronize content with Algolia when posts/terms/users are removed/added/unpublished/edited.
 * Define your own ranking criteria to make results more relevant for your use case.
