@@ -1,6 +1,6 @@
 === Algolia Search ===
 Contributors: Algolia
-Tags: Search, Algolia, Autocomplete, instant-search, relevant search, search highlight, faceted search, find-as-you-type search, search by tag, suggest, search by category, ajax search, better search, custom search
+Tags: Search, Algolia, Autocomplete, instant-search, relevant search, search highlight, faceted search, find-as-you-type search, suggest, search by category, ajax search, better search, custom search
 Requires at least: 3.7.14
 Tested up to: 4.5.6
 License: MIT License, GNU General Public License v2.0
