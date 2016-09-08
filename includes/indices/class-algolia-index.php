@@ -387,12 +387,13 @@ abstract class Algolia_Index
 		switch ( $task->get_name() ) {
 			case 'sync_item':
 				$item = $this->extract_item( $task );
-				
+
 				if ( null === $item ) {
-					throw new RuntimeException( 'Unable to extract item from task.' );
+					$this->delete_item( $task );
+				} else {
+					$this->sync( $item );
 				}
-				
-				$this->sync( $item );
+
 				break;
 			case 're_index_items':
 				$page = get_post_meta( $task->get_id(), 'algolia_task_re_index_page', true );
@@ -485,4 +486,10 @@ abstract class Algolia_Index
 
 		$this->logger->log_operation( sprintf( '[1] Updated index %s settings to sync replicas.', $index_name ) );
 	}
+
+	/**
+	 * @param Algolia_Task $task
+	 */
+	abstract public function delete_item( Algolia_Task $task );
+
 }

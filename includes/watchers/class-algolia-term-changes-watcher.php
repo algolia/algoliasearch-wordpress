@@ -34,7 +34,7 @@ class Algolia_Term_Changes_Watcher implements Algolia_Changes_Watcher
 		add_action( 'edited_terms', array( $this, 'queue_sync_item' ), 10, 2 );
 
 		// Fires immediately before a term taxonomy ID is deleted.
-		add_action( 'delete_term', array( $this, 'on_delete_term' ) );
+		add_action( 'delete_term', array( $this, 'on_delete_term' ), 10, 3 );
 
 		// Todo: Maybe add the following edge case:
 		// Fires immediately after a term-taxonomy relationship is updated.
@@ -74,20 +74,13 @@ class Algolia_Term_Changes_Watcher implements Algolia_Changes_Watcher
 
 		$this->queue->queue( 'sync_item', $task );
 	}
-	
+
 	/**
-	 * @param int $tt_id The term taxonomy ID.
+	 * @param int    $term_id The term ID.
+	 * @param string $tt_id The term taxonomy ID.
+	 * @param string $taxonomy The taxonomy.
 	 */
-	public function on_delete_term( $tt_id ) {
-		if ( function_exists( 'wpcom_vip_get_term_by' ) ) {
-			$term = wpcom_vip_get_term_by( 'term_taxonomy_id', (int) $tt_id );
-		} else {
-			$term = get_term_by( 'term_taxonomy_id', (int) $tt_id );
-		}
-		if ( ! $term ) {
-			return;
-		}
-		
-		$this->queue_sync_item( $term->term_id, $term->taxonomy );
+	public function on_delete_term( $term_id, $tt_id, $taxonomy ) {
+		$this->queue_sync_item( $term_id, $taxonomy );
 	}
 }

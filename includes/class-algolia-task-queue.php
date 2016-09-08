@@ -31,7 +31,11 @@ final class Algolia_Task_Queue
 		}
 
 		$this->logger->log( sprintf( 'New task %s was queued.', $task_name ), $data );
-		do_action( 'algolia_process_queue' );
+
+		// Let the automatic queue handling be disabled.
+		if ( ! defined( 'ALGOLIA_AUTO_PROCESS_QUEUE' ) || ALGOLIA_AUTO_PROCESS_QUEUE === true ) {
+			do_action( 'algolia_process_queue' );
+		}
 	}
 
 	/**
