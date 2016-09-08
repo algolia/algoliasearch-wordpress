@@ -112,9 +112,8 @@ class Algolia_Plugin {
 			new Algolia_Task_Queue_Loopback_Async( $this->task_queue, $this->task_dispatcher, $this->logger );
 			$this->override_wordpress_search();
 			$this->autocomplete_config = new Algolia_Autocomplete_Config( $this );
+			$this->template_loader = new Algolia_Template_Loader( $this );
 		}
-
-		$this->template_loader = new Algolia_Template_Loader( $this );
 
 		// Load admin or public part of the plugin.
 		if ( is_admin() ) {
