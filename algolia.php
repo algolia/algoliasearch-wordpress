@@ -2,14 +2,13 @@
 
 /**
  * @wordpress-plugin
- * Plugin Name:       Algolia Search
+ * Plugin Name:       Search by Algolia – Instant & Relevant results
  * Plugin URI:        https://community.algolia.com/wordpress
- * Description:       Algolia Search plugin for WordPress is a drop in replacement for WordPress search. It provides a find-as-you-type search results page and adds an autocomplete dropdown menu to your search bars.
+ * Description:       Algolia gives you professional-quality search without the setup hassle. Includes autocomplete, full control over look & feel, and relevance tuning.
  * Version:           0.6.2
  * Author:            Algolia
  * Author URI:        https://www.algolia.com/
  * License: 		  MIT License, GNU General Public License v2.0
- * License URI:       MIT-LICENSE.txt, GPL-LICENSE.txt
  * Text Domain:       algolia
  * Domain Path:       /languages/
  */
