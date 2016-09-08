@@ -160,12 +160,28 @@ final class Algolia_Posts_Index extends Algolia_Index
 
 		// We did not use get_the_post_thumbnail_url because not available prior to WP 4.4.
 		$thumbnail_url = '';
+		$thumbnails = array();
 		$post_thumbnail_id = get_post_thumbnail_id( $post->ID );
+		$thumbnail_sizes = get_intermediate_image_sizes();
 		if ( $post_thumbnail_id ) {
 			$thumbnail_url = wp_get_attachment_thumb_url( $post_thumbnail_id );
-		}
 
+			foreach ( $thumbnail_sizes as $size ) {
+				$img_info = wp_get_attachment_image_src( $post_thumbnail_id, $size );
+				if ( ! $img_info ) {
+					continue;
+				}
+
+				$thumbnails[ $size ] = array(
+					'url'         => $img_info[0],
+					'width'       => $img_info[1],
+					'height'      => $img_info[2],
+				);
+			}
+		}
 		$shared_attributes['thumbnail_url'] = $thumbnail_url;
+		$shared_attributes['thumbnails'] = $thumbnails;
+
 		$shared_attributes['permalink'] = get_permalink( $post );
 		$shared_attributes['post_mime_type'] = $post->post_mime_type;
 
