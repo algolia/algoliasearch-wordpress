@@ -390,9 +390,10 @@ abstract class Algolia_Index
 
 				if ( null === $item ) {
 					$this->delete_item( $task );
+				} else {
+					$this->sync( $item );
 				}
 
-				$this->sync( $item );
 				break;
 			case 're_index_items':
 				$page = get_post_meta( $task->get_id(), 'algolia_task_re_index_page', true );
@@ -490,5 +491,5 @@ abstract class Algolia_Index
 	 * @param Algolia_Task $task
 	 */
 	abstract public function delete_item( Algolia_Task $task );
-	
+
 }

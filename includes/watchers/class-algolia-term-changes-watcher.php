@@ -84,6 +84,7 @@ class Algolia_Term_Changes_Watcher implements Algolia_Changes_Watcher
 		} else {
 			$term = get_term_by( 'term_taxonomy_id', (int) $tt_id );
 		}
+	
 		if ( ! $term ) {
 			return;
 		}
