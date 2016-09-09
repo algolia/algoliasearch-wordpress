@@ -77,6 +77,17 @@
 					},
 					searchParameters: {
 						facetingAfterDistinct: true
+					},
+					searchFunction: function(helper) {
+						if (search.helper.state.query === '') {
+							search.helper.setQueryParameter('distinct', false);
+							search.helper.setQueryParameter('filters', 'record_index=0');
+						} else {
+							search.helper.setQueryParameter('distinct', true);
+							search.helper.setQueryParameter('filters', '');
+						}
+
+						helper.search();
 					}
 				});
 
