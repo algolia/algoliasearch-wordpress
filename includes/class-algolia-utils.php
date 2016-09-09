@@ -76,4 +76,31 @@ class Algolia_Utils
 
 		return $terms;
 	}
+
+	/**
+	 * @param int $post_id
+	 *
+	 * @return array
+	 */
+	public static function get_post_images( $post_id ) {
+		$images = array();
+		$post_thumbnail_id = get_post_thumbnail_id( (int) $post_id );
+		$sizes = get_intermediate_image_sizes();
+		if ( $post_thumbnail_id ) {
+			foreach ( $sizes as $size ) {
+				$info = wp_get_attachment_image_src( $post_thumbnail_id, $size );
+				if ( ! $info ) {
+					continue;
+				}
+
+				$images[ $size ] = array(
+					'url'         => $info[0],
+					'width'       => $info[1],
+					'height'      => $info[2],
+				);
+			}
+		}
+
+		return (array) apply_filters( 'algolia_get_post_images', $images );
+	}
 }

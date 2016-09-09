@@ -19,10 +19,10 @@
 
 	<script type="text/html" id="tmpl-instantsearch-hit">
 		<article itemtype="http://schema.org/Article">
-			<# if ( data.thumbnail_url ) { #>
+			<# if ( data.images.thumbnail ) { #>
 			<div class="ais-hits--thumbnail">
 				<a href="{{ data.permalink }}" title="{{ data.post_title }}">
-					<img src="{{ data.thumbnail_url }}" alt="{{ data.post_title }}" title="{{ data.post_title }}" itemprop="image" />
+					<img src="{{ data.images.thumbnail.url }}" alt="{{ data.post_title }}" title="{{ data.post_title }}" itemprop="image" />
 				</a>
 			</div>
 			<# } #>

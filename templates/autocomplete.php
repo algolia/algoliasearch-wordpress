@@ -7,8 +7,8 @@
 
 <script type="text/html" id="tmpl-autocomplete-post-suggestion">
 	<a class="suggestion-link" href="{{ data.permalink }}" title="{{ data.post_title }}">
-		<# if ( data.thumbnail_url ) { #>
-		<img class="suggestion-post-thumbnail" src="{{ data.thumbnail_url }}" alt="{{ data.post_title }}">
+		<# if ( data.images.thumbnail ) { #>
+		<img class="suggestion-post-thumbnail" src="{{ data.images.thumbnail.url }}" alt="{{ data.post_title }}">
 		<# } #>
 		<div class="suggestion-post-attributes">
 			<span class="suggestion-post-title">{{{ data._highlightResult.post_title.value }}}</span>
