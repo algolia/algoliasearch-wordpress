@@ -187,14 +187,21 @@ final class Algolia_Searchable_Posts_Index extends Algolia_Index
 		$shared_attributes['permalink'] = get_permalink( $post );
 		$shared_attributes['post_mime_type'] = $post->post_mime_type;
 
-		$post_tags = get_the_terms( $post->ID, 'post_tag' );
-		$post_tags = is_array( $post_tags ) ? $post_tags : array();
-		$shared_attributes['taxonomy_post_tag'] = wp_list_pluck( $post_tags, 'name' );
+		// Push all taxonomies by default, including custom ones.
+		$taxonomy_objects = get_object_taxonomies( $post->post_type, 'objects' );
 
-		$categories = get_the_terms( $post->ID, 'category' );
-		$categories = is_array( $categories ) ? $categories : array();
-		$shared_attributes['taxonomy_category'] = wp_list_pluck( $categories, 'name' );
-		$shared_attributes['category_tree'] = $this->get_category_tree( $categories );
+		$shared_attributes['taxonomies'] = array();
+		$shared_attributes['taxonomies_hierarchical'] = array();
+		foreach ( $taxonomy_objects as $taxonomy ) {
+			$terms = get_the_terms( $post->ID, $taxonomy->name );
+			$terms = is_array( $terms ) ? $terms : array();
+
+			if ( $taxonomy->hierarchical ) {
+				$shared_attributes['taxonomies_hierarchical'][ $taxonomy->name ] = Algolia_Utils::get_taxonomy_tree( $terms, $taxonomy->name );
+			}
+
+			$shared_attributes['taxonomies'][ $taxonomy->name ] = wp_list_pluck( $terms, 'name' );
+		}
 
 		$shared_attributes['is_sticky'] = is_sticky( $post->ID ) ? 1 : 0;
 

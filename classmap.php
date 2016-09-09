@@ -27,6 +27,7 @@ require_once ALGOLIA_PATH . 'includes/class-algolia-task-dispatcher.php';
 require_once ALGOLIA_PATH . 'includes/class-algolia-task-queue.php';
 require_once ALGOLIA_PATH . 'includes/class-algolia-task-queue-loopback-async.php';
 require_once ALGOLIA_PATH . 'includes/class-algolia-template-loader.php';
+require_once ALGOLIA_PATH . 'includes/class-algolia-utils.php';
 
 require_once ALGOLIA_PATH . 'includes/indices/class-algolia-index.php';
 require_once ALGOLIA_PATH . 'includes/indices/class-algolia-index-replica.php';
