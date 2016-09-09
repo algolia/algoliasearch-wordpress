@@ -111,6 +111,7 @@ final class Algolia_Posts_Index extends Algolia_Index
 		// Inject the objectID's.
 		foreach ( $records as $i => &$record ) {
 			$record['objectID'] = $this->get_post_object_id( $post->ID, $i );
+			$record['record_index'] = (int) $i;
 		}
 
 		$records = (array) apply_filters( 'algolia_post_records', $records, $post );
@@ -158,42 +159,29 @@ final class Algolia_Posts_Index extends Algolia_Index
 			);
 		}
 
-		// We did not use get_the_post_thumbnail_url because not available prior to WP 4.4.
-		$thumbnail_url = '';
-		$thumbnails = array();
-		$post_thumbnail_id = get_post_thumbnail_id( $post->ID );
-		$thumbnail_sizes = get_intermediate_image_sizes();
-		if ( $post_thumbnail_id ) {
-			$thumbnail_url = wp_get_attachment_thumb_url( $post_thumbnail_id );
-
-			foreach ( $thumbnail_sizes as $size ) {
-				$img_info = wp_get_attachment_image_src( $post_thumbnail_id, $size );
-				if ( ! $img_info ) {
-					continue;
-				}
-
-				$thumbnails[ $size ] = array(
-					'url'         => $img_info[0],
-					'width'       => $img_info[1],
-					'height'      => $img_info[2],
-				);
-			}
-		}
-		$shared_attributes['thumbnail_url'] = $thumbnail_url;
-		$shared_attributes['thumbnails'] = $thumbnails;
+		$shared_attributes['images'] = Algolia_Utils::get_post_images( $post->ID );
 
 		$shared_attributes['permalink'] = get_permalink( $post );
 		$shared_attributes['post_mime_type'] = $post->post_mime_type;
+		
 
-		$post_tags = get_the_terms( $post->ID, 'post_tag' );
-		$post_tags = is_array( $post_tags ) ? $post_tags : array();
-		$shared_attributes['taxonomy_post_tag'] = wp_list_pluck( $post_tags, 'name' );
+		// Push all taxonomies by default, including custom ones.
+		$taxonomy_objects = get_object_taxonomies( $post->post_type, 'objects' );
 
-		$categories = get_the_terms( $post->ID, 'category' );
-		$categories = is_array( $categories ) ? $categories : array();
-		$shared_attributes['taxonomy_category'] = wp_list_pluck( $categories, 'name' );
-		$shared_attributes['category_tree'] = $this->get_category_tree( $categories );
+		$shared_attributes['taxonomies'] = array();
+		$shared_attributes['taxonomies_hierarchical'] = array();
+		foreach ( $taxonomy_objects as $taxonomy ) {
+			$terms = get_the_terms( $post->ID, $taxonomy->name );
+			$terms = is_array( $terms ) ? $terms : array();
 
+			if ( $taxonomy->hierarchical ) {
+				$shared_attributes['taxonomies_hierarchical'][ $taxonomy->name ] = Algolia_Utils::get_taxonomy_tree( $terms, $taxonomy->name );
+			}
+
+			$shared_attributes['taxonomies'][ $taxonomy->name ] = wp_list_pluck( $terms, 'name' );
+		}
+		
+		
 		$shared_attributes['is_sticky'] = is_sticky( $post->ID ) ? 1 : 0;
 
 		if ( 'attachment' === $post->post_type ) {
@@ -210,49 +198,6 @@ final class Algolia_Posts_Index extends Algolia_Index
 
 		return $shared_attributes;
 	}
-
-	/**
-	 * Returns an array like:
-	 * array(
-	 *	'lvl0' => ['Sales', 'Marketing'],
-	 *  'lvl1' => ['Sales > Strategies', 'Marketing > Tips & Tricks']
-	 * 	...
-	 * );.
-	 *
-	 * This is useful when building hierarchical menus.
-	 * @see https://community.algolia.com/instantsearch.js/documentation/#hierarchicalmenu
-	 *
-	 * @param array $categories
-	 *
-	 * @return array
-	 */
-	protected function get_category_tree( array $categories ) {
-		$termIds = wp_list_pluck( $categories, 'term_id' );
-
-		$parents = array();
-		foreach ( $termIds as $termId ) {
-
-			$path = get_category_parents( $termId, false, ' > ' );
-			$parents[] = rtrim( $path, ' >' );
-		}
-
-		$categories = array();
-		foreach ( $parents as $parent ) {
-			$levels = explode( ' > ', $parent );
-
-			$previousLvl = '';
-			foreach ( $levels as $index => $level ) {
-				$categories[ 'lvl' . $index ][] = $previousLvl . $level;
-				$previousLvl .= $level . ' > ';
-
-				// Make sure we have not duplicate.
-				// The call to `array_values` ensures that we do not end up with an object in JSON.
-				$categories[ 'lvl' . $index ] = array_values( array_unique( $categories[ 'lvl' . $index ] ) );
-			}
-		}
-
-		return $categories;
-	}
 	
 	/**
 	 * @return array
@@ -267,6 +212,7 @@ final class Algolia_Posts_Index extends Algolia_Index
 				'unordered(title4)',
 				'unordered(title5)',
 				'unordered(title6)',
+				'unordered(taxonomies)',
 				'unordered(content)',
 			),
 			'customRanking' => array(
@@ -276,10 +222,9 @@ final class Algolia_Posts_Index extends Algolia_Index
 			'attributeForDistinct'  => 'post_id',
 			'distinct'              => true,
 			'attributesForFaceting' => array(
-				'taxonomy_post_tag',
-				'taxonomy_category',
+				'taxonomies',
+				'taxonomies_hierarchical',
 				'post_author.display_name',
-				'category_tree',
 			),
 			'attributesToSnippet' => array(
 				'post_title:30',

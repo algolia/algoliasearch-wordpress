@@ -57,43 +57,43 @@ Each matching **Searchable Post** will be rendered with a default hit template. 
 
 ```html
 <script type="text/html" id="tmpl-instantsearch-hit">
-  <article itemtype="http://schema.org/Article">
-    <# if ( data.thumbnail_url ) { #>
-    <div class="ais-hits--thumbnail">
-      <a href="{{ data.permalink }}" title="{{ data.post_title }}">
-        <img src="{{ data.thumbnail_url }}" alt="{{ data.post_title }}" title="{{ data.post_title }}" itemprop="image" />
-      </a>
-    </div>
-    <# } #>
+	<article itemtype="http://schema.org/Article">
+	    <# if ( data.images.thumbnail ) { #>
+	    <div class="ais-hits--thumbnail">
+	        <a href="{{ data.permalink }}" title="{{ data.post_title }}">
+	            <img src="{{ data.images.thumbnail.url }}" alt="{{ data.post_title }}" title="{{ data.post_title }}" itemprop="image" />
+	        </a>
+	    </div>
+	    <# } #>
 
-    <div class="ais-hits--content">
-      <h2 itemprop="name headline"><a href="{{ data.permalink }}" title="{{ data.post_title }}" itemprop="url">{{{ data._highlightResult.post_title.value }}}</a></h2>
-      <div class="ais-hits--tags">
-        <# for (var index in data.taxonomy_post_tag) { #>
-        <span class="ais-hits--tag">{{ data.taxonomy_post_tag[index].value }}</span>
-        <# } #>
-      </div>
-      <div class="excerpt">
-        <p>
-          <#
-          var attributes = ['content', 'title6', 'title5', 'title4', 'title3', 'title2', 'title1'];
-          var attribute_name;
-          var relevant_content = '';
-          for ( var index in attributes ) {
-            attribute_name = attributes[ index ];
-            if ( data._highlightResult[ attribute_name ].matchedWords.length > 0 ) {
-              relevant_content = data._snippetResult[ attribute_name ].value;
-            }
-          }
+	    <div class="ais-hits--content">
+	        <h2 itemprop="name headline"><a href="{{ data.permalink }}" title="{{ data.post_title }}" itemprop="url">{{{ data._highlightResult.post_title.value }}}</a></h2>
+	        <div class="ais-hits--tags">
+	            <# for (var index in data.taxonomies.post_tag) { #>
+	            <span class="ais-hits--tag">{{{ data._highlightResult.taxonomies.post_tag[index].value }}}</span>
+	            <# } #>
+	        </div>
+	        <div class="excerpt">
+	            <p>
+	                <#
+	                var attributes = ['content', 'title6', 'title5', 'title4', 'title3', 'title2', 'title1'];
+	                var attribute_name;
+	                var relevant_content = '';
+	                for ( var index in attributes ) {
+	                    attribute_name = attributes[ index ];
+	                    if ( data._highlightResult[ attribute_name ].matchedWords.length > 0 ) {
+	                        relevant_content = data._snippetResult[ attribute_name ].value;
+	                    }
+	                }
 
-          relevant_content = data._snippetResult[ attributes[ 0 ] ].value;
-          #>
-          {{{ relevant_content }}}
-        </p>
-      </div>
-    </div>
-    <div class="ais-clearfix"></div>
-  </article>
+	                relevant_content = data._snippetResult[ attributes[ 0 ] ].value;
+	                #>
+	                {{{ relevant_content }}}
+	            </p>
+	        </div>
+	    </div>
+	    <div class="ais-clearfix"></div>
+	</article>
 </script>
 ```
 
