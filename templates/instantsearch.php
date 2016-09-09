@@ -30,8 +30,8 @@
 			<div class="ais-hits--content">
 				<h2 itemprop="name headline"><a href="{{ data.permalink }}" title="{{ data.post_title }}" itemprop="url">{{{ data._highlightResult.post_title.value }}}</a></h2>
 				<div class="ais-hits--tags">
-					<# for (var index in data.taxonomy_post_tag) { #>
-					<span class="ais-hits--tag">{{ data.taxonomy_post_tag[index] }}</span>
+					<# for (var index in data.taxonomies.post_tag) { #>
+					<span class="ais-hits--tag">{{ data.taxonomies.post_tag[index] }}</span>
 					<# } #>
 				</div>
 				<div class="excerpt">
@@ -135,7 +135,7 @@
 						container: '#facet-categories',
 						separator: ' > ',
 						sortBy: ['count'],
-						attributes: ['category_tree.lvl0', 'category_tree.lvl1', 'category_tree.lvl2'],
+						attributes: ['taxonomies_hierarchical.category.lvl0', 'taxonomies_hierarchical.category.lvl1', 'taxonomies_hierarchical.category.lvl2'],
 						templates: {
 							header: '<h3 class="widgettitle">Categories</h3>'
 						}
@@ -146,7 +146,7 @@
 				search.addWidget(
 					instantsearch.widgets.refinementList({
 						container: '#facet-tags',
-						attributeName: 'taxonomy_post_tag',
+						attributeName: 'taxonomies.post_tag',
 						operator: 'and',
 						limit: 15,
 						sortBy: ['isRefined:desc', 'count:desc', 'name:asc'],
