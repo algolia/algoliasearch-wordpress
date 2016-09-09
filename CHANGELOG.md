@@ -1,3 +1,17 @@
+# 0.6.0
+- Index all taxonomies even custom ones
+- Made autocomplete & search page easily customizable by copy pasting a folder in the active theme
+- Fix an issue where you would get 500 errors once if API credentials were not yet set
+- Push all image sizes along with there urls to ease frontend template customization
+- Fix issues were the queue would stop being processed because we attempted to load an item that was no longer existing
+- Fix deletion syncing with Algolia
+- Lower the autocomplete dropdown min width to 200px so that it fits on mobile display
+- A lot of Docs improvements
+- Allow to use dev version of the js scripts by using constant 'SCRIPT_DEBUG'
+- Allow to avoid automatic queue processing by using 'ALGOLIA_AUTO_PROCESS_QUEUE' constant
+- Fix facet counts on search results page
+- Add support for replicas
+
 # 0.5.0
 - Fix a bug where autocomplete dropdown would not have the correct width after window resizing
 - Exclude post content contained inside `<script>` tags by default
