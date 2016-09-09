@@ -166,7 +166,7 @@
 			$menu.css('z-index', '99999');
 
 			// Makes dropdown match the input size.
-			var dropdownMinWidth = 280;
+			var dropdownMinWidth = 200;
 			function updateDropdownWidth() {
 				var inputWidth = $searchInput.outerWidth();
 				if (inputWidth >= dropdownMinWidth) {
