@@ -233,6 +233,7 @@ final class Algolia_Posts_Index extends Algolia_Index
 				'unordered(title4)',
 				'unordered(title5)',
 				'unordered(title6)',
+				'unordered(taxonomies)',
 				'unordered(content)',
 			),
 			'customRanking' => array(
