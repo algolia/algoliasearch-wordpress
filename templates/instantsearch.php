@@ -31,7 +31,7 @@
 				<h2 itemprop="name headline"><a href="{{ data.permalink }}" title="{{ data.post_title }}" itemprop="url">{{{ data._highlightResult.post_title.value }}}</a></h2>
 				<div class="ais-hits--tags">
 					<# for (var index in data.taxonomies.post_tag) { #>
-					<span class="ais-hits--tag">{{ data.taxonomies.post_tag[index] }}</span>
+					<span class="ais-hits--tag">{{{ data._highlightResult.taxonomies.post_tag[index].value }}}</span>
 					<# } #>
 				</div>
 				<div class="excerpt">
