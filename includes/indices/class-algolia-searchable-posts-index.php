@@ -277,11 +277,10 @@ final class Algolia_Searchable_Posts_Index extends Algolia_Index
 			'attributeForDistinct'  => 'post_id',
 			'distinct'              => true,
 			'attributesForFaceting' => array(
-				'taxonomy_post_tag',
-				'taxonomy_category',
+				'taxonomies',
+				'taxonomies_hierarchical',
 				'post_author.display_name',
 				'post_type_label',
-				'category_tree',
 			),
 			'attributesToSnippet' => array(
 				'post_title:30',
