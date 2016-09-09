@@ -111,6 +111,7 @@ final class Algolia_Posts_Index extends Algolia_Index
 		// Inject the objectID's.
 		foreach ( $records as $i => &$record ) {
 			$record['objectID'] = $this->get_post_object_id( $post->ID, $i );
+			$record['record_index'] = (int) $i;
 		}
 
 		$records = (array) apply_filters( 'algolia_post_records', $records, $post );
