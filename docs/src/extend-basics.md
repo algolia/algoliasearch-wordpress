@@ -109,10 +109,8 @@ Here is the list of all available Filters.
 |algolia\_{$index_id}_index_replicas|array $replicas, Algolia_Index $index
 |algolia_config|array $config
 |algolia_task_queue_lock_ttl|int $ttl
-|algolia_searchable_posts_indexing_batch_size|int $batch_size
-|algolia_posts_indexing_batch_size|int $batch_size
-|algolia_terms_indexing_batch_size|int $batch_size
-|algolia_users_indexing_batch_size|int $batch_size
+|algolia_indexing_batch_size|int $batch_size (default: 50)
+|algolia\_{$index_id}_indexing_batch_size|int $batch_size
 |algolia_logs_per_page|int $logs_per_page
 
 
