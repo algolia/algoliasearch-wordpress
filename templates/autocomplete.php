@@ -104,19 +104,21 @@
 		jQuery("input[name='s']").each(function(i) {
 			var $searchInput = jQuery(this);
 
+			var config = {
+				debug: algolia.debug,
+				hint: false,
+				openOnFocus: true,
+				templates: {}
+			};
+			//Todo: Add empty template when we fixed https://github.com/algolia/autocomplete.js/issues/109
+
+			if(algolia.powered_by_enabled) {
+				config.templates.footer = wp.template('autocomplete-footer');
+			}
+
 			// Instantiate autocomplete.js
-			autocomplete($searchInput[0],
-				{
-					debug: algolia.debug,
-					hint: false,
-					openOnFocus: true,
-					templates: {
-						//empty: wp.template('autocomplete-empty'), // Waiting for https://github.com/algolia/autocomplete.js/issues/109
-						footer: wp.template('autocomplete-footer')
-					}
-				},
-				sources
-			).on('autocomplete:selected', function(e, suggestion, datasetName) {
+			autocomplete($searchInput[0], config, sources)
+			.on('autocomplete:selected', function(e, suggestion, datasetName) {
 				// Redirect the user when we detect a suggestion selection.
 				window.location.href = suggestion.permalink;
 			});

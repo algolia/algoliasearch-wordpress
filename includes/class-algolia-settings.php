@@ -18,6 +18,7 @@ class Algolia_Settings
 		add_option( 'algolia_index_name_prefix', 'wp_' );
 		add_option( 'algolia_logging_enabled', 'no' );
 		add_option( 'algolia_api_is_reachable', 'no' );
+		add_option( 'algolia_powered_by_enabled', 'yes' );
 	}
 
 	/**
@@ -167,5 +168,22 @@ class Algolia_Settings
 	public function set_api_is_reachable( $flag ) {
 		$value = (bool) $flag === true ? 'yes' : 'no';
 		update_option( 'algolia_api_is_reachable', $value );
+	}
+
+	/**
+	 * @return bool
+	 */
+	public function is_powered_by_enabled() {
+		$enabled = get_option( 'algolia_powered_by_enabled', 'yes' );
+
+		return $enabled === 'yes';
+	}
+
+	public function enable_powered_by() {
+		update_option( 'algolia_powered_by_enabled', 'yes' );
+	}
+
+	public function disable_powered_by() {
+		update_option( 'algolia_powered_by_enabled', 'no' );
 	}
 }

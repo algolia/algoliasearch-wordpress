@@ -36,6 +36,7 @@ class Algolia_Template_Loader {
 			'debug'                => defined( 'WP_DEBUG' ) && WP_DEBUG,
 			'application_id'       => $settings->get_application_id(),
 			'search_api_key'       => $settings->get_search_api_key(),
+			'powered_by_enabled'   => $settings->is_powered_by_enabled(),
 			'autocomplete'         => array(
 				'sources'     => $autocomplete_config->get_config(),
 			),
