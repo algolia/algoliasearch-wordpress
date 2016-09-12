@@ -1,3 +1,7 @@
+# 0.6.1
+- Let users disable the Algolia powered by on the Settings page of the plugin
+- Raise the default batch size up to 50 for every index
+
 # 0.6.0
 - Index all taxonomies even custom ones
 - Made autocomplete & search page easily customizable by copy pasting a folder in the active theme
