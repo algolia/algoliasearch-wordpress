@@ -50,7 +50,7 @@
 
 .ais-search-box--powered-by {
     position: absolute;
-    top: 54px;
+    top: 60px;
     right: 0;
     font-size: 14px;
     text-align: right;
@@ -70,7 +70,7 @@
 }
 .ais-stats {
     position: absolute;
-    top: 54px;
+    top: 60px;
     font-size: 14px;
 }
 
