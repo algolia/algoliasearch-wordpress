@@ -183,13 +183,6 @@ final class Algolia_Terms_Index extends Algolia_Index
 	}
 
 	/**
-	 * @return int
-	 */
-	protected function get_re_index_batch_size() {
-		return (int) apply_filters( 'algolia_terms_indexing_batch_size', 50 );
-	}
-
-	/**
 	 * @param Algolia_Task $task
 	 */
 	public function delete_item( Algolia_Task $task ) {

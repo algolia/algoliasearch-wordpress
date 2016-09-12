@@ -121,13 +121,6 @@ final class Algolia_Posts_Index extends Algolia_Index
 	}
 
 	/**
-	 * @return int
-	 */
-	protected function get_re_index_batch_size() {
-		return (int) apply_filters( 'algolia_posts_indexing_batch_size', 10 );
-	}
-
-	/**
 	 * @param WP_Post $post
 	 *
 	 * @return array
