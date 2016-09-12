@@ -24,7 +24,7 @@
 
 #algolia-search-box {
     position: relative;
-    margin-bottom: 2rem;
+    margin-bottom: 3rem;
 }
 
 #algolia-search-box input {
@@ -49,9 +49,11 @@
 }
 
 .ais-search-box--powered-by {
+    position: absolute;
+    top: 54px;
+    right: 0;
     font-size: 14px;
     text-align: right;
-    margin-top: 2px;
 }
 
 .ais-search-box--powered-by-link {
@@ -68,7 +70,7 @@
 }
 .ais-stats {
     position: absolute;
-    bottom: 0;
+    top: 54px;
     font-size: 14px;
 }
 

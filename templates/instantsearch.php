@@ -97,7 +97,7 @@
 						container: '#algolia-search-box',
 						placeholder: 'Search for...',
 						wrapInput: false,
-						poweredBy: true
+						poweredBy: algolia.powered_by_enabled
 					})
 				);
 
