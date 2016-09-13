@@ -109,18 +109,18 @@ class Algolia_Admin_Page_Settings
 			$this->section
 		);
 
-		add_settings_field(
+		/*add_settings_field(
 			'algolia_powered_by_enabled',
 			__( 'Remove Algolia powered by logo', 'algolia' ),
 			array( $this, 'powered_by_enabled_callback' ),
 			$this->slug,
 			$this->section
-		);
+		);*/
 
 		register_setting( $this->option_group, 'algolia_application_id', array( $this, 'sanitize_application_id' ) );
 		register_setting( $this->option_group, 'algolia_search_api_key', array( $this, 'sanitize_search_api_key' ) );
 		register_setting( $this->option_group, 'algolia_api_key', array( $this, 'sanitize_api_key' ) );
-		register_setting( $this->option_group, 'algolia_powered_by_enabled', array( $this, 'sanitize_powered_by_enabled' ) );
+		// register_setting( $this->option_group, 'algolia_powered_by_enabled', array( $this, 'sanitize_powered_by_enabled' ) );
 	}
 
 	public function application_id_callback() {
