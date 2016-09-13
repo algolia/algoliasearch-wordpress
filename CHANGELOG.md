@@ -1,3 +1,8 @@
+# 0.6.2
+- Powered by can now be removed with the `ALGOLIA_POWERED_BY` constant
+- Avoid spamming a notice on every admin page about non indexed searchable posts index
+- Updated JavaScript dependencies
+
 # 0.6.1
 - Let users disable the Algolia powered by on the Settings page of the plugin
 - Raise the default batch size up to 50 for every index
