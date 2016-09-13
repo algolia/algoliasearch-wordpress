@@ -48,7 +48,7 @@ Indexing
 
 1. [Add objects](#add-objects---addobjects)
 1. [Update objects](#update-objects---saveobjects)
-1. [Partial update](#partial-update---partialupdateobjects)
+1. [Partial update objects](#partial-update-objects---partialupdateobjects)
 1. [Delete objects](#delete-objects---deleteobjects)
 
 Settings
@@ -374,11 +374,11 @@ The server response will look like:
 
 - `nbHits` (integer): Number of hits that the search query matched.
 
-- `page` (integer): Index of the current page (zero-based). See the [`page`](#page) search parameter.
+- `page` (integer): Index of the current page (zero-based). See the [`page`](#page) search parameter. *Note: Not returned if you use `offset`/`length` for pagination.*
 
-- `hitsPerPage` (integer): Maximum number of hits returned per page. See the [`hitsPerPage`](#hitsperpage) search parameter.
+- `hitsPerPage` (integer): Maximum number of hits returned per page. See the [`hitsPerPage`](#hitsperpage) search parameter. *Note: Not returned if you use `offset`/`length` for pagination.*
 
-- `nbPages` (integer): Number of pages corresponding to the number of hits. Basically, `ceil(nbHits / hitsPerPage)`.
+- `nbPages` (integer): Number of pages corresponding to the number of hits. Basically, `ceil(nbHits / hitsPerPage)`. *Note: Not returned if you use `offset`/`length` for pagination.*
 
 - `processingTimeMS` (integer): Time that the server took to process the request, in milliseconds. *Note: This does not include network time.*
 
@@ -398,7 +398,7 @@ When [`getRankingInfo`](#getrankinginfo) is set to `true`, the following additio
 
 - `serverUsed` (string): Actual host name of the server that processed the request. (Our DNS supports automatic failover and load balancing, so this may differ from the host name used in the request.)
 
-- `parsedQuery` (string): The query string that will be searched, after normalization.
+- `parsedQuery` (string): The query string that will be searched, after normalization. Normalization includes removing stop words (if [removeStopWords](#removestopwords) is enabled), and transforming portions of the query string into phrase queries (see [advancedSyntax](#advancedsyntax)).
 
 - `timeoutCounts` (boolean): Whether a timeout was hit when computing the facet counts. When `true`, the counts will be interpolated (i.e. approximate). See also `exhaustiveFacetsCount`.
 
@@ -442,6 +442,7 @@ Parameters that can also be used in a setSettings also have the `indexing` [scop
 **Attributes**
 
 - [attributesToRetrieve](#attributestoretrieve) `settings`, `search`
+- [restrictSearchableAttributes](#restrictsearchableattributes) `search`
 
 **Filtering / Faceting**
 
@@ -456,11 +457,14 @@ Parameters that can also be used in a setSettings also have the `indexing` [scop
 - [highlightPreTag](#highlightpretag) `settings`, `search`
 - [highlightPostTag](#highlightposttag) `settings`, `search`
 - [snippetEllipsisText](#snippetellipsistext) `settings`, `search`
+- [restrictHighlightAndSnippetArrays](#restricthighlightandsnippetarrays) `settings`, `search`
 
 **Pagination**
 
 - [page](#page) `search`
 - [hitsPerPage](#hitsperpage) `settings`, `search`
+- [offset](#offset) `search`
+- [length](#length) `search`
 
 **Typos**
 
@@ -488,6 +492,7 @@ Parameters that can also be used in a setSettings also have the `indexing` [scop
 - [advancedSyntax](#advancedsyntax) `settings`, `search`
 - [optionalWords](#optionalwords) `settings`, `search`
 - [removeStopWords](#removestopwords) `settings`, `search`
+- [disableExactOnAttributes](#disableexactonattributes) `settings`, `search`
 - [exactOnSingleWordQuery](#exactonsinglewordquery) `settings`, `search`
 - [alternativesAsExact](#alternativesasexact) `settings`, `search`
 
@@ -499,8 +504,50 @@ Parameters that can also be used in a setSettings also have the `indexing` [scop
 - [tagFilters (deprecated)](#tagfilters-deprecated) `search`
 - [facetFilters (deprecated)](#facetfilters-deprecated) `search`
 - [analytics](#analytics) `search`
+- [analyticsTags](#analyticstags) `search`
+- [synonyms](#synonyms) `search`
+- [replaceSynonymsInHighlight](#replacesynonymsinhighlight) `search`, `settings`
+- [minProximity](#minproximity) `search`, `settings`
 
 <!--/PARAMETERS_LINK-->
+
+### Multiple queries - `multipleQueries`
+
+You can send multiple queries with a single API call using a batch of queries:
+
+```php
+// perform 3 queries in a single API call:
+//  - 1st query targets index `categories`
+//  - 2nd and 3rd queries target index `products`
+$queries = [
+    ['indexName' => 'categories', 'query' => $myQueryString, 'hitsPerPage' => 3],
+    ['indexName' => 'products', 'query' => $myQueryString, 'hitsPerPage' => 3, 'facetFilters' => 'promotion'],
+    ['indexName' => 'products', 'query' => $myQueryString, 'hitsPerPage' => 10]
+];
+
+$results = $client->multipleQueries($queries);
+
+var_dump(results['results']):
+```
+
+You can specify a `strategy` parameter to optimize your multiple queries:
+
+- `none`: Execute the sequence of queries until the end.
+- `stopIfEnoughMatches`: Execute the sequence of queries until the number of hits is reached by the sum of hits.
+
+#### Response
+
+The resulting JSON contains the following fields:
+
+- `results` (array): The results for each request, in the order they were submitted. The contents are the same as in [Search in an index](#search-in-an-index---search).
+
+    Each result also includes the following additional fields:
+
+    - `index` (string): The name of the targeted index.
+
+    - `processed` (boolean, optional): *Note: Only returned when `strategy` is `stopIfEnoughmatches`.* Whether the query was processed.
+
+
 
 ### Find by IDs - `getObjects`
 
@@ -534,23 +581,49 @@ $index->getObjects(['myID1', 'myID2']);
 
 Each entry in an index has a unique identifier called `objectID`. There are two ways to add an entry to the index:
 
- 1. Using automatic `objectID` assignment. You will be able to access it in the answer.
- 2. Supplying your own `objectID`.
+ 1. Supplying your own `objectID`.
+ 2. Using automatic `objectID` assignment. You will be able to access it in the answer.
 
 You don't need to explicitly create an index, it will be automatically created the first time you add an object.
 Objects are schema less so you don't need any configuration to start indexing. If you wish to configure things, the settings section provides details about advanced settings.
 
-Example with automatic `objectID` assignment:
+Example with automatic `objectID` assignments:
 
 ```php
-$res = $index->addObject([
-	'firstname' => 'Jimmie',
-	'lastname' => 'Barninger'
-]);
-echo 'objectID=' . $res['objectID'] . "\n";
+$res = $index->addObjects(
+    [
+        [
+            'firstname' => 'Jimmie',
+            'lastname'  => 'Barninger'
+        ],
+        [
+            'firstname' => 'Warren',
+            'lastname'  => 'myID1'
+        ]
+    ]
+);
 ```
 
-Example with manual `objectID` assignment:
+Example with manual `objectID` assignments:
+
+```php
+$res = $index->addObjects(
+    [
+        [
+            'objectID' => '1',
+            'firstname' => 'Jimmie',
+            'lastname'  => 'Barninger'
+        ],
+        [
+            'objectID' => '2',
+            'firstname' => 'Warren',
+            'lastname'  => 'myID1'
+        ]
+    ]
+);
+```
+
+To add a single object, use the `[Add object](#add-object---addobject)` method:
 
 ```php
 $res = $index->addObject(
@@ -563,7 +636,6 @@ $res = $index->addObject(
 echo 'objectID=' . $res['objectID'] . "\n";
 ```
 
-
 ### Update objects - `saveObjects`
 
 You have three options when updating an existing object:
@@ -572,7 +644,26 @@ You have three options when updating an existing object:
  2. Replace only some attributes.
  3. Apply an operation to some attributes.
 
-Example on how to replace all attributes of an existing object:
+Example on how to replace all attributes existing objects:
+
+```php
+$res = $index->saveObjects(
+    [
+        [
+            'firstname' => 'Jimmie',
+            'lastname'  => 'Barninger',
+            'objectID'  => 'SFO'
+        ],
+        [
+            'firstname' => 'Warren',
+            'lastname'  => 'Speach',
+            'objectID'  => 'myID2'
+        ]
+    ]
+);
+```
+
+To update a single object, you can use the `[Update object](#update-object---saveobject) method:
 
 ```php
 $index->saveObject(
@@ -585,7 +676,8 @@ $index->saveObject(
 );
 ```
 
-### Partial update - `partialUpdateObjects`
+
+### Partial update objects - `partialUpdateObjects`
 
 You have many ways to update an object's attributes:
 
@@ -668,10 +760,33 @@ $index->partialUpdateObject(
 Note: Here we are decrementing the value by `42`. To decrement just by one, put
 `value:1`.
 
+To partial update multiple objects using one API call, you can use the `[Partial update objects](#partial-update-objects---partialupdateobjects)` method:
+
+```php
+$res = $index->partialUpdateObjects(
+    [
+        [
+            'firstname' => 'Jimmie',
+            'objectID'  => 'SFO'
+        ],
+        [
+            'firstname' => 'Warren',
+            'objectID'  => 'myID2'
+        ]
+    ]
+);
+```
+
 
 ### Delete objects - `deleteObjects`
 
-You can delete an object using its `objectID`:
+You can delete objects using their `objectID`:
+
+```php
+$res = $index->deleteObjects(["myID1", "myID2"]);
+```
+
+To delete a single object, you can use the `[Delete object](#delete-object---deleteobject)` method:
 
 ```php
 $index->deleteObject('myID');
@@ -846,11 +961,11 @@ They are three scopes:
 
 **Attributes**
 
-- [attributesForFaceting](#attributesforfaceting) `settings`
 - [attributesToIndex](#attributestoindex) `settings`
-- [attributesToRetrieve](#attributestoretrieve) `settings`, `search`
+- [attributesForFaceting](#attributesforfaceting) `settings`
 - [unretrievableAttributes](#unretrievableattributes) `settings`
-
+- [attributesToRetrieve](#attributestoretrieve) `settings`, `search`
+- [restrictSearchableAttributes](#restrictsearchableattributes) `search`
 
 **Ranking**
 
@@ -877,6 +992,8 @@ They are three scopes:
 
 - [page](#page) `search`
 - [hitsPerPage](#hitsperpage) `settings`, `search`
+- [offset](#offset) `search`
+- [length](#length) `search`
 
 **Typos**
 
@@ -921,8 +1038,12 @@ They are three scopes:
 - [tagFilters (deprecated)](#tagfilters-deprecated) `search`
 - [facetFilters (deprecated)](#facetfilters-deprecated) `search`
 - [analytics](#analytics) `search`
-- [altCorrections](#altcorrections) `settings`
+- [analyticsTags](#analyticstags) `search`
+- [synonyms](#synonyms) `search`
+- [replaceSynonymsInHighlight](#replacesynonymsinhighlight) `search`, `settings`
 - [placeholders](#placeholders) `settings`
+- [altCorrections](#altcorrections) `settings`
+- [minProximity](#minproximity) `search`, `settings`
 
 ### Search
 
@@ -1163,6 +1284,10 @@ Limit the number of facet values returned for each facet.
 
 For example, `maxValuesPerFacet=10` will retrieve a maximum of 10 values per facet.
 
+**Warnings**
+
+- The engine has a hard limit on the `maxValuesPerFacet` of `1000`. Any value above that will be interpreted by the engine as being `1000`.
+
 ### Highlighting / Snippeting
 
 #### attributesToHighlight
@@ -1261,6 +1386,28 @@ Pagination parameter used to select the page to retrieve.
 
 
 Pagination parameter used to select the number of hits per page.
+
+#### offset
+
+- scope: `search`
+- type: `integer`
+- default: `null`
+
+
+Offset of the first hit to return (zero-based).
+
+**Warning:** In most cases, `page`/`hitsPerPage` is the recommended method for pagination; `offset`/`length` is reserved for advanced use.
+
+#### length
+
+- scope: `search`
+- type: `integer`
+- default: `null`
+
+
+Number of hits to return.
+
+**Warning:** In most cases, `page`/`hitsPerPage` is the recommended method for pagination; `offset`/`length` is reserved for advanced use.
 
 ### Typos
 
@@ -1785,6 +1932,33 @@ For example, `[["category:Book","category:Movie"],"author:John%20Doe"]`.
 
 If set to false, this query will not be taken into account in the analytics feature.
 
+#### analyticsTags
+
+- scope: `search`
+- type: `array of strings`
+- default: `null`
+
+
+If set, tag your query with the specified identifiers. Tags can then be used in the Analytics to analyze a subset of searches only.
+
+#### synonyms
+
+- scope: `search`
+- type: `boolean`
+- default: `true`
+
+
+If set to `false`, the search will not use the synonyms defined for the targeted index.
+
+#### replaceSynonymsInHighlight
+
+- scope: `search`, `settings`
+- type: `boolean`
+- default: `true`
+
+
+If set to `false`, words matched via synonym expansion will not be replaced by the matched synonym in the highlighted result.
+
 #### placeholders
 
 - scope: `settings`
@@ -1831,6 +2005,19 @@ For example:
   { "word": "feet", "correction": "foot", "nbTypos": 1 }
 ]
 ```
+
+#### minProximity
+
+- scope: `search`, `settings`
+- type: `integer`
+- default: `1`
+
+
+Configure the precision of the `proximity` ranking criterion. By default, the minimum (and best) proximity value distance between 2 matching words is 1. Setting it to 2 (or 3) would allow 1 (or 2) words to be found between the matching words without degrading the proximity ranking value.
+
+Considering the query *“javascript framework”*, if you set `minProximity=2`, the records *“JavaScript framework”* and *“JavaScript charting framework”* will get the same proximity score, even if the second contains a word between the two matching words.
+
+**Note:** the maximum `minProximity` that can be set is 7. Any higher value will disable the `proximity` criterion from the ranking formula.
 
 
 ## Manage Indices
@@ -1925,22 +2112,57 @@ For example, if you want to fully update your index `MyIndex` every night, we re
 
 ## Api Keys
 
-The **admin** API key provides full control of all your indices. *The admin API key should always be kept secure; do NOT use it from outside your back-end.*
+### Overview
 
-You can also generate user API keys to control security.
-These API keys can be restricted to a set of operations or/and restricted to a given index.
+When creating your Algolia Account, you'll notice there are 3 different API Keys:
+
+- **Admin API Key** - it provides full control of all your indices.
+*The admin API key should always be kept secure;
+do NOT give it to anybody; do NOT use it from outside your back-end as it will
+allow the person who has it to query/change/delete data*
+
+- **Search-Only API Key** - It allows you to search on every indices.
+
+- **Monitoring API Key** - It allows you to access the [Monitoring API](https://www.algolia.com/doc/rest-api/monitoring)
+
+#### Other types of API keys
+
+The *Admin API Key* and *Search-Only API Key* both have really large scope and sometimes you want to give a key to
+someone that have restricted permissions, can it be an index, a rate limit, a validity limit, ...
+
+To address those use-cases we have two differents type of keys:
+
+- **Secured API Keys**
+
+When you need to restrict the scope of the *Search Key*, we recommend to use *Secured API Key*.
+You can generate them on the fly (without any call to the API)
+from the *Search Only API Key* or any search *User Key* using the [Generate key](#generate-key---generatesecuredapikey) method
+
+- **User API Keys**
+
+If *Secured API Keys* does not meet your requirements, you can make use of *User keys*.
+Managing and especially creating those keys requires a call to the API.
+
+We have several methods to manage them:
+- [Add user key](#add-user-key---adduserkey)
+- [Update user key](#update-user-key---updateuserkey)
+- [Delete user key](#delete-user-key---deleteuserkey)
+- [List api keys](#list-api-keys---listapikeys)
+- [Get key permissions](#get-key-permissions---getuserkeyacl)
 
 ### Generate key - `generateSecuredApiKey`
 
-You may have a single index containing **per user** data. In that case, all records should be tagged with their associated `user_id` in order to add a `tagFilters=user_42` filter at query time to retrieve only what a user has access to. If you're using the [JavaScript client](http://github.com/algolia/algoliasearch-client-js), it will result in a security breach since the user is able to modify the `tagFilters` you've set by modifying the code from the browser. To keep using the JavaScript client (recommended for optimal latency) and target secured records, you can generate a secured API key from your backend:
+When you need to restrict the scope of the *Search Key*, we recommend to use *Secured API Key*.
+You can generate a *Secured API Key* from the *Search Only API Key* or any search *User API Key*
 
-```php
-// generate a public API key for user 42. Here, records are tagged with:
-//  - 'user_XXXX' if they are visible by user XXXX
-$public_key = $client->generateSecuredApiKey('YourSearchOnlyApiKey', ['filters' => '_tags:user_42']);
-```
+There is a few things to know about about *Secured API Keys*
+- They always need to be generated **on your backend** using one of our API Client 
+- You can generate them on the fly (without any call to the API)
+- They will not appear on the dashboard as they are generated without any call to the API
+- The key you use to generate it **needs to become private** and you should not use it in your frontend.
+- The generated secured API key **will inherit any restriction from the search key it has been generated from**
 
-This public API key can then be used in your JavaScript code as follow:
+You can then use the key in your frontend code
 
 ```js
 var client = algoliasearch('YourApplicationID', '<%= public_api_key %>');
@@ -1957,7 +2179,70 @@ index.search('something', function(err, content) {
 });
 ```
 
-You can mix rate limits and secured API keys by setting a `userToken` query parameter at API key generation time. When set, a unique user will be identified by her `IP + user_token` instead of only by her `IP`. This allows you to restrict a single user to performing a maximum of `N` API calls per hour, even if she shares her `IP` with another user.
+#### Filters
+
+Every filter set in the API key will always be applied. On top of that [filters](#filters) can be applied
+in the query parameters.
+
+```php
+// generate a public API key for user 42. Here, records are tagged with:
+//  - 'user_XXXX' if they are visible by user XXXX
+$public_key = \AlgoliaSearch\Client::generateSecuredApiKey('SearchApiKey', ['filters' => '_tags:user_42']);
+```
+
+**Warning**:
+
+If you set filters in the key `groups:admin`, and `groups:press OR groups:visitors` in the query parameters,
+this will be equivalent to `groups:admin AND (groups:press OR groups:visitors)`
+
+##### Having one API Key per User
+
+One of the usage of secured API keys, is to have allow users to see only part of an index, when this index
+contains the data of all users.
+In that case, you can tag all records with their associated `user_id` in order to add a `user_id=42` filter when
+generating the *Secured API Key* to retrieve only what a user is tagged in.
+
+**Warning**
+If you're generating *Secured API Keys* using the [JavaScript client](http://github.com/algolia/algoliasearch-client-js) in your frontend,
+it will result in a security breach since the user is able to modify the `tagFilters` you've set
+by modifying the code from the browser.
+
+#### Valid Until
+
+You can set a Unix timestamp used to define the expiration date of the API key
+
+```php
+# generate a public API key that is valid for 1 hour:
+$validUntil = Time.now.to_i + 3600
+$public_key = \AlgoliaSearch\Client::generateSecuredApiKey('SearchApiKey', ['validUntil' => $validUntil]);
+```
+
+#### Index Restriction
+
+You can restrict the key to a list of index names allowed for the secured API key
+
+```php
+# generate a public API key that is restricted to 'index1' and 'index2':
+$public_key = \AlgoliaSearch\Client::generateSecuredApiKey('SearchApiKey', ['restrictIndices' => 'index1,index2']);
+```
+
+#### Rate Limiting
+
+If you want to rate limit a secured API Key, the API key you generate the secured api key from need to be rate-limited.
+You can do that either via the dashboard or via the API using the
+[Add user key](#add-user-key---adduserkey) or [Update user key](#update-user-key---updateuserkey) method
+
+##### User Rate Limiting
+
+By default the rate limits will only use the `IP`.
+
+This can be an issue when several of your end users are using the same IP.
+To avoid that, you can set a `userToken` query parameter when generating the key.
+
+When set, a unique user will be identified by his `IP + user_token` instead of only by his `IP`.
+
+This allows you to restrict a single user to performing a maximum of `N` API calls per hour,
+even if he shares his `IP` with another user.
 
 ```php
 // generate a public API key for user 42. Here, records are tagged with:
@@ -1966,23 +2251,6 @@ $public_key = $client->generateSecuredApiKey(
     'YourSearchOnlyApiKey',
     ['filters' => 'user_42', 'userToken' => 'user_42']
 );
-```
-
-This public API key can then be used in your JavaScript code as follow:
-
-```js
-var client = algoliasearch('YourApplicationID', '<%= public_api_key %>');
-
-var index = client.initIndex('indexName')
-
-index.search('another query', function(err, content) {
-  if (err) {
-    console.error(err);
-    return;
-  }
-
-  console.log(content);
-});
 ```
 
 
@@ -2098,71 +2366,6 @@ $results = $index->searchSynonyms("street", array("synonym", "oneWaySynonym"), 1
 ### Custom batch - `batch`
 
 You may want to perform multiple operations with one API call to reduce latency.
-We expose four methods to perform batch operations:
-
-* Add objects - `addObjects`: Add an array of objects using automatic `objectID` assignment.
-* Update objects - `saveObjects`: Add or update an array of objects that contains an `objectID` attribute.
-* Delete objects - `deleteObjects`: Delete an array of objectIDs.
-* Partial update - `partialUpdateObjects`: Partially update an array of objects that contain an `objectID` attribute (only specified attributes will be updated).
-
-Example using automatic `objectID` assignment:
-
-```php
-$res = $index->addObjects(
-    [
-        [
-            'firstname' => 'Jimmie',
-            'lastname'  => 'Barninger'
-        ],
-        [
-            'firstname' => 'Warren',
-            'lastname'  => 'myID1'
-        ]
-    ]
-);
-```
-
-Example with user defined `objectID` (add or update):
-
-```php
-$res = $index->saveObjects(
-    [
-        [
-            'firstname' => 'Jimmie',
-            'lastname'  => 'Barninger',
-            'objectID'  => 'SFO'
-        ],
-        [
-            'firstname' => 'Warren',
-            'lastname'  => 'Speach',
-            'objectID'  => 'myID2'
-        ]
-    ]
-);
-```
-
-Example that deletes a set of records:
-
-```php
-$res = $index->deleteObjects(["myID1", "myID2"]);
-```
-
-Example that updates only the `firstname` attribute:
-
-```php
-$res = $index->partialUpdateObjects(
-    [
-        [
-            'firstname' => 'Jimmie',
-            'objectID'  => 'SFO'
-        ],
-        [
-            'firstname' => 'Warren',
-            'objectID'  => 'myID2'
-        ]
-    ]
-);
-```
 
 
 Custom batch:
@@ -2186,7 +2389,7 @@ $res = $index->batch(
             ],
             [
                 'action'   => 'deleteObject',
-                'objectID' => 'myID3'
+                'objectID' => 'myID4'
             ]
         ]
     ]
@@ -2291,12 +2494,14 @@ The following fields are provided for convenience purposes, and **only when the 
 #### Example
 
 ```php
-// Iterate with a filter over the index
+// Iterate with a filter over the whole index
 foreach ($this->index->browse('', ['filters' => 'i<42']) as $hit) {
     print_r($hit);
 }
 
-$next_cursor = $this->index->browseFrom('', ['numericFilters' => 'i<42'])['cursor'];
+// Retrieve the next cursor from the browse method
+$result = $this->index->browseFrom('', ['filters' => 'i<42']);
+var_dump($result['cursor']);
 ```
 
 
@@ -2526,45 +2731,6 @@ $res = $client->getUserKeyACL('f420238212c54dcfad07ea0aa6d5c45f');
 // Gets the rights of an index specific key
 $res = $index->getUserKeyACL('71671c38001bf3ac857bc82052485107');
 ```
-
-### Multiple queries - `multipleQueries`
-
-You can send multiple queries with a single API call using a batch of queries:
-
-```php
-// perform 3 queries in a single API call:
-//  - 1st query targets index `categories`
-//  - 2nd and 3rd queries target index `products`
-$queries = [
-    ['indexName' => 'categories', 'query' => $myQueryString, 'hitsPerPage' => 3],
-    ['indexName' => 'products', 'query' => $myQueryString, 'hitsPerPage' => 3, 'facetFilters' => 'promotion'],
-    ['indexName' => 'products', 'query' => $myQueryString, 'hitsPerPage' => 10]
-];
-
-$results = $client->multipleQueries($queries);
-
-var_dump(results['results']):
-```
-
-You can specify a `strategy` parameter to optimize your multiple queries:
-
-- `none`: Execute the sequence of queries until the end.
-- `stopIfEnoughMatches`: Execute the sequence of queries until the number of hits is reached by the sum of hits.
-
-#### Response
-
-The resulting JSON contains the following fields:
-
-- `results` (array): The results for each request, in the order they were submitted. The contents are the same as in [Search in an index](#search-in-an-index---search).
-
-    Each result also includes the following additional fields:
-
-    - `index` (string): The name of the targeted index.
-
-    - `processed` (boolean, optional): *Note: Only returned when `strategy` is `stopIfEnoughmatches`.* Whether the query was processed.
-
-
-
 
 ### Get Logs - `getLogs`
 
