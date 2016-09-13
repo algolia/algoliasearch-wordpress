@@ -128,7 +128,7 @@ class Algolia_Admin_Page_Native_Search
 		}
 
 		$searchable_posts_index = $this->plugin->get_index( 'searchable_posts' );
-		if ( false === $searchable_posts_index->is_enabled() ) {
+		if ( false === $searchable_posts_index->is_enabled() && isset( $_GET['page'] ) && $_GET['page'] === $this->slug ) {
 			echo '<div class="error notice">
 					  <p>' . sprintf( __( 'Searchable posts index needs to be checked on the <a href="%s">Algolia: Indexing page</a> for the search results to be powered by Algolia.', 'algolia' ), admin_url( 'admin.php?page=algolia-indexing' ) ) . '</p>
 				  </div>';
