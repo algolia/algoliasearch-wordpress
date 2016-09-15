@@ -28,6 +28,9 @@
 			<?php _e( 'Current task', 'algolia' ); ?>:
 			<span class="current-task-name"></span>
 		</p>
+		<p class="failed-task">
+			<?php _e( 'One of your recent tasks failed. Please check the logs for more information.', 'algolia' ); ?>
+		</p>
 	</div>
 
 	<hr>
