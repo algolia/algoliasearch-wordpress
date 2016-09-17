@@ -54,8 +54,7 @@ class Algolia_Admin_Page_Autocomplete
 			'manage_options',
 			'algolia',
 			array( $this, 'display_page' ),
-			'',
-			30
+			''
 		);
 		add_submenu_page(
 			'algolia',

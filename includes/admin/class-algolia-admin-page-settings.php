@@ -62,8 +62,7 @@ class Algolia_Admin_Page_Settings
 				'manage_options',
 				$this->slug,
 				array( $this, 'display_page' ),
-				'',
-				30
+				''
 			);
 		} 
 		
