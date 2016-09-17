@@ -40,12 +40,16 @@
 }
 
 /* Native search page */
-
 form .input-radio label {
     font-weight: bold;
 }
 form .radio-info {
     margin-bottom: 15px;
     padding-left: 25px;
+}
+
+/* Indexing page */
+.failed-task {
+    display: none;
 }
 
