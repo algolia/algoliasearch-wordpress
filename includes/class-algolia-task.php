@@ -26,12 +26,37 @@ class Algolia_Task
 			$encoded = '{}';
 		}
 
-		return wp_insert_post( array(
+		add_filter( 'wp_insert_attachment_data', array( 'Algolia_Task', 'ensure_task_integrity' ), 100, 2 );
+		add_filter( 'wp_insert_post_data',       array( 'Algolia_Task', 'ensure_task_integrity' ), 100, 2 );
+
+		$success = wp_insert_post( array(
 			'post_type'    => self::$post_type,
 			'post_status'  => 'private',
 			'post_title'   => (string) $task_name,
 			'post_content' => $encoded,
 		), true );
+
+		remove_filter( 'wp_insert_attachment_data', array( 'Algolia_Task', 'ensure_task_integrity' ), 100 );
+		remove_filter( 'wp_insert_post_data', array( 'Algolia_Task', 'ensure_task_integrity' ), 100 );
+
+		return $success;
+	}
+
+	/**
+	 * This ensures tasks always have the correct status and post type.
+	 *
+	 * @param array $data
+	 * @param array $postarr
+	 *
+	 * @return array
+	 */
+	public static function ensure_task_integrity( $data = array(), $postarr = array() ) {
+		if ( $postarr['post_type'] === self::$post_type ) {
+			$data['post_type'] = self::$post_type;
+			$data['post_status'] = 'private';
+		}
+
+		return $data;
 	}
 
 	/**
