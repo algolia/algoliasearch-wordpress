@@ -85,6 +85,7 @@ final class Algolia_Task_Queue
 			if ( ++$retries <= $this->max_task_retries ) {
 				// Just increase the retries.
 				update_post_meta( $task->get_id(), 'algolia_task_retries', $retries );
+				set_transient( 'algolia_recently_failed_task', true, 60);
 				$this->logger->log_error( sprintf( 'An error occurred while handling task %s. It is gonna be retried.', $task->get_name() ), array( 'task' => $task->get_data(), 'exception' => $exception ) );
 			} else {
 				// Consider the task un-processable, delete it and go on!

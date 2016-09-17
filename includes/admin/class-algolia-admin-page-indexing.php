@@ -80,9 +80,10 @@ class Algolia_Admin_Page_Indexing
 	public function queue_status() {
 		$queue = $this->plugin->get_task_queue();
 		wp_send_json( array(
-			'tasks'   => $queue->get_queued_tasks_count(),
-			'running' => $queue->was_recently_running(),
-			'current' => get_transient( 'algolia_running_task' ),
+			'tasks'           => $queue->get_queued_tasks_count(),
+			'running'         => $queue->was_recently_running(),
+			'current'         => get_transient( 'algolia_running_task' ),
+			'recently_failed' => get_transient( 'algolia_recently_failed_task' ),
 		) );
 	}
 

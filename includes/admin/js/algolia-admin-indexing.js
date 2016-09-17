@@ -6,7 +6,8 @@
 		var queueStatus = {
 			tasks: 0,
 			running: false,
-			current: false
+			current: false,
+			recently_failed: false
 		};
 
 		var $pendingTasks = $(".pending-tasks");
@@ -15,6 +16,7 @@
 		var $runQueueLink = $(".run-queue-link");
 		var $currentTask = $(".current-task");
 		var $currentTaskName = $(".current-task-name");
+		var $taskFailed = $(".failed-task");
 
 		function refreshQueueStatus() {
 			$.post("admin-ajax.php", {
@@ -58,6 +60,13 @@
 			} else {
 				$currentTask.hide();
 			}
+
+			if(queueStatus.recently_failed) {
+				$taskFailed.show();
+			} else {
+				$taskFailed.hide();
+			}
+
 		}
 
 		$(".algolia-run-queue").click(function(e) {
