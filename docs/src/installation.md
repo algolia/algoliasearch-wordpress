@@ -30,6 +30,3 @@ Here is a list of known incompatibilities with other plugins. Be sure you go thr
 **W3 Total Cache:**
 - The autocomplete experience will not work if JavaScript is minified with W3 Total Cache
 - It looks like the queue processing does not work with object caching turned on. (We have been unable to reproduce this one yet).
-
-**Post Type Switcher**
-- This plugin will trigger an infinite loop upon updating/creating/saving a post because it will convert 'algolia_task' post types to the one provided on the post form instead.
