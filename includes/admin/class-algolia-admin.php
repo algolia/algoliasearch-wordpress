@@ -62,7 +62,7 @@ class Algolia_Admin {
 			return;
 		}
 
-		if ( ! isset( $_GET['page'] ) || $_GET['page'] !== 'indexing' ) {
+		if ( ! isset( $_GET['page'] ) || $_GET['page'] !== 'algolia-indexing' ) {
 			return;
 		}
 
