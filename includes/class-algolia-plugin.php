@@ -5,6 +5,11 @@ class Algolia_Plugin {
 	const NAME = 'algolia';
 
 	/**
+	 * @var Algolia_Plugin
+	 */
+	static private $instance;
+
+	/**
 	 * @var Algolia_API
 	 */
 	protected $api;
@@ -49,7 +54,21 @@ class Algolia_Plugin {
 	 */
 	private $template_loader;
 
-	public function __construct() {
+	/**
+	 * @return Algolia_Plugin
+	 */
+	public static function get_instance() {
+		if ( null === self::$instance ) {
+			self::$instance = new Algolia_Plugin();
+		}
+
+		return self::$instance;
+	}
+
+	/**
+	 * Loads the plugin.
+	 */
+	private function __construct() {
 		// Register the assets so that they can be used in other plugins outside of the context of the core features.
 		add_action( 'wp_enqueue_scripts', array( $this, 'register_assets' ) );
 		add_action( 'admin_enqueue_scripts', array( $this, 'register_assets' ) );
