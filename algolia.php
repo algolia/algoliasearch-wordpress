@@ -4,7 +4,7 @@
  * @wordpress-plugin
  * Plugin Name:       Search by Algolia – Instant & Relevant results
  * Plugin URI:        https://community.algolia.com/wordpress
- * Description:       Algolia gives you professional-quality search without the setup hassle. Includes autocomplete, full control over look & feel, and relevance tuning.
+ * Description:       Algolia brings you state of the art search without the setup hassle. Includes autocomplete, full control over look & feel, and relevance tuning.
  * Version:           0.6.2
  * Author:            Algolia
  * Author URI:        https://www.algolia.com/

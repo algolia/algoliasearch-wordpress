@@ -6,7 +6,7 @@ Tested up to: 4.5.6
 Stable tag: trunk
 License: MIT License, GNU General Public License v2.0
 
-Algolia gives you professional-quality search without the setup hassle. Includes autocomplete, full control over look & feel, and relevance tuning
+Algolia brings you state of the art search without the setup hassle. Includes autocomplete, full control over look & feel, and relevance tuning.
 
 == Description ==
 
