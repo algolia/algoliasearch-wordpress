@@ -28,5 +28,4 @@ The official name of the plugin is: **Algolia Search for WordPress**.
 Here is a list of known incompatibilities with other plugins. Be sure you go through them as you are installing the plugin:
 
 **W3 Total Cache:**
-- The autocomplete experience will not work if JavaScript is minified with W3 Total Cache
-- It looks like the queue processing does not work with object caching turned on. (We have been unable to reproduce this one yet).
+- Object caching may cause admin UI to no display indexing status in realtime.

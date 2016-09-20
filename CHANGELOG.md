@@ -1,3 +1,8 @@
+# 1.0.0
+- Index `menu_order` field by default
+- Resolve conflict with Post Type Switcher plugin
+- Fix the asynchronous call check that happens on Indexing page
+
 # 0.6.2
 - Powered by can now be removed with the `ALGOLIA_POWERED_BY` constant
 - Avoid spamming a notice on every admin page about non indexed searchable posts index

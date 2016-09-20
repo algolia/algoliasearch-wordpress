@@ -1,5 +1,5 @@
 /*!
- * autocomplete.js 0.21.4
+ * autocomplete.js 0.21.5
  * https://github.com/algolia/autocomplete.js
  * Copyright 2016 Algolia, Inc. and other contributors; Licensed MIT
  */
@@ -71,9 +71,16 @@ return /******/ (function(modules) { // webpackBootstrap
 	'use strict';
 
 	var current$ = window.$;
-	__webpack_require__(2);
-	var zepto = window.Zepto;
+	var currentZepto = window.Zepto;
+
+	__webpack_require__(2); // this will inject Zepto in window, unfortunately no easy commonJS zepto build
+	var zepto = window.Zepto; // save zepto for our own usage
 	window.$ = current$; // restore the `$` (we don't want Zepto here)
+	window.Zepto = currentZepto; // restore potential Zepto
+	if (!currentZepto) {
+	  // cleanup the environement so we do not inject bad things
+	  delete window.Zepto;
+	}
 
 	// setup DOM element
 	var DOM = __webpack_require__(3);
@@ -2692,12 +2699,40 @@ return /******/ (function(modules) { // webpackBootstrap
 	// shim for using process in browser
 
 	var process = module.exports = {};
+
+	// cached from whatever global is present so that test runners that stub it
+	// don't break things.  But we need to wrap it in a try catch in case it is
+	// wrapped in strict mode code which doesn't define any globals.  It's inside a
+	// function because try/catches deoptimize in certain engines.
+
+	var cachedSetTimeout;
+	var cachedClearTimeout;
+
+	(function () {
+	  try {
+	    cachedSetTimeout = setTimeout;
+	  } catch (e) {
+	    cachedSetTimeout = function () {
+	      throw new Error('setTimeout is not defined');
+	    }
+	  }
+	  try {
+	    cachedClearTimeout = clearTimeout;
+	  } catch (e) {
+	    cachedClearTimeout = function () {
+	      throw new Error('clearTimeout is not defined');
+	    }
+	  }
+	} ())
 	var queue = [];
 	var draining = false;
 	var currentQueue;
 	var queueIndex = -1;
 
 	function cleanUpNextTick() {
+	    if (!draining || !currentQueue) {
+	        return;
+	    }
 	    draining = false;
 	    if (currentQueue.length) {
 	        queue = currentQueue.concat(queue);
@@ -2713,7 +2748,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    if (draining) {
 	        return;
 	    }
-	    var timeout = setTimeout(cleanUpNextTick);
+	    var timeout = cachedSetTimeout(cleanUpNextTick);
 	    draining = true;
 
 	    var len = queue.length;
@@ -2730,7 +2765,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    }
 	    currentQueue = null;
 	    draining = false;
-	    clearTimeout(timeout);
+	    cachedClearTimeout(timeout);
 	}
 
 	process.nextTick = function (fun) {
@@ -2742,7 +2777,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    }
 	    queue.push(new Item(fun, args));
 	    if (queue.length === 1 && !draining) {
-	        setTimeout(drainQueue, 0);
+	        cachedSetTimeout(drainQueue, 0);
 	    }
 	};
 
@@ -3084,7 +3119,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	  },
 
 	  cursorTopSuggestion: function cursorTopSuggestion() {
-	    this._setCursor(this._getSuggestions().first(), true);
+	    this._setCursor(this._getSuggestions().first(), false);
 	  },
 
 	  update: function update(query) {

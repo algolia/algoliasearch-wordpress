@@ -1,3 +1,6 @@
+# Search by Algolia plugin for WordPress
+
+## User documentation & guides
 
 **Looking for the user documentation? [head over here](https://community.algolia.com/wordpress)!**
 
