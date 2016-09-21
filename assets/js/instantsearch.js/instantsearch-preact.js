@@ -1,4 +1,4 @@
-/*! instantsearch.js 1.8.6 | © Algolia Inc. and other contributors; Licensed MIT | github.com/algolia/instantsearch.js */(function webpackUniversalModuleDefinition(root, factory) {
+/*! instantsearch.js 1.8.8 | © Algolia Inc. and other contributors; Licensed MIT | github.com/algolia/instantsearch.js */(function webpackUniversalModuleDefinition(root, factory) {
 	if(typeof exports === 'object' && typeof module === 'object')
 		module.exports = factory();
 	else if(typeof define === 'function' && define.amd)
@@ -145,19 +145,19 @@ return /******/ (function(modules) { // webpackBootstrap
 	
 	var _rangeSlider2 = _interopRequireDefault(_rangeSlider);
 	
-	var _sortBySelector = __webpack_require__(390);
+	var _sortBySelector = __webpack_require__(387);
 	
 	var _sortBySelector2 = _interopRequireDefault(_sortBySelector);
 	
-	var _starRating = __webpack_require__(391);
+	var _starRating = __webpack_require__(388);
 	
 	var _starRating2 = _interopRequireDefault(_starRating);
 	
-	var _stats = __webpack_require__(394);
+	var _stats = __webpack_require__(391);
 	
 	var _stats2 = _interopRequireDefault(_stats);
 	
-	var _toggle = __webpack_require__(397);
+	var _toggle = __webpack_require__(394);
 	
 	var _toggle2 = _interopRequireDefault(_toggle);
 	
@@ -20087,7 +20087,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	Object.defineProperty(exports, "__esModule", {
 	  value: true
 	});
-	exports.default = '1.8.6';
+	exports.default = '1.8.8';
 
 /***/ },
 /* 322 */
@@ -25920,10 +25920,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	
 	var _classnames2 = _interopRequireDefault(_classnames);
 	
-	var _find = __webpack_require__(195);
-	
-	var _find2 = _interopRequireDefault(_find);
-	
 	var _autoHideContainer = __webpack_require__(331);
 	
 	var _autoHideContainer2 = _interopRequireDefault(_autoHideContainer);
@@ -25933,6 +25929,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	var _Selector2 = _interopRequireDefault(_Selector);
 	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
 	
 	var bem = (0, _utils.bemHelper)('ais-numeric-selector');
 	
@@ -25981,13 +25979,13 @@ return /******/ (function(modules) { // webpackBootstrap
 	  };
 	
 	  return {
+	    getConfiguration: function getConfiguration(currentSearchParameters, searchParametersFromUrl) {
+	      return {
+	        numericRefinements: _defineProperty({}, attributeName, _defineProperty({}, operator, [this._getRefinedValue(searchParametersFromUrl)]))
+	      };
+	    },
 	    init: function init(_ref2) {
 	      var helper = _ref2.helper;
-	
-	      var currentValue = this._getRefinedValue(helper);
-	      if (currentValue !== undefined) {
-	        helper.addNumericRefinement(attributeName, operator, currentValue);
-	      }
 	
 	      this._refine = function (value) {
 	        helper.clearRefinements(attributeName);
@@ -26003,16 +26001,20 @@ return /******/ (function(modules) { // webpackBootstrap
 	
 	      _reactDom2.default.render(_react2.default.createElement(Selector, {
 	        cssClasses: cssClasses,
-	        currentValue: this._getRefinedValue(helper),
+	        currentValue: this._getRefinedValue(helper.state),
 	        options: options,
 	        setValue: this._refine,
 	        shouldAutoHideContainer: results.nbHits === 0
 	      }), containerNode);
 	    },
-	    _getRefinedValue: function _getRefinedValue(helper) {
-	      var refinements = helper.getRefinements(attributeName);
-	      var refinedValue = (0, _find2.default)(refinements, { operator: operator });
-	      return refinedValue && refinedValue.value !== undefined && refinedValue.value[0] !== undefined ? refinedValue.value[0] : options[0].value;
+	    _getRefinedValue: function _getRefinedValue(state) {
+	      // This is reimplementing state.getNumericRefinement
+	      // But searchParametersFromUrl is not an actual SearchParameters object
+	      // It's only the object structure without the methods, because getStateFromQueryString
+	      // is not sending a SearchParameters. There's no way given how web built the helper
+	      // to initialize a true partial state where only the refinements are present
+	      return state && state.numericRefinements && state.numericRefinements[attributeName] !== undefined && state.numericRefinements[attributeName][operator] !== undefined && state.numericRefinements[attributeName][operator][0] !== undefined ? // could be 0
+	      state.numericRefinements[attributeName][operator][0] : options[0].value;
 	    }
 	  };
 	}
@@ -27759,10 +27761,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	
 	var _Slider2 = _interopRequireDefault(_Slider);
 	
-	var _isInteger = __webpack_require__(387);
-	
-	var _isInteger2 = _interopRequireDefault(_isInteger);
-	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
 	function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
@@ -27823,10 +27821,25 @@ return /******/ (function(modules) { // webpackBootstrap
 	  var autoHideContainer = _ref$autoHideContaine === undefined ? true : _ref$autoHideContaine;
 	  var userMin = _ref.min;
 	  var userMax = _ref.max;
+	  var _ref$precision = _ref.precision;
+	  var precision = _ref$precision === undefined ? 2 : _ref$precision;
 	
 	  if (!container || !attributeName) {
 	    throw new Error(usage);
 	  }
+	
+	  var formatToNumber = function formatToNumber(v) {
+	    return Number(Number(v).toFixed(precision));
+	  };
+	
+	  var sliderFormatter = {
+	    from: function from(v) {
+	      return v;
+	    },
+	    to: function to(v) {
+	      return formatToNumber(v).toLocaleString();
+	    }
+	  };
 	
 	  var containerNode = (0, _utils.getContainerNode)(container);
 	  var Slider = (0, _headerFooter2.default)(_Slider2.default);
@@ -27885,10 +27898,10 @@ return /******/ (function(modules) { // webpackBootstrap
 	    _refine: function _refine(helper, oldValues, newValues) {
 	      helper.clearRefinements(attributeName);
 	      if (newValues[0] > oldValues.min) {
-	        helper.addNumericRefinement(attributeName, '>=', newValues[0]);
+	        helper.addNumericRefinement(attributeName, '>=', formatToNumber(newValues[0]));
 	      }
 	      if (newValues[1] < oldValues.max) {
-	        helper.addNumericRefinement(attributeName, '<=', newValues[1]);
+	        helper.addNumericRefinement(attributeName, '<=', formatToNumber(newValues[1]));
 	      }
 	      helper.search();
 	    },
@@ -27911,12 +27924,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	        max: null
 	      };
 	
-	      var pipsFormatter = (0, _isInteger2.default)(step) ? function (v) {
-	        return Math.round(Number(v)).toLocaleString();
-	      } : function (v) {
-	        return Number(v).toLocaleString();
-	      };
-	
 	      if (userMin !== undefined) stats.min = userMin;
 	      if (userMax !== undefined) stats.max = userMax;
 	
@@ -27937,7 +27944,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	        step: step,
 	        templateProps: this._templateProps,
 	        tooltips: tooltips,
-	        pipsFormatter: pipsFormatter
+	        format: sliderFormatter
 	      }), containerNode);
 	    }
 	  };
@@ -28030,10 +28037,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	          mode: 'positions',
 	          density: 3,
 	          values: [0, 50, 100],
-	          stepped: true,
-	          format: {
-	            to: this.props.pipsFormatter
-	          }
+	          stepped: true
 	        };
 	      } else {
 	        pips = this.props.pips;
@@ -28042,7 +28046,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	      return _react2.default.createElement(_reactNouislider2.default
 	      // NoUiSlider also accepts a cssClasses prop, but we don't want to
 	      // provide one.
-	      , _extends({}, (0, _omit2.default)(this.props, ['cssClasses', 'pipsFormatter']), {
+	      , _extends({}, (0, _omit2.default)(this.props, ['cssClasses']), {
 	        animate: false,
 	        behaviour: 'snap',
 	        connect: true,
@@ -30164,42 +30168,6 @@ return /******/ (function(modules) { // webpackBootstrap
 /* 387 */
 /***/ function(module, exports, __webpack_require__) {
 
-	// https://github.com/paulmillr/es6-shim
-	// http://people.mozilla.org/~jorendorff/es6-draft.html#sec-number.isinteger
-	var isFinite = __webpack_require__(388);
-	module.exports = Number.isInteger || function(val) {
-	  return typeof val === "number" &&
-	    isFinite(val) &&
-	    Math.floor(val) === val;
-	};
-
-
-/***/ },
-/* 388 */
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-	var numberIsNan = __webpack_require__(389);
-	
-	module.exports = Number.isFinite || function (val) {
-		return !(typeof val !== 'number' || numberIsNan(val) || val === Infinity || val === -Infinity);
-	};
-
-
-/***/ },
-/* 389 */
-/***/ function(module, exports) {
-
-	'use strict';
-	module.exports = Number.isNaN || function (x) {
-		return x !== x;
-	};
-
-
-/***/ },
-/* 390 */
-/***/ function(module, exports, __webpack_require__) {
-
 	'use strict';
 	
 	Object.defineProperty(exports, "__esModule", {
@@ -30313,7 +30281,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	exports.default = sortBySelector;
 
 /***/ },
-/* 391 */
+/* 388 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -30344,11 +30312,11 @@ return /******/ (function(modules) { // webpackBootstrap
 	
 	var _headerFooter2 = _interopRequireDefault(_headerFooter);
 	
-	var _defaultTemplates = __webpack_require__(392);
+	var _defaultTemplates = __webpack_require__(389);
 	
 	var _defaultTemplates2 = _interopRequireDefault(_defaultTemplates);
 	
-	var _defaultLabels = __webpack_require__(393);
+	var _defaultLabels = __webpack_require__(390);
 	
 	var _defaultLabels2 = _interopRequireDefault(_defaultLabels);
 	
@@ -30534,7 +30502,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	exports.default = starRating;
 
 /***/ },
-/* 392 */
+/* 389 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -30550,7 +30518,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	};
 
 /***/ },
-/* 393 */
+/* 390 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -30563,7 +30531,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	};
 
 /***/ },
-/* 394 */
+/* 391 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -30590,7 +30558,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	
 	var _headerFooter2 = _interopRequireDefault(_headerFooter);
 	
-	var _Stats = __webpack_require__(395);
+	var _Stats = __webpack_require__(392);
 	
 	var _Stats2 = _interopRequireDefault(_Stats);
 	
@@ -30598,7 +30566,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	
 	var _classnames2 = _interopRequireDefault(_classnames);
 	
-	var _defaultTemplates = __webpack_require__(396);
+	var _defaultTemplates = __webpack_require__(393);
 	
 	var _defaultTemplates2 = _interopRequireDefault(_defaultTemplates);
 	
@@ -30693,7 +30661,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	exports.default = stats;
 
 /***/ },
-/* 395 */
+/* 392 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -30762,7 +30730,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	exports.default = Stats;
 
 /***/ },
-/* 396 */
+/* 393 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -30777,7 +30745,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	};
 
 /***/ },
-/* 397 */
+/* 394 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -30788,7 +30756,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	
 	var _utils = __webpack_require__(328);
 	
-	var _defaultTemplates = __webpack_require__(398);
+	var _defaultTemplates = __webpack_require__(395);
 	
 	var _defaultTemplates2 = _interopRequireDefault(_defaultTemplates);
 	
@@ -30808,11 +30776,11 @@ return /******/ (function(modules) { // webpackBootstrap
 	
 	var _RefinementList2 = _interopRequireDefault(_RefinementList);
 	
-	var _currentToggle = __webpack_require__(399);
+	var _currentToggle = __webpack_require__(396);
 	
 	var _currentToggle2 = _interopRequireDefault(_currentToggle);
 	
-	var _legacyToggle = __webpack_require__(400);
+	var _legacyToggle = __webpack_require__(397);
 	
 	var _legacyToggle2 = _interopRequireDefault(_legacyToggle);
 	
@@ -30939,7 +30907,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	exports.default = toggle;
 
 /***/ },
-/* 398 */
+/* 395 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -30954,7 +30922,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	};
 
 /***/ },
-/* 399 */
+/* 396 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -30975,7 +30943,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	
 	var _reactDom2 = _interopRequireDefault(_reactDom);
 	
-	var _defaultTemplates = __webpack_require__(398);
+	var _defaultTemplates = __webpack_require__(395);
 	
 	var _defaultTemplates2 = _interopRequireDefault(_defaultTemplates);
 	
@@ -31106,7 +31074,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	exports.default = currentToggle;
 
 /***/ },
-/* 400 */
+/* 397 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -31128,7 +31096,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	
 	var _reactDom2 = _interopRequireDefault(_reactDom);
 	
-	var _defaultTemplates = __webpack_require__(398);
+	var _defaultTemplates = __webpack_require__(395);
 	
 	var _defaultTemplates2 = _interopRequireDefault(_defaultTemplates);
 	
