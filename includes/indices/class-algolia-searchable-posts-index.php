@@ -102,6 +102,7 @@ final class Algolia_Searchable_Posts_Index extends Algolia_Index
 		$parser->setExcludeSelectors( array(
 			'pre',
 			'script',
+			'style',
 		) );
 		$parser->setSharedAttributes( $shared_attributes );
 
