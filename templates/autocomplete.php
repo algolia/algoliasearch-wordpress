@@ -1,6 +1,6 @@
 <script type="text/html" id="tmpl-autocomplete-header">
 	<div class="autocomplete-header">
-		<div class="autocomplete-header-title">{{ data.label }}</div>
+		<div class="autocomplete-header-title">{{{ data.label }}}</div>
 		<div class="clear"></div>
 	</div>
 </script>
