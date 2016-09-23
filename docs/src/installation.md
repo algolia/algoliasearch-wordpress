@@ -12,6 +12,7 @@ You will need to make sure your server meets the following requirements:
 - PHP >= 5.3
 - cURL PHP extension
 - mbstring PHP extension
+- `/wp-admin` part of the website should not be protected behind an .htaccess password as this won't allow the queue to handle tasks
 
 You will also need at least **WordPress in version 3.7.14**.
 
