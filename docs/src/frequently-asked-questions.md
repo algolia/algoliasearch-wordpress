@@ -73,3 +73,10 @@ Definitely! In the same fashion that WordPress lets you prefix all database tabl
 
 This can be configured on the `Indexing` section of the plugin.
 
+### Why doesn't my autocomplete dropdown show up?
+
+1. First of all ensure the autocomplete feature is turned on on the Autocomplete page of the admin UI,
+1. Make sure you actually selected at least one index to display from that same page, and ensure those indices were created in Algolia,
+1. Make sure your theme calls the `wp_footer()` method in your template files.
+
+
