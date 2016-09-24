@@ -144,7 +144,8 @@ class Algolia_Task_Queue_Loopback_Async extends WP_Async_Task
 				),
 			);
 
-			$url = admin_url( 'admin-post.php' );
+			$scheme = ( defined( 'ALGOLIA_LOOPBACK_HTTP' ) && ALGOLIA_LOOPBACK_HTTP === true ) ? 'http' : 'admin';
+			$url = admin_url( 'admin-post.php', $scheme );
 
 			$result = wp_remote_post( $url, $request_args );
 

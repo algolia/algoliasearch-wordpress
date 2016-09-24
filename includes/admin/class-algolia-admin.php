@@ -66,7 +66,9 @@ class Algolia_Admin {
 			return;
 		}
 
-		$url = admin_url( 'admin-post.php' );
+		$scheme = ( defined( 'ALGOLIA_LOOPBACK_HTTP' ) && ALGOLIA_LOOPBACK_HTTP === true ) ? 'http' : 'admin';
+		$url = admin_url( 'admin-post.php', $scheme );
+
 		$request_args = array(
 			'timeout'   => 60,
 			'blocking'  => true,
