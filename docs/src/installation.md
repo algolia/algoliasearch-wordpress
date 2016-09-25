@@ -13,8 +13,8 @@ You will need to make sure your server meets the following requirements:
 - cURL PHP extension
 - mbstring PHP extension
 - `/wp-admin` part of the website should not be protected behind an .htaccess password as this won't allow the queue to handle tasks
-
-You will also need at least **WordPress in version 3.7.14**.
+- OpenSSL greater than 1.0.1
+- WordPress in version 3.7.x
 
 <div class="alert alert-warning">You will not be able to install the plugin if one of this requirement is not met.</div>
 

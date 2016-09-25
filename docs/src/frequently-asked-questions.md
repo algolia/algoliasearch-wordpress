@@ -79,4 +79,34 @@ This can be configured on the `Indexing` section of the plugin.
 1. Make sure you actually selected at least one index to display from that same page, and ensure those indices were created in Algolia,
 1. Make sure your theme calls the `wp_footer()` method in your template files.
 
+### How do I resolve `wp_remote()` errors on `indexing` admin page?
+
+It really depends what error you are getting, but here are a few know issues:
+
+**You are using an SSL certificate (your website url starts with `https://`):**
+
+Our plugin uses cURL and the underlying OpenSSL library to loop over the queued indexing tasks.
+
+If the OpenSSL library is too old, then you might face cURL error 35 with messages containing `handshake failure`, or `unknown protocol`.
+
+In that case you should ask your hosting provider to upgrade your cURL/OpenSSL version.
+
+If you are unable to upgrade your cURL/OpenSSL versions, and if your website can also be accessed over 'HTTP', you can force the loopback to access your website over HTTP by adding the following line to your wp-config.php file: `define( 'ALGOLIA_LOOPBACK_HTTP', true );`
+
+**Htaccess password protected:**
+
+If your /wp-admin section of your website instance is .htaccess password protected, then you currently have no way to make the queue work.
+
+We might support this in the future.
+
+**You are using Docker:**
+
+If you are using Docker, you should make sure that the domain name you are using is listed in the `/etc/hosts` file of your container.
+
+Port forwarding is currently unsupported, so you should use port 80 or 443 depending on if you are using http or https to access your website.
+
+**My case is not listed here:**
+
+If your problem is covered here, please submit an issue with the error details here: https://github.com/algolia/algoliasearch-wordpress/issues
+
 
