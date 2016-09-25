@@ -66,15 +66,18 @@ class Algolia_Admin {
 			return;
 		}
 
-		$url = admin_url( 'admin-post.php' );
+		$scheme = ( defined( 'ALGOLIA_LOOPBACK_HTTP' ) && ALGOLIA_LOOPBACK_HTTP === true ) ? 'http' : 'admin';
+		$url = admin_url( 'admin-post.php', $scheme );
+
 		$request_args = array(
-			'timeout'   => 60,
-			'blocking'  => true,
-			'sslverify' => apply_filters( 'https_local_ssl_verify', true ),
+			'timeout'     => 60,
+			'blocking'    => true,
+			'redirection' => 0,
+			'sslverify'   => apply_filters( 'https_local_ssl_verify', true ),
 		);
 
 		$result = wp_remote_post( $url, $request_args );
-		if( ! $result instanceof WP_Error ) {
+		if( ! $result instanceof WP_Error && $result['response']['code'] === 200 ) {
 			// Remote call check was successful.
 			return;
 		}
@@ -83,6 +86,8 @@ class Algolia_Admin {
 
 		echo '<div class="error notice">
 				<p>' . esc_html__( "wp_remote_post() failed, indexing won't work. Checkout the logs for more details.", 'algolia' ) . '</p>
+				<p>URL called: ' . $url . '</p>
+				<p><code><pre>' . print_r( $result, true ) . '</pre></code></p>
 			</div>';
 	}
 }

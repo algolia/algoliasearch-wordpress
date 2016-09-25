@@ -135,22 +135,28 @@ class Algolia_Task_Queue_Loopback_Async extends WP_Async_Task
 			}
 
 			$request_args = array(
-				'timeout'   => $this->timeout,
-				'blocking'  => false,
-				'sslverify' => apply_filters( 'https_local_ssl_verify', true ),
-				'body'      => $this->_body_data,
-				'headers'   => array(
+				'timeout'   	=> $this->timeout,
+				'blocking'  	=> false,
+				'redirection' 	=> 0,
+				'sslverify' 	=> apply_filters( 'https_local_ssl_verify', true ),
+				'body'      	=> $this->_body_data,
+				'headers'   	=> array(
 					'cookie' => implode( '; ', $cookies ),
 				),
 			);
 
-			$url = admin_url( 'admin-post.php' );
+			$scheme = ( defined( 'ALGOLIA_LOOPBACK_HTTP' ) && ALGOLIA_LOOPBACK_HTTP === true ) ? 'http' : 'admin';
+			$url = admin_url( 'admin-post.php', $scheme );
 
 			$result = wp_remote_post( $url, $request_args );
 
-			if( ! $result instanceof WP_Error ) {
+			if ( ! $result instanceof WP_Error && $result['response']['code'] === 200 ) {
 				// We only log errors, so we are done here.
 				return;
+			}
+
+			if ( ! $result instanceof WP_Error ) {
+				return $this->logger->log_error( 'An error occurred while trying to remotely trigger the next task execution.', $result );
 			}
 
 			$message = $result->get_error_message( 'http_request_failed' );
