@@ -175,7 +175,7 @@
 						sortBy: ['isRefined:desc', 'count:desc', 'name:asc'],
 						limit: 10,
 						templates: {
-							header: '<h3 class="widgettitle">Auteurs</h3>'
+							header: '<h3 class="widgettitle">Authors</h3>'
 						}
 					})
 				);
