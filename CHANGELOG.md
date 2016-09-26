@@ -1,3 +1,10 @@
+# 1.1.0
+- Allow special chars n autocomplete header templates
+- Do not index inlined CSS styles
+- Add support for a new constant that allows forcing HTTP in loopback
+- Disallow redirection in loopback and add debug information
+- Add `wp_remote_post` debugging information on indexing screen
+
 # 1.0.0
 - Index `menu_order` field by default
 - Resolve conflict with Post Type Switcher plugin
