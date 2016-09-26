@@ -1,8 +1,8 @@
 === Search by Algolia – Instant & Relevant results ===
 Contributors: Algolia
 Tags: Search, Algolia, Autocomplete, instant-search, relevant search, search highlight, faceted search, find-as-you-type search, suggest, search by category, ajax search, better search, custom search
-Requires at least: 3.7.14
-Tested up to: 4.5.6
+Requires at least: 3.7.1
+Tested up to: 4.6.1
 Stable tag: trunk
 License: MIT License, GNU General Public License v2.0
 
