@@ -38,7 +38,7 @@ class Algolia_Admin_Page_Settings
 		add_action( 'admin_notices', array( $this, 'display_errors' ) );
 
 		// Display a link to this page from the plugins page.
-		add_filter( 'plugin_action_links_algolia/algolia.php', array( $this, 'add_action_links' ) );
+		add_filter( 'plugin_action_links_' . ALGOLIA_PLUGIN_BASENAME, array( $this, 'add_action_links' ) );
 	}
 
 	/**

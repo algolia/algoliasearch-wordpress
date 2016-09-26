@@ -31,6 +31,7 @@ if ( version_compare( $wp_version, '3.7.14', '<' ) ) {
 
 // The Algolia Search plugin version.
 define( 'ALGOLIA_VERSION', '1.1.0' );
+define( 'ALGOLIA_PLUGIN_BASENAME', plugin_basename(__FILE__) );
 
 if ( ! defined( 'ALGOLIA_PATH' ) ) {
 	define( 'ALGOLIA_PATH', plugin_dir_path( __FILE__ ) );
@@ -67,4 +68,4 @@ register_deactivation_hook( __FILE__, 'deactivate_algolia' );
 
 require_once ALGOLIA_PATH . 'classmap.php';
 
-$algolia = new Algolia_Plugin( plugin_dir_path( __FILE__ ), plugin_dir_url( __FILE__ ) );
+$algolia = new Algolia_Plugin();
