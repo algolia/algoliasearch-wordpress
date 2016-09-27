@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="19px" height="19px" viewBox="0 0 19 19" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 40 (33762) - http://www.bohemiancoding.com/sketch -->
+    <title>icons/icon-separator-8</title>
+    <desc>Created with Sketch.</desc>
+    <defs></defs>
+    <g id="Page-2" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="wordpress-landing" transform="translate(-151.000000, -5571.000000)" fill="#41C8A0">
+            <g id="Group-8" transform="translate(0.000000, 5125.000000)">
+                <path d="M160.5,465 C165.746705,465 170,460.746705 170,455.5 C170,450.253295 165.746705,446 160.5,446 C155.253295,446 151,450.253295 151,455.5 C151,460.746705 155.253295,465 160.5,465 Z M163.173115,455.509181 L157.918911,459.925862 L157.165762,460.577576 L158.469189,462.083875 L159.222338,461.432161 L166.067204,455.509181 L159.223498,449.568735 L158.471354,448.915862 L157.165607,450.42015 L157.917751,451.073024 L163.173115,455.509181 Z" id="icons/icon-separator-8"></path>
+            </g>
+        </g>
+    </g>
+</svg>
