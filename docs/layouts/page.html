@@ -1,4 +1,5 @@
 {{> head }}
+<div class="doc">
 
 <header id="top-section" class="doc-header">
     <div class="row row-doc">
@@ -14,7 +15,7 @@
     </div>
 </header>
 
-<div class="row">
+<div class="row m-a">
     <div class="medium-9 large-9 medium-push-3 large-push-3 columns">
 
         <article>
@@ -82,42 +83,11 @@
     </div>
 
 </div>
+</div>
 
-<section class="ac-footer">
-  <div class="ac-footer-container">
-    <p class="ac-footer-links">
-      Code licensed under
-      <a href="#" class="ac-footer-link-item">MIT</a>
-      <br>
-      <a href="#" class="ac-footer-link-item">Github</a>
-      <a href="#" class="ac-footer-link-item">issues</a>
-      <a class="ac-footer-link-item" href="https://www.algolia.com/policies/privacy">Privacy policy</a>
-    </p>
-  </div>
 
-    <div class="ac-footer-container ac-footer-brand">
-        <p>This project is part of</p>
-        <img class="ac-footer-brand-icon" src="https://res.cloudinary.com/hilnmyskv/image/upload/logo-community.svg">
-        <figure>
-            <img class="ac-footer-brand-logo" src="https://res.cloudinary.com/hilnmyskv/image/upload/v1463417234/algolia-community_n6tixd.svg">
-            <figcaption>Algolia Community</figcaption>
-        </figure>
-        <a href="https://community.algolia.com/" class="ac-footer-btn ac-footer-btn-cta">See More</a>
-        <span class="ac-icon ac-icon-love-dark"></span>
-    </div>
-
-    <p class="ac-footer-version">Latest version: {{ version }}</p>
-
-    <div class="ac-footer-actions">
-        <div class="footer-container">
-            <p>Build unique search experiences with Algolia</p>
-            <a href="https://www.algolia.com/why?utm_medium=social-owned&utm_source=wordpress%20website&utm_campaign=homepage&utm_term=why" class="ac-footer-btn ac-footer-btn-ghost-grey">
-                See Why
-                <span class="ac-icon-triangle"></span>
-            </a>
-            <a href="https://www.algolia.com/users/sign_up?utm_medium=social-owned&utm_source=wordpress%20website&utm_campaign=homepage&utm_term=get_started" class="ac-footer-btn ac-footer-btn-ghost-pink">Get Started For Free</a>
-        </div>
-    </div>
-</section>
+<script src="{{ rootPath }}vendor/jquery/jquery.js"></script>
+<script src="{{ rootPath }}vendor/foundation-sites/foundation.js"></script>
+<script src="{{ rootPath }}js/doc.js"></script>
 
 {{> footer }}
