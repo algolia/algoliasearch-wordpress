@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="50" height="50" viewBox="0 0 50 50" xmlns:xlink="http://www.w3.org/1999/xlink">
+  <defs>
+    <path id="b" d="M15.539999,13.5199996 L12.4599993,10.9599994 L1.63999989,23.9999986 L12.4599993,37.0399986 L15.539999,34.4799973 L6.83999973,23.9999986 L15.539999,13.5199996 L15.539999,13.5199996 Z M13.9999992,25.9999984 L17.9999989,25.9999984 L17.9999989,21.9999987 L13.9999992,21.9999987 L13.9999992,25.9999984 L13.9999992,25.9999984 Z M33.999998,21.9999987 L29.9999982,21.9999987 L29.9999982,25.9999984 L33.999998,25.9999984 L33.999998,21.9999987 L33.999998,21.9999987 Z M21.9999987,25.9999984 L25.9999984,25.9999984 L25.9999984,21.9999987 L21.9999987,21.9999987 L21.9999987,25.9999984 L21.9999987,25.9999984 Z M35.5399987,10.9599994 L32.4599971,13.5199996 L41.1599973,23.9999986 L32.4599971,34.4799973 L35.5399987,37.0399986 L46.3599978,23.9999986 L35.5399987,10.9599994 L35.5399987,10.9599994 Z"/>
+    <filter id="a" width="200%" height="200%" x="-50%" y="-50%" filterUnits="objectBoundingBox">
+      <feOffset dy="2" in="SourceAlpha" result="shadowOffsetOuter1"/>
+      <feGaussianBlur stdDeviation="1" in="shadowOffsetOuter1" result="shadowBlurOuter1"/>
+      <feColorMatrix values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.1 0" in="shadowBlurOuter1"/>
+    </filter>
+  </defs>
+  <g fill="none" fill-rule="evenodd" transform="translate(1 1)">
+    <polygon stroke="#000000" stroke-opacity=".008" stroke-width=".5" points="0 0 48 0 48 48 0 48"/>
+    <use fill="black" filter="url(#a)" xlink:href="#b"/>
+    <use fill="#FFFFFF" xlink:href="#b"/>
+  </g>
+</svg>

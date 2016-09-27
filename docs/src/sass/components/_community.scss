@@ -1,0 +1,952 @@
+.community-content-wrapper {
+  margin-top: $navigation-height;
+
+  p {
+    line-height: 22px;
+    font-size: 16px;
+  }
+
+  article {
+    background: transparent
+  }
+}
+.m-a {
+  margin: auto;
+  float: none !important;
+}
+
+.header-lead {
+  color: #fff
+}
+[debug] * {
+ // outline: rgba(red, 0.8) solid 1px
+}
+/**
+ * ==========================================
+ * COMMUNITY BLOCKS
+ * ==========================================
+ *
+ * Each block / section of the landing page is
+ * defined here.
+ *
+ * They shouldn't be related, moving a block
+ * from it's original position, it should
+ * work as expected.
+ *
+ * Namespace: .cm--
+ *
+ */
+
+.cm--container {
+  max-width: 1200px;
+  margin: auto;
+  width: 100%;
+  height: 100%;
+  position: relative;
+
+  .cm--section &{
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 0;
+    bottom: 0;
+  }
+}
+
+.cm--title {
+  text-align: center;
+  width: 100%;
+  font-size: 1.8em;
+  color: #4a4a4c;
+  display: block;
+  position: relative;
+  margin-top: 60px;
+  margin-bottom: 80px;
+
+  &:after {
+    content: '';
+    position: absolute;
+    width: 50px;
+    height: 3px;
+    background: #fb366e;
+    top: 1.8em;
+    left: 0;
+    right: 0;
+    margin: auto;
+  }
+}
+
+.cm--center {
+  @include vh-center(absolute);
+}
+.cm--h-center {
+  @include h-center(absolute);
+}
+.cm--v-center {
+  @include v-center(absolute);
+}
+.row {
+  float: left;
+  width: 100%;
+}
+
+.black-bg {
+  background: rgba(0, 0, 0, 0.85)
+}
+.dark-blue-bg {
+  background: #0e213b
+}
+.grey-bg {
+  background: #F3F4F7
+}
+
+.light-blue-bg {
+  background: #f7fbfc
+}
+
+.purple-bg {
+  background: #96588A
+}
+
+/**
+ * Crucial to work on diagonal layouts
+ * setting the z-index
+ */
+ @for $i from 0 to 20 {
+  .zi-#{$i} {
+    z-index: $i;
+  }
+}
+
+/**
+ *  Community header
+ */
+.cm--header {
+  position: relative;
+  height: $cm-header-height;
+  width: 100%;
+  font-family: $font-settings;
+  background: linear-gradient(116deg, #4a2ab3, #22a9e9);
+  background-size: 100%;
+  background-position:  center center;
+
+
+  &:after {
+    display: block;
+    content: '';
+    position: absolute;
+    width: 100%;
+    height: 130%;
+    z-index: 11;
+    background: url('../img/header-background.svg');
+    background-repeat: no-repeat;
+    background-position:top center;
+    background-size: 100%;
+  }
+
+  .diagonal-white-tr {
+    bottom: 0;
+  }
+
+  .al-badge {
+    display: inline-block;
+    padding-bottom: 4em;
+    border-bottom: 4px solid #fff;
+    width: 43px;
+    height: 43px;
+
+    img {
+      width: 100%;
+    }
+  }
+}
+
+.header--content,
+.header--graphic  {
+  position: absolute;
+  height: 100%;
+  width: 50%;
+  overflow: hidden;
+  z-index: 105;
+}
+
+.header--content {
+  left: 0;
+  color: #fff;
+
+  h1, h3 {
+    color: currentColor;
+
+    span {
+      font-size: 0.5em;
+    }
+  }
+
+  h1 {
+    padding-top: 0;
+    margin-top: 0.5em;
+  }
+
+  h3 {
+    font-weight: 500;
+  }
+}
+
+.header--graphic {
+  right: 0;
+
+  img {
+    position: absolute;
+    width: 100%;
+    max-width: 840px;
+    display: block;
+    right: -10%;
+    bottom: -0.5em;
+    margin: 0;
+    padding: 0;
+    z-index: 9999;
+  }
+}
+
+
+/**
+ *  Community Sections
+ */
+
+.cm--section {
+  min-height: 580px;
+  height: auto;
+  width: 100%;
+  max-width: 100%;
+  margin: auto;
+  position: relative;
+  float: left;
+
+
+  h4 {
+    margin-bottom: 0.85em;
+  }
+
+  article {
+    max-width: 420px;
+
+    p {
+      padding: 0;
+      margin: 0;
+    }
+  }
+
+}
+
+.section--content,
+.section--graphic  {
+  position: absolute;
+  width: 50%;
+
+  &__full {
+    width: 100%;
+    max-width: inherit
+  }
+
+  &__half {
+    position: relative;
+    float: left;
+    max-width: inherit;
+  }
+}
+
+.section--content {
+  top: 50%;
+  transform: translateY(-50%);
+
+
+  p {
+    line-height: 21px;
+  }
+}
+
+.section--graphic {
+  height: 100%;
+
+  img {
+    width: 100%;
+    max-width: 480px;
+    max-height: 324px;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+
+    &.iphone-screen {
+      max-height: inherit;
+      max-width: 360px;
+      top: 30%;
+      left: 70%
+    }
+  }
+}
+
+.relevant-search-result {
+  .section--content {
+    top: 30% !important;
+  }
+}
+
+.realtime-search {
+  .section--content {
+    top: 40% !important;
+  }
+}
+
+
+/**
+ *  Community Section Dark/Dark-blue
+ *  cm-showcase-right
+ *  cm-showcase-center
+ */
+.cm--section__dark,
+.cm--section__dark-blue {
+  overflow: hidden;
+
+  h1,h2,h3, h4,p {
+    color: #fff
+  }
+}
+
+
+/*
+ * cm-showcase-right
+ */
+
+.cm-showcase-right {
+  background-image: linear-gradient(to bottom, #26a0e7, #4b2e91);
+  position: relative;
+  min-height: 460px;
+  top: -200px;
+
+  .section--graphic {
+    left: inherit;
+    top: 10px;
+    transform: none;
+    max-width: inherit;
+
+    img {
+      max-height: inherit;
+      width: 80%;
+      max-width: 860px;
+      left: initial;
+      bottom: 0;
+      right: 0;
+      position: absolute;
+      top: initial;
+      transform: none;
+      box-shadow: -4px -4px 40px rgba(black, 0.2);
+      border-radius: 6px;
+    }
+  }
+
+  .section--content {
+    position: relative;
+
+    @include v-center(absolute);
+  }
+
+
+  .diagonal-white-tr {
+    @include diagonal(-4deg, #fff, 320px) {
+      top: -360px;
+      overflow: hidden;
+      z-index: 99;
+    }
+  }
+}
+
+/*
+ * cm-showcase-center
+ */
+.cm-showcase-center .section--content {
+  left: inherit;
+  right: inherit;
+  transform: none;
+  max-width: 620px;
+  margin: auto;
+}
+
+.cm-showcase-center .section--graphic {
+    left: inherit;
+    top: inherit;
+    bottom: 0;
+    transform: none;
+    max-width: inherit;
+    position: absolute;
+
+
+  img {
+    max-height: inherit;
+    max-width: 960px;
+    width: 50%;
+    position: absolute;
+    display: block;
+    top: inherit;
+    left: 0;
+    bottom: inherit;
+    right: 0;
+    transform: none;
+    margin: auto;
+  }
+}
+
+/**
+ *  Community Get Started Section
+ *
+ */
+
+.get-started {
+  min-height: 550px;
+
+  .cm--container {
+    top: -200px;
+    z-index: 99999;
+  }
+
+  .diagonal-white-br {
+    @include diagonal(4deg, #fff, 270px, 'true') {
+      top: -200px;
+      overflow: hidden;
+      z-index: 99;
+    }
+  }
+}
+
+/**
+ *  Brands showcase section
+ *
+ */
+.brands-showcase {
+  height: 340px;
+  background-image: linear-gradient(102deg, #3475c7, #4e006a);
+  z-index: -1;
+  color: #fff;
+
+  h2,h3, a {
+    color: #fff
+  }
+
+  .diagonal-white-br {
+    @include diagonal(4deg, #fff, 270px, 'true') {
+      top: -260px;
+      overflow: hidden;
+      z-index: 99;
+    }
+  }
+
+  .section--content__full {
+    @include v-center(absolute);
+    top: 65%;
+  }
+
+
+  .content--graphic {
+    width: 10%;
+    float: left;
+    position: relative;
+    height: 300px;
+
+    img {
+      @include vh-center(absolute);
+      top: 35%;
+    }
+  }
+
+  .content--text {
+    width: 90%;
+    height: 300px;
+    float: left;
+    position: relative;
+  }
+
+  ul.trust-us {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+
+    li {
+      display: inline-block;
+      padding: 0;
+      margin: 0 2.5% 0 0;
+      opacity: 0.65;
+
+      img {
+        display: block;
+        height: 100%;
+      }
+    }
+  }
+}
+
+/**
+ *  Brands showcase section
+ *
+ */
+.what-they-say {
+  height: 380px;
+  min-height: inherit;
+  background: #FFF;
+  z-index: -1;
+
+  .section--content__full {
+    margin-top: -100px;
+    overflow: hidden;
+  }
+
+  .diagonal-white-br {
+    z-index: -1;
+    @include diagonal(-4deg, #fff, 200px, 'true') {
+      top: -140px;
+      overflow: hidden;
+      z-index: 99;
+    }
+  }
+}
+
+
+.cm-showcase-center {
+  background-image: linear-gradient(35deg, #4b2e91, #0e213b);
+  min-height: 800px;
+
+  @include diagonal(-4deg, #fff, 200px, 'true') {
+    top: -120px;
+    overflow: hidden;
+    z-index: 99;
+  }
+
+  .section--content {
+    margin-top: 180px;
+  }
+}
+
+.item-holder {
+  width: 100%;
+  float: left;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-wrap: wrap;
+  flex-direction: row;
+
+  .item {
+    flex: 20%;
+    padding: 0 1em;
+
+    &--graphic {
+      margin: auto auto 1em;
+    }
+  }
+}
+
+
+
+/**
+ * Developer Friendly
+ */
+.developer-friendly {
+  background: #1d262f;
+  color: #fff;
+  position: relative;
+  width: 100%;
+  padding-bottom: 0em;
+
+  .cm--container {
+    height: 980px;
+  }
+
+  .cm--h-center {
+    bottom: 0;
+  }
+
+  header {
+    line-height: 1;
+
+    img {
+      margin-right: 0.6em;
+      margin-top: 0.5em;
+      max-height: 24px;
+    }
+  }
+
+  .section--content {
+    top: inherit;
+    transform: inherit;
+  }
+
+  article p {
+    font-size: 19px;
+    color: #fff;
+  }
+
+  ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    padding-left: 1em;
+
+    li {
+      display: block;
+      margin-bottom: 1.5em;
+      padding-left: 1em;
+
+      &:before {
+        content: '';
+        display: block;
+        position: absolute;
+        left: 0;
+        width: 20px;
+        height: 20px;
+        background: url('../img/icons/icon-separator.svg')no-repeat center center / contain;
+      }
+    }
+  }
+
+
+  .ac-icon {
+    width: 81px;
+    height: 81px;
+  }
+
+
+   @include diagonal(-4deg, #FFF, 200px, 'true') {
+    top: -120px;
+    overflow: hidden;
+    z-index: 99;
+  }
+
+  h2,h3 {
+    color: #fff
+  }
+
+  .nav-doc-sample {
+    transform: translateY(50px)
+  }
+}
+
+
+/**
+ * Recall section
+ */
+
+.recall-section {
+  background-image: linear-gradient(165deg, #26a0e7, #4b2e91);
+  min-height: 400px;
+  width: 100%;
+  top: -110px;
+  position: relative;
+  transform: skewY(2deg);
+
+
+  @include diagonal(-4deg, #1d262f, 300px, 'true') {
+    top: -220px;
+    overflow: hidden;
+    z-index: 99;
+  }
+
+
+  .section--content {
+    position: relative;
+    top: inherit;
+    transform: none;
+    float: left;
+    transform: skewY(-2deg);
+  }
+
+  p {
+    color: #fff;
+    line-height: 32px;
+    font-size: 20px;
+  }
+
+  .btn {
+    margin: auto;
+    position: relative;
+    max-width: 180px;
+    top: 28px;
+  }
+}
+
+
+/**
+ * woocommerce-section
+ */
+
+.woocommerce-section {
+  width: 100%;
+  top: -160px;
+  z-index: -1;
+  margin-bottom: -160px;
+  overflow: hidden;
+
+  .section--content__half {
+    width: 50%;
+  }
+
+  .section--content__half:nth-child(1) {
+    &:before {
+      content: '';
+      display: block;
+      position: absolute;
+      height: 600px;
+      top: -50px;
+      left: -50px;
+      width: 100%;
+      background: #fff;
+      transform: skewX(-8deg)
+    }
+  }
+  .section--content__half:nth-child(2) {
+
+    img {
+      position: absolute;
+      right: -60px;
+      top: 50%;
+      width: 84px;
+    }
+
+    .content {
+      margin-top: 6em;
+    }
+  }
+  .content {
+    margin-top: 4em;
+    padding: 0 4.5em;
+    max-width: 626px;
+    position: relative;
+  }
+
+  h4 {
+    font-weight: 600;
+    color: #96588a;
+    text-transform: uppercase;
+    padding-bottom: 1em;
+  }
+
+  .brand {
+    font-size: 33px;
+    font-family: 'Raleway';
+    font-weight: 600;
+    line-height: 1;
+    margin-bottom: 1em;
+
+    img {
+      width: 34px;
+      position: relative;
+      top: 8px;
+    }
+
+
+    span {
+      font-size: 18px;
+    }
+  }
+
+  ul {
+    padding: 0;
+    margin: 0;
+    color: #fff;
+    list-style: none;
+
+    li {
+      width: 100%;
+      position: relative;
+      padding-left: 1.2em;
+      margin-bottom: 2em;
+      font-size: 18px;
+      line-height: 22px;
+
+      &:before {
+        content: '';
+        position: absolute;
+        left: 0;
+        display: block;
+        width: 12px;
+        height: 12px;
+        top: 6px;
+        background: url("data:image/svg+xml;utf8,<svg width=\'10\' height=\'10\' viewBox=\'0 0 10 10\' xmlns=\'http://www.w3.org/2000/svg\'><path d=\'M0 0h10v10H0z\' fill=\'%23FFF\' fill-rule=\'evenodd\'/></svg>")no-repeat center center / contain;
+      }
+    }
+  }
+}
+
+/**
+ * MC Newsletter
+ */
+#mc_embed_signup {
+  input,
+  button {
+    float: left;
+  }
+
+  input {
+    width: 267px;
+    height: 42px;
+    padding: 13px;
+    background-color: #ffffff;
+    box-shadow: inset 2px 2px 3px 0 rgba(0, 0, 0, 0.5);
+    border: solid 1px #68255b;
+  }
+
+  button {
+    width: 180px;
+    height: 42px;
+    border-radius: 3px;
+    border: 0;
+    color: #fff;
+    margin-left: 8px;
+    background-color: #6e205f;
+    box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.22);
+  }
+}
+
+/**
+ * ==========================================
+ * COMMUNITY COMPONENTS
+ * ==========================================
+ *
+ * Reusable components of Algolia's community
+ * websites.
+ *
+ * Namespace: .cm--
+ *
+ */
+
+
+
+ .cm--item-block {
+  max-width: 120px;
+  height: 120px;
+  border-radius: 16px;
+  box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.1);
+  position: relative;
+
+
+  img {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    margin: auto;
+  }
+
+  &.block-green{
+    background-image: linear-gradient(322deg, #29c9b2, #b7da46);
+  }
+  &.block-blue {
+    background-image: linear-gradient(135deg, #53ddec, #463d9d);
+  }
+  &.block-orange {
+    background-image: linear-gradient(140deg, #ffc003, #f02b2b);
+  }
+ }
+
+
+
+.cm--feature-list {
+  display: flex;
+  flex-wrap: wrap;
+  flex-direction: row;
+
+  .list-item {
+    width: 100%;
+    border-radius: 3px;
+    background-color: #ffffff;
+    box-shadow: 0 1px 0 0 rgba(197, 202, 216, 0.5), 0 2px 4px 0 #c7cbd6;
+    padding: 24px;
+    max-height: 74px;
+    margin-bottom: 20px;
+    margin-right: 30px;
+    flex: 33%;
+    position: relative;
+
+    &:not(:nth-child(3)):not(:nth-child(6)):not(:nth-child(9)) {
+      flex: calc(33.33% - 60px);
+    }
+
+
+    &_muted {
+      border: solid 2px #e3e4e8;
+      box-shadow: none;
+      background: transparent;
+      text-align: center;
+    }
+
+
+    img {
+      display: block;
+      float: left;
+    }
+
+    span {
+      color: #55606e;
+      line-height: 1.8;
+      font-family: "Open Sans", $font-fallback;
+      font-weight: 400;
+      padding-left: 28px;
+      font-size: 14px;
+    }
+    a {
+      display: block;
+      width: 100%;
+      height: 100%;
+      position: absolute;
+      top: 0;
+      left: 0;
+      text-decoration: none;
+      border-radius: 3px;
+
+      span {
+        line-height: 74px;
+      }
+
+      &:hover {
+        background: $brand-primary;
+
+        span {
+          color: #fff;
+        }
+      }
+    }
+    &:last-of-type {
+      span {
+        padding-left: 0;
+      }
+    }
+  }
+}
+
+
+
+
+/**
+ * Diagonals layout
+ */
+
+.diagonal-white-tr,
+.diagonal-white-br {
+  position: absolute;
+  width: 100%;
+  opacity: 1;
+}
+
+.diagonal-white-tr {
+  @include diagonal(-5deg, #fff, 400px) {
+    top: -100px;
+    overflow: hidden;
+    z-index: 30;
+  }
+}
+
+.diagonal-white-br {
+  @include diagonal(5deg, #fff, 400px) {
+    overflow: hidden;
+    z-index: 30;
+  }
+}

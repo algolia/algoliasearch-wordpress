@@ -48,6 +48,108 @@
 // @include motion-ui-transitions;
 // @include motion-ui-animations;
 
+@import 'https://fonts.googleapis.com/css?family=Open+Sans:400,600|Raleway:300,400,700';
+
+@import 'settings/settings';
+@import "components/community";
+@import 'components/buttons';
+@import 'components/tweets';
+@import 'tachyons/tachyons';
+
+
+// Custom components.
+@import "components/header";
+@import "components/footer";
+
+
+* {
+  box-sizing: border-box;
+
+  @include isRetina {
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscaled;
+  }
+}
+
+
+
+/**
+ * Base style
+ */
+
+ body {
+  font-family: 'Open Sans', $font-fallback;
+ }
+
+h1,h2,h3,h4,h5,h6 {
+  color: $greyish-brown
+}
+
+p {
+  color: $battleship-grey
+}
+
+hr {
+  width: 100%;
+  height: 1px;
+  opacity: 0.5;
+  background-color: #d8d8d8;
+  border: none;
+}
+
+
+
+/// DUMP OLD VERSION
+@charset 'utf-8';
+
+@import 'settings/settings';
+@import 'foundation';
+
+@include foundation-global-styles;
+@include foundation-grid;
+// @include foundation-flex-grid;
+@include foundation-typography;
+@include foundation-button;
+// @include foundation-forms;
+// @include foundation-range-input;
+// @include foundation-accordion;
+// @include foundation-accordion-menu;
+// @include foundation-badge;
+// @include foundation-breadcrumbs;
+// @include foundation-button-group;
+// @include foundation-callout;
+// @include foundation-close-button;
+@include foundation-menu;
+// @include foundation-menu-icon;
+// @include foundation-drilldown-menu;
+// @include foundation-dropdown;
+// @include foundation-dropdown-menu;
+// @include foundation-flex-video;
+// @include foundation-label;
+// @include foundation-media-object;
+// @include foundation-off-canvas;
+// @include foundation-orbit;
+// @include foundation-pagination;
+// @include foundation-progress-bar;
+// @include foundation-progress-element;
+// @include foundation-meter-element;
+// @include foundation-slider;
+@include foundation-sticky;
+// @include foundation-reveal;
+// @include foundation-switch;
+@include foundation-table;
+// @include foundation-tabs;
+@include foundation-thumbnail;
+// @include foundation-title-bar;
+// @include foundation-tooltip;
+// @include foundation-top-bar;
+@include foundation-visibility-classes;
+// @include foundation-float-classes;
+// @include foundation-flex-classes;
+//
+// @include motion-ui-transitions;
+// @include motion-ui-animations;
+
 
 // Custom components.
 @import "components/anchor";
@@ -74,7 +176,8 @@
   box-sizing: border-box;
 }
 
-/* General Rules */
+.doc {
+  /* General Rules */
 body {
  background: #FAFAFA;
 }
@@ -446,6 +549,7 @@ table thead tr, #content table tbody tr {
 }
 
 
+}
 // Mobile classes
 .mobile-only {
   display: none;

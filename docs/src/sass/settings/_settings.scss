@@ -42,44 +42,43 @@
 
 @import 'util/util';
 
-// Algolia's UI-Component :
-// ------------------------
-//
-// VARIABLES
-// ---------
+/** Algolia's UI-Component :
+ * ------------------------
+ *
+ * VARIABLES
+*/
 
-// Breakpoints
+/**
+ * Breakpoints
+ */
 $bp-huge: 2000px;
 $bp-big: 1440px;
 $bp-medium: 960px;
 $bp-small: 768px;
 
-// Dimensions
+/**
+ * Dimensions
+ */
 $max-container-width: 940px;
 $navigation-height: 50px;
 $beta-banner-height: 30px;
 $margin: 16px;
 
-// Colors
-$red-pink: #fb366e;
-$steel: #788795;
-$black: #0a1724;
-$orange: #FDBD57;
-$blue: #46AEDA;
-$white-75: rgba(white, 0.75);
-// Gradient colors
-$c-2:  #1d3657;
-$c-1: #3498db;
-$gray-lighter: #f7f7f9;
-
-// Fonts
+/**
+ * Fonts
+ */
 $font-name: "Raleway";
 $font-fallback: Helvetica Neue, helvetica;
 $font-settings:  $font-name, $font-fallback;
 
-// 1. Global
-// ---------
+/**
+ * Community variables
+ */
+$cm-header-height: 540px;
 
+/**
+ * Colors
+ */
 $global-font-size: 100%;
 $global-width: rem-calc(1200);
 $global-lineheight: 1.5;
@@ -93,7 +92,14 @@ $foundation-palette: (
 $light-gray: #e6e6e6;
 $medium-gray: #cacaca;
 $dark-gray: #8a8a8a;
-$white: #fefefe;
+$white: #fff;
+$black: #0a1724;
+$blue: #46AEDA;
+$red-pink: #fb366e;
+$steel: #788795;
+$black: #0a1724;
+$orange: #FDBD57;
+
 $body-background: $white;
 $body-font-color: $black;
 $body-font-family: $font-settings;
@@ -106,6 +112,36 @@ $global-radius: 3px;
 $global-text-direction: ltr;
 $global-flexbox: false;
 $print-transparent-backgrounds: true;
+$denim-blue: #3a5395;
+$darkish-pink: #e7486b;
+$red-pink: #fb366e;
+$charcoal-grey: #4a4a4c;
+$charcoal-grey-75: rgba(74, 74, 76, 0.75);
+$greyish-brown: #4a4a4a;
+$greyish: #a4a4a4;
+$pale-grey: #f2f4f6;
+$blue-grey: #9ba7bf;
+$light-blue-grey: #becce0;
+$powder-blue: #c2d5ff;
+$grey-blue: #7183a7;
+$dark-grey-blue: #0e213b;
+$silver: #d4d9de;
+$steel: #788795;
+$battleship-grey: #697782;
+$brand-primary: #1D96C7;
+$black: #0a1724;
+$white-75: rgba(white, 0.75);
+
+/**
+ * Gradient colors
+ */
+$c-2:  #1d3657;
+$c-1: #3498db;
+$gray-lighter: #f7f7f9;
+
+
+
+
 
 @include add-foundation-colors;
 
@@ -227,7 +263,7 @@ $input-error-font-weight: $global-weight-bold;
 // 7. Accordion
 // ------------
 
-$accordion-background: $white;
+$accordion-background: #fff;
 $accordion-plusminus: true;
 $accordion-item-color: foreground($accordion-background, $primary-color);
 $accordion-item-background-hover: $light-gray;
@@ -599,4 +635,92 @@ $topbar-title-spacing: 1rem;
 $topbar-input-width: 200px;
 $topbar-unstack-breakpoint: medium;
 
+
+/**
+ * Mixin
+ */
+
+/**
+ * RETINA
+ *
+ * Detect retina / high density pixels screens
+ *
+ *  @content [Write the style you want to apply to the diagonal edge, and it will be added within the @content directive]
+ */
+@mixin isRetina {
+  @media
+  (-webkit-min-device-pixel-ratio: 1.25),
+  (min-resolution: 120dpi){
+    @content
+  }
+
+
+  @media
+  (-webkit-min-device-pixel-ratio: 1.3),
+  (min-resolution: 124.8dpi){
+    @content
+  }
+
+
+  @media
+  (-webkit-min-device-pixel-ratio: 1.5),
+  (min-resolution: 144dpi){
+    @content
+  }
+}
+/**
+ * CENTERING
+ *
+ * Define a vertical/horizontal/both centering
+ *
+ *  $position: Absolute / relative
+ */
+@mixin v-center($position) {
+  position: $position;
+  top: 50%;
+  transform: translateY(-50%);
+}
+
+@mixin h-center($position) {
+  position: $position;
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+@mixin vh-center($position) {
+  position: $position;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+/**
+ * DIAGONAL
+ *
+ * Generate a diagonal edge on a before pseudo element
+ *
+ *  $rotation: diagonal degree
+ *  $background : background color, image, gradient
+ *  $height: height of the edge ( px, %, cm, pc, etc)
+ *
+ *  @content [Write the style you want to apply to the diagonal edge, and it will be added within the @content directive]
+ */
+@mixin diagonal($rotation, $background, $height, $imp: false) {
+  &:before {
+    content: '';
+    display: block;
+    position: absolute;
+    z-index: -1;
+    width: 100%;
+    height: $height;
+    background: #{$background};
+    @if $imp == 'true' {
+      transform: skewY($rotation) !important;
+    }
+    @else {
+      transform: skewY($rotation);
+    }
+    @content;
+  }
+}
 

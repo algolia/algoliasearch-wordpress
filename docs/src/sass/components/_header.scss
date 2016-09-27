@@ -9,12 +9,17 @@
   padding: 0 16px;
   margin: 0;
   line-height: $navigation-height;
-  z-index: 101;
+  z-index: 99999;
   font-family: $font-settings;
   box-sizing: border-box;
   color: #fff;
   background: $black;
   font-weight: 400;
+  margin: auto;
+
+  .row {
+    float: none;
+  }
 
 
   a {
@@ -191,17 +196,17 @@
     vertical-align: middle;
     margin-top: -4px;
   }
+}
 
-  .ac-icon {
-    display: inline-block;
-    position: relative;
-    width: 26px;
-    height: 36px;
-    margin: auto;
-    vertical-align: sub;
+.ac-icon {
+  display: inline-block;
+  position: relative;
+  width: 26px;
+  height: 36px;
+  margin: auto;
+  vertical-align: sub;
 
-    &.ac-icon-github {
-      background: url('../img/icon-github.svg')no-repeat center center / contain
-    }
+  &.ac-icon-github {
+    background: url('../img/icon-github.svg')no-repeat center center / contain
   }
 }
