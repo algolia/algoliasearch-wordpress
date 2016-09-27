@@ -1,6 +1,8 @@
 .community-content-wrapper {
   margin-top: $navigation-height;
-
+  article {
+    padding: 0;
+  }
   p {
     line-height: 22px;
     font-size: 16px;
@@ -185,6 +187,7 @@
   h1 {
     padding-top: 0;
     margin-top: 0.5em;
+    font-weight: 500;
   }
 
   h3 {
