@@ -5,6 +5,18 @@
     line-height: 22px;
     font-size: 16px;
   }
+
+  article {
+    background: transparent
+  }
+}
+.m-a {
+  margin: auto;
+  float: none !important;
+}
+
+.header-lead {
+  color: #fff
 }
 [debug] * {
  // outline: rgba(red, 0.8) solid 1px
@@ -209,6 +221,7 @@
   margin: auto;
   position: relative;
   float: left;
+
 
   h4 {
     margin-bottom: 0.85em;
@@ -429,6 +442,7 @@
 
   .section--content__full {
     @include v-center(absolute);
+    top: 65%;
   }
 
 
@@ -440,6 +454,7 @@
 
     img {
       @include vh-center(absolute);
+      top: 35%;
     }
   }
 
