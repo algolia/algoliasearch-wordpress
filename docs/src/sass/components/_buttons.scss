@@ -44,6 +44,10 @@
     background: #3ecf8e;
     border: none;
 
+    &:hover {
+      background: darken(#3ecf8e, 10%);
+      color: #efefef
+    }
   }
 
 
