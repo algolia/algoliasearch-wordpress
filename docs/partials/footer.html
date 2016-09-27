@@ -1,20 +1,56 @@
-        <script src="{{ rootPath }}vendor/jquery/jquery.js"></script>
-        <script src="{{ rootPath }}vendor/foundation-sites/foundation.js"></script>
-        <script src="{{ rootPath }}js/app.js"></script>
-        <script src="{{ rootPath }}js/responsiveNavigation.js"></script>
-        {{livereload}}
-        {{marketing}}
+<section class="ac-footer">
+  <div class="ac-footer-container">
+    <p class="ac-footer-links">
+      Code licensed under
+      <a class="ac-footer-link-item" href="LICENSE">MIT</a>
+      <br/>
+      <a class="ac-footer-link-item" href="https://github.com/">Github</a>
+      <a class="ac-footer-link-item" href="https://github.com/issues">Issues</a>
+      <a class="ac-footer-link-item" href="https://www.algolia.com/policies/privacy">Privacy policy</a>
+  </p>
+</div>
+<div class="ac-footer-container ac-footer-brand">
+    <p>This project is part of</p>
+    <img class="ac-footer-brand-icon" src="https://res.cloudinary.com/hilnmyskv/image/upload/logo-community.svg"/>
+    <figure>
+      <img class="ac-footer-brand-logo" src="https://res.cloudinary.com/hilnmyskv/image/upload/v1463417234/algolia-community_n6tixd.svg"/>
+      <figcaption>Algolia Community</figcaption>
+  </figure>
+  <a class="ac-footer-btn ac-footer-btn-cta" href="https://community.algolia.com/">See More</a>
+  <span class="ac-icon ac-icon-love-dark"></span>
+</div>
+<p class="ac-footer-version">Latest version: {{version}}</p>
+<div class="ac-footer-actions">
+    <div class="footer-container">
+      <p>Build unique search experiences with Algolia</p>
+      <a class="ac-footer-btn ac-footer-btn-ghost-grey" href="https://www.algolia.com/why?utm_medium=social-owned&utm_source=places%20website&utm_campaign=homepage&utm_term=why">
+        See Why
+        <span class="ac-icon-triangle"></span>
+    </a>
+    <a class="ac-footer-btn ac-footer-btn-ghost-pink" href="https://www.algolia.com/users/sign_up?utm_medium=social-owned&utm_source=places%20website&utm_campaign=homepage&utm_term=get_started">Get Started For Free</a>
+</div>
+</div>
+</section>
 
-        <script type="text/javascript">
-            var $searchInput = $("#algolia-search-input");
-            if ( $searchInput.length > 0 ) {
-                var $searchIcon = $("#search-icon");
-                var $clearIcon = $("#search-clear-icon");
 
-                var myDocsearch = docsearch({
-                    apiKey: '52641df1ce4919ba42eb84595f4825c7',
-                    indexName: 'wordpress_algolia',
-                    inputSelector: '#algolia-search-input',
+<script src="{{ rootPath }}vendor/jquery/jquery.js"></script>
+<script src="{{ rootPath }}js/app.js"></script>
+<script src="{{ rootPath }}js/responsiveNavigation.js"></script>
+<script async defer src="https://buttons.github.io/buttons.js"></script>
+<script src="https://cdn.jsdelivr.net/lodash/4.16.2/lodash.min.js"></script>
+{{livereload}}
+{{marketing}}
+
+<script type="text/javascript">
+    var $searchInput = $("#algolia-search-input");
+    if ( $searchInput.length > 0 ) {
+        var $searchIcon = $("#search-icon");
+        var $clearIcon = $("#search-clear-icon");
+
+        var myDocsearch = docsearch({
+            apiKey: '52641df1ce4919ba42eb84595f4825c7',
+            indexName: 'wordpress_algolia',
+            inputSelector: '#algolia-search-input',
                     debug: false, // Set debug to true if you want to inspect the dropdown
                     autocompleteOptions: {
                         openOnFocus: true
@@ -22,23 +58,23 @@
 
                 });
 
-                $clearIcon.on("click", function() {
-                    $(".aa-input").focus();
-                    $clearIcon.hide();
-                    $searchIcon.fadeIn();
-                    myDocsearch.autocomplete.autocomplete.setVal("");
-                });
+        $clearIcon.on("click", function() {
+            $(".aa-input").focus();
+            $clearIcon.hide();
+            $searchIcon.fadeIn();
+            myDocsearch.autocomplete.autocomplete.setVal("");
+        });
 
-                $searchInput.on("keyup", function() {
-                    if ($searchInput.val().length === 0){
-                        $clearIcon.hide();
-                        $searchIcon.fadeIn();
-                    } else {
-                        $searchIcon.hide();
-                        $clearIcon.fadeIn();
-                    }
-                });
+        $searchInput.on("keyup", function() {
+            if ($searchInput.val().length === 0){
+                $clearIcon.hide();
+                $searchIcon.fadeIn();
+            } else {
+                $searchIcon.hide();
+                $clearIcon.fadeIn();
             }
-        </script>
-    </body>
+        });
+    }
+</script>
+</body>
 </html>

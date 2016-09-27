@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="50" height="51" viewBox="0 0 50 51" xmlns:xlink="http://www.w3.org/1999/xlink">
+  <defs>
+    <path id="b" d="M23.9999986,1.99999988 L5.99999964,9.9999994 L5.99999964,21.9999987 C5.99999964,33.0999964 13.6799995,43.4799968 23.9999986,45.9999972 C34.3199975,43.4799968 41.9999975,33.0999964 41.9999975,21.9999987 L41.9999975,9.9999994 L23.9999986,1.99999988 L23.9999986,1.99999988 Z M19.9999988,33.999998 L11.9999993,25.9999984 L14.8199988,23.1799988 L19.9999988,28.3399983 L33.1799982,15.1599989 L35.9999978,17.9999989 L19.9999988,33.999998 L19.9999988,33.999998 Z"/>
+    <filter id="a" width="200%" height="200%" x="-50%" y="-50%" filterUnits="objectBoundingBox">
+      <feOffset dy="2" in="SourceAlpha" result="shadowOffsetOuter1"/>
+      <feGaussianBlur stdDeviation="1" in="shadowOffsetOuter1" result="shadowBlurOuter1"/>
+      <feColorMatrix values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.1 0" in="shadowBlurOuter1"/>
+    </filter>
+  </defs>
+  <g fill="none" fill-rule="evenodd" transform="translate(1 1)">
+    <polygon stroke="#000000" stroke-opacity=".008" stroke-width=".5" points="0 0 48 0 48 48 0 48"/>
+    <use fill="black" filter="url(#a)" xlink:href="#b"/>
+    <use fill="#FFFFFF" xlink:href="#b"/>
+  </g>
+</svg>
