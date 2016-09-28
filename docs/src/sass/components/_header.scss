@@ -44,6 +44,15 @@
 
   .ac-nav-brand {
     float: left;
+
+
+    span.desktop-only {
+      display: inline !important;
+
+      @media (max-width: $bp-small) {
+        display: none !important;
+      }
+    }
   }
   .ac-nav-menu {
     float: right;
@@ -170,7 +179,7 @@
     top: 12px;
     right: 8px;
     color: #000;
-    max-width: 200px;
+    max-width: 100px;
     float: right;
 
 
