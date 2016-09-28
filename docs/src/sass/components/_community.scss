@@ -203,6 +203,9 @@
   clear: both;
   position: relative;
   float: left;
+  &.relevant-search-result{
+    min-height: 400px;
+  }
 
   h4 {
     margin-bottom: 0.85em;
@@ -272,8 +275,8 @@
 
     img {
       max-height: inherit;
-      width: 150%;
-      max-width: 860px;
+      width: 130%;
+      max-width: 560px;
       box-shadow: -4px -4px 40px rgba(black, 0.2);
       border-radius: 6px;
     }
@@ -395,8 +398,8 @@
 
       img {
         display: block;
-        max-height: 30px;
-        max-width: 130px;
+        max-height: 22px;
+        max-width: 120px;
       }
     }
   }
@@ -478,7 +481,7 @@
   padding-bottom: 0em;
 
   .cm--container {
-    height: 850px;
+    height: 880px;
   }
 
   .cm--h-center {
@@ -504,12 +507,20 @@
   article p {
     font-size: 19px;
     color: #fff;
+    text-align: left;
+  }
+
+  .code-block{
+    @media (max-width: $bp-small){
+      display: none;
+    }
   }
 
   ul {
     list-style: none;
     padding: 0;
     margin: 0;
+    text-align: left;
 
     li {
       display: block;
@@ -603,13 +614,11 @@
   z-index: -1;
   margin-bottom: -160px;
   overflow: hidden;
-
-  .section--content {
-    width: 50%;
-    float: left;
-  }
+  position: relative;
 
   .section--content:nth-child(1) {
+    text-align: center;
+    padding-top: 50px;
     &:before {
       content: '';
       display: block;
@@ -621,25 +630,23 @@
       background: #fff;
       transform: skewX(-8deg)
     }
+    @media (max-width: $bp-small){
+      width: 80%;
+      text-align: left;
+      padding-left: 10%;
+    }
   }
   .section--content:nth-child(2) {
-
+    padding-top: 120px;
     img {
       position: absolute;
-      right: -60px;
+      right: -10px;
       top: 50%;
       width: 84px;
     }
-
-    .content {
-      margin-top: 6em;
+    @media (max-width: $bp-small){
+      display: none;
     }
-  }
-  .content {
-    margin-top: 4em;
-    padding: 0 4.5em;
-    max-width: 626px;
-    position: relative;
   }
 
   h4 {
@@ -656,17 +663,21 @@
     line-height: 1;
     margin-bottom: 1em;
 
-    img {
+    .algolia-logo {
       width: 34px;
       position: relative;
-      top: 8px;
+      top: -6px;
     }
-
-
     span {
       font-size: 18px;
     }
   }
+
+  .woocommerce-logo{
+    width: 200px;
+  }
+
+
 
   ul {
     padding: 0;
@@ -771,12 +782,13 @@
 
 
 .cm--feature-list {
+  margin-left: 30px;
   display: flex;
   flex-wrap: wrap;
   flex-direction: row;
 
   .list-item {
-    width: 100%;
+    flex: 300px;
     border-radius: 3px;
     background-color: #ffffff;
     box-shadow: 0 1px 0 0 rgba(197, 202, 216, 0.5), 0 2px 4px 0 #c7cbd6;
@@ -785,22 +797,17 @@
     margin-bottom: 20px;
     margin-right: 30px;
     position: relative;
-
-    @media (max-width: $bp-small){
-    }
-
-    &:not(:nth-child(3)):not(:nth-child(6)):not(:nth-child(9)) {
-      flex: calc(33.33% - 60px);
-    }
-
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
 
     &_muted {
       border: solid 2px #e3e4e8;
+      padding: 35px;
       box-shadow: none;
       background: transparent;
       text-align: center;
     }
-
 
     img {
       display: block;
