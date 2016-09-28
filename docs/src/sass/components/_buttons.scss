@@ -19,7 +19,8 @@
 
   &:hover,
   &:active {
-    background: $red-pink
+    background: $red-pink;
+    color: #efefef
   }
 
   &:focus:not(:hover) {
