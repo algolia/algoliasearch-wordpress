@@ -23,7 +23,7 @@
   color: #fff
 }
 [debug] * {
- // outline: rgba(red, 0.8) solid 1px
+ //outline: rgba(red, 0.8) solid 1px
 }
 /**
  * ==========================================
@@ -410,8 +410,17 @@
 
   .item--mention {
     font-weight: 600;
-    color: $greyish-black;
+    color: #55606E;
     margin-bottom: 8px;
+    font-size: 1em;
+    font-family: 'Open Sans', sans-serif;
+  }
+
+  .item--description {
+    font-family: "Open Sans", sans-serif;
+    font-size: 14px;
+    max-width: 360px;
+    margin-top: 8px;
   }
 }
 
@@ -531,7 +540,7 @@
     }
 
     &--graphic {
-      margin: auto auto 1em;
+      margin: auto auto 24px;
     }
   }
 }
