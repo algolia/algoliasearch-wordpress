@@ -23,7 +23,7 @@
   color: #fff
 }
 [debug] * {
- //outline: rgba(red, 0.8) solid 1px
+ outline: rgba(red, 0.8) solid 1px
 }
 /**
  * ==========================================
@@ -271,6 +271,14 @@
     display: block;
     max-width: 400px;
   }
+
+  .flex {
+    align-items: center;
+    justify-content: center;
+    .section--content {
+
+    }
+  }
 }
 
 .section--content,
@@ -298,7 +306,7 @@
   img {
     &.iphone-screen {
       max-height: inherit;
-      top: -120px;
+      top: -220px;
       right: 0;
       position: absolute;
       height: 450px;
