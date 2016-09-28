@@ -1,6 +1,5 @@
 .community-content-wrapper {
   margin-top: $navigation-height;
-  overflow-x: hidden;
 
   article {
     padding: 0;
@@ -166,6 +165,9 @@
 .header--graphic {
   position: relative;
   z-index: 50;
+  min-height: 540px;
+  overflow: hidden;
+
 }
 .header--content {
   color: #fff;
