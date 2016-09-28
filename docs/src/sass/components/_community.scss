@@ -22,9 +22,11 @@
 .header-lead {
   color: #fff
 }
+
 [debug] * {
  outline: rgba(red, 0.8) solid 1px
 }
+
 /**
  * ==========================================
  * COMMUNITY BLOCKS
@@ -69,6 +71,14 @@
     left: 0;
     right: 0;
     margin: auto;
+  }
+
+  &.big-title {
+    @media (max-width: $bp-small ) {
+      &:after {
+        top: 3em;
+      }
+    }
   }
 }
 
@@ -275,8 +285,9 @@
   .flex {
     align-items: center;
     justify-content: center;
-    .section--content {
 
+    @media (max-width: $bp-small) {
+      display: block;
     }
   }
 }
@@ -341,6 +352,11 @@
   background-image: linear-gradient(to bottom, #26a0e7, #4b2e91);
 
   .section--graphic {
+
+    @media (max-width: $bp-small) {
+      overflow: hidden;
+
+    }
 
     img {
       max-height: inherit;
@@ -469,6 +485,20 @@
     margin: 80px 0 60px;
   }
 
+   .content--graphic,
+   .content--text {
+    @media ( max-width: $bp-small ) {
+      width: 100%;
+      text-align: center;
+      padding-left: 1em;
+      padding-right: 1em;
+
+      &.content--text {
+        margin-top: 1em;
+      }
+    }
+   }
+
   ul.trust-us {
     list-style: none;
     padding: 0;
@@ -565,12 +595,24 @@
   width: 100%;
   padding-bottom: 0em;
 
+  @media (max-width: $bp-small) {
+    padding-bottom: 4em;
+  }
+
   .cm--container {
     height: 880px;
+
+    @media (max-width: $bp-small) {
+      height: auto;
+    }
   }
 
   .cm--h-center {
     bottom: 80px;
+
+    @media (max-width: $bp-small) {
+      display: none
+    }
   }
 
   header {
@@ -587,6 +629,9 @@
   .section--content {
     top: inherit;
     transform: inherit;
+    @media (max-width: $bp-small) {
+      padding: 0 1em;
+    }
   }
 
   article p {
@@ -701,9 +746,17 @@
   overflow: hidden;
   position: relative;
 
+  @media (max-width: $bp-small){
+    background: #fff
+  }
+
+
   .section--content:nth-child(1) {
     text-align: center;
     padding-top: 50px;
+
+
+
     &:before {
       content: '';
       display: block;
@@ -716,9 +769,10 @@
       transform: skewX(-8deg)
     }
     @media (max-width: $bp-small){
-      width: 80%;
+      width: 100%;
       text-align: left;
-      padding-left: 10%;
+      text-align: center;
+
     }
   }
   .section--content:nth-child(2) {
