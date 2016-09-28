@@ -1,11 +1,14 @@
 .community-content-wrapper {
   margin-top: $navigation-height;
+  overflow-x: hidden;
+
   article {
     padding: 0;
   }
+
   p {
     line-height: 22px;
-    font-size: 16px;
+    font-size: 14px;
   }
 
   article {
@@ -55,6 +58,7 @@
   position: relative;
   margin-top: 60px;
   margin-bottom: 80px;
+  font-weight: 600;
 
   &:after {
     content: '';
@@ -110,6 +114,9 @@
     z-index: $i;
   }
 }
+.zi-50 {
+  z-index: 50;
+}
 
 /**
  *  Community header
@@ -123,16 +130,43 @@
   background-repeat: no-repeat;
   background-size: cover;
 
+   @media (max-width: $bp-medium + 280){
+    min-height: 580px;
+  }
+
+
   .al-badge {
     display: inline-block;
-    padding-bottom: 4em;
-    border-bottom: 4px solid #fff;
-    width: 43px;
-    height: 43px;
+    padding-bottom: 3.25em;
+    border-bottom: 2px solid #fff;
+    width: 32px;
+    height: 32px;
+  }
+
+  .diagonal-white-tr {
+    @include diagonal(-2deg, #fff, 170px, 'true') {}
+    top: 100%;
+    position: absolute;
+
+    @media (max-width: $bp-medium) {
+      display: none;
+    }
+  }
+
+  .btn {
+    max-width: 200px;
+
+    img {
+      top: -2px;
+    }
   }
 }
 
-
+.header--content,
+.header--graphic {
+  position: relative;
+  z-index: 50;
+}
 .header--content {
   color: #fff;
   @extend .fl;
@@ -166,15 +200,19 @@
   h1 {
     padding-top: 0;
     margin-top: 0.5em;
-    font-weight: 500;
+    font-weight: 800;
+    font-size: 48px;
   }
 
   h3 {
     font-weight: 500;
   }
 
-
-
+  &__version {
+    display: inline-block;
+    position: relative;
+    top: 8px;
+  }
 }
 
 .header--graphic {
@@ -198,17 +236,38 @@
  */
 
 .cm--section {
+
   @extend .pv5;
   width: 100%;
   clear: both;
   position: relative;
   float: left;
+
   &.relevant-search-result{
     min-height: 400px;
   }
 
   h4 {
     margin-bottom: 0.85em;
+  }
+
+  header {
+    .icon {
+      display: inline-block;
+      margin-bottom: 24px;
+    }
+  }
+
+  .content-title {
+    font-family: 'Open Sans';
+    font-weight: 600;
+    color: $greyish-black;
+    margin-bottom: 8px;
+  }
+
+  .content-article {
+    display: block;
+    max-width: 400px;
   }
 }
 
@@ -346,6 +405,12 @@
       z-index: 0;
     }
   }
+
+  .item--mention {
+    font-weight: 600;
+    color: $greyish-black;
+    margin-bottom: 8px;
+  }
 }
 
 /**
@@ -413,6 +478,7 @@
   min-height: inherit;
   background: #FFF;
   z-index: 100;
+  border-bottom: 1px solid #efefef;
 
   .section--content__full {
     overflow: hidden;
@@ -640,7 +706,7 @@
     padding-top: 120px;
     img {
       position: absolute;
-      right: -10px;
+      right: 2em;
       top: 50%;
       width: 84px;
     }
@@ -815,7 +881,8 @@
     }
 
     span {
-      color: #55606e;
+      color: $greyish-black;
+      margin-bottom: 8px;
       line-height: 1.8;
       font-family: "Open Sans", $font-fallback;
       font-weight: 400;
