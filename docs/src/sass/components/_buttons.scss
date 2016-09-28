@@ -7,7 +7,7 @@
   line-height: 40px;
   padding: 0 1em;
   text-align: center;
-  display: block;
+  display: inline-block;
   text-decoration: none;
   border-radius: 3px;
   text-transform: uppercase;
@@ -20,6 +20,10 @@
   &:hover,
   &:active {
     background: $red-pink
+  }
+
+  &:focus:not(:hover) {
+    color: #fff;
   }
 
   &.btn-cta {
@@ -86,8 +90,6 @@
   img {
     display: inline-block;
     position: relative;
-    float: left;
-    top: 8px;
-    margin-right: 1em;
+    margin-right: 8px;
   }
 }
