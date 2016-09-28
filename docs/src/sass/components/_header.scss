@@ -21,7 +21,6 @@
     float: none;
   }
 
-
   a {
     color: #fff;
     text-decoration: none;
@@ -34,7 +33,7 @@
     line-height: $navigation-height;
 
     @media (max-width: $bp-big){
-      max-width: 100%
+      max-width: 100%;
     }
   }
 
@@ -185,8 +184,6 @@
       visibility: visible;
     }
   }
-
-
 
   .ac-nav-brand-breadcrumb {
     display: inline-block;
