@@ -1,217 +1,196 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<svg width="522px" height="330px" viewBox="0 0 522 330" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
-    <!-- Generator: Sketch 40 (33762) - http://www.bohemiancoding.com/sketch -->
-    <title>facets-illus</title>
-    <desc>Created with Sketch.</desc>
-    <defs>
-        <rect id="path-1" x="0" y="0" width="330" height="324" rx="4"></rect>
-        <filter x="-50%" y="-50%" width="200%" height="200%" filterUnits="objectBoundingBox" id="filter-3">
-            <feMorphology radius="1" operator="dilate" in="SourceAlpha" result="shadowSpreadOuter1"></feMorphology>
-            <feOffset dx="0" dy="2" in="shadowSpreadOuter1" result="shadowOffsetOuter1"></feOffset>
-            <feGaussianBlur stdDeviation="1" in="shadowOffsetOuter1" result="shadowBlurOuter1"></feGaussianBlur>
-            <feComposite in="shadowBlurOuter1" in2="SourceAlpha" operator="out" result="shadowBlurOuter1"></feComposite>
-            <feColorMatrix values="0 0 0 0 0   0 0 0 0 0   0 0 0 0 0  0 0 0 0.1 0" type="matrix" in="shadowBlurOuter1"></feColorMatrix>
-        </filter>
-        <mask id="mask-4" maskContentUnits="userSpaceOnUse" maskUnits="objectBoundingBox" x="-1" y="-1" width="332" height="326">
-            <rect x="-1" y="-1" width="332" height="326" fill="white"></rect>
-            <use xlink:href="#path-1" fill="black"></use>
-        </mask>
-        <linearGradient x1="50%" y1="0%" x2="50%" y2="100%" id="linearGradient-5">
-            <stop stop-color="#2B91FC" offset="0%"></stop>
-            <stop stop-color="#2D91FC" offset="100%"></stop>
-        </linearGradient>
-        <path d="M0,3.00335124 C0,1.34464615 1.34237885,0 3.00335124,0 L10.9966488,0 C12.6553538,0 14,1.34237885 14,3.00335124 L14,10.9966488 C14,12.6553538 12.6576211,14 10.9966488,14 L3.00335124,14 C1.34464615,14 0,12.6576211 0,10.9966488 L0,3.00335124 Z" id="path-6"></path>
-        <mask id="mask-7" maskContentUnits="userSpaceOnUse" maskUnits="objectBoundingBox" x="0" y="0" width="14" height="14" fill="white">
-            <use xlink:href="#path-6"></use>
-        </mask>
-        <polyline id="path-8" points="3.90002441 7.90864964 6.00159836 10.2941486 10.232513 3.75967852"></polyline>
-        <filter x="-50%" y="-50%" width="200%" height="200%" filterUnits="objectBoundingBox" id="filter-9">
-            <feMorphology radius="0.75" operator="dilate" in="SourceAlpha" result="shadowSpreadOuter1"></feMorphology>
-            <feOffset dx="0" dy="1" in="shadowSpreadOuter1" result="shadowOffsetOuter1"></feOffset>
-            <feMorphology radius="1" operator="erode" in="SourceAlpha" result="shadowInner"></feMorphology>
-            <feOffset dx="0" dy="1" in="shadowInner" result="shadowInner"></feOffset>
-            <feComposite in="shadowOffsetOuter1" in2="shadowInner" operator="out" result="shadowOffsetOuter1"></feComposite>
-            <feGaussianBlur stdDeviation="0.5" in="shadowOffsetOuter1" result="shadowBlurOuter1"></feGaussianBlur>
-            <feColorMatrix values="0 0 0 0 0   0 0 0 0 0   0 0 0 0 0  0 0 0 0.196841033 0" type="matrix" in="shadowBlurOuter1"></feColorMatrix>
-        </filter>
-        <linearGradient x1="50%" y1="0%" x2="50%" y2="100%" id="linearGradient-10">
-            <stop stop-color="#AEAEAE" offset="0%"></stop>
-            <stop stop-color="#C0C0C0" offset="100%"></stop>
-        </linearGradient>
-        <rect id="path-11" x="0" y="0" width="14" height="14" rx="3"></rect>
-        <filter x="-50%" y="-50%" width="200%" height="200%" filterUnits="objectBoundingBox" id="filter-12">
-            <feGaussianBlur stdDeviation="0.5" in="SourceAlpha" result="shadowBlurInner1"></feGaussianBlur>
-            <feOffset dx="0" dy="1" in="shadowBlurInner1" result="shadowOffsetInner1"></feOffset>
-            <feComposite in="shadowOffsetInner1" in2="SourceAlpha" operator="arithmetic" k2="-1" k3="1" result="shadowInnerInner1"></feComposite>
-            <feColorMatrix values="0 0 0 0 0   0 0 0 0 0   0 0 0 0 0  0 0 0 0.196246603 0" type="matrix" in="shadowInnerInner1"></feColorMatrix>
-        </filter>
-        <mask id="mask-13" maskContentUnits="userSpaceOnUse" maskUnits="objectBoundingBox" x="0" y="0" width="14" height="14" fill="white">
-            <use xlink:href="#path-11"></use>
-        </mask>
-        <rect id="path-14" x="0" y="0" width="14" height="14" rx="3"></rect>
-        <filter x="-50%" y="-50%" width="200%" height="200%" filterUnits="objectBoundingBox" id="filter-15">
-            <feGaussianBlur stdDeviation="0.5" in="SourceAlpha" result="shadowBlurInner1"></feGaussianBlur>
-            <feOffset dx="0" dy="1" in="shadowBlurInner1" result="shadowOffsetInner1"></feOffset>
-            <feComposite in="shadowOffsetInner1" in2="SourceAlpha" operator="arithmetic" k2="-1" k3="1" result="shadowInnerInner1"></feComposite>
-            <feColorMatrix values="0 0 0 0 0   0 0 0 0 0   0 0 0 0 0  0 0 0 0.196246603 0" type="matrix" in="shadowInnerInner1"></feColorMatrix>
-        </filter>
-        <mask id="mask-16" maskContentUnits="userSpaceOnUse" maskUnits="objectBoundingBox" x="0" y="0" width="14" height="14" fill="white">
-            <use xlink:href="#path-14"></use>
-        </mask>
-        <rect id="path-17" x="0" y="0" width="68" height="34" rx="3"></rect>
-        <mask id="mask-18" maskContentUnits="userSpaceOnUse" maskUnits="objectBoundingBox" x="0" y="0" width="68" height="34" fill="white">
-            <use xlink:href="#path-17"></use>
-        </mask>
-        <rect id="path-19" x="0" y="0" width="131" height="34" rx="3"></rect>
-        <mask id="mask-20" maskContentUnits="userSpaceOnUse" maskUnits="objectBoundingBox" x="0" y="0" width="131" height="34" fill="white">
-            <use xlink:href="#path-19"></use>
-        </mask>
-        <rect id="path-21" x="0" y="0" width="66" height="34" rx="3"></rect>
-        <mask id="mask-22" maskContentUnits="userSpaceOnUse" maskUnits="objectBoundingBox" x="0" y="0" width="66" height="34" fill="white">
-            <use xlink:href="#path-21"></use>
-        </mask>
-        <rect id="path-23" x="0" y="0" width="66" height="34" rx="3"></rect>
-        <mask id="mask-24" maskContentUnits="userSpaceOnUse" maskUnits="objectBoundingBox" x="0" y="0" width="66" height="34" fill="white">
-            <use xlink:href="#path-23"></use>
-        </mask>
-        <rect id="path-25" x="0" y="0" width="85" height="34" rx="3"></rect>
-        <mask id="mask-26" maskContentUnits="userSpaceOnUse" maskUnits="objectBoundingBox" x="0" y="0" width="85" height="34" fill="white">
-            <use xlink:href="#path-25"></use>
-        </mask>
-    </defs>
-    <g id="Page-2" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
-        <g id="wordpress-landing" transform="translate(-706.000000, -1018.000000)">
-            <g id="facets" transform="translate(206.000000, 1019.000000)">
-                <g id="facets-illus" transform="translate(500.000000, 0.000000)">
-                    <g id="Group-14-Copy-2" transform="translate(189.000000, 0.000000)">
-                        <g id="Group-13-Copy">
-                            <mask id="mask-2" fill="white">
-                                <use xlink:href="#path-1"></use>
-                            </mask>
-                            <g id="Rectangle-3">
-                                <use fill="black" fill-opacity="1" filter="url(#filter-3)" xlink:href="#path-1"></use>
-                                <use fill="#FFFFFF" fill-rule="evenodd" xlink:href="#path-1"></use>
-                                <use stroke="#D8D9DE" mask="url(#mask-4)" stroke-width="2" xlink:href="#path-1"></use>
-                            </g>
-                            <text id="Deep-linking-&amp;-searc" mask="url(#mask-2)" font-family="OpenSans-Semibold, Open Sans" font-size="14" font-weight="500" fill="#46AEDA">
-                                <tspan x="12" y="27">Deep linking &amp; search in iOS 9 will change ev..</tspan>
-                            </text>
-                            <text id="The-holy-grail-for-a" opacity="0.5" mask="url(#mask-2)" font-family="'Open Sans', Open Sans, OpenSans, sans-serif" font-size="12" font-weight="normal" fill="#262626">
-                                <tspan x="12" y="48">The holy grail for any investor is to discover the next G...</tspan>
-                            </text>
-                            <text id="Next-level-searching" mask="url(#mask-2)" font-family="OpenSans-Semibold, Open Sans" font-size="14" font-weight="500" fill="#46AEDA">
-                                <tspan x="12" y="92">Next-level searching in Slack</tspan>
-                            </text>
-                            <text id="Day-to-day-productiv" opacity="0.5" mask="url(#mask-2)" font-family="'Open Sans', Open Sans, OpenSans, sans-serif" font-size="12" font-weight="normal" fill="#262626">
-                                <tspan x="12" y="113">Day to day productivity is one thing. Having a long-ter...</tspan>
-                            </text>
-                            <text id="How-Google-Is-Taking" mask="url(#mask-2)" font-family="OpenSans-Semibold, Open Sans" font-size="14" font-weight="500" fill="#46AEDA">
-                                <tspan x="12" y="157">How Google Is Taking Search Outside the Box</tspan>
-                            </text>
-                            <text id="The-I/O-conference-h" opacity="0.5" mask="url(#mask-2)" font-family="'Open Sans', Open Sans, OpenSans, sans-serif" font-size="12" font-weight="normal" fill="#262626">
-                                <tspan x="12" y="178">The I/O conference had virtual reality, photos and elec...</tspan>
-                            </text>
-                            <text id="A-painstakingly-craf" mask="url(#mask-2)" font-family="OpenSans-Semibold, Open Sans" font-size="14" font-weight="500" fill="#46AEDA">
-                                <tspan x="12" y="222">A painstakingly crafted search for Hearthsto..</tspan>
-                            </text>
-                            <text id="Hearthstone’s-popula" opacity="0.5" mask="url(#mask-2)" font-family="'Open Sans', Open Sans, OpenSans, sans-serif" font-size="12" font-weight="normal" fill="#262626">
-                                <tspan x="12" y="243">Hearthstone’s popularity is stunning. Is it the worthy...</tspan>
-                            </text>
-                            <text id="A-painstakingly-craf-Copy" mask="url(#mask-2)" font-family="OpenSans-Semibold, Open Sans" font-size="14" font-weight="500" fill="#46AEDA">
-                                <tspan x="12" y="287">A painstakingly crafted search for Hearthsto..</tspan>
-                            </text>
-                            <text id="Hearthstone’s-popula-Copy" opacity="0.5" mask="url(#mask-2)" font-family="'Open Sans', Open Sans, OpenSans, sans-serif" font-size="12" font-weight="normal" fill="#262626">
-                                <tspan x="12" y="308">Hearthstone’s popularity is stunning. Is it the worthy...</tspan>
-                            </text>
-                            <rect id="Rectangle-4" fill="#D8D8D8" opacity="0.5" mask="url(#mask-2)" x="5.68434189e-14" y="64" width="330" height="1"></rect>
-                            <rect id="Rectangle-4-Copy" fill="#D8D8D8" opacity="0.5" mask="url(#mask-2)" x="5.68434189e-14" y="129" width="330" height="1"></rect>
-                            <rect id="Rectangle-4-Copy-2" fill="#D8D8D8" opacity="0.5" mask="url(#mask-2)" x="5.68434189e-14" y="194" width="330" height="1"></rect>
-                            <rect id="Rectangle-4-Copy-3" fill="#D8D8D8" opacity="0.5" mask="url(#mask-2)" x="5.68434189e-14" y="259" width="330" height="1"></rect>
-                        </g>
-                    </g>
-                    <g id="Group-42" transform="translate(0.000000, 16.000000)">
-                        <g id="Group-44">
-                            <text id="TYPE" opacity="0.5" font-family="'Open Sans', Open Sans, OpenSans, sans-serif" font-size="12" font-weight="normal" fill="#262626">
-                                <tspan x="0" y="13">TYPE</tspan>
-                            </text>
-                            <text id="Article" font-family="'Open Sans', Open Sans, OpenSans, sans-serif" font-size="13" font-weight="normal" fill="#262626">
-                                <tspan x="20" y="43">Article</tspan>
-                            </text>
-                            <g id="checkbox_on" transform="translate(0.000000, 32.000000)">
-                                <use id="Rectangle-3-Copy" stroke="url(#linearGradient-5)" mask="url(#mask-7)" stroke-width="1" fill="#3B99FC" fill-rule="evenodd" xlink:href="#path-6"></use>
-                                <g id="Path-68">
-                                    <use fill="black" fill-opacity="1" filter="url(#filter-9)" xlink:href="#path-8"></use>
-                                    <use stroke="#FFFFFF" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" xlink:href="#path-8"></use>
-                                </g>
-                            </g>
-                            <g id="checkbox_off" transform="translate(0.000000, 58.000000)">
-                                <g id="Rectangle-3-Copy-2">
-                                    <use fill="#FFFFFF" fill-rule="evenodd" xlink:href="#path-11"></use>
-                                    <use fill="black" fill-opacity="1" filter="url(#filter-12)" xlink:href="#path-11"></use>
-                                    <use stroke="url(#linearGradient-10)" mask="url(#mask-13)" stroke-width="1" xlink:href="#path-11"></use>
-                                </g>
-                            </g>
-                            <g id="checkbox_off" transform="translate(0.000000, 84.000000)">
-                                <g id="Rectangle-3-Copy-2">
-                                    <use fill="#FFFFFF" fill-rule="evenodd" xlink:href="#path-14"></use>
-                                    <use fill="black" fill-opacity="1" filter="url(#filter-15)" xlink:href="#path-14"></use>
-                                    <use stroke="url(#linearGradient-10)" mask="url(#mask-16)" stroke-width="1" xlink:href="#path-14"></use>
-                                </g>
-                            </g>
-                            <text id="Video" font-family="'Open Sans', Open Sans, OpenSans, sans-serif" font-size="13" font-weight="normal" fill="#262626">
-                                <tspan x="20" y="69">Video</tspan>
-                            </text>
-                            <text id="Categorie" font-family="'Open Sans', Open Sans, OpenSans, sans-serif" font-size="13" font-weight="normal" fill="#262626">
-                                <tspan x="20" y="95">Categorie</tspan>
-                            </text>
-                            <text id="236" font-family="'Open Sans', Open Sans, OpenSans, sans-serif" font-size="11" font-weight="normal" fill="#B7BABD">
-                                <tspan x="130.131348" y="43">236</tspan>
-                            </text>
-                            <text id="48" font-family="'Open Sans', Open Sans, OpenSans, sans-serif" font-size="11" font-weight="normal" fill="#B7BABD">
-                                <tspan x="136.420898" y="69">48</tspan>
-                            </text>
-                            <text id="12" font-family="'Open Sans', Open Sans, OpenSans, sans-serif" font-size="11" font-weight="normal" fill="#B7BABD">
-                                <tspan x="136.420898" y="95">12</tspan>
-                            </text>
-                        </g>
-                        <g id="Group-46" transform="translate(0.000000, 129.000000)">
-                            <text id="TAGS" opacity="0.5" font-family="'Open Sans', Open Sans, OpenSans, sans-serif" font-size="12" font-weight="normal" fill="#262626">
-                                <tspan x="0" y="13">TAGS</tspan>
-                            </text>
-                            <g id="Group-40" transform="translate(0.000000, 29.000000)">
-                                <use id="Rectangle-10" stroke="#F0F0F0" mask="url(#mask-18)" stroke-width="2" fill="#FAFAFA" xlink:href="#path-17"></use>
-                                <text id="Startup" font-family="'Open Sans', Open Sans, OpenSans, sans-serif" font-size="13" font-weight="normal" fill="#262626">
-                                    <tspan x="12" y="22">Startup</tspan>
-                                </text>
-                            </g>
-                            <g id="Group-39" transform="translate(0.000000, 71.000000)">
-                                <use id="Rectangle-10-Copy-2" stroke="#F0F0F0" mask="url(#mask-20)" stroke-width="2" fill="#FAFAFA" xlink:href="#path-19"></use>
-                                <text id="Entrepreneurship" font-family="'Open Sans', Open Sans, OpenSans, sans-serif" font-size="13" font-weight="normal" fill="#262626">
-                                    <tspan x="12" y="22">Entrepreneurship</tspan>
-                                </text>
-                            </g>
-                            <g id="Group-39-Copy" transform="translate(0.000000, 113.000000)">
-                                <use id="Rectangle-10-Copy-2" stroke="#F0F0F0" mask="url(#mask-22)" stroke-width="2" fill="#FAFAFA" xlink:href="#path-21"></use>
-                                <text id="Search" font-family="'Open Sans', Open Sans, OpenSans, sans-serif" font-size="13" font-weight="normal" fill="#262626">
-                                    <tspan x="12" y="22">Search</tspan>
-                                </text>
-                            </g>
-                            <g id="Group-39-Copy-2" transform="translate(73.000000, 113.000000)">
-                                <use id="Rectangle-10-Copy-2" stroke="#F0F0F0" mask="url(#mask-24)" stroke-width="2" fill="#FAFAFA" xlink:href="#path-23"></use>
-                                <text id="Design" font-family="'Open Sans', Open Sans, OpenSans, sans-serif" font-size="13" font-weight="normal" fill="#262626">
-                                    <tspan x="12" y="22">Design</tspan>
-                                </text>
-                            </g>
-                            <g id="Group-41" transform="translate(75.000000, 29.000000)">
-                                <use id="Rectangle-10-Copy" stroke="#F0F0F0" mask="url(#mask-26)" stroke-width="2" fill="#FAFAFA" xlink:href="#path-25"></use>
-                                <text id="Marketing" font-family="'Open Sans', Open Sans, OpenSans, sans-serif" font-size="13" font-weight="normal" fill="#262626">
-                                    <tspan x="12" y="22">Marketing</tspan>
-                                </text>
-                            </g>
-                        </g>
-                    </g>
-                </g>
-            </g>
-        </g>
+
+<svg xmlns="http://www.w3.org/2000/svg" width="522" height="330" viewBox="0 0 522 330" xmlns:xlink="http://www.w3.org/1999/xlink">
+  <defs>
+    <rect id="a" width="330" height="324" rx="4"/>
+    <filter id="j" width="200%" height="200%" x="-50%" y="-50%" filterUnits="objectBoundingBox">
+      <feMorphology radius="1" operator="dilate" in="SourceAlpha" result="shadowSpreadOuter1"/>
+      <feOffset dy="2" in="shadowSpreadOuter1" result="shadowOffsetOuter1"/>
+      <feGaussianBlur stdDeviation="1" in="shadowOffsetOuter1" result="shadowBlurOuter1"/>
+      <feComposite in="shadowBlurOuter1" in2="SourceAlpha" operator="out" result="shadowBlurOuter1"/>
+      <feColorMatrix values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.1 0" in="shadowBlurOuter1"/>
+    </filter>
+    <mask id="k" width="332" height="326" x="-1" y="-1">
+      <rect width="332" height="326" x="-1" y="-1" fill="white"/>
+      <use fill="black" xlink:href="#a"/>
+    </mask>
+    <linearGradient id="m" x1="50%" x2="50%" y1="0%" y2="100%">
+      <stop stop-color="#2B91FC" offset="0%"/>
+      <stop stop-color="#2D91FC" offset="100%"/>
+    </linearGradient>
+    <path id="b" d="M0,3.00335124 C0,1.34464615 1.34237885,0 3.00335124,0 L10.9966488,0 C12.6553538,0 14,1.34237885 14,3.00335124 L14,10.9966488 C14,12.6553538 12.6576211,14 10.9966488,14 L3.00335124,14 C1.34464615,14 0,12.6576211 0,10.9966488 L0,3.00335124 Z"/>
+    <mask id="n" width="14" height="14" x="0" y="0" fill="white">
+      <use xlink:href="#b"/>
+    </mask>
+    <polyline id="p" points="3.9 7.909 6.002 10.294 10.233 3.76"/>
+    <filter id="o" width="200%" height="200%" x="-50%" y="-50%" filterUnits="objectBoundingBox">
+      <feMorphology radius=".75" operator="dilate" in="SourceAlpha" result="shadowSpreadOuter1"/>
+      <feOffset dy="1" in="shadowSpreadOuter1" result="shadowOffsetOuter1"/>
+      <feMorphology radius="1" in="SourceAlpha" result="shadowInner"/>
+      <feOffset dy="1" in="shadowInner" result="shadowInner"/>
+      <feComposite in="shadowOffsetOuter1" in2="shadowInner" operator="out" result="shadowOffsetOuter1"/>
+      <feGaussianBlur stdDeviation=".5" in="shadowOffsetOuter1" result="shadowBlurOuter1"/>
+      <feColorMatrix values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.196841033 0" in="shadowBlurOuter1"/>
+    </filter>
+    <linearGradient id="r" x1="50%" x2="50%" y1="0%" y2="100%">
+      <stop stop-color="#AEAEAE" offset="0%"/>
+      <stop stop-color="#C0C0C0" offset="100%"/>
+    </linearGradient>
+    <rect id="c" width="14" height="14" rx="3"/>
+    <filter id="q" width="200%" height="200%" x="-50%" y="-50%" filterUnits="objectBoundingBox">
+      <feGaussianBlur stdDeviation=".5" in="SourceAlpha" result="shadowBlurInner1"/>
+      <feOffset dy="1" in="shadowBlurInner1" result="shadowOffsetInner1"/>
+      <feComposite in="shadowOffsetInner1" in2="SourceAlpha" operator="arithmetic" k2="-1" k3="1" result="shadowInnerInner1"/>
+      <feColorMatrix values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.196246603 0" in="shadowInnerInner1"/>
+    </filter>
+    <mask id="s" width="14" height="14" x="0" y="0" fill="white">
+      <use xlink:href="#c"/>
+    </mask>
+    <rect id="d" width="14" height="14" rx="3"/>
+    <filter id="t" width="200%" height="200%" x="-50%" y="-50%" filterUnits="objectBoundingBox">
+      <feGaussianBlur stdDeviation=".5" in="SourceAlpha" result="shadowBlurInner1"/>
+      <feOffset dy="1" in="shadowBlurInner1" result="shadowOffsetInner1"/>
+      <feComposite in="shadowOffsetInner1" in2="SourceAlpha" operator="arithmetic" k2="-1" k3="1" result="shadowInnerInner1"/>
+      <feColorMatrix values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.196246603 0" in="shadowInnerInner1"/>
+    </filter>
+    <mask id="u" width="14" height="14" x="0" y="0" fill="white">
+      <use xlink:href="#d"/>
+    </mask>
+    <rect id="e" width="68" height="34" rx="3"/>
+    <mask id="v" width="68" height="34" x="0" y="0" fill="white">
+      <use xlink:href="#e"/>
+    </mask>
+    <rect id="f" width="131" height="34" rx="3"/>
+    <mask id="w" width="131" height="34" x="0" y="0" fill="white">
+      <use xlink:href="#f"/>
+    </mask>
+    <rect id="g" width="66" height="34" rx="3"/>
+    <mask id="x" width="66" height="34" x="0" y="0" fill="white">
+      <use xlink:href="#g"/>
+    </mask>
+    <rect id="h" width="66" height="34" rx="3"/>
+    <mask id="y" width="66" height="34" x="0" y="0" fill="white">
+      <use xlink:href="#h"/>
+    </mask>
+    <rect id="i" width="85" height="34" rx="3"/>
+    <mask id="z" width="85" height="34" x="0" y="0" fill="white">
+      <use xlink:href="#i"/>
+    </mask>
+  </defs>
+  <g fill="none" fill-rule="evenodd" transform="translate(0 1)">
+    <g transform="translate(189)">
+      <mask id="l" fill="white">
+        <use xlink:href="#a"/>
+      </mask>
+      <use fill="black" filter="url(#j)" xlink:href="#a"/>
+      <use fill="#FFFFFF" xlink:href="#a"/>
+      <use stroke="#D8D9DE" stroke-width="2" mask="url(#k)" xlink:href="#a"/>
+      <text fill="#46AEDA" mask="url(#l)" font-family="OpenSans-Semibold, Open Sans" font-size="14" font-weight="500">
+        <tspan x="12" y="27">Deep linking &amp; search in iOS 9 will change ev..</tspan>
+      </text>
+      <text fill="#262626" opacity=".5" mask="url(#l)" font-family="OpenSans, Open Sans" font-size="12">
+        <tspan x="12" y="48">The holy grail for any investor is to discover the next G...</tspan>
+      </text>
+      <text fill="#46AEDA" mask="url(#l)" font-family="OpenSans-Semibold, Open Sans" font-size="14" font-weight="500">
+        <tspan x="12" y="92">Next-level searching in Slack</tspan>
+      </text>
+      <text fill="#262626" opacity=".5" mask="url(#l)" font-family="OpenSans, Open Sans" font-size="12">
+        <tspan x="12" y="113">Day to day productivity is one thing. Having a long-ter...</tspan>
+      </text>
+      <text fill="#46AEDA" mask="url(#l)" font-family="OpenSans-Semibold, Open Sans" font-size="14" font-weight="500">
+        <tspan x="12" y="157">How Google Is Taking Search Outside the Box</tspan>
+      </text>
+      <text fill="#262626" opacity=".5" mask="url(#l)" font-family="OpenSans, Open Sans" font-size="12">
+        <tspan x="12" y="178">The I/O conference had virtual reality, photos and elec...</tspan>
+      </text>
+      <text fill="#46AEDA" mask="url(#l)" font-family="OpenSans-Semibold, Open Sans" font-size="14" font-weight="500">
+        <tspan x="12" y="222">A painstakingly crafted search for Hearthsto..</tspan>
+      </text>
+      <text fill="#262626" opacity=".5" mask="url(#l)" font-family="OpenSans, Open Sans" font-size="12">
+        <tspan x="12" y="243">Hearthstone’s popularity is stunning. Is it the worthy...</tspan>
+      </text>
+      <text fill="#46AEDA" mask="url(#l)" font-family="OpenSans-Semibold, Open Sans" font-size="14" font-weight="500">
+        <tspan x="12" y="287">A painstakingly crafted search for Hearthsto..</tspan>
+      </text>
+      <text fill="#262626" opacity=".5" mask="url(#l)" font-family="OpenSans, Open Sans" font-size="12">
+        <tspan x="12" y="308">Hearthstone’s popularity is stunning. Is it the worthy...</tspan>
+      </text>
+      <rect width="330" height="1" y="64" fill="#D8D8D8" opacity=".5" mask="url(#l)"/>
+      <rect width="330" height="1" y="129" fill="#D8D8D8" opacity=".5" mask="url(#l)"/>
+      <rect width="330" height="1" y="194" fill="#D8D8D8" opacity=".5" mask="url(#l)"/>
+      <rect width="330" height="1" y="259" fill="#D8D8D8" opacity=".5" mask="url(#l)"/>
     </g>
+    <g transform="translate(0 16)">
+      <text fill="#262626" opacity=".5" font-family="OpenSans, Open Sans" font-size="12">
+        <tspan x="0" y="13">TYPE</tspan>
+      </text>
+      <text fill="#262626" font-family="OpenSans, Open Sans" font-size="13">
+        <tspan x="20" y="43">Article</tspan>
+      </text>
+      <g transform="translate(0 32)">
+        <use fill="#3B99FC" stroke="url(#m)" mask="url(#n)" xlink:href="#b"/>
+        <use fill="black" filter="url(#o)" xlink:href="#p"/>
+        <use stroke="#FFFFFF" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" xlink:href="#p"/>
+      </g>
+      <g transform="translate(0 58)">
+        <use fill="#FFFFFF" xlink:href="#c"/>
+        <use fill="black" filter="url(#q)" xlink:href="#c"/>
+        <use stroke="url(#r)" mask="url(#s)" xlink:href="#c"/>
+      </g>
+      <g transform="translate(0 84)">
+        <use fill="#FFFFFF" xlink:href="#d"/>
+        <use fill="black" filter="url(#t)" xlink:href="#d"/>
+        <use stroke="url(#r)" mask="url(#u)" xlink:href="#d"/>
+      </g>
+      <text fill="#262626" font-family="OpenSans, Open Sans" font-size="13">
+        <tspan x="20" y="69">Video</tspan>
+      </text>
+      <text fill="#262626" font-family="OpenSans, Open Sans" font-size="13">
+        <tspan x="20" y="95">Categorie</tspan>
+      </text>
+      <text fill="#000000" fill-opacity=".5" font-family="OpenSans, Open Sans" font-size="11">
+        <tspan x="130.131" y="43">236</tspan>
+      </text>
+      <text fill="#000000" fill-opacity=".5" font-family="OpenSans, Open Sans" font-size="11">
+        <tspan x="136.421" y="69">48</tspan>
+      </text>
+      <text fill="#000000" fill-opacity=".5" font-family="OpenSans, Open Sans" font-size="11">
+        <tspan x="136.421" y="95">12</tspan>
+      </text>
+      <g transform="translate(0 129)">
+        <text fill="#262626" opacity=".5" font-family="OpenSans, Open Sans" font-size="12">
+          <tspan x="0" y="13">TAGS</tspan>
+        </text>
+        <g transform="translate(0 29)">
+          <use stroke="#F0F0F0" stroke-width="2" mask="url(#v)" xlink:href="#e"/>
+          <text fill="#262626" font-family="OpenSans, Open Sans" font-size="13">
+            <tspan x="12" y="22">Startup</tspan>
+          </text>
+        </g>
+        <g transform="translate(0 71)">
+          <use stroke="#F0F0F0" stroke-width="2" mask="url(#w)" xlink:href="#f"/>
+          <text fill="#262626" font-family="OpenSans, Open Sans" font-size="13">
+            <tspan x="12" y="22">Entrepreneurship</tspan>
+          </text>
+        </g>
+        <g transform="translate(0 113)">
+          <use stroke="#F0F0F0" stroke-width="2" mask="url(#x)" xlink:href="#g"/>
+          <text fill="#262626" font-family="OpenSans, Open Sans" font-size="13">
+            <tspan x="12" y="22">Search</tspan>
+          </text>
+        </g>
+        <g transform="translate(73 113)">
+          <use stroke="#F0F0F0" stroke-width="2" mask="url(#y)" xlink:href="#h"/>
+          <text fill="#262626" font-family="OpenSans, Open Sans" font-size="13">
+            <tspan x="12" y="22">Design</tspan>
+          </text>
+        </g>
+        <g transform="translate(75 29)">
+          <use stroke="#F0F0F0" stroke-width="2" mask="url(#z)" xlink:href="#i"/>
+          <text fill="#262626" font-family="OpenSans, Open Sans" font-size="13">
+            <tspan x="12" y="22">Marketing</tspan>
+          </text>
+        </g>
+      </g>
+    </g>
+  </g>
 </svg>
