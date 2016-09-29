@@ -704,7 +704,7 @@
   }
 
 
-   @include diagonal(-4deg, #FFF, 200px, 'true') {
+   @include diagonal(-4deg, #F3F4F7, 200px, 'true') {
     top: -120px;
     overflow: hidden;
     z-index: 99;
@@ -971,7 +971,6 @@
       padding: 35px;
       box-shadow: none;
       background: transparent;
-      text-align: center;
     }
 
     img {
@@ -998,6 +997,13 @@
       text-decoration: none;
       border-radius: 3px;
 
+      svg {
+        display: inline-block;
+        max-width: 26px;
+        @include v-center(relative)
+        margin: -2px 24px 0;
+      }
+
       span {
         line-height: 74px;
       }
@@ -1007,6 +1013,10 @@
 
         span {
           color: #fff;
+        }
+
+        svg path{
+          fill: #fff !important
         }
       }
     }
