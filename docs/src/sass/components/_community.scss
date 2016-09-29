@@ -280,6 +280,12 @@
   .content-article {
     display: block;
     max-width: 400px;
+
+    @media ( max-width: $bp-small ) {
+      position: relative;
+      float: none;
+      margin: auto;
+    }
   }
 
   .flex {
@@ -288,6 +294,27 @@
 
     @media (max-width: $bp-small) {
       display: block;
+    }
+  }
+
+
+  &.realtime-search {
+    .cm--container {
+      transform: translateX(-50px);
+
+      @media ( max-width: $bp-medium ) {
+        transform: none
+      }
+    }
+  }
+
+  &.relevant-search-result {
+    .cm--container {
+      transform: translateX(-80px);
+
+      @media ( max-width: $bp-medium ) {
+        transform: none
+      }
     }
   }
 }
