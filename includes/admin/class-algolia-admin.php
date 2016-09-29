@@ -70,11 +70,24 @@ class Algolia_Admin {
 		$url = admin_url( 'admin-post.php', $scheme );
 
 		$request_args = array(
-			'timeout'     => 60,
-			'blocking'    => true,
-			'redirection' => 0,
-			'sslverify'   => apply_filters( 'https_local_ssl_verify', true ),
+			'blocking'    		=> true,
+			'redirection' 		=> 0,
+			'algolia_loopback' 	=> true,
+			'sslverify'   		=> apply_filters( 'https_local_ssl_verify', true ),
 		);
+
+		add_filter( 'use_curl_transport', function( $flag, array $args ) {
+			if( ! isset( $args['algolia_loopback'] ) || $args['algolia_loopback'] !== true ) {
+				// Only alter Algolia loopback calls.
+				return $flag;
+			}
+			
+			$version = curl_version();
+			
+			// Do not use cURL for loopback if version is lower than 7.34 because it does not support
+			// TLS > 1.0 nor SSLv2
+			return version_compare( $version['version'], '7.34', '>' );
+		}, 10, 2 );
 
 		$result = wp_remote_post( $url, $request_args );
 		if( ! $result instanceof WP_Error && $result['response']['code'] === 200 ) {
