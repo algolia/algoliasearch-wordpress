@@ -471,6 +471,9 @@
     font-size: 14px;
     max-width: 360px;
     margin-top: 8px;
+        width: 100%;
+    float: none;
+    margin: auto;
   }
 }
 
@@ -482,6 +485,10 @@
   background-image: linear-gradient(102deg, #3475c7, #4e006a);
   z-index: -1;
   color: #fff;
+
+  @media (min-width: $bp-huge) {
+    padding: 10em 0;
+  }
 
   h2, h3, a {
     color: #fff
@@ -562,10 +569,15 @@
   .diagonal-white-br {
     z-index: -1;
 
-    @include diagonal(-4deg, #fff, 200px, 'true') {
+    @include diagonal(-4deg, #fff, 260px, 'true') {
       top: -140px;
       overflow: hidden;
       z-index: 99;
+
+
+      @media (min-width: $bp-huge) {
+        top: -200px;
+      }
     }
   }
 }
@@ -620,6 +632,10 @@
   position: relative;
   width: 100%;
   padding-bottom: 0em;
+
+  @media (min-width: $bp-huge) {
+    padding: 8em 0 0;
+  }
 
   @media (max-width: $bp-small) {
     padding-bottom: 4em;
@@ -704,10 +720,14 @@
   }
 
 
-   @include diagonal(-4deg, #F3F4F7, 200px, 'true') {
+   @include diagonal(-4deg, #F3F4F7, 220px, 'true') {
     top: -120px;
     overflow: hidden;
     z-index: 99;
+
+    @media (min-width: $bp-huge) {
+      top: -100px;
+    }
   }
 
   h2,h3 {
@@ -730,10 +750,16 @@
   transform: skewY(2deg);
 
 
+
   @include diagonal(-4deg, #1d262f, 300px, 'true') {
     top: -220px;
     overflow: hidden;
     z-index: 99;
+
+
+    @media (min-width: $bp-huge) {
+      top: -200px;
+    }
   }
 
 
@@ -754,8 +780,11 @@
   .btn {
     margin: auto;
     position: relative;
-    max-width: 180px;
+    max-width: 260px;
+    width: 100%;
     top: 28px;
+    float: none;
+    left: calc(50% - 130px);
   }
 }
 
@@ -771,6 +800,11 @@
   margin-bottom: -160px;
   overflow: hidden;
   position: relative;
+
+  @media (min-width: $bp-huge) {
+    top: -170px;
+    margin-bottom: -170px;
+  }
 
   @media (max-width: $bp-small){
     background: #fff
@@ -808,6 +842,11 @@
       right: 2em;
       top: 50%;
       width: 84px;
+
+      @media (min-width: $bp-huge) {
+        right: 20%;
+        width: 120px;
+      }
     }
     @media (max-width: $bp-small){
       display: none;
