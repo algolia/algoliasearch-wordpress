@@ -471,7 +471,7 @@
     font-size: 14px;
     max-width: 360px;
     margin-top: 8px;
-        width: 100%;
+    width: 100%;
     float: none;
     margin: auto;
   }
@@ -815,8 +815,6 @@
     text-align: center;
     padding-top: 50px;
 
-
-
     &:before {
       content: '';
       display: block;
@@ -846,6 +844,14 @@
       @media (min-width: $bp-huge) {
         right: 20%;
         width: 120px;
+      }
+       @media (max-width: $bp-big) {
+        right: 20%;
+        top: 10%;
+      }
+      @media (max-width: $bp-medium + 200) {
+        display: none;
+
       }
     }
     @media (max-width: $bp-small){
