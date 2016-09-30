@@ -177,4 +177,12 @@ function my_theme_dequeue_styles() {
 add_action( 'wp_print_styles', 'my_theme_dequeue_styles', 100 );
 ```
 
+## Disable autocomplete on certain search inputs
+
+By default, if the autocomplete feature is turned on, we will attach an Algolia dropdown to every search input of your website matching the jQuery selector `input[name='s']`.
+
+Note however that we also exclude inputs that have an associated `no-autocomplete` class.
+
+So to easily disable the Algolia autocomplete dropdown for a given search input, simply add the `no-autocomplete` class to it.
+
 
