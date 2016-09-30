@@ -12,6 +12,9 @@ Search by Algolia is the smartest way to improve search on your site. Autocomple
 
 The plugin provides relevant search results in milliseconds, ensuring that your users can find your best posts at the speed of thought. It also comes with native typo-tolerance and is language-agnostic, so that every WordPress user, no matter where they are, can benefit from it.
 
+= Getting started guide =
+Once you have installed the plugin, you can follow the step by step guide provided here: https://community.algolia.com/wordpress/configuration.html
+
 = Relevance =
 Algolia enhances your search functionality with a completely customizable search experience which can be seamlessly integrated into your Wordpress theme. It lets you create a find-as-you-type experience or an auto-complete dropdown menu, which provides relevant results from the first keystroke. Our extension also automatically synchronizes data (posts, taxonomies etc.) in real-time, making sure that any updates to your site are available as soon as they are made.
 
@@ -55,13 +58,48 @@ It will also give you guidance about where to ask support if your question is no
 
 == Installation ==
 
-1. Upload the plugin files to the `/wp-content/plugins/algolia` directory, or install the plugin through the WordPress plugins screen directly.
-1. Activate the Algolia Search plugin through the 'Plugins' screen in WordPress
-1. If you don't have any Algolia account, go get one for free here: [Algolia sign-up page](https://www.algolia.com/users/sign_up?utm_source=WordPress&utm_medium=extension&utm_campaign=readme)
-1. From here you can follow the on-boarding tour to get your search up and running
+= Minimum Requirements =
+
+* PHP version 5.3 or greater (PHP 5.6 or greater is recommended)
+* MySQL version 5.0 or greater (MySQL 5.6 or greater is recommended)
+* Some payment gateways require fsockopen support (for IPN access)
+* Requires WordPress 3.7+ (WordPress 4.4+ is recommended because we will drop support below it in upcoming releases)
+
+Visit the [Search by Algolia server requirements documentation](https://community.algolia.com/wordpress/installation.html) for a detailed list of server requirements.
+
+= Automatic installation =
+
+Automatic installation is the easiest option as WordPress handles the file transfers itself and you don’t need to leave your web browser. To do an automatic install of Search by Algolia, log in to your WordPress dashboard, navigate to the Plugins menu and click Add New.
+
+In the search field type “Algolia” and click Search Plugins. Once you’ve found our search plugin you can view details about it such as the point release, rating and description. Most importantly of course, you can install it by simply clicking “Install Now”.
+
+= Manual installation =
+
+The manual installation method involves downloading our search plugin and uploading it to your webserver via your favourite FTP application. The WordPress codex contains [instructions on how to do this here](https://codex.wordpress.org/Managing_Plugins#Manual_Plugin_Installation).
+
+= Updating =
+
+Automatic updates should work like a charm; as always though, ensure you backup your site just in case.
+
+== Screenshots ==
+
+1. Algolia Settings.
+2. Indexing configuration.
+3. Instant-search results configuration.
+4. Autocomplete dropdown configuration.
+5. Autocomplete dropdown example.
+6. Instant-search results page example.
 
 == Changelog ==
 
-As we believe in the Don't Repeat Yourself principle, checkout the changelog on the GitHub repository!
+You can access older changes [here](https://github.com/algolia/algoliasearch-wordpress/blob/master/CHANGELOG.md)
 
-[CHANGELOG](https://github.com/algolia/algoliasearch-wordpress/blob/master/CHANGELOG.md)
+== Upgrade Notice ==
+
+= 1.2.0 =
+
+We fixed some issues in the `templates/autocomplete.php` and `templates/instantsearch.php` files.
+
+If you have copied the templates folder in your theme folder, you should make sure you manually patch the following fixes:
+
+- https://github.com/algolia/algoliasearch-wordpress/pull/305

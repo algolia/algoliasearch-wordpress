@@ -19,7 +19,8 @@ To contribute, simply edit the markdown formatted files located in `docs/src/*.m
 2. Update version number in [package.json](https://github.com/algolia/algoliasearch-wordpress/blob/master/package.json)
 3. Update version number in [docs/index.js](https://github.com/algolia/algoliasearch-wordpress/blob/master/docs/index.js#L25)
 4. Update version number (x2) in [algolia.php](https://github.com/algolia/algoliasearch-wordpress/blob/master/algolia.php)
-5. Create a PR and merge it once it has been re-checked
-6. Create a release on GitHub
-7. Run `$ bin/build-zip.sh` and attach the `dist/algolia.zip` to the release
+5. Update changelog in [README.txt](https://github.com/algolia/algoliasearch-wordpress/blob/master/README.txt)
+6. Create a PR and merge it once it has been re-checked
+7. Create a release on GitHub
 8. Publish the docs `cd docs && make release`
+9. Switch to `svn` branch and run `bin/publish.sh`
