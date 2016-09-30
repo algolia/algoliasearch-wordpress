@@ -6,6 +6,8 @@ class Algolia_Logger
 	const LEVEL_OPERATION = 'operation';
 	const LEVEL_ERROR = 'error';
 
+	const DEFAULT_MAX_LOG_ENTRIES = 50;
+
 	public static $post_type = 'algolia_log';
 	
 	private $logging_enabled = false;
@@ -52,6 +54,8 @@ class Algolia_Logger
 			'post_type'    => self::$post_type,
 			'meta_input'   => array( 'algolia_log_level' => $level ),
 		) );
+
+		$this->clear_old_logs();
 	}
 
 	/**
@@ -61,7 +65,7 @@ class Algolia_Logger
 		$query = new WP_Query( array(
 			'post_type'      => self::$post_type,
 			'post_status'    => 'private',
-			'nopaging'		     => true,
+			'nopaging'		 => true,
 			'posts_per_page' => -1,
 			'fields'         => 'ids',
 		) );
@@ -69,6 +73,42 @@ class Algolia_Logger
 		foreach ( $query->posts as $log_id ) {
 			wp_delete_post( (int) $log_id, true );
 		}
+	}
+
+	/**
+	 * Deletes oldest log entries until we have less than the ALGOLIA_MAX_LOG_ENTRIES.
+	 * ALGOLIA_MAX_LOG_ENTRIES defaults to 50.
+	 *
+	 * Deletes the 5 oldest log entries which allows big existing log lists to catch-up slowly.
+	 */
+	public function clear_old_logs() {
+		$max_entries = defined( 'ALGOLIA_MAX_LOG_ENTRIES' ) ? (int) ALGOLIA_MAX_LOG_ENTRIES : self::DEFAULT_MAX_LOG_ENTRIES;
+
+		if ( $this->get_log_entries_count() <= $max_entries ) {
+			return;
+		}
+
+		$query = new WP_Query( array(
+			'post_type'      => self::$post_type,
+			'post_status'    => 'private',
+			'orderby'		 => 'ID',
+			'order'			 => 'ASC',
+			'posts_per_page' => 5, // We delete the 5 oldest log entries.
+			'fields'         => 'ids',
+		) );
+
+		foreach ( $query->posts as $log_id ) {
+			wp_delete_post( (int) $log_id, true );
+		}
+	}
+
+	/**
+	 * @return int
+	 */
+	public function get_log_entries_count() {
+		$logs_count = wp_count_posts( self::$post_type );
+
+		return (int) $logs_count->private;
 	}
 
 	/**
@@ -85,8 +125,8 @@ class Algolia_Logger
 			'post_type'      => self::$post_type,
 			'post_status'    => 'private',
 			'posts_per_page' => $logs_per_page,
-			'orderby'		      => 'ID',
-			'paged'			       => absint( $paged ),
+			'orderby'		 => 'ID',
+			'paged'			 => absint( $paged ),
 		);
 
 		if ( null !== $level && in_array( $level, $this->get_log_levels(), true ) ) {
