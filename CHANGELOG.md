@@ -1,4 +1,5 @@
 # 1.2.0
+- Fix broken pagination on instant search page
 - Fix conflicts with plugins also using the PHP `simple_html_dom` library
 - Limit the maximum number of log entries to 50 by default
 - Fix an issue where empty errors would get logged during queue processing
