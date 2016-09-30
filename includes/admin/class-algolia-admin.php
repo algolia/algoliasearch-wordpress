@@ -72,7 +72,6 @@ class Algolia_Admin {
 		$request_args = array(
 			'timeout'     => 60,
 			'blocking'    => true,
-			'redirection' => 0,
 			'sslverify'   => apply_filters( 'https_local_ssl_verify', true ),
 		);
 

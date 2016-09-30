@@ -137,7 +137,6 @@ class Algolia_Task_Queue_Loopback_Async extends WP_Async_Task
 			$request_args = array(
 				'timeout'   	=> $this->timeout,
 				'blocking'  	=> false,
-				'redirection' 	=> 0,
 				'sslverify' 	=> apply_filters( 'https_local_ssl_verify', true ),
 				'body'      	=> $this->_body_data,
 				'headers'   	=> array(
@@ -150,7 +149,7 @@ class Algolia_Task_Queue_Loopback_Async extends WP_Async_Task
 
 			$result = wp_remote_post( $url, $request_args );
 
-			if ( ! $result instanceof WP_Error && $result['response']['code'] === 200 ) {
+			if ( ! $result instanceof WP_Error ) {
 				// We only log errors, so we are done here.
 				return;
 			}
