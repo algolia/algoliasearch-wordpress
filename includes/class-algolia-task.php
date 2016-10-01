@@ -79,8 +79,10 @@ class Algolia_Task
 	 */
 	public static function get_queued_tasks_count() {
 		// Avoid cache because we need the total to always be up to date.
-		$cache_key = _count_posts_cache_key( self::$post_type );
-		wp_cache_delete( $cache_key, 'counts' );
+		if ( wp_using_ext_object_cache() ) {
+			$cache_key = _count_posts_cache_key( self::$post_type );
+			wp_cache_delete( $cache_key, 'counts' );
+		}
 		
 		$tasks_count = wp_count_posts( self::$post_type );
 

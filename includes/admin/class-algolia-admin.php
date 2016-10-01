@@ -15,6 +15,8 @@ class Algolia_Admin {
 
 		add_action( 'admin_enqueue_scripts', array( $this, 'enqueue_styles' ) );
 		add_action( 'admin_enqueue_scripts', array( $this, 'enqueue_scripts' ) );
+		
+		new Algolia_Cache_Helper();
 
 		$api = $plugin->get_api();
 		if ( $api->is_reachable() ) {

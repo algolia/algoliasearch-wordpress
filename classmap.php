@@ -43,6 +43,7 @@ require_once ALGOLIA_PATH . 'includes/watchers/class-algolia-user-changes-watche
 
 if ( is_admin() ) {
 	require_once ALGOLIA_PATH . 'includes/admin/class-algolia-admin.php';
+	require_once ALGOLIA_PATH . 'includes/admin/class-algolia-cache-helper.php';
 	require_once ALGOLIA_PATH . 'includes/admin/class-algolia-admin-page-autocomplete.php';
 	require_once ALGOLIA_PATH . 'includes/admin/class-algolia-admin-page-indexing.php';
 	require_once ALGOLIA_PATH . 'includes/admin/class-algolia-admin-page-logs.php';

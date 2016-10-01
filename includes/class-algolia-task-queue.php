@@ -130,7 +130,7 @@ final class Algolia_Task_Queue
 			$task_data['max_num_pages'] = $max_num_pages ? (int) $max_num_pages : 1 ;
 		}
 		
-		set_transient( 'algolia_running_task', $task_data, 10);
+		set_transient( 'algolia_running_task', $task_data, 10 );
 	}
 
 	/**
@@ -160,6 +160,7 @@ final class Algolia_Task_Queue
 	 * @return bool
 	 */
 	public function was_recently_running() {
+
 		return (bool) get_transient( 'algolia_queue_recently_running' );
 	}
 
