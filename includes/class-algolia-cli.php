@@ -40,7 +40,7 @@ class Algolia_CLI extends \WP_CLI_Command {
 		\WP_CLI::success( "About to process a total of $count task(s)." );
 
 		$notify = \WP_CLI\Utils\make_progress_bar( "Processing $count task(s)", $count );
-		$queue->run( $dispatcher );
+		
 		do {
 			$queue->run( $dispatcher );
 
