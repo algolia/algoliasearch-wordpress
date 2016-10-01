@@ -9,7 +9,8 @@ class Algolia_Cache_Helper
 		'algolia_running_task',
 		'algolia_queue_running',
 		'algolia_queue_recently_running',
-		'algolia_recently_failed_task'
+		'algolia_recently_failed_task',
+		'algolia_stop_queue'
 	);
 	
 	public function __construct() {
@@ -28,14 +29,14 @@ class Algolia_Cache_Helper
 		global $_wp_using_ext_object_cache;
 		$this->was_using_ext_object_cache = $_wp_using_ext_object_cache;
 		$_wp_using_ext_object_cache = false;
-		
+
 		return $value;
 	}
 
 	function enable_cache( $value = null ) {
 		global $_wp_using_ext_object_cache;
 		$_wp_using_ext_object_cache = $this->was_using_ext_object_cache;
-		
+
 		return $value;
 	}
 }

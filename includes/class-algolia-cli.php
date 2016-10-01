@@ -42,7 +42,14 @@ class Algolia_CLI extends \WP_CLI_Command {
 		$notify = \WP_CLI\Utils\make_progress_bar( "Processing $count task(s)", $count );
 		
 		do {
-			$queue->run( $dispatcher );
+			$success = $queue->run( $dispatcher );
+
+			if ( false === $success ) {
+				$notify->finish();
+				\WP_CLI::error( "The queue processing was aborted.");
+				
+				return;
+			}
 
 			$newCount = $queue->get_queued_tasks_count();
 
