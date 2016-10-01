@@ -1,6 +1,6 @@
 ---
-title: Configuration
-description: Now that your plugin is installed, here is how to configure it.
+title: Getting Started
+description: Step by step guide to setup the Search by Algolia plugin for WordPress.
 layout: page.html
 ---
 ## Algolia Credentials
