@@ -56,6 +56,13 @@ final class Algolia_Task_Queue
 		if ( $this->is_running() ) {
 			return $this->logger->log( sprintf( 'Queue is already being handled.' ) );
 		}
+		
+		$should_stop = get_transient( 'algolia_stop_queue' );
+		if ( $should_stop ) {
+			delete_transient( 'algolia_stop_queue' );
+			$this->logger->log( 'Queue was manually stopped' );
+			return;
+		}
 
 		$task = Algolia_Task::get_first();
 

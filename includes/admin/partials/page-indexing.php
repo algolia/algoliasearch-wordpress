@@ -31,6 +31,9 @@
 							<span class="run-queue-link">
 								<a href="#" class="page-title-action algolia-run-queue"><?php echo __( 'Process queue', 'algolia' ); ?></a>
 							</span>
+							<span class="stop-queue-link">
+								<a href="#" class="page-title-action algolia-stop-queue"><?php echo __( 'Stop queue processing', 'algolia' ); ?></a>
+							</span>
 					</td>
 				</tr>
 				<tr>

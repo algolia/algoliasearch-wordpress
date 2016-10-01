@@ -14,6 +14,7 @@
 		var $statusRunning = $(".status-running");
 		var $statusIdle = $(".status-idle");
 		var $runQueueLink = $(".run-queue-link");
+		var $stopQueueLink = $(".stop-queue-link");
 		var $currentTask = $(".current-task");
 		var $currentTaskName = $(".current-task-name");
 		var $taskFailed = $(".failed-task");
@@ -48,9 +49,11 @@
 				$statusIdle.hide();
 				$deleteTasksBtn.hide();
 				$runQueueLink.hide();
+				$stopQueueLink.show();
 			} else {
 				$statusRunning.hide();
 				$statusIdle.show();
+				$stopQueueLink.hide();
 
 				if(queueStatus.tasks > 0) {
 					$runQueueLink.show();
@@ -80,7 +83,13 @@
 			$.post("admin-ajax.php", {
 				action: "algolia_run_queue"
 			});
-			refreshQueueStatus();
+		});
+
+		$stopQueueLink.click(function(e) {
+			e.preventDefault();
+			$.post("admin-ajax.php", {
+				action: "algolia_stop_queue"
+			});
 		});
 
 		refreshQueueStatus();

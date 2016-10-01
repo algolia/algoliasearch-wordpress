@@ -42,6 +42,7 @@ class Algolia_Admin_Page_Indexing
 		add_action( 'update_option_algolia_synced_indices_ids', array( $this, 'synced_indices_ids_updated' ), 10, 2 );
 
 		add_action( 'wp_ajax_algolia_run_queue', array( $this, 'run_queue' ) );
+		add_action( 'wp_ajax_algolia_stop_queue', array( $this, 'stop_queue' ) );
 		add_action( 'wp_ajax_algolia_queue_status', array( $this, 'queue_status' ) );
 
 		add_action( 'admin_post_algolia_re_index_all', array( $this, 're_index_all' ) );
@@ -80,6 +81,11 @@ class Algolia_Admin_Page_Indexing
 
 	public function run_queue() {
 		do_action( 'algolia_process_queue' );
+		wp_die();
+	}
+
+	public function stop_queue() {
+		set_transient( 'algolia_stop_queue', true );
 		wp_die();
 	}
 

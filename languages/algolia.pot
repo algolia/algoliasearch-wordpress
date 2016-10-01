@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: algolia\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-10-01 11:21+0200\n"
+"POT-Creation-Date: 2016-10-01 11:39+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -68,75 +68,75 @@ msgid ""
 "search bar(s)."
 msgstr ""
 
-#: includes/admin/class-algolia-admin-page-indexing.php:116
+#: includes/admin/class-algolia-admin-page-indexing.php:122
 msgid "All indices were queued for re-indexing."
 msgstr ""
 
-#: includes/admin/class-algolia-admin-page-indexing.php:122
+#: includes/admin/class-algolia-admin-page-indexing.php:128
 msgid "All pending tasks were deleted."
 msgstr ""
 
-#: includes/admin/class-algolia-admin-page-indexing.php:129
-#: includes/admin/class-algolia-admin-page-indexing.php:130
+#: includes/admin/class-algolia-admin-page-indexing.php:135
+#: includes/admin/class-algolia-admin-page-indexing.php:136
 msgid "Indexing"
 msgstr ""
 
-#: includes/admin/class-algolia-admin-page-indexing.php:140
+#: includes/admin/class-algolia-admin-page-indexing.php:146
 msgid "Content Types"
 msgstr ""
 
-#: includes/admin/class-algolia-admin-page-indexing.php:147
+#: includes/admin/class-algolia-admin-page-indexing.php:153
 msgid "Index name prefix"
 msgstr ""
 
-#: includes/admin/class-algolia-admin-page-indexing.php:155
+#: includes/admin/class-algolia-admin-page-indexing.php:161
 msgid "Indices"
 msgstr ""
 
-#: includes/admin/class-algolia-admin-page-indexing.php:185
+#: includes/admin/class-algolia-admin-page-indexing.php:191
 msgid ""
 "Each Content type is pushed to its own Algolia index. Configure here the "
 "list of indices you want to use."
 msgstr ""
 
-#: includes/admin/class-algolia-admin-page-indexing.php:196
+#: includes/admin/class-algolia-admin-page-indexing.php:202
 msgid "This prefix will be added to your index names."
 msgstr ""
 
-#: includes/admin/class-algolia-admin-page-indexing.php:233
+#: includes/admin/class-algolia-admin-page-indexing.php:239
 msgid ""
 "Indices prefix can only contain alphanumeric characters and underscores."
 msgstr ""
 
-#: includes/admin/class-algolia-admin-page-indexing.php:289
+#: includes/admin/class-algolia-admin-page-indexing.php:295
 #, php-format
 msgid "Queued re-indexing of: %s."
 msgstr ""
 
-#: includes/admin/class-algolia-admin-page-indexing.php:292
+#: includes/admin/class-algolia-admin-page-indexing.php:298
 #, php-format
 msgid "Queued de-indexing of: %s."
 msgstr ""
 
-#: includes/admin/class-algolia-admin-page-indexing.php:323
+#: includes/admin/class-algolia-admin-page-indexing.php:329
 msgid ""
 "Your new index prefix has correctly been taken into account. If you had "
 "indexed data with the previous index prefix, the indices will be renamed to "
 "reflect the change."
 msgstr ""
 
-#: includes/admin/class-algolia-admin-page-indexing.php:355
+#: includes/admin/class-algolia-admin-page-indexing.php:361
 #, php-format
 msgid ""
 "You have no indexed content in Algolia. Please index some content on the <a "
 "href=\"%s\">Algolia: Indexing page</a>."
 msgstr ""
 
-#: includes/admin/class-algolia-admin-page-indexing.php:364
+#: includes/admin/class-algolia-admin-page-indexing.php:370
 msgid "Configure here the content types you want to push to Algolia."
 msgstr ""
 
-#: includes/admin/class-algolia-admin-page-indexing.php:365
+#: includes/admin/class-algolia-admin-page-indexing.php:371
 msgid ""
 "Changing configuration will automatically schedule a new indexation task."
 msgstr ""
@@ -402,19 +402,23 @@ msgstr ""
 msgid "Process queue"
 msgstr ""
 
-#: includes/admin/partials/page-indexing.php:37
+#: includes/admin/partials/page-indexing.php:35
+msgid "Stop queue processing"
+msgstr ""
+
+#: includes/admin/partials/page-indexing.php:40
 msgid "Pending tasks"
 msgstr ""
 
-#: includes/admin/partials/page-indexing.php:42
+#: includes/admin/partials/page-indexing.php:45
 msgid "Delete all pending tasks"
 msgstr ""
 
-#: includes/admin/partials/page-indexing.php:47
+#: includes/admin/partials/page-indexing.php:50
 msgid "Current task"
 msgstr ""
 
-#: includes/admin/partials/page-indexing.php:56
+#: includes/admin/partials/page-indexing.php:59
 msgid ""
 "One of your recent tasks failed. Please check the logs for more information."
 msgstr ""
