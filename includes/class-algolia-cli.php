@@ -31,6 +31,13 @@ class Algolia_CLI extends \WP_CLI_Command {
 
 		if ( 0 === $count ) {
 			\WP_CLI::success( 'No tasks to process.');
+			
+			return;
+		}
+
+		if ( $queue->is_running() ) {
+			\WP_CLI::error( 'Queue is already running.');
+
 			return;
 		}
 
@@ -47,7 +54,7 @@ class Algolia_CLI extends \WP_CLI_Command {
 			if ( false === $success ) {
 				$notify->finish();
 				\WP_CLI::error( "The queue processing was aborted.");
-				
+
 				return;
 			}
 
