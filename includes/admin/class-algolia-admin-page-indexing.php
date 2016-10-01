@@ -354,6 +354,10 @@ class Algolia_Admin_Page_Indexing
 	public function display_errors() {
 		settings_errors( $this->option_group );
 
+		if ( defined( 'ALGOLIA_HIDE_HELP_NOTICES' ) && ALGOLIA_HIDE_HELP_NOTICES ) {
+			return;
+		}
+
 		$indices = $this->plugin->get_indices( array( 'enabled' => true ) );
 
 		if ( empty( $indices ) ) {
