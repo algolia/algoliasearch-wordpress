@@ -81,3 +81,5 @@ Here is the list of all available Filters.
 |algolia_indexing_batch_size|int $batch_size (default: 50)
 |algolia\_{$index_id}_indexing_batch_size|int $batch_size
 |algolia_logs_per_page|int $logs_per_page
+|algolia_templates_path|string $path (default: 'algolia/')
+|algolia_template_locations|array $locations
