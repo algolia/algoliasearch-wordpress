@@ -158,7 +158,15 @@ class Algolia_Template_Loader {
 	 */
 	private function locate_template( $file ) {
 		$locations[] = $file;
-		$locations[] = $this->plugin->get_templates_path() . $file;
+
+		$templates_path = $this->plugin->get_templates_path();
+		if ( 'algolia/' !== $templates_path ) {
+			$locations[] = 'algolia/' . $file;
+		}
+		
+		$locations[] = $templates_path . $file;
+
+		$locations = (array) apply_filters( 'algolia_template_locations', $locations, $file );
 
 		$template = locate_template( array_unique( $locations ) );
 
