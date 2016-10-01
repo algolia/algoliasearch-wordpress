@@ -121,6 +121,10 @@ class Algolia_Admin_Page_Native_Search
 	public function display_errors() {
 		settings_errors( $this->option_group );
 
+		if ( defined( 'ALGOLIA_HIDE_HELP_NOTICES' ) && ALGOLIA_HIDE_HELP_NOTICES ) {
+			return;
+		}
+
 		$settings = $this->plugin->get_settings();
 
 		if ( ! $settings->should_override_search_in_backend() && ! $settings->should_override_search_with_instantsearch() ) {
