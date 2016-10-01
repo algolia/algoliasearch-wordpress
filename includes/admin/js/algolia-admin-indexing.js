@@ -14,9 +14,11 @@
 		var $statusRunning = $(".status-running");
 		var $statusIdle = $(".status-idle");
 		var $runQueueLink = $(".run-queue-link");
+		var $stopQueueLink = $(".stop-queue-link");
 		var $currentTask = $(".current-task");
 		var $currentTaskName = $(".current-task-name");
 		var $taskFailed = $(".failed-task");
+		var $deleteTasksBtn = $('#delete-pending-tasks');
 
 		function refreshQueueStatus() {
 			$.post("admin-ajax.php", {
@@ -24,6 +26,7 @@
 			}, function(data) {
 				queueStatus = data;
 				updateDisplay();
+				setTimeout(refreshQueueStatus, 3000);
 			});
 		}
 
@@ -41,17 +44,23 @@
 			}
 			$currentTaskName.html(taskName);
 
-			if(queueStatus.running) {
+			if(queueStatus.running && queueStatus.tasks > 0) {
 				$statusRunning.show();
 				$statusIdle.hide();
+				$deleteTasksBtn.hide();
+				$runQueueLink.hide();
+				$stopQueueLink.show();
 			} else {
 				$statusRunning.hide();
 				$statusIdle.show();
+				$stopQueueLink.hide();
 
 				if(queueStatus.tasks > 0) {
 					$runQueueLink.show();
+					$deleteTasksBtn.show();
 				} else {
 					$runQueueLink.hide();
+					$deleteTasksBtn.hide();
 				}
 			}
 
@@ -69,17 +78,20 @@
 
 		}
 
-		$(".algolia-run-queue").click(function(e) {
+		$runQueueLink.click(function(e) {
 			e.preventDefault();
 			$.post("admin-ajax.php", {
 				action: "algolia_run_queue"
 			});
-			refreshQueueStatus();
+		});
+
+		$stopQueueLink.click(function(e) {
+			e.preventDefault();
+			$.post("admin-ajax.php", {
+				action: "algolia_stop_queue"
+			});
 		});
 
 		refreshQueueStatus();
-
-		// Refresh every 3 seconds.
-		setInterval(refreshQueueStatus, 3000);
 	});
 })( jQuery );

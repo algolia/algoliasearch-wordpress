@@ -42,9 +42,11 @@ class Algolia_Admin_Page_Indexing
 		add_action( 'update_option_algolia_synced_indices_ids', array( $this, 'synced_indices_ids_updated' ), 10, 2 );
 
 		add_action( 'wp_ajax_algolia_run_queue', array( $this, 'run_queue' ) );
+		add_action( 'wp_ajax_algolia_stop_queue', array( $this, 'stop_queue' ) );
 		add_action( 'wp_ajax_algolia_queue_status', array( $this, 'queue_status' ) );
 
 		add_action( 'admin_post_algolia_re_index_all', array( $this, 're_index_all' ) );
+		add_action( 'admin_post_algolia_delete_pending_tasks', array( $this, 'delete_pending_tasks' ) );
 
 		if ( get_transient( 'algolia_indices_notice' ) ) {
 			add_action( 'admin_notices', array( $this, 'post_types_notice' ) );
@@ -57,6 +59,11 @@ class Algolia_Admin_Page_Indexing
 		if ( get_transient( 'algolia_all_re_indexed' ) ) {
 			delete_transient( 'algolia_all_re_indexed' );
 			add_action( 'admin_notices', array( $this, 'all_re_indexed_notice' ) );
+		}
+
+		if ( get_transient( 'algolia_deleted_pending_tasks' ) ) {
+			delete_transient( 'algolia_deleted_pending_tasks' );
+			add_action( 'admin_notices', array( $this, 'deleted_pending_tasks_notice' ) );
 		}
 		$this->plugin = $plugin;
 	}
@@ -74,6 +81,11 @@ class Algolia_Admin_Page_Indexing
 
 	public function run_queue() {
 		do_action( 'algolia_process_queue' );
+		wp_die();
+	}
+
+	public function stop_queue() {
+		set_transient( 'algolia_stop_queue', true );
 		wp_die();
 	}
 
@@ -98,9 +110,22 @@ class Algolia_Admin_Page_Indexing
 		wp_redirect( admin_url( 'admin.php?page=' . $this->slug ) );
 	}
 
+	public function delete_pending_tasks() {
+		Algolia_Task::delete_all_tasks();
+
+		set_transient( 'algolia_deleted_pending_tasks', true );
+		wp_redirect( admin_url( 'admin.php?page=' . $this->slug ) );
+	}
+
 	public function all_re_indexed_notice() {
 		echo '<div class="updated notice">
 			      <p>' . esc_html__( 'All indices were queued for re-indexing.', 'algolia' ) . '</p>
+			  </div>';
+	}
+
+	public function deleted_pending_tasks_notice() {
+		echo '<div class="updated notice">
+			      <p>' . esc_html__( 'All pending tasks were deleted.', 'algolia' ) . '</p>
 			  </div>';
 	}
 

@@ -49,7 +49,11 @@ form .radio-info {
 }
 
 /* Indexing page */
-.failed-task {
+.failed-task, .status-running, .status-idle, #delete-pending-tasks, .current-task, .run-queue-link, .stop-queue-link {
+    display: none;
+}
+
+#delete-pending-tasks {
     display: none;
 }
 

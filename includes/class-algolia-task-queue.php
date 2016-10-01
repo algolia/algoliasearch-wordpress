@@ -56,6 +56,13 @@ final class Algolia_Task_Queue
 		if ( $this->is_running() ) {
 			return $this->logger->log( sprintf( 'Queue is already being handled.' ) );
 		}
+		
+		$should_stop = get_transient( 'algolia_stop_queue' );
+		if ( $should_stop ) {
+			delete_transient( 'algolia_stop_queue' );
+			$this->logger->log( 'Queue was manually stopped' );
+			return;
+		}
 
 		$task = Algolia_Task::get_first();
 
@@ -89,8 +96,13 @@ final class Algolia_Task_Queue
 				$this->logger->log_error( sprintf( 'An error occurred while handling task %s. It is gonna be retried.', $task->get_name() ), array( 'task' => $task->get_data(), 'exception' => $exception ) );
 			} else {
 				// Consider the task un-processable, delete it and go on!
-				$task->delete();
-				$this->logger->log_error( sprintf( 'Task %s was deleted after %d attempts to process it.', $task->get_name(), $this->max_task_retries ), array( 'task' => $task->get_data(), 'exception' => $exception ) );
+				$this->logger->log_error( sprintf( 'Queue processing stopped after trying to handle task %s %d times.', $task->get_name(), $this->max_task_retries ), array( 'task' => $task->get_data(), 'exception' => $exception ) );
+
+				// Let's reset the retry count for next queue processing attempt.
+				delete_post_meta( $task->get_id(), 'algolia_task_retries' );
+
+				// We need to return here to stop the queue processing.
+				return;
 			}
 		}
 

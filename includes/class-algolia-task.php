@@ -130,4 +130,21 @@ class Algolia_Task
 	public function delete() {
 		wp_delete_post( (int) $this->post->ID, true );
 	}
+
+	/**
+	 * Delete all tasks.
+	 */
+	public static function delete_all_tasks() {
+		$query = new WP_Query( array(
+			'post_type'      => self::$post_type,
+			'post_status'    => 'private',
+			'nopaging'       => true,
+			'posts_per_page' => -1,
+			'fields'	     => 'ids',
+		) );
+
+		foreach ( $query->posts as $id ) {
+			wp_delete_post( $id, true );
+		}
+	}
 }
