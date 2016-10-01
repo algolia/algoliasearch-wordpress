@@ -301,7 +301,7 @@ class Algolia_Admin_Page_Indexing
 			$queue->queue( 'change_name_prefix', array( 'index_id' => $index->get_id(), 'from' => $old_value, 'to' => $value ) );
 		}
 		
-		$message = __( 'Your indices are being moved to reflect the new indices prefix.', 'algolia' );
+		$message = __( 'Your new index prefix has correctly been taken into account. If you had indexed data with the previous index prefix, the indices will be renamed to reflect the change.', 'algolia' );
 		set_transient( 'algolia_index_name_prefix_notice', $message );
 	}
 
