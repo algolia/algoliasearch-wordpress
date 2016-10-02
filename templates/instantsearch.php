@@ -66,7 +66,7 @@
 					alert('It looks like you haven\'t indexed the searchable posts index. Please head to the Indexing page of the Algolia Search plugin and index it.');
 				}
 
-				// Instantiate instantsearch.js
+				/* Instantiate instantsearch.js */
 				var search = instantsearch({
 					appId: algolia.application_id,
 					apiKey: algolia.search_api_key,
@@ -79,9 +79,9 @@
 						facetingAfterDistinct: true
 					},
 					searchFunction: function(helper) {
-						// helper does a setPage(0) on almost every method call
-						// see https://github.com/algolia/algoliasearch-helper-js/blob/7d9917135d4192bfbba1827fd9fbcfef61b8dd69/src/algoliasearch.helper.js#L645
-						// and https://github.com/algolia/algoliasearch-helper-js/issues/121
+						/* helper does a setPage(0) on almost every method call */
+						/* see https://github.com/algolia/algoliasearch-helper-js/blob/7d9917135d4192bfbba1827fd9fbcfef61b8dd69/src/algoliasearch.helper.js#L645 */
+						/* and https://github.com/algolia/algoliasearch-helper-js/issues/121 */
 						var savedPage = helper.state.page;
 						if (search.helper.state.query === '') {
 							search.helper.setQueryParameter('distinct', false);
@@ -95,7 +95,7 @@
 					}
 				});
 
-				// Search box widget
+				/* Search box widget */
 				search.addWidget(
 					instantsearch.widgets.searchBox({
 						container: '#algolia-search-box',
@@ -105,14 +105,14 @@
 					})
 				);
 
-				// Stats widget
+				/* Stats widget */
 				search.addWidget(
 					instantsearch.widgets.stats({
 						container: '#algolia-stats'
 					})
 				);
 
-				// Hits widget
+				/* Hits widget */
 				search.addWidget(
 					instantsearch.widgets.hits({
 						container: '#algolia-hits',
@@ -124,14 +124,14 @@
 					})
 				);
 
-				// Pagination widget
+				/* Pagination widget */
 				search.addWidget(
 					instantsearch.widgets.pagination({
 						container: '#algolia-pagination'
 					})
 				);
 
-				// Post types refinement widget
+				/* Post types refinement widget */
 				search.addWidget(
 					instantsearch.widgets.menu({
 						container: '#facet-post-types',
@@ -144,7 +144,7 @@
 					})
 				);
 
-				// Categories refinement widget
+				/* Categories refinement widget */
 				search.addWidget(
 					instantsearch.widgets.hierarchicalMenu({
 						container: '#facet-categories',
@@ -157,7 +157,7 @@
 					})
 				);
 
-				// Tags refinement widget
+				/* Tags refinement widget */
 				search.addWidget(
 					instantsearch.widgets.refinementList({
 						container: '#facet-tags',
@@ -171,7 +171,7 @@
 					})
 				);
 
-				// Users refinement widget
+				/* Users refinement widget */
 				search.addWidget(
 					instantsearch.widgets.menu({
 						container: '#facet-users',
@@ -184,7 +184,7 @@
 					})
 				);
 
-				// Start
+				/* Start */
 				search.start();
 
 				jQuery('#algolia-search-box input').attr('type', 'search').select();
