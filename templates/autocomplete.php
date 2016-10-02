@@ -69,10 +69,10 @@
 
 <script type="text/javascript">
 	jQuery(function () {
-		// init Algolia client
+		/* init Algolia client */
 		var client = algoliasearch(algolia.application_id, algolia.search_api_key);
 
-		// setup default sources
+		/* setup default sources */
 		var sources = [];
 		jQuery.each(algolia.autocomplete.sources, function(i, config) {
 			sources.push({
@@ -100,7 +100,7 @@
 
 		});
 
-		// Setup dropdown menus
+		/* Setup dropdown menus */
 		jQuery("input[name='s']:not('.no-autocomplete')").each(function(i) {
 			var $searchInput = jQuery(this);
 
@@ -110,25 +110,25 @@
 				openOnFocus: true,
 				templates: {}
 			};
-			//Todo: Add empty template when we fixed https://github.com/algolia/autocomplete.js/issues/109
+			/* Todo: Add empty template when we fixed https://github.com/algolia/autocomplete.js/issues/109 */
 
 			if(algolia.powered_by_enabled) {
 				config.templates.footer = wp.template('autocomplete-footer');
 			}
 
-			// Instantiate autocomplete.js
+			/* Instantiate autocomplete.js */
 			autocomplete($searchInput[0], config, sources)
 			.on('autocomplete:selected', function(e, suggestion, datasetName) {
-				// Redirect the user when we detect a suggestion selection.
+				/* Redirect the user when we detect a suggestion selection. */
 				window.location.href = suggestion.permalink;
 			});
 
 			var $autocomplete = $searchInput.parent();
 
-			// Remove autocomplete.js default inline input search styles.
+			/* Remove autocomplete.js default inline input search styles. */
 			$autocomplete.removeAttr('style');
 
-			// Configure tether
+			/* Configure tether */
 			var $menu = $autocomplete.find('.aa-dropdown-menu');
 			var config = {
 				element: $menu,
@@ -143,12 +143,12 @@
 				]
 			};
 
-			// This will make sure the dropdown is no longer part of the same container as
-			// the search input container.
-			// It ensures styles are not overridden and limits theme breaking.
+			/* This will make sure the dropdown is no longer part of the same container as */
+			/* the search input container. */
+			/* It ensures styles are not overridden and limits theme breaking. */
 			var tether = new Tether(config);
 			tether.on('update', function(item) {
-				// todo: fix the inverse of this: https://github.com/HubSpot/tether/issues/182
+				/* todo: fix the inverse of this: https://github.com/HubSpot/tether/issues/182 */
 				if (item.attachment.left == 'right' && item.attachment.top == 'top' && item.targetAttachment.left == 'left' && item.targetAttachment.top == 'bottom') {
 					config.attachment = 'top right';
 					config.targetAttachment = 'bottom right';
@@ -164,10 +164,10 @@
 			});
 
 
-			// Trick to ensure the autocomplete is always above all.
+			/* Trick to ensure the autocomplete is always above all. */
 			$menu.css('z-index', '99999');
 
-			// Makes dropdown match the input size.
+			/* Makes dropdown match the input size. */
 			var dropdownMinWidth = 200;
 			function updateDropdownWidth() {
 				var inputWidth = $searchInput.outerWidth();
@@ -181,7 +181,7 @@
 			jQuery(window).on('resize', updateDropdownWidth);
 		});
 
-		// This ensures that when the dropdown overflows the window, Thether can reposition it.
+		/* This ensures that when the dropdown overflows the window, Thether can reposition it. */
 		jQuery('body').css('overflow-x', 'hidden');
 
 		jQuery(document).on("click", ".algolia-powered-by-link", function(e) {

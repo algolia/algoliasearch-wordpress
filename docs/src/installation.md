@@ -24,7 +24,7 @@ Please follow installation steps here: https://wordpress.org/plugins/search-by-a
 
 ## Conflicting plugins
 
-Here is a list of known incompatibilities with other plugins. Be sure you go through them as you are installing the plugin:
+We have resolved all conflicts we had with third party plugins for now.
 
-**W3 Total Cache:**
-- Object caching may cause admin UI to no display indexing status in realtime.
+If you think you found a conflict with a plugin, please reach out to us so that we can investigate!
+

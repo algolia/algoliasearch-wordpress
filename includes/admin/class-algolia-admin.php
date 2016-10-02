@@ -15,6 +15,8 @@ class Algolia_Admin {
 
 		add_action( 'admin_enqueue_scripts', array( $this, 'enqueue_styles' ) );
 		add_action( 'admin_enqueue_scripts', array( $this, 'enqueue_scripts' ) );
+		
+		new Algolia_Cache_Helper();
 
 		$api = $plugin->get_api();
 		if ( $api->is_reachable() ) {
@@ -62,6 +64,8 @@ class Algolia_Admin {
 			return;
 		}
 
+		$this->w3tc_notice();
+
 		if ( ! isset( $_GET['page'] ) || $_GET['page'] !== 'algolia-indexing' ) {
 			return;
 		}
@@ -88,5 +92,26 @@ class Algolia_Admin {
 				<p>URL called: ' . $url . '</p>
 				<p><code><pre>' . print_r( $result, true ) . '</pre></code></p>
 			</div>';
+	}
+
+	/**
+	 * Display notice to help users adding 'algolia_' as an ignored query string to the db caching configuration.
+	 */
+	public function w3tc_notice() {
+		if ( ! function_exists( 'w3tc_pgcache_flush' ) || ! function_exists( 'w3_instance' ) ) {
+			return;
+		}
+
+		$config   = w3_instance('W3_Config');
+		$enabled  = $config->get_integer( 'dbcache.enabled' );
+		$settings = array_map( 'trim', $config->get_array( 'dbcache.reject.sql' ) );
+
+		if ( $enabled && ! in_array( 'algolia_', $settings ) ) {
+			?>
+			<div class="error">
+				<p><?php printf( __( 'In order for <strong>database caching</strong> to work with Algolia you must add <code>algolia_</code> to the "Ignored Query Stems" option in W3 Total Cache settings <a href="%s">here</a>.', 'algolia' ), admin_url( 'admin.php?page=w3tc_dbcache' ) ); ?></p>
+			</div>
+			<?php
+		}
 	}
 }

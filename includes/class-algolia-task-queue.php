@@ -50,18 +50,21 @@ final class Algolia_Task_Queue
 	public function run( Algolia_Task_Dispatcher $task_dispatcher ) {
 		if ( 0 === Algolia_Task::get_queued_tasks_count() ) {
 			// Nothing to process or queue is already running.
-			return;
+			return false;
 		}
 
 		if ( $this->is_running() ) {
-			return $this->logger->log( sprintf( 'Queue is already being handled.' ) );
+			$this->logger->log( sprintf( 'Queue is already being handled.' ) );
+
+			return false;
 		}
 		
 		$should_stop = get_transient( 'algolia_stop_queue' );
 		if ( $should_stop ) {
 			delete_transient( 'algolia_stop_queue' );
 			$this->logger->log( 'Queue was manually stopped' );
-			return;
+
+			return false;
 		}
 
 		$task = Algolia_Task::get_first();
@@ -102,13 +105,15 @@ final class Algolia_Task_Queue
 				delete_post_meta( $task->get_id(), 'algolia_task_retries' );
 
 				// We need to return here to stop the queue processing.
-				return;
+				return false;
 			}
 		}
 
 		if ( Algolia_Task::get_queued_tasks_count() > 0 ) {
 			do_action( 'algolia_process_queue' );
 		}
+
+		return true;
 	}
 	
 	/**
@@ -130,7 +135,7 @@ final class Algolia_Task_Queue
 			$task_data['max_num_pages'] = $max_num_pages ? (int) $max_num_pages : 1 ;
 		}
 		
-		set_transient( 'algolia_running_task', $task_data, 10);
+		set_transient( 'algolia_running_task', $task_data, 10 );
 	}
 
 	/**
@@ -160,6 +165,7 @@ final class Algolia_Task_Queue
 	 * @return bool
 	 */
 	public function was_recently_running() {
+
 		return (bool) get_transient( 'algolia_queue_recently_running' );
 	}
 
