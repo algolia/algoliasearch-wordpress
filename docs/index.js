@@ -11,6 +11,7 @@ var asset       = require('metalsmith-static');
 var helpers     = require('metalsmith-register-helpers');
 var headingsid  = require('metalsmith-headings-identifier');
 var file        = require('./plugins/file/index.js');
+var imagemin    = require('metalsmith-imagemin')
 
 var sassPaths = [
     'node_modules/foundation-sites/scss'
@@ -46,6 +47,13 @@ var siteBuild = Metalsmith(__dirname)
     .use(asset({
         src: './node_modules/foundation-sites/dist',
         dest: './vendor/foundation-sites'
+    }))
+
+    .use(imagemin({
+        gifsicle: {},
+        jpegrecompress: { quality: 'medium' },
+        pngquant: { quality: '65-80' },
+        svgo: {}
     }))
 
     // Add Highlight.js for code snippets.
