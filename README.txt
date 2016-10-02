@@ -92,6 +92,17 @@ Automatic updates should work like a charm; as always though, ensure you backup 
 
 == Changelog ==
 
+= 1.3.0 =
+
+* Make the plugin play nicely with the W3 Total Cache plugin
+* Fix an issue where the Cache Enabler plugin would break the autocomplete when JavaScript was inlined
+* Introduced a constant to hide admin help notices
+* Add WP CLI process-queue & re-index-all commands
+* Allow theme authors to get full control over the Algolia templates location
+* Stop the queue instead of trashing failed tasks
+* Allow users to delete all pending tasks
+* Allow users to stop the queue when it is running
+
 = 1.2.0 =
 
 * Fix broken pagination on instant search page
@@ -105,6 +116,14 @@ You can access older changes [here](https://github.com/algolia/algoliasearch-wor
 
 == Upgrade Notice ==
 
+= 1.3.0 =
+
+We fixed some issues in the `templates/autocomplete.php` and `templates/instantsearch.php` files.
+
+If you have copied the templates folder in your theme folder, you should make sure you manually patch the following fixes:
+
+- https://github.com/algolia/algoliasearch-wordpress/commit/81ce6975ad1069d8db95cdb92cbd60e139328465
+
 = 1.2.0 =
 
 We fixed some issues in the `templates/autocomplete.php` and `templates/instantsearch.php` files.
@@ -112,3 +131,4 @@ We fixed some issues in the `templates/autocomplete.php` and `templates/instants
 If you have copied the templates folder in your theme folder, you should make sure you manually patch the following fixes:
 
 - https://github.com/algolia/algoliasearch-wordpress/pull/305
+

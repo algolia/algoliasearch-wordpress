@@ -1,3 +1,13 @@
+# 1.3.0
+- Make the plugin play nicely with the W3 Total Cache plugin
+- Fix an issue where the Cache Enabler plugin would break the autocomplete when JavaScript was inlined
+- Introduced a constant to hide admin help notices
+- Add WP CLI process-queue & re-index-all commands
+- Allow theme authors to get full control over the Algolia templates location
+- Stop the queue instead of trashing failed tasks
+- Allow users to delete all pending tasks
+- Allow users to stop the queue when it is running
+
 # 1.2.0
 - Fix broken pagination on instant search page
 - Fix conflicts with plugins also using the PHP `simple_html_dom` library

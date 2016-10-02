@@ -1,6 +1,6 @@
 # Search by Algolia plugin for WordPress
 
-[![Dependency Status](https://www.versioneye.com/php/algolia:algoliasearch-wordpress/dev-master/badge?style=flat-square)](https://www.versioneye.com/php/algolia:algoliasearch-wordpress/dev-master) [![dependencies Status](https://david-dm.org/algolia/algoliasearch-wordpress/status.svg)](https://david-dm.org/algolia/algoliasearch-wordpress) [![devDependencies Status](https://david-dm.org/algolia/algoliasearch-wordpress/dev-status.svg)](https://david-dm.org/algolia/algoliasearch-wordpress?type=dev)
+[![PHP Dependency Status](https://www.versioneye.com/php/algolia:algoliasearch-wordpress/dev-master/badge?style=flat-square)](https://www.versioneye.com/php/algolia:algoliasearch-wordpress/dev-master) [![JS dependencies Status](https://david-dm.org/algolia/algoliasearch-wordpress/status.svg)](https://david-dm.org/algolia/algoliasearch-wordpress) [![JS devDependencies Status](https://david-dm.org/algolia/algoliasearch-wordpress/dev-status.svg)](https://david-dm.org/algolia/algoliasearch-wordpress?type=dev)
 
 ## User documentation & guides
 
