@@ -23,7 +23,7 @@ Ensure you have read the [common questions & answers](frequently-asked-questions
 
 The plugin is not translated in your language?
 
-You can grab the .pot file here: https://github.com/algolia/algoliasearch-wordpress/blob/master/wordpress/wp-content/plugins/algolia/languages/algolia.pot
+You can grab the .pot file here: https://github.com/algolia/algoliasearch-wordpress/blob/master/languages/algolia.pot
 
 If you are able, send us a Pull Request, otherwise send us the translations by email at [support+wordpress@algolia.com](mailto:support+wordpress@algolia.com).
 
@@ -33,8 +33,4 @@ You are a WordPress agency and would like to make your theme compliant with our 
 
 First of all, by default our plugin will work out of the box with any theme. [Read this](frequently-asked-questions.html#will-this-plugin-be-compatible-with-my-wordpress-theme-) for further explanation.
 
-If you would like to offer a customized search experience that fits in your theme branding guidelines, you can:
-- [Customize the autocomplete](customize-autocomplete.html)
-- [Create a custom search experience](custom-search.html)
-
-Be sure to read the [basics of extending the plugin](extend-basics.html).
+If you would like to offer a customized search experience that fits in your theme branding guidelines, please see how to [customize templates](customize-templates.html).
