@@ -2,6 +2,7 @@
   "name": "algoliasearch-wordpress-plugin-docs",
   "private": true,
   "dependencies": {
+    "babel-runtime": "^6.11.6",
     "cheerio": "^0.20.0",
     "foundation-sites": "^6.2.3",
     "gh-pages": "^0.11.0",
@@ -10,6 +11,7 @@
     "lodash": "^4.13.1",
     "metalsmith": "^2.1.0",
     "metalsmith-headings-identifier": "0.0.11",
+    "metalsmith-imagemin": "^2.0.0",
     "metalsmith-layouts": "^1.6.5",
     "metalsmith-mapsite": "^1.0.4",
     "metalsmith-markdown": "^0.2.1",
