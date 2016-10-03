@@ -562,6 +562,11 @@
   z-index: 100;
   border-bottom: 1px solid #efefef;
 
+  @media (max-width: $bp-small) {
+    display: none;
+
+  }
+
   .section--content__full {
     overflow: hidden;
   }
