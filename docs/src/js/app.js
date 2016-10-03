@@ -1,10 +1,6 @@
 
 $(function () {
 
-    if($('.press__tweets').length === 0) {
-        return;
-    }
-
     var ACTIONS = {
         PREV: 'PREV',
         NEXT: 'NEXT'
@@ -13,9 +9,6 @@ $(function () {
     var $nextBtn = $('.press__tweet__arrow--next');
     var $tweets = $('.press__tweet');
     var $tweetsContainer = $('.press__tweets');
-    var _gap = 325;
-    var _divide = 3;
-    var _offsetVal = 2;
 
     var currentIndex = Math.floor($tweets.length / 2);
     function setCurrentTweet(action) {
@@ -42,8 +35,8 @@ $(function () {
         var _$centerElement$posit = $centerElement.position();
         var left = _$centerElement$posit.left;
         var containerSize = $tweetsContainer.width();
-        var gap = action === ACTIONS.NEXT ? tweetSize / _divide : tweetSize - _gap;
-        var offset = -(containerSize / _offsetVal) + left + gap;
+        var gap = action === ACTIONS.NEXT ? tweetSize / 3 : tweetSize - 325;
+        var offset = -(containerSize / 2) + left + gap;
         $tweets.removeClass('press__tweet--current');
         $centerElement.addClass('press__tweet--current');
         removeClickableTweets();
