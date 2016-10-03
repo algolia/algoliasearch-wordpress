@@ -11,7 +11,8 @@ var asset       = require('metalsmith-static');
 var helpers     = require('metalsmith-register-helpers');
 var headingsid  = require('metalsmith-headings-identifier');
 var file        = require('./plugins/file/index.js');
-var imagemin    = require('metalsmith-imagemin')
+var imagemin    = require('metalsmith-imagemin');
+
 
 var sassPaths = [
     'node_modules/foundation-sites/scss'

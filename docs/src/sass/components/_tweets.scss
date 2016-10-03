@@ -73,3 +73,22 @@
 .press__tweet:last-child .press__tweet__arrow--next {
     display: none
 }
+
+@media (max-width: $bp-small) {
+    .press__tweet--current {
+        max-width: 100%;
+    }
+    .press__tweet--current .press__tweet__arrow--prev,
+    .press__tweet--current .press__tweet__arrow--next {
+        width: 20% !important;
+        left: -25% !important;
+    }
+    .press__tweet--current .press__tweet__arrow--next {
+        left: 52% !important;
+    }
+    .twitter-tweet {
+        min-width: inherit !important;
+        width: 60% !important;
+        transform: translateX(-10%) rotate(0) !important;
+    }
+}

@@ -1,10 +1,6 @@
 
 $(function () {
 
-    if($('.press__tweets').length === 0) {
-        return;
-    }
-
     var ACTIONS = {
         PREV: 'PREV',
         NEXT: 'NEXT'
