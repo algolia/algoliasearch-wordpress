@@ -150,6 +150,10 @@
     border-bottom: 2px solid #fff;
     width: 32px;
     height: 32px;
+
+    use {
+      fill: #46AEDA;
+    }
   }
 
   .diagonal-white-tr {
@@ -509,6 +513,16 @@
     height: 200px;
     text-align: right;
     padding-top: 80px;
+
+    svg {
+     display: inline-block;
+     width: 74px;
+     height: 86px;
+
+     use {
+      fill: #46AEDA;
+     }
+    }
   }
 
   .content--text {
@@ -665,11 +679,13 @@
   header {
     line-height: 1;
 
-    img {
+    svg {
+      display: inline-block;
       width: 40px;
       margin-right: 0.6em;
       margin-top: 0.5em;
-      margin-bottom: .6em;
+      position: relative;
+      top: 0.3em;
     }
   }
 
@@ -790,6 +806,10 @@
     top: 28px;
     float: none;
     left: calc(50% - 130px);
+
+    @media (max-width: $bp-small) {
+      left: inherit;
+    }
   }
 }
 
@@ -881,7 +901,11 @@
     .algolia-logo {
       width: 34px;
       position: relative;
-      top: -6px;
+      top: 6px;
+
+      use {
+        fill: #46AEDA
+      }
     }
     span {
       font-size: 18px;
@@ -1023,7 +1047,7 @@
       background: transparent;
     }
 
-    img {
+    svg {
       display: block;
       float: left;
     }
