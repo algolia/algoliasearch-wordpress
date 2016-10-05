@@ -76,7 +76,7 @@
       <use xlink:href="#i"/>
     </mask>
   </defs>
-  <g fill="none" fill-rule="evenodd" transform="translate(0 1)">
+  <g fill="none" fill-rule="evenodd" transform="translate(0 1)" font-family="'Open Sans', Open Sans, OpenSans, sans-serif">
     <g transform="translate(189)">
       <mask id="l" fill="white">
         <use xlink:href="#a"/>
@@ -84,31 +84,31 @@
       <use fill="black" filter="url(#j)" xlink:href="#a"/>
       <use fill="#FFFFFF" xlink:href="#a"/>
       <use stroke="#D8D9DE" stroke-width="2" mask="url(#k)" xlink:href="#a"/>
-      <text fill="#46AEDA" mask="url(#l)" font-family="OpenSans-Semibold, Open Sans" font-size="14" font-weight="500">
+      <text fill="#46AEDA" mask="url(#l)" font-family="'Open Sans', Open Sans, OpenSans, sans-serif" font-size="14" font-weight="500">
         <tspan x="12" y="27">Deep linking &amp; search in iOS 9 will change ev..</tspan>
       </text>
       <text fill="#262626" opacity=".5" mask="url(#l)" font-family="OpenSans, Open Sans" font-size="12">
         <tspan x="12" y="48">The holy grail for any investor is to discover the next G...</tspan>
       </text>
-      <text fill="#46AEDA" mask="url(#l)" font-family="OpenSans-Semibold, Open Sans" font-size="14" font-weight="500">
+      <text fill="#46AEDA" mask="url(#l)" font-family="'Open Sans', Open Sans, OpenSans, sans-serif" font-size="14" font-weight="500">
         <tspan x="12" y="92">Next-level searching in Slack</tspan>
       </text>
       <text fill="#262626" opacity=".5" mask="url(#l)" font-family="OpenSans, Open Sans" font-size="12">
         <tspan x="12" y="113">Day to day productivity is one thing. Having a long-ter...</tspan>
       </text>
-      <text fill="#46AEDA" mask="url(#l)" font-family="OpenSans-Semibold, Open Sans" font-size="14" font-weight="500">
+      <text fill="#46AEDA" mask="url(#l)" font-family="'Open Sans', Open Sans, OpenSans, sans-serif" font-size="14" font-weight="500">
         <tspan x="12" y="157">How Google Is Taking Search Outside the Box</tspan>
       </text>
       <text fill="#262626" opacity=".5" mask="url(#l)" font-family="OpenSans, Open Sans" font-size="12">
         <tspan x="12" y="178">The I/O conference had virtual reality, photos and elec...</tspan>
       </text>
-      <text fill="#46AEDA" mask="url(#l)" font-family="OpenSans-Semibold, Open Sans" font-size="14" font-weight="500">
+      <text fill="#46AEDA" mask="url(#l)" font-family="'Open Sans', Open Sans, OpenSans, sans-serif" font-size="14" font-weight="500">
         <tspan x="12" y="222">A painstakingly crafted search for Hearthsto..</tspan>
       </text>
       <text fill="#262626" opacity=".5" mask="url(#l)" font-family="OpenSans, Open Sans" font-size="12">
         <tspan x="12" y="243">Hearthstone’s popularity is stunning. Is it the worthy...</tspan>
       </text>
-      <text fill="#46AEDA" mask="url(#l)" font-family="OpenSans-Semibold, Open Sans" font-size="14" font-weight="500">
+      <text fill="#46AEDA" mask="url(#l)" font-family="'Open Sans', Open Sans, OpenSans, sans-serif" font-size="14" font-weight="500">
         <tspan x="12" y="287">A painstakingly crafted search for Hearthsto..</tspan>
       </text>
       <text fill="#262626" opacity=".5" mask="url(#l)" font-family="OpenSans, Open Sans" font-size="12">
