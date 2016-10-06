@@ -67,11 +67,13 @@ class Algolia_Search
 
 		// This can fail if the index is still queued.
 		try {
-			$results = $this->index->search( $query->query['s'], array(
+			$params = apply_filters( 'algolia_search_params', array(
 				'attributesToRetrieve' => 'post_id',
 				'hitsPerPage'          => $posts_per_page,
 				'page'                 => $current_page - 1, // Algolia pages are zero indexed.
 			) );
+			
+			$results = $this->index->search( $query->query['s'], $params );
 		} catch ( AlgoliaException $exception ) {
 			$this->logger->log( 'An error occurred while performing a search.', $exception, Algolia_Logger::LEVEL_ERROR );
 
