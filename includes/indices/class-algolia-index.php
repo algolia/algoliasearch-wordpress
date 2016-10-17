@@ -164,6 +164,7 @@ abstract class Algolia_Index
 		}
 
 		$index = $this->get_index();
+		$records = $this->sanitize_json_data( $records );
 		$index->addObjects( $records );
 
 		$records_count = count( $records );
@@ -240,6 +241,9 @@ abstract class Algolia_Index
 
 		if ( ! empty( $records ) ) {
 			$index = $this->get_tmp_index();
+			
+			$records = $this->sanitize_json_data( $records );
+			
 			$index->addObjects( $records );
 			$this->logger->log_operation( sprintf( '[%d] Added %d records to index %s', count( $records ), count( $records ), $index->indexName ), $records );
 		}
@@ -249,6 +253,23 @@ abstract class Algolia_Index
 			$this->sync_replicas();
 			do_action( 'algolia_re_indexed_items', $this->get_id() );
 		}
+	}
+
+	/**
+	 * Sanitize data to allow non UTF-8 content to pass.
+	 * Here we use a private function introduced in WP 4.1.
+	 * 
+	 * @param $data
+	 *
+	 * @return mixed
+	 * @throws Exception
+	 */
+	protected function sanitize_json_data( $data ) {
+		if ( function_exists( '_wp_json_sanity_check' ) ) {
+			return _wp_json_sanity_check( $data, 512 );
+		}
+		
+		return $data;
 	}
 
 	/**
