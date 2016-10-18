@@ -1,4 +1,11 @@
 
+
+ window.onload = function(){
+  if ( navigator.userAgent.indexOf('Safari') != -1 ) {
+    document.body.classList.add('safari')
+  }
+ }
+
 $(function () {
 
     var ACTIONS = {
