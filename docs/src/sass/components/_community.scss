@@ -503,6 +503,11 @@
       top: -250px;
       overflow: hidden;
       z-index: 99;
+
+
+      body.safari &{
+        top: -220px;
+      }
     }
   }
 

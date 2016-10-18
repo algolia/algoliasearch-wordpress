@@ -8,7 +8,7 @@
     -webkit-transition: opacity 0.3s linear, -webkit-transform 0.5s ease;
     transition: opacity 0.3s linear, -webkit-transform 0.5s ease;
     transition: opacity 0.3s linear, transform 0.5s ease;
-    transition: opacity 0.3s linear, transform 0.5s ease, -webkit-transform 0.5s ease
+    transition: opacity 0.3s linear, transform 0.5s ease, -webkit-transform 0.5s ease;
 }
 .press__tweets::-webkit-scrollbar {
     width: 0px !important
@@ -16,6 +16,11 @@
 .press__tweets--loading {
     opacity: 0
 }
+
+body.safari ul.press__tweets{
+  display: flex;
+}
+
 .press__tweet {
     border-radius: 4px;
     display: inline-block;
@@ -26,7 +31,11 @@
     -webkit-transition: -webkit-transform 0.5s ease;
     transition: -webkit-transform 0.5s ease;
     transition: transform 0.5s ease;
-    transition: transform 0.5s ease, -webkit-transform 0.5s ease
+    transition: transform 0.5s ease, -webkit-transform 0.5s ease;
+
+    body.safari &{
+      min-width: 420px;
+    }
 }
 .press__tweet:last-child {
     margin-right: 0
