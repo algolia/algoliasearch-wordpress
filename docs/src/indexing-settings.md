@@ -20,7 +20,7 @@ Before telling you about the default settings per content type and how to custom
 
 **attributesToIndex**:
 Refers to the attributes that the search will be based on. By default we will generally list here all the text attributes that the user would like to search in.
-Unless we wrap our attribute name in `unordered()`, word match position matters, meaning that if a word is find earlier in the indexed attribute, it will be considered a better match.
+Unless we wrap our attribute name in `unordered()`, word match position matters, meaning that if a word is found earlier in the indexed attribute, it will be considered a better match.
 
 **customRanking**
 Internally, the Algolia Search engine uses a Tie breaking algorithm, which means that at every step of the search process, it will keep only the most relevant results by applying consequently every available ranking algorithm.
