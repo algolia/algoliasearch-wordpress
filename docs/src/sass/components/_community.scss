@@ -499,14 +499,13 @@
   }
 
   .diagonal-white-br {
-    @include diagonal(4deg, #fff, 270px, 'true') {
+    @include diagonal(4deg, #fff, 300px, 'true') {
       top: -250px;
       overflow: hidden;
       z-index: 99;
 
-
       body.safari &{
-        top: -220px;
+        top: -250px;
       }
     }
   }
