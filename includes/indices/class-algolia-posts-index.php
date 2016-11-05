@@ -137,7 +137,7 @@ final class Algolia_Posts_Index extends Algolia_Index
 		}
 		$shared_attributes['post_type_label'] = $post_type->labels->name;
 		$shared_attributes['post_title'] = $post->post_title;
-		$shared_attributes['post_excerpt'] = $post->post_excerpt;
+		$shared_attributes['post_excerpt'] = apply_filters( 'the_excerpt', $post->post_excerpt );
 		$shared_attributes['post_date'] = get_post_time( 'U', false, $post );
 		$shared_attributes['post_date_formatted'] = get_the_date( '', $post );
 		$shared_attributes['post_modified'] = get_post_modified_time( 'U', false, $post );
