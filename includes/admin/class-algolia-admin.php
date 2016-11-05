@@ -79,6 +79,8 @@ class Algolia_Admin {
 			'sslverify'   => apply_filters( 'https_local_ssl_verify', true ),
 		);
 
+		$request_args = (array) apply_filters( 'algolia_loopback_request_args', $request_args );
+
 		$result = wp_remote_post( $url, $request_args );
 		if( ! $result instanceof WP_Error && $result['response']['code'] === 200 ) {
 			// Remote call check was successful.
