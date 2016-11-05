@@ -95,9 +95,22 @@ If you are unable to upgrade your cURL/OpenSSL versions, and if your website can
 
 **Htaccess password protected:**
 
-If your /wp-admin section of your website instance is .htaccess password protected, then you currently have no way to make the queue work.
+If your /wp-admin section of your website is protected with Basic HTTP Authentication, you can use the `algolia_loopback_request_args` filter to add your username and password to the remote calls headers.
 
-We might support this in the future.
+```php
+<?php
+// In your current active theme functions.php.
+define( 'MY_USERNAME', 'test' );
+define( 'MY_PASSWORD', 'test' );
+
+function custom_loopback_request_args( array $request_args ) {
+	$request_args['headers']['Authorization'] = 'Basic ' . base64_encode( MY_USERNAME . ':' . MY_PASSWORD );
+
+	return $request_args;
+}
+
+add_filter( 'algolia_loopback_request_args', 'custom_loopback_request_args' );
+```
 
 **You are using Docker:**
 
