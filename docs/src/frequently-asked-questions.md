@@ -118,6 +118,12 @@ If you are using Docker, you should make sure that the domain name you are using
 
 Port forwarding is currently unsupported, so you should use port 80 or 443 depending on if you are using http or https to access your website.
 
+**Does the instant search results work with IE9?**
+
+The default implementation will break on IE9. You can use the `useHash` option of the instantsearch.js library to enable support for IE9.
+
+See https://github.com/algolia/algoliasearch-wordpress/pull/375 for an example of how to enable IE9 support.
+
 **My case is not listed here:**
 
 If your problem is covered here, please submit an issue with the error details here: https://github.com/algolia/algoliasearch-wordpress/issues
