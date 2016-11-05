@@ -168,7 +168,7 @@ abstract class Algolia_Index
 		$index->addObjects( $records );
 
 		$records_count = count( $records );
-		$this->logger->log_operation( sprintf( '[%d] Added %d records to index %s', $records_count, $records_count, $index->indexName ), $records );
+		$this->logger->log_operation( sprintf( '[%d] Added %d records to index %s', $records_count, $records_count, $index->indexName ) );
 	}
 	
 	/**
@@ -245,7 +245,7 @@ abstract class Algolia_Index
 			$records = $this->sanitize_json_data( $records );
 			
 			$index->addObjects( $records );
-			$this->logger->log_operation( sprintf( '[%d] Added %d records to index %s', count( $records ), count( $records ), $index->indexName ), $records );
+			$this->logger->log_operation( sprintf( '[%d] Added %d records to index %s', count( $records ), count( $records ), $index->indexName ) );
 		}
 
 		if ( $page === $max_num_pages ) {
