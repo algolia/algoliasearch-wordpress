@@ -84,3 +84,4 @@ Here is the list of all available Filters.
 |algolia_templates_path|string $path (default: 'algolia/')
 |algolia_template_locations|array $locations
 |algolia_search_params|array $params
+|algolia_loopback_request_args|array $request_args
