@@ -92,6 +92,16 @@ Automatic updates should work like a charm; as always though, ensure you backup 
 
 == Changelog ==
 
+= 1.4.0 =
+
+* Introduce the `algolia_loopback_request_args` filter to override loopback args. Allows queue to work with Basic Authentication
+* Allow user generated Admin API keys
+* Resolve logging performances causing queue to crash before being able to move _tmp indices to their final destination
+* Make sure "shortcodes" are parsed inside post excerpts
+* Add support for non UTF-8 content
+* Display a more explicit error when credential validation fails
+* Add a filter `algolia_search_params` to be able to filter backend search parameters
+
 = 1.3.0 =
 
 * Make the plugin play nicely with the W3 Total Cache plugin
