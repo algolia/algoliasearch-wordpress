@@ -1,3 +1,6 @@
+# 1.4.1
+- Fix the validity check for the Admin API key in the settings tab
+
 # 1.4.0
 - Introduce the `algolia_loopback_request_args` filter to override loopback args. Allows queue to work with Basic Authentication
 - Allow user generated Admin API keys
