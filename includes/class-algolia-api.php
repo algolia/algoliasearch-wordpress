@@ -75,6 +75,16 @@ class Algolia_API
 	 */
 	public static function assert_valid_credentials( $application_id, $api_key ) {
 		$client = new Client( (string) $application_id, (string) $api_key );
+
+		// This checks if the API Key is an Admin API key.
+		// Admin API keys have no scopes so we need a separate check here.
+		try {
+			$client->listUserKeys();
+
+			return;
+		} catch ( Exception $exception ) {}
+		
+		
 		// If this call does not succeed, then the application_ID or API_key is/are wrong.
 		// This will raise an exception.
 		$key = $client->getUserKeyACL( (string) $api_key );
