@@ -42,12 +42,12 @@ var siteBuild = Metalsmith(__dirname)
     // Copy vendor assets to the build.
     .use(asset({
         src: './node_modules/jquery/dist',
-        dest: './vendor/jquery'
+        dest: './deps/jquery'
     }))
 
     .use(asset({
         src: './node_modules/foundation-sites/dist',
-        dest: './vendor/foundation-sites'
+        dest: './deps/foundation-sites'
     }))
 
     .use(imagemin({
