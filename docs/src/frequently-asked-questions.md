@@ -124,7 +124,44 @@ The default implementation will break on IE9. You can use the `useHash` option o
 
 See https://github.com/algolia/algoliasearch-wordpress/pull/375 for an example of how to enable IE9 support.
 
-**My case is not listed here:**
+### Can I remove non required thumbnail sizes from the records?
+
+By default the plugin pushes all the thumbnail sizes available so that you can easily switch the displayed format in your frontend integration.
+
+If you want to optimize the records size you can definitely remove non-used sizes.
+
+Let's say you only use `thumbnail` and the `medium` thumbnail sizes, here is how to remove all the others:
+
+```php
+<?php
+
+/**
+ * @param array $shared_attributes
+ *
+ * @return array
+ */
+function vm_post_shared_attributes( array $shared_attributes ) {
+	$keep_sizes = array( 'thumbnail', 'medium' );
+	$images = array();
+	foreach ( $shared_attributes['images'] as $size => $info ) {
+		if ( in_array( $size, $keep_sizes ) ) {
+			$images[$size] = $info;
+		}
+	}
+
+	$shared_attributes['images'] = $images;
+
+	return $shared_attributes;
+}
+
+// Remove the un-necessary sizes from the posts index.
+add_filter( 'algolia_post_shared_attributes', 'vm_post_shared_attributes' );
+
+// Also remove the un-necessary sizes from the searchable posts index.
+add_filter( 'algolia_searchable_post_shared_attributes', 'vm_post_shared_attributes' );
+```
+
+### My case is not listed here, what to do?
 
 If your problem is covered here, please submit an issue with the error details here: https://github.com/algolia/algoliasearch-wordpress/issues
 
