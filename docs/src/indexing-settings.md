@@ -205,3 +205,18 @@ function custom_posts_index_settings( array $settings ) {
 add_filter( 'algolia_posts_post_index_settings', 'custom_posts_index_settings' );
 
 ```
+
+## Register custom facet
+
+Let's say you want to register a custom attribute as a facet `number_bedroom` in Algolia:
+
+```php
+<?php
+
+function custom_posts_index_settings( array $settings ) {
+	$settings['attributesForFaceting'][] = 'number_bedroom';
+
+	return $settings;
+}
+add_filter( 'algolia_posts_index_settings', 'custom_posts_index_settings' );
+```
