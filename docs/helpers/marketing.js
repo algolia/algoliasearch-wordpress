@@ -25,7 +25,11 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 })(window,document,'script','dataLayer','GTM-N8JP8G');</script>
 <!-- Twitter -->
 <script src="//platform.twitter.com/oct.js" type="text/javascript"></script>
-<script type="text/javascript">twttr.conversion.trackPid('ntr1j', { tw_sale_amount: 0, tw_order_quantity: 0 });</script>
+<script type="text/javascript">
+if("twttr" in window) {
+    twttr.conversion.trackPid('ntr1j', { tw_sale_amount: 0, tw_order_quantity: 0 });
+}
+</script>
 <noscript>
   <img height="1" width="1" style="display:none;" alt="" src="https://analytics.twitter.com/i/adsct?txn_id=ntr1j&amp;p_id=Twitter&amp;tw_sale_amount=0&amp;tw_order_quantity=0">
   <img height="1" width="1" style="display:none;" alt="" src="//t.co/i/adsct?txn_id=ntr1j&amp;p_id=Twitter&amp;tw_sale_amount=0&amp;tw_order_quantity=0">
