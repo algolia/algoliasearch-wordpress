@@ -406,6 +406,7 @@ abstract class Algolia_Index
 	 * @return bool
 	 */
 	final public function handle_task( Algolia_Task $task ) {
+		do_action( 'algolia_before_handle_task', $task );
 		$data = $task->get_data();
 
 		switch ( $task->get_name() ) {
