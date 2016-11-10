@@ -169,7 +169,9 @@ class Algolia_Template_Loader {
 		$locations = (array) apply_filters( 'algolia_template_locations', $locations, $file );
 
 		$template = locate_template( array_unique( $locations ) );
+		
+		$default_template = (string) apply_filters( 'algolia_default_template', $this->plugin->get_path() . '/templates/' . $file, $file );
 
-		return $template ? $template : $this->plugin->get_path() . '/templates/' . $file;
+		return $template ? $template : $default_template;
 	}
 }

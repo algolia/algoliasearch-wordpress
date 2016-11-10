@@ -83,5 +83,6 @@ Here is the list of all available Filters.
 |algolia_logs_per_page|int $logs_per_page
 |algolia_templates_path|string $path (default: 'algolia/')
 |algolia_template_locations|array $locations
+|algolia_default_template|string $template, string $file
 |algolia_search_params|array $params
 |algolia_loopback_request_args|array $request_args
