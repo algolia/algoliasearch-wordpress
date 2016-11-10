@@ -55,6 +55,11 @@ class Algolia_Plugin {
 	private $template_loader;
 
 	/**
+	 * @var Algolia_Compatibility
+	 */
+	private $compatibility;
+
+	/**
 	 * @return Algolia_Plugin
 	 */
 	public static function get_instance() {
@@ -85,6 +90,8 @@ class Algolia_Plugin {
 		$this->logger = new Algolia_Logger( $this->settings->get_logging_enabled() );
 
 		$this->api = new Algolia_API( $this->settings );
+
+		$this->compatibility = new Algolia_Compatibility();
 
 		add_action( 'init', array( $this, 'register_post_types'), 5 );
 		add_action( 'init', array( $this, 'load' ), 20 );

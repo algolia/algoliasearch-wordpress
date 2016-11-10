@@ -18,6 +18,7 @@ require_once ALGOLIA_PATH . 'includes/class-algolia-activator.php';
 require_once ALGOLIA_PATH . 'includes/class-algolia-deactivator.php';
 require_once ALGOLIA_PATH . 'includes/class-algolia-api.php';
 require_once ALGOLIA_PATH . 'includes/class-algolia-autocomplete-config.php';
+require_once ALGOLIA_PATH . 'includes/class-algolia-compatibility.php';
 require_once ALGOLIA_PATH . 'includes/class-algolia-logger.php';
 require_once ALGOLIA_PATH . 'includes/class-algolia-plugin.php';
 require_once ALGOLIA_PATH . 'includes/class-algolia-search.php';
