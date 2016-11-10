@@ -37,6 +37,6 @@ Here is the list of all available Actions.
 |algolia_de_indexed_items|string $index_id
 |algolia_autocomplete_scripts|*none*
 |algolia_instantsearch_scripts|*none*
-|algolia_before_handle_task|WP_Post $task
-|algolia_task_handled|WP_Post $task
+|algolia_before_handle_task|Algolia_Task $task
+|algolia_task_handled|Algolia_Task $task
 
