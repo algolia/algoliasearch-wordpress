@@ -98,7 +98,6 @@ final class Algolia_Searchable_Posts_Index extends Algolia_Index
 		$post_content = apply_filters( 'the_content', $post->post_content );
 
 		$parser = new \Algolia\DOMParser();
-
 		$parser->setExcludeSelectors( array(
 			'pre',
 			'script',
@@ -106,9 +105,32 @@ final class Algolia_Searchable_Posts_Index extends Algolia_Index
 		) );
 		$parser->setSharedAttributes( $shared_attributes );
 
-		apply_filters( 'algolia_searchable_post_parser', $parser );
+		if ( defined( 'ALGOLIA_SPLIT_POSTS' ) && false === ALGOLIA_SPLIT_POSTS ) {
+			$parser->setAttributeSelectors( array(
+				'title1'  => 'h1#unused',
+				'title2'  => 'h2#unused',
+				'title3'  => 'h3#unused',
+				'title4'  => 'h4#unused',
+				'title5'  => 'h5#unused',
+				'title6'  => 'h6#unused',
+				'content' => 'h1, h2, h3, h4, h5, h6, p, ul, ol, dl, table',
+			) );
 
-		$records = $parser->parse( $post_content );
+			apply_filters( 'algolia_post_parser', $parser );
+			
+			$records = $parser->parse( $post_content );
+
+			$merged = array_shift( $records );
+			foreach ( $records as $record ) {
+				$merged['content'] .= ' ' . $record['content'];
+			}
+
+			$merged['content'] = substr( $merged['content'], 0, 2000 );
+			$records = array( $merged );
+		} else {
+			apply_filters( 'algolia_post_parser', $parser );
+			$records = $parser->parse( $post_content );
+		}
 
 		// Inject the objectID's.
 		foreach ( $records as $i => &$record ) {

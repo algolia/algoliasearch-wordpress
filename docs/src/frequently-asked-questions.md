@@ -18,9 +18,24 @@ If you are desperate and your deadline was yesterday, send us an email at [suppo
 
 ## Questions & Answers
 
-### Posts count are wrong on facets when using instantsearch.js
+### I have more records than I have posts, is that normal?
 
-Currently we do not support displaying accurate counts in facets. This is due to the fact that we use the DISTINCT feature of Algolia to split posts into several small records.
+This is intentional and allows you to fully leverage the Algolia engine.
+
+The plugin takes care of the splitting for you and makes sure that your articles are fully indexed independently from their size.
+
+This means that even if your article is huge and you are searching for a word that is at the very bottom, you will have it as part of the suggested articles.
+
+### Is it possible to disable the post splitting?
+
+Yes, you can turn off the post splitting by defining a constant in your WordPress `wp-config.php` file.
+
+```
+define( 'ALGOLIA_SPLIT_POSTS', false );
+```
+
+Then you will need to <span class="wp-btn">Re-index everything</span> from the `Indexing` page of the plugin.
+
 
 ### I was using the Beta version of your plugin, what exactly has changed?
 
