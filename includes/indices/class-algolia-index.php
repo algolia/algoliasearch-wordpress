@@ -378,8 +378,20 @@ abstract class Algolia_Index
 		$from_name = $this->get_name( $from );
 		$to_name = $this->get_name( $to );
 
+		// We need to unset the replicas prior to moving the master index.
+		$index = $this->client->initIndex( $from_name );
+		$task = $index->setSettings( array( 'replicas' => array() ) );
+
+		// Todo: We should make sure we wait on the same host here.
+		// Todo: For now this might fail on first attempt.
+		$index->waitTask( $task['taskID'], 1000 );
+		$this->logger->log_operation( sprintf( '[1] Unlink replicas from index %s.', $from_name ) );
+
 		$this->client->moveIndex( $from_name, $to_name );
 		$this->logger->log_operation( sprintf( '[1] Moved index from %s to %s.', $from_name, $to_name ) );
+
+		// Re-create the replicas here.
+		$this->sync_replicas();
 	}
 	
 	public function get_default_autocomplete_config() {
