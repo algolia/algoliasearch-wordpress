@@ -30,11 +30,8 @@ final class Algolia_Posts_Index extends Algolia_Index
 	 */
 	public function get_admin_name() {
 		$post_type = get_post_type_object( $this->post_type );
-		if( null === $post_type ) {
-			throw new RuntimeException( 'Unable to fetch the post type information.' );
-		}
-
-		return $post_type->labels->name;
+		
+		return null === $post_type ? $this->post_type : $post_type->labels->name;
 	}
 
 	/**
@@ -130,12 +127,7 @@ final class Algolia_Posts_Index extends Algolia_Index
 		$shared_attributes = array();
 		$shared_attributes['post_id'] = $post->ID;
 		$shared_attributes['post_type'] = $post->post_type;
-		
-		$post_type = get_post_type_object( $post->post_type );
-		if( null === $post_type ) {
-			throw new RuntimeException( 'Unable to fetch the post type information.' );
-		}
-		$shared_attributes['post_type_label'] = $post_type->labels->name;
+		$shared_attributes['post_type_label'] = $this->get_admin_name();
 		$shared_attributes['post_title'] = $post->post_title;
 		$shared_attributes['post_excerpt'] = apply_filters( 'the_excerpt', $post->post_excerpt );
 		$shared_attributes['post_date'] = get_post_time( 'U', false, $post );
