@@ -23,17 +23,6 @@ new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
 j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 '//www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
 })(window,document,'script','dataLayer','GTM-N8JP8G');</script>
-<!-- Twitter -->
-<script src="//platform.twitter.com/oct.js" type="text/javascript"></script>
-<script type="text/javascript">
-if("twttr" in window) {
-    twttr.conversion.trackPid('ntr1j', { tw_sale_amount: 0, tw_order_quantity: 0 });
-}
-</script>
-<noscript>
-  <img height="1" width="1" style="display:none;" alt="" src="https://analytics.twitter.com/i/adsct?txn_id=ntr1j&amp;p_id=Twitter&amp;tw_sale_amount=0&amp;tw_order_quantity=0">
-  <img height="1" width="1" style="display:none;" alt="" src="//t.co/i/adsct?txn_id=ntr1j&amp;p_id=Twitter&amp;tw_sale_amount=0&amp;tw_order_quantity=0">
-</noscript>
 <!-- Facebook -->
 <script>
   !function(f,b,e,v,n,t,s){if(f.fbq)return;n=f.fbq=function(){n.callMethod?
@@ -67,6 +56,15 @@ if("twttr" in window) {
     else {window.attachEvent('onload', _onload)}
   }());
 </script>
+<!-- Twitter -->
+<script>
+!function(e,t,n,s,u,a){e.twq||(s=e.twq=function(){s.exe?s.exe.apply(s,arguments):s.queue.push(arguments);
+},s.version='1.1',s.queue=[],u=t.createElement(n),u.async=!0,u.src='//static.ads-twitter.com/uwt.js',
+a=t.getElementsByTagName(n)[0],a.parentNode.insertBefore(u,a))}(window,document,'script');
+twq('init','nuosw');
+twq('track','PageView');
+</script>
+<!-- KM -->
 <script type="text/javascript">
   var _kmq = _kmq || [];
   var _kmk = _kmk || 'cb5a3adb92e8915a37a36ba1a50f2ce4fae4a1b9';
