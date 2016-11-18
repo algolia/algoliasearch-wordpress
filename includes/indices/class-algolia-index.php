@@ -462,10 +462,20 @@ abstract class Algolia_Index
 	 * @return array
 	 */
 	public function to_array() {
+		$replicas = $this->get_replicas();
+
+		$items = array();
+		foreach ( $replicas as $replica ) {
+			$items[] = array(
+				'name' => $replica->get_replica_index_name( $this )
+			);
+		}
+		
 		return array(
 			'name' 		  => $this->get_name(),
 			'id'   		  => $this->get_id(),
-			'enabled' 	=> $this->enabled,
+			'enabled' 	  => $this->enabled,
+			'replicas'    => $items
 		);
 	}
 
