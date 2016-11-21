@@ -462,17 +462,27 @@ abstract class Algolia_Index
 	 * @return array
 	 */
 	public function to_array() {
+		$replicas = $this->get_replicas();
+
+		$items = array();
+		foreach ( $replicas as $replica ) {
+			$items[] = array(
+				'name'         => $replica->get_replica_index_name( $this ),
+			);
+		}
+		
 		return array(
 			'name' 		  => $this->get_name(),
 			'id'   		  => $this->get_id(),
-			'enabled' 	=> $this->enabled,
+			'enabled' 	  => $this->enabled,
+			'replicas'    => $items
 		);
 	}
 
 	/**
 	 * @return array
 	 */
-	protected function get_replicas() {
+	public function get_replicas() {
 		$replicas = (array) apply_filters( 'algolia_index_replicas', array(), $this );
 		$replicas = (array) apply_filters( 'algolia_' . $this->get_id() . '_index_replicas', $replicas, $this );
 
