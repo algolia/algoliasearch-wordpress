@@ -176,6 +176,29 @@ add_filter( 'algolia_post_shared_attributes', 'vm_post_shared_attributes' );
 add_filter( 'algolia_searchable_post_shared_attributes', 'vm_post_shared_attributes' );
 ```
 
+### Can I push my custom user attributes?
+
+Yes, and you can do so by using the `algolia_user_record` filter:
+
+```
+<?php
+
+/**
+ * @param array   $record
+ * @param WP_User $user
+ *
+ * @return array
+ */
+function custom_user_record( array $record, WP_User $user ) {
+	$record['custom_field'] = get_user_meta( $user->ID, 'custom_field', true );
+	/* Add as many as you want. */
+
+	return $record;
+}
+
+add_filter( 'algolia_user_record', 'custom_user_record', 10, 2 );
+```
+
 ### My case is not listed here, what to do?
 
 If your problem is covered here, please submit an issue with the error details here: https://github.com/algolia/algoliasearch-wordpress/issues
