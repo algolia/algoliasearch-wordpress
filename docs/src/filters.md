@@ -76,6 +76,7 @@ Here is the list of all available Filters.
 |algolia_users_index_synonyms|array $synonyms
 |algolia_index_replicas|array $replicas, Algolia_Index $index
 |algolia\_{$index_id}_index_replicas|array $replicas, Algolia_Index $index
+|algolia_replica_display_name|string $display_name, string $attribute_name, string $order, Algolia_Index $index
 |algolia_config|array $config
 |algolia_task_queue_lock_ttl|int $ttl
 |algolia_indexing_batch_size|int $batch_size (default: 50)

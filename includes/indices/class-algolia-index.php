@@ -467,7 +467,8 @@ abstract class Algolia_Index
 		$items = array();
 		foreach ( $replicas as $replica ) {
 			$items[] = array(
-				'name' => $replica->get_replica_index_name( $this )
+				'name'         => $replica->get_replica_index_name( $this ),
+				'display_name' => $replica->get_display_name( $this ),
 			);
 		}
 		

@@ -34,6 +34,18 @@ class Algolia_Index_Replica
 	 *
 	 * @return string
 	 */
+	public function get_display_name( Algolia_Index $index ) {
+		$name = $this->get_replica_index_name( $index );
+		$name = (string) apply_filters( 'algolia_replica_display_name', $name, $this->attribute_name, $this->order, $index );
+
+		return $name;
+	}
+
+	/**
+	 * @param Algolia_Index $index
+	 *
+	 * @return string
+	 */
 	public function get_replica_index_name( Algolia_Index $index ) {
 		return (string) $index->get_name() . '_' . $this->attribute_name . '_' . $this->order;
 	}
