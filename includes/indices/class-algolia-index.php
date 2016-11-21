@@ -468,7 +468,6 @@ abstract class Algolia_Index
 		foreach ( $replicas as $replica ) {
 			$items[] = array(
 				'name'         => $replica->get_replica_index_name( $this ),
-				'display_name' => $replica->get_display_name( $this ),
 			);
 		}
 		
@@ -483,7 +482,7 @@ abstract class Algolia_Index
 	/**
 	 * @return array
 	 */
-	protected function get_replicas() {
+	public function get_replicas() {
 		$replicas = (array) apply_filters( 'algolia_index_replicas', array(), $this );
 		$replicas = (array) apply_filters( 'algolia_' . $this->get_id() . '_index_replicas', $replicas, $this );
 

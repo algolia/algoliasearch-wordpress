@@ -34,18 +34,6 @@ class Algolia_Index_Replica
 	 *
 	 * @return string
 	 */
-	public function get_display_name( Algolia_Index $index ) {
-		$name = $this->get_replica_index_name( $index );
-		$name = (string) apply_filters( 'algolia_replica_display_name', $name, $this->attribute_name, $this->order, $index );
-
-		return $name;
-	}
-
-	/**
-	 * @param Algolia_Index $index
-	 *
-	 * @return string
-	 */
 	public function get_replica_index_name( Algolia_Index $index ) {
 		return (string) $index->get_name() . '_' . $this->attribute_name . '_' . $this->order;
 	}
@@ -55,5 +43,19 @@ class Algolia_Index_Replica
 	 */
 	public function get_ranking() {
 		return array( $this->order . '(' . $this->attribute_name . ')', 'typo', 'geo', 'words', 'filters', 'proximity', 'attribute', 'exact', 'custom' );
+	}
+
+	/**
+	 * @return string
+	 */
+	public function get_attribute_name() {
+		return $this->attribute_name;
+	}
+
+	/**
+	 * @return string
+	 */
+	public function get_order() {
+		return $this->order;
 	}
 }
