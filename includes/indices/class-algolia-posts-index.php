@@ -124,7 +124,14 @@ final class Algolia_Posts_Index extends Algolia_Index
 			$merged['content'] = substr( $merged['content'], 0, 2000 );
 			$records = array( $merged );
 		} else {
+			$content_max_size = 5000;
+			if ( defined( 'ALGOLIA_CONTENT_MAX_SIZE' ) ) {
+				$content_max_size = (int) ALGOLIA_CONTENT_MAX_SIZE;
+			}
+			$parser->setAttributeMaxSize( 'content', $content_max_size );
+			
 			apply_filters( 'algolia_post_parser', $parser );
+			
 			$records = $parser->parse( $post_content );
 		}
 

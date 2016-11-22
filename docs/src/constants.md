@@ -33,3 +33,4 @@ Here is the list of all available constants.
 | ALGOLIA_POWERED_BY | true | By passing this constant to false, you will remove the Algolia branding from the autocomplete.js and instantsearch.js implementations. Please note however that we ask you to not remove the Algolia logo if you are on a Hacker plan. |
 | ALGOLIA_HIDE_HELP_NOTICES | false | By turning this on, you will hide help notices on the autocomplete and instantsearch admin pages. This is sometimes useful if you are using a custom autocomplete or instantsearch implementation.|
 | ALGOLIA_SPLIT_POSTS | true | By turning this off, 1 post will equal 1 record but content will be truncated to fit into the Algolia payload max size.|
+| ALGOLIA_CONTENT_MAX_SIZE | 5000 | Split the content over several records when exceeding ALGOLIA_CONTENT_MAX_SIZE (size in bytes).
