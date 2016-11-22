@@ -1,5 +1,11 @@
 ## CHANGELOG
 
+### 0.3.0
+- Add a way to limit the size of an attribute with `DOMParser::setAttributeMaxSize($attribute, $size)`
+
+### 0.2.0
+- Avoid loading the `simple_html_dom` library constants, functions and classes if already loaded.
+
 ### 0.1.0
 - `DOMParser::Parse` now returns at least 1 record if shared attributes are set.
 

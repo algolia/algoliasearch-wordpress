@@ -13,6 +13,15 @@ final class DOMParser
     private $attributes = array();
 
     /**
+     * Holds the optional max sizes for the attributes.
+     * When the an attribute exceeds the max size, it will be split over
+     * multiple records. We will ensure the split occurs between words.
+     *
+     * @var array
+     */
+    private $attributeMaxSizes = array();
+
+    /**
      * These attributes will be used if no attribute selectors
      * were set with setAttributeSelectors.
      *
@@ -256,15 +265,23 @@ final class DOMParser
                 continue;
             }
 
-            // If we are deeper in the hierarchy, we need to create a record and go up to
-            // the current element level.
+            // If we are deeper in the hierarchy or at the same level,
+            // we need to create a record and go up to the current element level.
             if ($level <= $this->currentLevel) {
                 $this->publishCurrentObject();
                 $this->prepareCurrentObject($level);
             }
 
-            $this->setCurrentObjectAttribute($attributeKey, $attributeValue);
+            $attributePieces = $this->splitAttributeValue($attributeKey, $attributeValue);
+
+            $this->setCurrentObjectAttribute($attributeKey, array_shift($attributePieces));
             $this->currentLevel = $level;
+
+            foreach ($attributePieces as $value) {
+                $this->publishCurrentObject();
+                $this->prepareCurrentObject($level);
+                $this->setCurrentObjectAttribute($attributeKey, $value);
+            }
         }
         $this->publishCurrentObject();
 
@@ -356,6 +373,59 @@ final class DOMParser
         $node->innertext = '';
         foreach ($node->children() as $child) {
             $this->emptyNodeContent($child);
+        }
+    }
+
+    /**
+     * @param string $attribute The attribute to limit in size.
+     * @param int    $maxSize   The max size in bytes for the attribute.
+     */
+    public function setAttributeMaxSize($attribute, $maxSize)
+    {
+        $maxSize = (int) $maxSize;
+        if ($maxSize <= 0) {
+            throw new \InvalidArgumentException('Max size should be a positive integer greater than zero.');
+        }
+
+        $this->attributeMaxSizes[(string) $attribute] = $maxSize;
+    }
+
+    /**
+     * Returns an array of strings. Each string will conform the attribute's
+     * max size if provided.
+     * 
+     * @param string $attributeKey
+     * @param string $attributeValue
+     *
+     * @return array
+     */
+    private function splitAttributeValue($attributeKey, $attributeValue)
+    {
+        if (!isset($this->attributeMaxSizes[$attributeKey])) {
+            return array($attributeValue);
+        }
+
+        $maxSize = $this->attributeMaxSizes[$attributeKey];
+
+        $values = array();
+
+        while (true) {
+            $attributeValue = trim($attributeValue);
+            if (mb_strlen($attributeValue) <= $maxSize) {
+                $values[] = $attributeValue;
+
+                return $values;
+            }
+
+            $cutAtPosition = mb_strpos($attributeValue, ' ', $maxSize);
+            if (false === $cutAtPosition) {
+                $values[] = $attributeValue;
+
+                return $values;
+            }
+
+            $values[] = mb_strcut($attributeValue, 0, $cutAtPosition);
+            $attributeValue = mb_strcut($attributeValue, $cutAtPosition);
         }
     }
 }
