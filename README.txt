@@ -101,6 +101,14 @@ Automatic updates should work like a charm; as always though, ensure you backup 
 
 == Changelog ==
 
+= 1.5.0 =
+
+* Split content attribute over several records if greater than 5000 bytes
+* Support changing prefix on indices having replicas
+* Add a constant to disable post splitting
+* Fix an issue where the index name would rely on a non existing 'label' key of the post type object
+* Replace Visual Composer shortcodes in posts
+
 = 1.4.1 =
 
 * Fix the validity check for the Admin API key in the settings tab
