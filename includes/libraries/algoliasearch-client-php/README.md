@@ -204,7 +204,7 @@ You can also configure the list of attributes you want to index by order of impo
 ```php
 $index->setSettings(
     [
-        'attributesToIndex' => [
+        'searchableAttributes' => [
             'lastname',
             'firstname',
             'company',
@@ -330,11 +330,11 @@ The server response will look like:
 
     Hits are made of the JSON objects that you stored in the index; therefore, they are mostly schema-less. However, Algolia does enrich them with a few additional fields:
 
-    - `_highlightResult` (object, optional): Highlighted attributes. *Note: Only returned when [`attributesToHighlight`](#attributestohighlight) is non-empty.*
+    - `_highlightResult` (object, optional): Highlighted attributes. *Note: Only returned when [attributesToHighlight](#attributestohighlight) is non-empty.*
 
         - `${attribute_name}` (object): Highlighting for one attribute.
 
-            - `value` (string): Markup text with occurrences highlighted. The tags used for highlighting are specified via [`highlightPreTag`](#highlightpretag) and [`highlightPostTag`](#highlightposttag).
+            - `value` (string): Markup text with occurrences highlighted. The tags used for highlighting are specified via [highlightPreTag](#highlightpretag) and [highlightPostTag](#highlightposttag).
 
             - `matchLevel` (string, enum) = {`none` | `partial` | `full`}: Indicates how well the attribute matched the search query.
 
@@ -342,15 +342,15 @@ The server response will look like:
 
             - `fullyHighlighted` (boolean): Whether the entire attribute value is highlighted.
 
-    - `_snippetResult` (object, optional): Snippeted attributes. *Note: Only returned when [`attributesToSnippet`](#attributestosnippet) is non-empty.*
+    - `_snippetResult` (object, optional): Snippeted attributes. *Note: Only returned when [attributesToSnippet](#attributestosnippet) is non-empty.*
 
         - `${attribute_name}` (object): Snippeting for the corresponding attribute.
 
-            - `value` (string): Markup text with occurrences highlighted and optional ellipsis indicators. The tags used for highlighting are specified via [`highlightPreTag`](#highlightpretag) and [`highlightPostTag`](#highlightposttag). The text used to indicate ellipsis is specified via [`snippetEllipsisText`](#snippetellipsistext).
+            - `value` (string): Markup text with occurrences highlighted and optional ellipsis indicators. The tags used for highlighting are specified via [highlightPreTag](#highlightpretag) and [highlightPostTag](#highlightposttag). The text used to indicate ellipsis is specified via [snippetEllipsisText](#snippetellipsistext).
 
             - `matchLevel` (string, enum) = {`none` | `partial` | `full`}: Indicates how well the attribute matched the search query.
 
-    - `_rankingInfo` (object, optional): Ranking information. *Note: Only returned when [`getRankingInfo`](#getrankinginfo) is `true`.*
+    - `_rankingInfo` (object, optional): Ranking information. *Note: Only returned when [getRankingInfo](#getrankinginfo) is `true`.*
 
         - `nbTypos` (integer): Number of typos encountered when matching the record. Corresponds to the `typos` ranking criterion in the ranking formula.
 
@@ -370,31 +370,31 @@ The server response will look like:
 
         - `filters` (integer): *This field is reserved for advanced usage.* It will be zero in most cases.
 
-    - `_distinctSeqID` (integer): *Note: Only returned when [`distinct`](#distinct) is non-zero.* When two consecutive results have the same value for the attribute used for "distinct", this field is used to distinguish between them.
+    - `_distinctSeqID` (integer): *Note: Only returned when [distinct](#distinct) is non-zero.* When two consecutive results have the same value for the attribute used for "distinct", this field is used to distinguish between them.
 
 - `nbHits` (integer): Number of hits that the search query matched.
 
-- `page` (integer): Index of the current page (zero-based). See the [`page`](#page) search parameter. *Note: Not returned if you use `offset`/`length` for pagination.*
+- `page` (integer): Index of the current page (zero-based). See the [page](#page) search parameter. *Note: Not returned if you use `offset`/`length` for pagination.*
 
-- `hitsPerPage` (integer): Maximum number of hits returned per page. See the [`hitsPerPage`](#hitsperpage) search parameter. *Note: Not returned if you use `offset`/`length` for pagination.*
+- `hitsPerPage` (integer): Maximum number of hits returned per page. See the [hitsPerPage](#hitsperpage) search parameter. *Note: Not returned if you use `offset`/`length` for pagination.*
 
 - `nbPages` (integer): Number of pages corresponding to the number of hits. Basically, `ceil(nbHits / hitsPerPage)`. *Note: Not returned if you use `offset`/`length` for pagination.*
 
 - `processingTimeMS` (integer): Time that the server took to process the request, in milliseconds. *Note: This does not include network time.*
 
-- `query` (string): An echo of the query text. See the [`query`](#query) search parameter.
+- `query` (string): An echo of the query text. See the [query](#query) search parameter.
 
-- `queryAfterRemoval` (string, optional): *Note: Only returned when [`removeWordsIfNoResults`](#removewordsifnoresults) is set.* A markup text indicating which parts of the original query have been removed in order to retrieve a non-empty result set. The removed parts are surrounded by `<em>` tags.
+- `queryAfterRemoval` (string, optional): *Note: Only returned when [removeWordsIfNoResults](#removewordsifnoresults) is set to `lastWords` or `firstWords`.* A markup text indicating which parts of the original query have been removed in order to retrieve a non-empty result set. The removed parts are surrounded by `<em>` tags.
 
 - `params` (string, URL-encoded): An echo of all search parameters.
 
 - `message` (string, optional): Used to return warnings about the query.
 
-- `aroundLatLng` (string, optional): *Note: Only returned when [`aroundLatLngViaIP`](#aroundlatlngviaip) is set.* The computed geo location. **Warning: for legacy reasons, this parameter is a string and not an object.** Format: `${lat},${lng}`, where the latitude and longitude are expressed as decimal floating point numbers.
+- `aroundLatLng` (string, optional): *Note: Only returned when [aroundLatLngViaIP](#aroundlatlngviaip) is set.* The computed geo location. **Warning: for legacy reasons, this parameter is a string and not an object.** Format: `${lat},${lng}`, where the latitude and longitude are expressed as decimal floating point numbers.
 
 - `automaticRadius` (integer, optional): *Note: Only returned for geo queries without an explicitly specified radius (see `aroundRadius`).* The automatically computed radius. **Warning: for legacy reasons, this parameter is a string and not an integer.**
 
-When [`getRankingInfo`](#getrankinginfo) is set to `true`, the following additional fields are returned:
+When [getRankingInfo](#getrankinginfo) is set to `true`, the following additional fields are returned:
 
 - `serverUsed` (string): Actual host name of the server that processed the request. (Our DNS supports automatic failover and load balancing, so this may differ from the host name used in the request.)
 
@@ -406,7 +406,7 @@ When [`getRankingInfo`](#getrankinginfo) is set to `true`, the following additio
 
 ... and ranking information is also added to each of the hits (see above).
 
-When [`facets`](#facets) is non-empty, the following additional fields are returned:
+When [facets](#facets) is non-empty, the following additional fields are returned:
 
 - `facets` (object): Maps each facet name to the corresponding facet counts:
 
@@ -426,12 +426,10 @@ When [`facets`](#facets) is non-empty, the following additional fields are retur
 
         - `sum` (integer | float): The sum of all values in the result set.
 
-- `exhaustiveFacetsCount` (boolean): Whether the counts are exhaustive (`true`) or approximate (`false`). *Note: When using [`distinct`](#distinct), the facet counts cannot be exhaustive.*
-
+- `exhaustiveFacetsCount` (boolean): Whether the counts are exhaustive (`true`) or approximate (`false`). *Note: When using [distinct](#distinct), the facet counts cannot be exhaustive.*
 
 ### Search Parameters
 
-<!--PARAMETERS_LINK-->
 Here is the list of parameters you can use with the search method (`search` [scope](#scope)):
 Parameters that can also be used in a setSettings also have the `indexing` [scope](#scope)
 
@@ -508,8 +506,7 @@ Parameters that can also be used in a setSettings also have the `indexing` [scop
 - [synonyms](#synonyms) `search`
 - [replaceSynonymsInHighlight](#replacesynonymsinhighlight) `search`, `settings`
 - [minProximity](#minproximity) `search`, `settings`
-
-<!--/PARAMETERS_LINK-->
+- [responseFields](#responsefields) `search`, `settings`
 
 ### Multiple queries - `multipleQueries`
 
@@ -663,7 +660,7 @@ $res = $index->saveObjects(
 );
 ```
 
-To update a single object, you can use the `[Update object](#update-object---saveobject) method:
+To update a single object, you can use the `saveObject` method:
 
 ```php
 $index->saveObject(
@@ -855,9 +852,9 @@ $index->setSettings(array("customRanking" => array("desc(followers)")));
 
 Performance wise, it's better to do a `setSettings` before pushing the data
 
-#### Slave settings
+#### Replica settings
 
-You can forward all settings updates to the slaves of an index by using the `forwardToSlaves` option:
+You can forward all settings updates to the replicas of an index by using the `forwardToReplicas` option:
 
 ```php
 $index->setSettings(['customRanking' => ['desc(followers)']], true);
@@ -867,16 +864,14 @@ $index->setSettings(['customRanking' => ['desc(followers)']], true);
 
 ### Index settings parameters
 
-<!--PARAMETERS_LINK-->
-
-Here is the list of parameters you can use with the set settings method (`indexing` [scope](#scope))
+Here is the list of parameters you can use with the set settings method (`settings` [scope](#scope)).
 
 
-Parameters that can be overridden at search time also have the `search` [scope](#scope)
+Parameters that can be overridden at search time also have the `search` [scope](#scope).
 
 **Attributes**
 
-- [attributesToIndex](#attributestoindex) `settings`
+- [searchableAttributes](#searchableattributes) `settings`
 - [attributesForFaceting](#attributesforfaceting) `settings`
 - [attributesToRetrieve](#attributestoretrieve) `settings`, `search`
 - [unretrievableAttributes](#unretrievableattributes) `settings`
@@ -885,7 +880,7 @@ Parameters that can be overridden at search time also have the `search` [scope](
 
 - [ranking](#ranking) `settings`
 - [customRanking](#customranking) `settings`
-- [slaves](#slaves) `settings`
+- [replicas](#replicas) `settings`
 
 **Filtering / Faceting**
 
@@ -929,13 +924,10 @@ Parameters that can be overridden at search time also have the `search` [scope](
 
 - [attributeForDistinct](#attributefordistinct) `settings`
 - [distinct](#distinct) `settings`, `search`
-- [numericAttributesToIndex](#numericattributestoindex) `settings`
+- [numericAttributesForFiltering](#numericattributesforfiltering) `settings`
 - [allowCompressionOfIntegerArray](#allowcompressionofintegerarray) `settings`
 - [altCorrections](#altcorrections) `settings`
 - [placeholders](#placeholders) `settings`
-
-<!--/PARAMETERS_LINK-->
-
 
 ## Parameters
 
@@ -961,7 +953,7 @@ They are three scopes:
 
 **Attributes**
 
-- [attributesToIndex](#attributestoindex) `settings`
+- [searchableAttributes](#searchableattributes) `settings`
 - [attributesForFaceting](#attributesforfaceting) `settings`
 - [unretrievableAttributes](#unretrievableattributes) `settings`
 - [attributesToRetrieve](#attributestoretrieve) `settings`, `search`
@@ -971,7 +963,7 @@ They are three scopes:
 
 - [ranking](#ranking) `settings`
 - [customRanking](#customranking) `settings`
-- [slaves](#slaves) `settings`
+- [replicas](#replicas) `settings`
 
 **Filtering / Faceting**
 
@@ -1032,7 +1024,7 @@ They are three scopes:
 - [attributeForDistinct](#attributefordistinct) `settings`
 - [distinct](#distinct) `settings`, `search`
 - [getRankingInfo](#getrankinginfo) `search`
-- [numericAttributesToIndex](#numericattributestoindex) `settings`
+- [numericAttributesForFiltering](#numericattributesforfiltering) `settings`
 - [allowCompressionOfIntegerArray](#allowcompressionofintegerarray) `settings`
 - [numericFilters (deprecated)](#numericfilters-deprecated) `search`
 - [tagFilters (deprecated)](#tagfilters-deprecated) `search`
@@ -1044,6 +1036,7 @@ They are three scopes:
 - [placeholders](#placeholders) `settings`
 - [altCorrections](#altcorrections) `settings`
 - [minProximity](#minproximity) `search`, `settings`
+- [responseFields](#responsefields) `search`, `settings`
 
 ### Search
 
@@ -1058,11 +1051,12 @@ The instant search query string, used to set the string you want to search in yo
 
 ### Attributes
 
-#### attributesToIndex
+#### searchableAttributes
 
 - scope: `settings`
 - type: `array of strings`
 - default: `*`
+- formerly known as: `attributesToIndex`
 
 
 The list of attributes you want index (i.e. to make searchable).
@@ -1074,7 +1068,7 @@ This parameter has two important uses:
 
 1. **Limit the attributes to index.** For example, if you store the URL of a picture, you want to store it and be able to retrieve it, but you probably don't want to search in the URL.
 
-2. **Control part of the ranking.** The contents of the `attributesToIndex` parameter impacts ranking in two complementary ways:
+2. **Control part of the ranking.** The contents of the `searchableAttributes` parameter impacts ranking in two complementary ways:
 
     First, the order in which attributes are listed defines their ranking priority: matches in attributes at the beginning of the list will be considered more important than matches in attributes further down the list. To assign the same priority to several attributes, pass them within the same string, separated by commas. For example, by specifying `["title,"alternative_title", "text"]`, `title` and `alternative_title` will have the same priority, but a higher priority than `text`.
 
@@ -1129,13 +1123,13 @@ You can also use `*` to retrieve all values when an **attributesToRetrieve** set
 
 - scope: `search`
 - type: `array of strings`
-- default: `attributesToIndex`
+- default: `searchableAttributes`
 
 
-List of attributes you want to use for textual search (must be a subset of the `attributesToIndex` index setting).
+List of attributes you want to use for textual search (must be a subset of the `searchableAttributes` index setting).
 Attributes are separated with a comma such as `"name,address"`.
 You can also use JSON string array encoding such as `encodeURIComponent("[\"name\",\"address\"]")`.
-By default, all attributes specified in the `attributesToIndex` settings are used to search.
+By default, all attributes specified in the `searchableAttributes` settings are used to search.
 
 
 ### Ranking
@@ -1155,7 +1149,7 @@ We have nine available criterion:
 * `geo`: Sort according to decreasing distance when performing a geo location based search.
 * `words`: Sort according to the number of query words matched by decreasing order. This parameter is useful when you use the `optionalWords` query parameter to have results with the most matched words first.
 * `proximity`: Sort according to the proximity of the query words in hits.
-* `attribute`: Sort according to the order of attributes defined by attributesToIndex.
+* `attribute`: Sort according to the order of attributes defined by searchableAttributes.
 * `exact`:
   * If the user query contains one word: sort objects having an attribute that is exactly the query word before others. For example, if you search for the TV show "V", you want to find it with the "V" query and avoid getting all popular TV shows starting by the letter V before it.
   * If the user query contains multiple words: sort according to the number of words that matched exactly (not as a prefix).
@@ -1183,11 +1177,12 @@ For example, `"customRanking" => ["desc(population)", "asc(name)"]`.
 To get a full description of how the Custom Ranking works,
 you can have a look at our [Ranking guide](https://www.algolia.com/doc/guides/relevance/ranking).
 
-#### slaves
+#### replicas
 
 - scope: `settings`
 - type: `array of strings`
 - default: `[]`
+- formerly known as: `slaves`
 
 
 The list of indices on which you want to replicate all write operations.
@@ -1198,7 +1193,7 @@ If you want to use different ranking configurations depending of the use case,
 you need to create one index per ranking configuration.
 
 This option enables you to perform write operations only on this index and automatically
-update slave indices with the same operations.
+update replica indices with the same operations.
 
 ### Filtering / Faceting
 
@@ -1470,7 +1465,7 @@ If set to true, plural won't be considered as a typo. For example, car and cars,
 
 
 List of attributes on which you want to disable typo tolerance
-(must be a subset of the `attributesToIndex` index setting).
+(must be a subset of the `searchableAttributes` index setting).
 
 Attributes are separated with a comma such as `"name,address"`.
 You can also use JSON string array encoding such as `encodeURIComponent("[\"name\",\"address\"]")`.
@@ -1728,7 +1723,7 @@ For most use cases, it is better to not use this feature as people search by key
 
 
 List of attributes on which you want to disable prefix matching
-(must be a subset of the `attributesToIndex` index setting).
+(must be a subset of the `searchableAttributes` index setting).
 
 This setting is useful on attributes that contain string that should not be matched as a prefix
 (for example a product SKU).
@@ -1742,7 +1737,7 @@ This setting is useful on attributes that contain string that should not be matc
 
 
 List of attributes on which you want to disable the computation of `exact` criteria
-(must be a subset of the `attributesToIndex` index setting).
+(must be a subset of the `searchableAttributes` index setting).
 
 #### exactOnSingleWordQuery
 
@@ -1822,11 +1817,12 @@ you can have a look at our [guide on distinct](https://www.algolia.com/doc/searc
 If set to true,
 the result hits will contain ranking information in the **_rankingInfo** attribute.
 
-#### numericAttributesToIndex
+#### numericAttributesForFiltering
 
 - scope: `settings`
 - type: `array of strings`
 - default: ``
+- formerly known as: `numericAttributesToIndex`
 
 
 All numerical attributes are automatically indexed as numerical filters
@@ -2019,6 +2015,25 @@ Considering the query *“javascript framework”*, if you set `minProximity=2`,
 
 **Note:** the maximum `minProximity` that can be set is 7. Any higher value will disable the `proximity` criterion from the ranking formula.
 
+#### responseFields
+
+- scope: `search`, `settings`
+- type: `array of strings`
+- default: `*`
+
+
+Choose which fields the response will contain. Applies to search and browse queries.
+
+By default, all fields are returned. If this parameter is specified, only the fields explicitly listed will be returned, unless `*` is used, in which case all fields are returned. Specifying an empty list or unknown field names is an error.
+
+This parameter is mainly intended to limit the response size. For example, for complex queries, echoing of request parameters in the response's `params` field can be undesirable.
+
+Some fields cannot be filtered out:
+
+- warning `message`
+- `cursor` in browse queries
+- fields triggered explicitly via [getRankingInfo](#getrankinginfo)
+
 
 ## Manage Indices
 
@@ -2089,7 +2104,7 @@ The moveIndex method will overwrite the destination index, and delete the tempor
 **Warning**
 
 The moveIndex operation will override all settings of the destination,
-There is one exception for the [slaves](#slaves) parameter which is not impacted.
+There is one exception for the [replicas](#replicas) parameter which is not impacted.
 
 For example, if you want to fully update your index `MyIndex` every night, we recommend the following process:
 
@@ -2097,13 +2112,13 @@ For example, if you want to fully update your index `MyIndex` every night, we re
   and [Get synonym](#get-synonym---getsynonym).
  1. Apply settings and synonyms to the temporary index `MyTmpIndex`, (this will create the `MyTmpIndex` index)
   using [Set settings](#set-settings---setsettings) and [Batch synonyms](#batch-synonyms---batchsynonyms)
-  (make sure to remove the [slaves](#slaves) parameter from the settings if it exists).
+  (make sure to remove the [replicas](#replicas) parameter from the settings if it exists).
  1. Import your records into a new index using [Add objects](#add-objects---addobjects).
  1. Atomically replace the index `MyIndex` with the content and settings of the index `MyTmpIndex`
  using the [Move index](#move-index---moveindex) method.
  This will automatically override the old index without any downtime on the search.
  1. You'll end up with only one index called `MyIndex`, that contains the records and settings pushed to `MyTmpIndex`
- and the slave-indices that were initially attached to `MyIndex` will be in sync with the new data.
+ and the replica-indices that were initially attached to `MyIndex` will be in sync with the new data.
 
 
 
@@ -2272,7 +2287,7 @@ $public_key = \AlgoliaSearch\Client::generateSecuredApiKey('SearchApiKey', ['res
 
 This method saves a single synonym record into the index.
 
-In this example, we specify true to forward the creation to slave indices.
+In this example, we specify true to forward the creation to replica indices.
 By default the behavior is to save only on the specified index.
 
 ```php
@@ -2286,7 +2301,7 @@ $index->saveSynonym("a-unique-identifier", array(
 ### Batch synonyms - `batchSynonyms`
 
 Use the batch method to create a large number of synonyms at once,
-forward them to slave indices if desired,
+forward them to replica indices if desired,
 and optionally replace all existing synonyms
 on the index with the content of the batch using the replaceExistingSynonyms parameter.
 
@@ -2295,7 +2310,7 @@ on a production index. This is the only way to ensure the index always
 has a full list of synonyms to use during the indexing of the new list.
 
 ```php
-// Batch synonyms, with slave forwarding and atomic replacement of existing synonyms
+// Batch synonyms, with replica forwarding and atomic replacement of existing synonyms
 $index->batchSynonyms(array(array(
   "objectID" => "a-unique-identifier",
   "type" => "synonym",
@@ -2322,10 +2337,10 @@ in the batch update.
 
 Use the normal index delete method to delete synonyms,
 specifying the objectID of the synonym record you want to delete.
-Forward the deletion to slave indices by setting the forwardToSlaves parameter to true.
+Forward the deletion to replica indices by setting the forwardToReplicas parameter to true.
 
 ```php
-// Delete and forward to slaves
+// Delete and forward to replicas
 $index->deleteSynonym("a-unique-identifier", true);
 ```
 
@@ -2340,7 +2355,7 @@ To atomically replace all synonyms of an index,
 use the batch method with the replaceExistingSynonyms parameter set to true.
 
 ```php
-// Clear synonyms and forward to slaves
+// Clear synonyms and forward to replicas
 $index->clearSynonyms(true);
 ```
 

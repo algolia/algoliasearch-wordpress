@@ -247,4 +247,52 @@ EOT;
         $records = $parser->parse($dom);
         $this->assertEquals($expected, $records);
     }
+
+    public function testAttributeMaxSize()
+    {
+        $expected = array(
+            array(
+                'title1'  => '',
+                'title2'  => 'My h2 heading',
+                'title3'  => '',
+                'title4'  => '',
+                'title5'  => '',
+                'title6'  => '',
+                'content' => 'My first',
+            ),
+            array(
+                'title1'  => '',
+                'title2'  => 'My h2 heading',
+                'title3'  => '',
+                'title4'  => '',
+                'title5'  => '',
+                'title6'  => '',
+                'content' => 'paragraph',
+            ),
+            array(
+                'title1'  => '',
+                'title2'  => 'My h2 heading',
+                'title3'  => 'My h3 heading',
+                'title4'  => '',
+                'title5'  => '',
+                'title6'  => '',
+                'content' => '',
+            ),
+        );
+
+        $parser = new DOMParser();
+        $parser->setRootSelector('article');
+        $parser->setAttributeMaxSize('content', 7);
+        $objects = $parser->parse($this->content);
+        $this->assertEquals($expected, $objects);
+    }
+
+    /**
+     * @expectedException \InvalidArgumentException
+     */
+    public function testAttributeMaxSizeIsPostiveInteger()
+    {
+        $parser = new DOMParser();
+        $parser->setAttributeMaxSize('content', -1);
+    }
 }
