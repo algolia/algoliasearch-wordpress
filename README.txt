@@ -12,6 +12,15 @@ Search by Algolia is the smartest way to improve search on your site. Autocomple
 
 The plugin provides relevant search results in milliseconds, ensuring that your users can find your best posts at the speed of thought. It also comes with native typo-tolerance and is language-agnostic, so that every WordPress user, no matter where they are, can benefit from it.
 
+= About pricing =
+
+This plugin relies on the [Algolia service](https://www.algolia.com/) which requires you to [create an account here](https://www.algolia.com/users/sign_up).
+Algolia offers its Search as a Service provider on a incremental payment program, including a free Hacker Plan which includes 10,000 records & 100,000 operations per month. Beyond that, plans start at $49/month.
+
+Note that there isn’t a direct correlation between the number of posts in WordPress and the number of records in Algolia.
+Also note that we only offer support to paying plans.
+On average, you can expect to have about 10 times more records than you have posts, though this is not a golden rule and you could end up with more records.
+
 = Getting started guide =
 Once you have installed the plugin, you can follow the step by step guide provided here: https://community.algolia.com/wordpress/configuration.html
 
