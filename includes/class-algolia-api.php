@@ -45,10 +45,14 @@ class Algolia_API
 	public function get_client() {
 		global $wp_version;
 
+		$integration_name = (string) apply_filters( 'algolia_ua_integration_name', 'Wordpress' );
+		$integration_version = (string) apply_filters( 'algolia_ua_integration_version', ALGOLIA_VERSION );
+		
 		// Build the UserAgent.
-		$ua = '; Wordpress integration (' . ALGOLIA_VERSION . ')'
+		$ua = '; ' . $integration_name . ' integration (' . $integration_version . ')'
 			. '; PHP (' . phpversion() . ')'
 			. '; Wordpress (' . $wp_version . ')';
+		
 
 		Version::$custom_value = $ua;
 
