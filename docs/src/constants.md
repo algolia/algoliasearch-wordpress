@@ -34,3 +34,7 @@ Here is the list of all available constants.
 | ALGOLIA_HIDE_HELP_NOTICES | false | By turning this on, you will hide help notices on the autocomplete and instantsearch admin pages. This is sometimes useful if you are using a custom autocomplete or instantsearch implementation.|
 | ALGOLIA_SPLIT_POSTS | true | By turning this off, 1 post will equal 1 record but content will be truncated to fit into the Algolia payload max size.|
 | ALGOLIA_CONTENT_MAX_SIZE | 5000 | Split the content over several records when exceeding ALGOLIA_CONTENT_MAX_SIZE (size in bytes).
+| ALGOLIA_APPLICATION_ID | null | The Algolia application to use.
+| ALGOLIA_SEARCH_API_KEY | null | The Algolia search only API key to use.
+| ALGOLIA_API_KEY | null | The Algolia admin API key to use.
+| ALGOLIA_INDEX_NAME_PREFIX | 'wp_' | The index name prefix to use.

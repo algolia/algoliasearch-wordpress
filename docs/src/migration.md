@@ -72,3 +72,17 @@ To conclude this section, here are the steps to bring the Search by Algolia plug
 
 
 <div class="alert alert-info">If you experience any problem applying this guide, please reach out to support+wordpress@algolia.com so we can improve it!</div>
+
+## Ease environment switching with constants
+
+Starting from version 1.6.0, you can add the following lines to your `wp-config.php` file:
+
+```
+define( 'ALGOLIA_APPLICATION_ID', '<your_application_id>' );
+define( 'ALGOLIA_SEARCH_API_KEY', '<your_search_api_key>' );
+define( 'ALGOLIA_API_KEY', '<your_api_key>' );
+define( 'ALGOLIA_INDEX_NAME_PREFIX', '<your_index_name_prefix>' );
+```
+
+<div class="alert alert-info">Adding the constants to your `wp-config.php` will disable the editing of those fields via the admin panel.</div>
+

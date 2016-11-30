@@ -197,9 +197,11 @@ class Algolia_Admin_Page_Indexing
 
 	public function index_name_prefix_callback()
 	{
-		$index_name_prefix = $this->plugin->get_settings()->get_index_name_prefix();
+		$settings = $this->plugin->get_settings();
+		$index_name_prefix = $settings->get_index_name_prefix();
+		$disabled_html = $settings->is_index_name_prefix_in_config() ? ' disabled' : '';
 
-		echo '<input type="text" name="algolia_index_name_prefix" value="' . esc_attr( $index_name_prefix ) . '"/>' .
+		echo '<input type="text" name="algolia_index_name_prefix" value="' . esc_attr( $index_name_prefix ) . '" ' . $disabled_html . '/>' .
 			'<p class="description" id="home-description">' . __( 'This prefix will be added to your index names.', 'algolia' ) . '</p>';
 	}
 

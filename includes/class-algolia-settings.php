@@ -25,21 +25,42 @@ class Algolia_Settings
 	 * @return string
 	 */
 	public function get_application_id() {
-		return get_option( 'algolia_application_id', '' );
+		if ( ! $this->is_application_id_in_config() ) {
+
+			return (string) get_option( 'algolia_application_id', '' );
+		}
+
+		$this->assert_constant_is_non_empty_string( ALGOLIA_APPLICATION_ID, 'ALGOLIA_APPLICATION_ID' );
+
+		return ALGOLIA_APPLICATION_ID;
 	}
 
 	/**
 	 * @return string
 	 */
 	public function get_search_api_key() {
-		return get_option( 'algolia_search_api_key', '' );
+		if ( ! $this->is_search_api_key_in_config() ) {
+
+			return (string) get_option( 'algolia_search_api_key', '' );
+		}
+
+		$this->assert_constant_is_non_empty_string( ALGOLIA_SEARCH_API_KEY, 'ALGOLIA_SEARCH_API_KEY' );
+
+		return ALGOLIA_SEARCH_API_KEY;
 	}
 
 	/**
 	 * @return string
 	 */
 	public function get_api_key() {
-		return get_option( 'algolia_api_key', '' );
+		if ( ! $this->is_api_key_in_config() ) {
+
+			return (string) get_option( 'algolia_api_key', '' );
+		}
+
+		$this->assert_constant_is_non_empty_string( ALGOLIA_API_KEY, 'ALGOLIA_API_KEY' );
+
+		return ALGOLIA_API_KEY;
 	}
 
 	/**
@@ -132,8 +153,61 @@ class Algolia_Settings
 	 * @return string
 	 */
 	public function get_index_name_prefix() {
-		return (string) get_option( 'algolia_index_name_prefix', 'wp_' );
+		if ( ! $this->is_index_name_prefix_in_config() ) {
+
+			return (string) get_option( 'algolia_index_name_prefix', 'wp_' );
+		}
+
+		$this->assert_constant_is_non_empty_string( ALGOLIA_INDEX_NAME_PREFIX, 'ALGOLIA_INDEX_NAME_PREFIX' );
+
+		return ALGOLIA_INDEX_NAME_PREFIX;
 	}
+
+	/**
+	 * Makes sure that constants are non empty strings.
+	 * This makes sure that we fail early if the environment configuration is wrong.
+	 *
+	 * @param $value
+	 * @param $constant_name
+	 */
+	protected function assert_constant_is_non_empty_string( $value, $constant_name ) {
+		if ( ! is_string( $value ) ) {
+			throw new RuntimeException( sprintf( 'Constant %s in wp-config.php should be a string, %s given.', $constant_name, gettype( $value ) ) );
+		}
+
+		if ( 0 === mb_strlen( $value ) ) {
+			throw new RuntimeException( sprintf( 'Constant %s in wp-config.php cannot be empty.', $constant_name ) );
+		}
+	}
+
+	/**
+	 * @return bool
+	 */
+	public function is_application_id_in_config() {
+		return defined( 'ALGOLIA_APPLICATION_ID' );
+	}
+
+	/**
+	 * @return bool
+	 */
+	public function is_search_api_key_in_config() {
+		return defined( 'ALGOLIA_SEARCH_API_KEY' );
+	}
+
+	/**
+	 * @return bool
+	 */
+	public function is_api_key_in_config() {
+		return defined( 'ALGOLIA_API_KEY' );
+	}
+
+	/**
+	 * @return bool
+	 */
+	public function is_index_name_prefix_in_config() {
+		return defined( 'ALGOLIA_INDEX_NAME_PREFIX' );
+	}
+
 
 	/**
 	 * @return bool
