@@ -123,20 +123,30 @@ class Algolia_Admin_Page_Settings
 	}
 
 	public function application_id_callback() {
-		$setting = esc_attr( $this->plugin->get_settings()->get_application_id() );
-		echo "<input type='text' name='algolia_application_id' class='regular-text' value='$setting' />" .
+
+		$settings = $this->plugin->get_settings();
+		$setting = esc_attr( $settings->get_application_id() );
+		$disabled_html = $settings->is_application_id_in_config() ? ' disabled' : '';
+
+		echo "<input type='text' name='algolia_application_id' class='regular-text' value='$setting' $disabled_html/>" .
 			'<p class="description" id="home-description">' . __( 'Your Algolia Application ID.', 'algolia' ) . '</p>';
 	}
 
 	public function search_api_key_callback() {
-		$setting = esc_attr( $this->plugin->get_settings()->get_search_api_key() );
-		echo "<input type='text' name='algolia_search_api_key' class='regular-text' value='$setting' />" .
+		$settings = $this->plugin->get_settings();
+		$setting = esc_attr( $settings->get_search_api_key() );
+		$disabled_html = $settings->is_search_api_key_in_config() ? ' disabled' : '';
+
+		echo "<input type='text' name='algolia_search_api_key' class='regular-text' value='$setting' $disabled_html/>" .
 			'<p class="description" id="home-description">' . __( 'Your Algolia Search-only API key (public).', 'algolia' ) . '</p>';
 	}
 
 	public function api_key_callback() {
-		$setting = esc_attr( $this->plugin->get_settings()->get_api_key() );
-		echo "<input type='password' name='algolia_api_key' class='regular-text' value='$setting' />" .
+		$settings = $this->plugin->get_settings();
+		$setting = esc_attr( $settings->get_api_key() );
+		$disabled_html = $settings->is_api_key_in_config() ? ' disabled' : '';
+
+		echo "<input type='password' name='algolia_api_key' class='regular-text' value='$setting' $disabled_html/>" .
 			'<p class="description" id="home-description">' . __( 'Your Algolia ADMIN API key (kept private).', 'algolia' ) . '</p>';
 	}
 
