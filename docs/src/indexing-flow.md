@@ -79,6 +79,33 @@ add_filter( 'algolia_should_index_user', 'filter_user', 10, 2 );
 In the above example, User with ID 1 would never get indexed. This example is trivial, but at least gives you a quick overview on how to filter your items to index.
 Also note how we return `false` early on if the decision has already been taken to not index the content.
 
+**Another example to exclude posts from the searchable_posts index where the noindex option from the Yoast SEO plugin is set to "noindex"**
+```php
+<?php
+
+/**
+ * Don't index pages where the robot index option
+ * in the Yoast SEO plugin is set to noindex.
+ * 
+ * @param bool $should_index
+ * @param WP_Post $post
+ *
+ * @return bool
+ */
+function filter_post( bool $should_index, WP_Post $post )
+{
+    if ( false === $should_index ) {
+        return false;
+    }
+
+    return get_post_meta($post->ID, '_yoast_wpseo_meta-robots-noindex', true) == 1 ? false : true;
+}
+
+// Hook into Algolia to manipulate the post that should be indexed.
+add_filter( 'algolia_should_index_searchable_post', 'filter_post', 10, 2 );
+```
+<div class="alert alert-warning">This example assumes you are using the Yoast SEO plugin for WordPress</div>
+
 
 
 ## Queue processing
