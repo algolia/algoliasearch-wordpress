@@ -99,7 +99,7 @@
 				search.addWidget(
 					instantsearch.widgets.searchBox({
 						container: '#algolia-search-box',
-						placeholder: 'Search for...',
+						placeholder: '<?php echo __('Search for...','algolia'); ?>',
 						wrapInput: false,
 						poweredBy: algolia.powered_by_enabled
 					})
@@ -108,7 +108,13 @@
 				/* Stats widget */
 				search.addWidget(
 					instantsearch.widgets.stats({
-						container: '#algolia-stats'
+						container: '#algolia-stats',
+						templates: {
+                    					body: `{{#hasNoResults}}<?php echo __('No results','algolia');?>{{/hasNoResults}}
+							{{#hasOneResult}}1 <?php echo __('result','algolia');?>{{/hasOneResult}}
+							{{#hasManyResults}}{{#helpers.formatNumber}}{{nbHits}}{{/helpers.formatNumber}} <?php echo __('results','algolia');?>{{/hasManyResults}}
+							<span class="{{cssClasses.time}}"><?php echo __('found in','algolia');?> {{processingTimeMS}}<?php echo __('ms','algolia');?></span>`
+                    				}
 					})
 				);
 
@@ -118,7 +124,7 @@
 						container: '#algolia-hits',
 						hitsPerPage: 10,
 						templates: {
-							empty: 'No results were found for "<strong>{{query}}</strong>".',
+							empty: '<?php echo __('No results were found for','algolia');?> "<strong>{{query}}</strong>".',
 							item: wp.template('instantsearch-hit')
 						}
 					})
@@ -139,7 +145,7 @@
 						sortBy: ['isRefined:desc', 'count:desc', 'name:asc'],
 						limit: 10,
 						templates: {
-							header: '<h3 class="widgettitle">Post Type</h3>'
+							header: '<h3 class="widgettitle"><?php echo __('Post Type','algolia');?></h3>'
 						},
 					})
 				);
@@ -152,7 +158,7 @@
 						sortBy: ['count'],
 						attributes: ['taxonomies_hierarchical.category.lvl0', 'taxonomies_hierarchical.category.lvl1', 'taxonomies_hierarchical.category.lvl2'],
 						templates: {
-							header: '<h3 class="widgettitle">Categories</h3>'
+							header: '<h3 class="widgettitle"><?php echo __('Categories','algolia');?></h3>'
 						}
 					})
 				);
@@ -166,7 +172,7 @@
 						limit: 15,
 						sortBy: ['isRefined:desc', 'count:desc', 'name:asc'],
 						templates: {
-							header: '<h3 class="widgettitle">Tags</h3>'
+							header: '<h3 class="widgettitle"><?php echo __('Tags','algolia');?></h3>'
 						}
 					})
 				);
@@ -179,7 +185,7 @@
 						sortBy: ['isRefined:desc', 'count:desc', 'name:asc'],
 						limit: 10,
 						templates: {
-							header: '<h3 class="widgettitle">Authors</h3>'
+							header: '<h3 class="widgettitle"><?php echo __('Authors','algolia');?></h3>'
 						}
 					})
 				);
