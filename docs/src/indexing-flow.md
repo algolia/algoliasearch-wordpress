@@ -104,6 +104,7 @@ function filter_post( bool $should_index, WP_Post $post )
 // Hook into Algolia to manipulate the post that should be indexed.
 add_filter( 'algolia_should_index_searchable_post', 'filter_post', 10, 2 );
 ```
+<div class="alert alert-warning">This example assumes you are using the Yoast SEO plugin for WordPress</div>
 
 
 
