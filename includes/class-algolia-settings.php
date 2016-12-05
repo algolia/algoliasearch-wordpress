@@ -139,7 +139,9 @@ class Algolia_Settings
 	 * @return bool
 	 */
 	public function should_override_search_with_instantsearch() {
-		return $this->get_override_native_search() === 'instantsearch';
+		$value = $this->get_override_native_search() === 'instantsearch';
+
+		return (bool) apply_filters( 'algolia_should_override_search_with_instantsearch', $value );
 	}
 
 	/**

@@ -90,4 +90,32 @@ class Algolia_CLI extends \WP_CLI_Command {
 			\WP_CLI::success( "Queued [$id] for indexing.");
 		}
 	}
+
+	/**
+	 * Re-index the index passed as first parameter.
+	 *
+	 * ## OPTIONS
+	 *
+	 * <index_id>
+	 * : Index ID to re-index.
+	 *
+	 * ## EXAMPLES
+	 *
+	 *     wp algolia re-index
+	 *
+	 * @alias re-index
+	 */
+	public function re_index( $args ) {
+		list( $index_id ) = $args;
+
+		$ids = $this->plugin->get_settings()->get_synced_indices_ids();
+		if ( ! in_array( $index_id, $ids ) ) {
+			return \WP_CLI::error( "Index ID '$index_id' does not exist, thus can not be re-indexed." );
+		}
+
+		$queue = $this->plugin->get_task_queue();
+
+		$queue->queue( 're_index_items', array( 'index_id' => $index_id ) );
+		\WP_CLI::success( "Queued [$index_id] for indexing.");
+	}
 }
