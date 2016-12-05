@@ -86,3 +86,4 @@ Here is the list of all available Filters.
 |algolia_default_template|string $template, string $file
 |algolia_search_params|array $params
 |algolia_loopback_request_args|array $request_args
+|algolia_should_override_search_with_instantsearch|bool $bool (default: depending on configuration)
