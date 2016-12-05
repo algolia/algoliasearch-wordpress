@@ -332,10 +332,9 @@ abstract class Algolia_Index
 		
 		// Set the synonyms.
 		$synonyms = $this->get_synonyms();
-		if ( empty( $synonyms ) ) {
-			$tmp_index->clearSynonyms();
-			$this->logger->log_operation( sprintf( "[1] Cleared synonyms of index '%s'.", $tmp_index->indexName ), $synonyms );
-		} else {
+		if ( ! empty( $synonyms ) ) {
+			// If synonyms are provided by WordPress, erase existing ones when we push them.
+			// In general though, users will handle the synonyms in the Algolia dashboard.
 			$tmp_index->batchSynonyms( $synonyms, false, true );
 			$this->logger->log_operation( sprintf( "[1] Pushed synonyms to index '%s'.", $tmp_index->indexName ), $synonyms );
 		}
