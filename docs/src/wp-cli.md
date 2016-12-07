@@ -39,5 +39,14 @@ wp algolia re-index-all
 wp algolia re_index_all
 ```
 
+## Command: algolia re-index
 
+The following command will queue a single index for re-indexing.
 
+<div class="alert alert-warning">This does not trigger the processing of the queue. Please see the `process-queue` command to process all generated tasks.</div>
+
+```bash
+wp algolia re-index <index_id>
+# or
+wp algolia re_index <index_id>
+```
