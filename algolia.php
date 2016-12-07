@@ -5,7 +5,7 @@
  * Plugin Name:       Search by Algolia – Instant & Relevant results
  * Plugin URI:        https://community.algolia.com/wordpress
  * Description:       Search by Algolia is the smartest way to improve search on your site. Autocomplete is included, along with full control over look, feel and relevance.
- * Version:           1.5.0
+ * Version:           1.6.0
  * Author:            Algolia
  * Author URI:        https://www.algolia.com/
  * License: 		  MIT License, GNU General Public License v2.0
@@ -30,7 +30,7 @@ if ( version_compare( $wp_version, '3.7.14', '<' ) ) {
 }
 
 // The Algolia Search plugin version.
-define( 'ALGOLIA_VERSION', '1.5.0' );
+define( 'ALGOLIA_VERSION', '1.6.0' );
 define( 'ALGOLIA_PLUGIN_BASENAME', plugin_basename(__FILE__) );
 
 if ( ! defined( 'ALGOLIA_PATH' ) ) {

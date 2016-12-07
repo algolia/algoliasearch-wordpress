@@ -1,3 +1,9 @@
+# 1.6.0
+- Re-index indices instead of moving them when index name prefix is changed
+- Keep the synonyms configured on the Algolia dashboard when we re-index
+- Add a command to the WP-CLI integration to re-index a single index
+- Allow API Keys and index name prefix to be configured with constants to ease switching between environments
+
 # 1.5.0
 - Split content attribute over several records if greater than 5000 bytes
 - Support changing prefix on indices having replicas
