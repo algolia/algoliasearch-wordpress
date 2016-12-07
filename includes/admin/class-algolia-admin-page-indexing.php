@@ -326,10 +326,10 @@ class Algolia_Admin_Page_Indexing
 				continue;
 			}
 
-			$queue->queue( 'change_name_prefix', array( 'index_id' => $index->get_id(), 'from' => $old_value, 'to' => $value ) );
+			$queue->queue( 're_index_items', array( 'index_id' => $index->get_id() ) );
 		}
 		
-		$message = __( 'Your new index prefix has correctly been taken into account. If you had indexed data with the previous index prefix, the indices will be renamed to reflect the change.', 'algolia' );
+		$message = __( 'Your new index prefix has correctly been taken into account. Everything will now be re-indexed.', 'algolia' );
 		set_transient( 'algolia_index_name_prefix_notice', $message );
 	}
 
