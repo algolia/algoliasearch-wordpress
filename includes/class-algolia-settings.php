@@ -250,7 +250,7 @@ class Algolia_Settings
 	 * @return bool
 	 */
 	public function is_powered_by_enabled() {
-		return ! defined( 'ALGOLIA_POWERED_BY' ) || ALGOLIA_POWERED_BY === false;
+		return ! defined( 'ALGOLIA_POWERED_BY' ) || ALGOLIA_POWERED_BY === true;
 		/*$enabled = get_option( 'algolia_powered_by_enabled', 'yes' );
 
 		return $enabled === 'yes';*/
