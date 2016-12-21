@@ -1,5 +1,15 @@
 ## Change Log
 
+### 1.13.0
+- rename searchFacet to searchForFacetValues
+- better checks for curl handles
+
+### 1.12.1
+- Fix UA version number
+
+### 1.12.0
+- Improved retry strategy (#187)
+
 ### 1.11.0
 - Add searchFacet feature
 
