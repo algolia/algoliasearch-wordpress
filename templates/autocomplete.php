@@ -76,7 +76,7 @@
 		var sources = [];
 		jQuery.each(algolia.autocomplete.sources, function(i, config) {
 			sources.push({
-				source: autocomplete.sources.hits(client.initIndex(config['index_name']), {
+				source: algoliaAutocomplete.sources.hits(client.initIndex(config['index_name']), {
 					hitsPerPage: config['max_suggestions'],
 					attributesToSnippet: [
 						'content:10',
@@ -117,7 +117,7 @@
 			}
 
 			/* Instantiate autocomplete.js */
-			autocomplete($searchInput[0], config, sources)
+			algoliaAutocomplete($searchInput[0], config, sources)
 			.on('autocomplete:selected', function(e, suggestion, datasetName) {
 				/* Redirect the user when we detect a suggestion selection. */
 				window.location.href = suggestion.permalink;

@@ -88,6 +88,7 @@ class Algolia_Template_Loader {
 
 		// Enqueue the autocomplete.js library.
 		wp_enqueue_script( 'algolia-autocomplete' );
+		wp_enqueue_script( 'algolia-autocomplete-noconflict' );
 
 		// WordPress utility useful for using underscore templating.
 		wp_enqueue_script( 'wp-util' );
