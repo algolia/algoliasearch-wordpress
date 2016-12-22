@@ -70,17 +70,13 @@ class Algolia_Admin {
 			return;
 		}
 
-		$scheme = ( defined( 'ALGOLIA_LOOPBACK_HTTP' ) && ALGOLIA_LOOPBACK_HTTP === true ) ? 'http' : 'admin';
-		$url = admin_url( 'admin-post.php', $scheme );
-
-		$request_args = array(
+		
+		$url = Algolia_Utils::get_loopback_request_url();
+		$request_args = Algolia_Utils::get_loopback_request_args( array(
 			'timeout'     => 60,
 			'blocking'    => true,
-			'sslverify'   => apply_filters( 'https_local_ssl_verify', true ),
-		);
-
-		$request_args = (array) apply_filters( 'algolia_loopback_request_args', $request_args );
-
+		) );
+		
 		$result = wp_remote_post( $url, $request_args );
 		if( ! $result instanceof WP_Error && $result['response']['code'] === 200 ) {
 			// Remote call check was successful.
