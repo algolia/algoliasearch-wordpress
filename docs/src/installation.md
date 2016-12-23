@@ -21,21 +21,20 @@ Algolia Search plugin for WordPress has a few system requirements to be able to 
 
 You will need to make sure your server meets the following requirements:
 
-- PHP >= 5.3
+- WordPress 4.4+
+- PHP 5.6 or greater
+- MySQL 5.6 or greater
 - cURL PHP extension
 - mbstring PHP extension
 - OpenSSL greater than 1.0.1
-- WordPress in version 3.7.x
 
-<div class="alert alert-warning">You will not be able to install the plugin if one of this requirement is not met.</div>
+<div class="alert alert-info">
+It is possible that the plugin might work on lower versions of the listed requirements.
+Still we recommend you use up to date versions for PHP and WordPress as we might introduce breaking changes in the future.
+</div>
 
 ## Plugin Installation
 
 Please follow installation steps here: https://wordpress.org/plugins/search-by-algolia-instant-relevant-results/installation/
 
-## Conflicting plugins
-
-We have resolved all conflicts we had with third party plugins for now.
-
-If you think you found a conflict with a plugin, please reach out to us so that we can investigate!
 
