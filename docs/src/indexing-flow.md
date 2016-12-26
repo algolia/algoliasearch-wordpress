@@ -56,9 +56,9 @@ Indeed, before each post, term and user indexing, we decide if the item should b
 You can hook into the indexing decision making for searchable posts, posts, terms and users by using respectively the `algolia_should_index_searchable_post`, `algolia_should_index_post`, `algolia_should_index_term` and `algolia_should_index_user` filters.
 
 **Here is an example for filtering user indexing:**
+
 ```php
 <?php
-
 /**
  * @param bool $should_index
  * @param WP_User $user
@@ -80,19 +80,19 @@ In the above example, User with ID 1 would never get indexed. This example is tr
 Also note how we return `false` early on if the decision has already been taken to not index the content.
 
 **Another example to exclude posts from the searchable_posts index where the noindex option from the Yoast SEO plugin is set to "noindex"**
+
 ```php
 <?php
-
 /**
  * Don't index pages where the robot index option
  * in the Yoast SEO plugin is set to noindex.
- * 
- * @param bool $should_index
+ *
+ * @param bool    $should_index
  * @param WP_Post $post
  *
  * @return bool
  */
-function filter_post( bool $should_index, WP_Post $post )
+function filter_post($should_index, WP_Post $post )
 {
     if ( false === $should_index ) {
         return false;
@@ -104,6 +104,7 @@ function filter_post( bool $should_index, WP_Post $post )
 // Hook into Algolia to manipulate the post that should be indexed.
 add_filter( 'algolia_should_index_searchable_post', 'filter_post', 10, 2 );
 ```
+
 <div class="alert alert-warning">This example assumes you are using the Yoast SEO plugin for WordPress</div>
 
 
