@@ -32,7 +32,13 @@ When you are asking for support on [Stack Overflow](http://stackoverflow.com/que
 
 This way, people will get a better sense of what is happening in your WordPress website.
 
-## PHP logs
+## PHP logs - With an extension
+
+If you are not technical or find it easier to use a plugin to access the PHP error logs, you can use: https://wordpress.org/plugins/error-log-monitor/
+
+Once installed, you will be able to see your PHP error logs in a widget on the WordPress dashboard screen.
+
+## PHP logs - Manual
 
 Most of the job done by this plugin is done asynchronously which makes debugging a bit harder.
 For that reason we introduced our custom logs like explained in the previous sections of this page.
