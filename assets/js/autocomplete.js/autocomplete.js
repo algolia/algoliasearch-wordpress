@@ -1,5 +1,5 @@
 /*!
- * autocomplete.js 0.21.8
+ * autocomplete.js 0.23.0
  * https://github.com/algolia/autocomplete.js
  * Copyright 2016 Algolia, Inc. and other contributors; Licensed MIT
  */
@@ -110,6 +110,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	      hint: options.hint === undefined ? true : !!options.hint,
 	      minLength: options.minLength,
 	      autoselect: options.autoselect,
+	      autoselectOnBlur: options.autoselectOnBlur,
 	      openOnFocus: options.openOnFocus,
 	      templates: options.templates,
 	      debug: options.debug,
@@ -139,6 +140,17 @@ return /******/ (function(modules) { // webpackBootstrap
 	}
 
 	autocomplete.sources = Typeahead.sources;
+
+	var wasAutocompleteSet = 'autocomplete' in window;
+	var oldAutocomplete = window.autocomplete;
+	autocomplete.noConflict = function noConflict() {
+	  if (wasAutocompleteSet) {
+	    window.autocomplete = oldAutocomplete;
+	  } else {
+	    delete window.autocomplete;
+	  }
+	  return autocomplete;
+	};
 
 	module.exports = autocomplete;
 
@@ -1617,6 +1629,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	  this.isActivated = false;
 	  this.debug = !!o.debug;
 	  this.autoselect = !!o.autoselect;
+	  this.autoselectOnBlur = !!o.autoselectOnBlur;
 	  this.openOnFocus = !!o.openOnFocus;
 	  this.minLength = _.isNumber(o.minLength) ? o.minLength : 1;
 	  this.cssClasses = o.cssClasses = _.mixin({}, css.defaultClasses, o.cssClasses || {});
@@ -1740,6 +1753,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	  _onCursorRemoved: function onCursorRemoved() {
 	    this.input.resetInputValue();
 	    this._updateHint();
+	    this.eventBus.trigger('cursorremoved');
 	  },
 
 	  _onDatasetRendered: function onDatasetRendered() {
@@ -1787,10 +1801,22 @@ return /******/ (function(modules) { // webpackBootstrap
 	  },
 
 	  _onBlurred: function onBlurred() {
+	    var cursorDatum;
+	    var topSuggestionDatum;
+
+	    cursorDatum = this.dropdown.getDatumForCursor();
+	    topSuggestionDatum = this.dropdown.getDatumForTopSuggestion();
+
 	    if (!this.debug) {
-	      this.isActivated = false;
-	      this.dropdown.empty();
-	      this.dropdown.close();
+	      if (this.autoselectOnBlur && cursorDatum) {
+	        this._select(cursorDatum);
+	      } else if (this.autoselectOnBlur && topSuggestionDatum) {
+	        this._select(topSuggestionDatum);
+	      } else {
+	        this.isActivated = false;
+	        this.dropdown.empty();
+	        this.dropdown.close();
+	      }
 	    }
 	  },
 

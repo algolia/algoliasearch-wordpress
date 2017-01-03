@@ -1,0 +1,1 @@
+window.algoliaAutocomplete = autocomplete.noConflict();
