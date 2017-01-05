@@ -81,6 +81,8 @@ Also note how we return `false` early on if the decision has already been taken 
 
 **Another example to exclude posts from the searchable_posts index where the noindex option from the Yoast SEO plugin is set to "noindex"**
 
+<div class="alert alert-warning">This example assumes you are using the Yoast SEO plugin for WordPress</div>
+
 ```php
 <?php
 /**
@@ -92,7 +94,7 @@ Also note how we return `false` early on if the decision has already been taken 
  *
  * @return bool
  */
-function filter_post($should_index, WP_Post $post )
+function filter_post( $should_index, WP_Post $post )
 {
     if ( false === $should_index ) {
         return false;
@@ -105,7 +107,32 @@ function filter_post($should_index, WP_Post $post )
 add_filter( 'algolia_should_index_searchable_post', 'filter_post', 10, 2 );
 ```
 
-<div class="alert alert-warning">This example assumes you are using the Yoast SEO plugin for WordPress</div>
+**Exclude post types from `searchable_posts_index`**
+
+In this example we exclude the `page` post type from the `searchable_posts` index.
+
+```php
+<?php
+/**
+ * @param bool    $should_index
+ * @param WP_Post $post
+ *
+ * @return bool
+ */
+function exclude_post_types( $should_index, WP_Post $post )
+{
+    // Add all post types you don't want to make searchable.
+    $excluded_post_types = array( 'page' );
+    if ( false === $should_index ) {
+        return false;
+    }
+
+    return ! in_array( $post->post_type, $excluded_post_types, true );
+}
+
+// Hook into Algolia to manipulate the post that should be indexed.
+add_filter( 'algolia_should_index_searchable_post', 'exclude_post_types', 10, 2 );
+```
 
 
 
