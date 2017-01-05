@@ -139,6 +139,26 @@ The default implementation will break on IE9. You can use the `useHash` option o
 
 See https://github.com/algolia/algoliasearch-wordpress/pull/375 for an example of how to enable IE9 support.
 
+### The indexing is slow, can I optimize the required time?
+
+Yes, it depends on your servers capacities though and the number of plugins you have enabled.
+
+By default we only index 50 items per indexing process to ensure we don't reach PHP max execution time or memory limits.
+
+Here is a way to increase the number of items indexed on each PHP indexing process:
+
+```
+<?php
+
+add_filter( 'algolia_indexing_batch_size', function() {
+    return 200;
+} );
+```
+
+If indexing doesn't work anymore after the change, it probably means you pushed the number to high. Checkout the logs in that case to be sure.
+
+
+
 ### Can I remove non required thumbnail sizes from the records?
 
 By default the plugin pushes all the thumbnail sizes available so that you can easily switch the displayed format in your frontend integration.
