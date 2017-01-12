@@ -13,6 +13,12 @@ This plugin comes shipped with commands that can be triggered via the tool.
 
 To setup WP-CLI please checkout its [official documentation](http://wp-cli.org/#installing).
 
+<div class="alert alert-warning">
+If you are using WordPress in a multiwesbite configuration (network enabled), you need to use the `--url` argument to precise on what website you want to execute the commmand.
+If you get the following message: `The configuration for this website does not allow to contact the Algolia API.`, it means you are trying to execute a command on a website that
+is not configured properly to reach the Algolia API (missing the API keys for example).
+</div>
+
 ## Command: algolia process-queue
 
 The following command will process all the pending tasks of the queue.
