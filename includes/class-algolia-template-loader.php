@@ -90,9 +90,6 @@ class Algolia_Template_Loader {
 		wp_enqueue_script( 'algolia-autocomplete' );
 		wp_enqueue_script( 'algolia-autocomplete-noconflict' );
 
-		// WordPress utility useful for using underscore templating.
-		wp_enqueue_script( 'wp-util' );
-
 		// Lib useful for positioning the autocomplete.js dropdown.
 		wp_enqueue_script( 'tether' );
 
@@ -135,9 +132,6 @@ class Algolia_Template_Loader {
 
 			// Enqueue the instantsearch.js library.
 			wp_enqueue_script( 'algolia-instantsearch' );
-
-			// WordPress utility useful for using underscore templating.
-			wp_enqueue_script( 'wp-util' );
 
 			// Allow users to easily enqueue custom styles and scripts.
 			do_action( 'algolia_instantsearch_scripts' );
