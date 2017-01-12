@@ -518,14 +518,9 @@
     text-align: right;
     padding-top: 80px;
 
-    svg {
+    img {
      display: inline-block;
      width: 74px;
-     height: 86px;
-
-     use {
-      fill: #46AEDA;
-     }
     }
   }
 
@@ -905,12 +900,10 @@
     .algolia-logo {
       width: 34px;
       position: relative;
-      top: 6px;
-
-      use {
-        fill: #46AEDA
-      }
+      display: inline-block;
+      vertical-align: bottom;
     }
+
     span {
       font-size: 18px;
     }
