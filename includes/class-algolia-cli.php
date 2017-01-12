@@ -24,6 +24,12 @@ class Algolia_CLI extends \WP_CLI_Command {
 	 * @alias process-queue
 	 */
 	public function process_queue() {
+		if ( ! $this->plugin->get_api()->is_reachable() ) {
+			\WP_CLI::error( 'The configuration for this website does not allow to contact the Algolia API.');
+
+			return;
+		}
+
 		$queue = $this->plugin->get_task_queue();
 		$dispatcher = $this->plugin->get_task_dispatcher();
 
@@ -83,6 +89,12 @@ class Algolia_CLI extends \WP_CLI_Command {
 	 * @alias re-index-all
 	 */
 	public function re_index_all() {
+		if ( ! $this->plugin->get_api()->is_reachable() ) {
+			\WP_CLI::error( 'The configuration for this website does not allow to contact the Algolia API.');
+
+			return;
+		}
+
 		$ids = $this->plugin->get_settings()->get_synced_indices_ids();
 		$queue = $this->plugin->get_task_queue();
 		foreach ( $ids as $id ) {
@@ -106,6 +118,12 @@ class Algolia_CLI extends \WP_CLI_Command {
 	 * @alias re-index
 	 */
 	public function re_index( $args ) {
+		if ( ! $this->plugin->get_api()->is_reachable() ) {
+			\WP_CLI::error( 'The configuration for this website does not allow to contact the Algolia API.');
+
+			return;
+		}
+
 		list( $index_id ) = $args;
 
 		$ids = $this->plugin->get_settings()->get_synced_indices_ids();
