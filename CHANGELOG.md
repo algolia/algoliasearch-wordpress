@@ -1,3 +1,14 @@
+# 1.7.0
+To upgrade from 1.6.0, follow the [Upgrade instructions](https://community.algolia.com/wordpress/upgrade.html#from-1-6-0-to-1-7-0).
+
+- Fix the condition to remove the powered by
+- Use autocomplete.js in noConflict mode
+- Also append Cookies to wp_remote_post test calls on indexing screen
+- Update WordPress tested up to 4.7
+- Ensure wp-util is always loaded before instantsearch.js or autocomplete.js
+- Enable Yoast frontend hooks when indexing records
+- Check if the API is reachable before executing CLI commands
+
 # 1.6.0
 - Re-index indices instead of moving them when index name prefix is changed
 - Keep the synonyms configured on the Algolia dashboard when we re-index
