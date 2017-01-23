@@ -95,7 +95,7 @@ final class Algolia_Searchable_Posts_Index extends Algolia_Index
 	private function get_post_records( WP_Post $post ) {
 		$shared_attributes = $this->get_post_shared_attributes( $post );
 
-		$post_content = apply_filters( 'the_content', $post->post_content );
+		$post_content = apply_filters( 'the_content', preg_replace('/\[\/?et_pb.*?\]/', '', $post->post_content) );
 
 		$parser = new \Algolia\DOMParser();
 		$parser->setExcludeSelectors( array(
@@ -117,7 +117,7 @@ final class Algolia_Searchable_Posts_Index extends Algolia_Index
 			) );
 
 			apply_filters( 'algolia_post_parser', $parser );
-			
+
 			$records = $parser->parse( $post_content );
 
 			$merged = array_shift( $records );
@@ -159,7 +159,7 @@ final class Algolia_Searchable_Posts_Index extends Algolia_Index
 		$shared_attributes = array();
 		$shared_attributes['post_id'] = $post->ID;
 		$shared_attributes['post_type'] = $post->post_type;
-		
+
 		$post_type = get_post_type_object( $post->post_type );
 		if( null === $post_type ) {
 			throw new RuntimeException( 'Unable to fetch the post type information.' );
@@ -184,7 +184,7 @@ final class Algolia_Searchable_Posts_Index extends Algolia_Index
 		}
 
 		$shared_attributes['images'] = Algolia_Utils::get_post_images( $post->ID );
-		
+
 		$shared_attributes['permalink'] = get_permalink( $post );
 		$shared_attributes['post_mime_type'] = $post->post_mime_type;
 
@@ -211,7 +211,7 @@ final class Algolia_Searchable_Posts_Index extends Algolia_Index
 
 		return $shared_attributes;
 	}
-	
+
 	/**
 	 * @return array
 	 */
@@ -366,10 +366,10 @@ final class Algolia_Searchable_Posts_Index extends Algolia_Index
 			'post_status' 		    => 'any', // Let the `should_index` take care of the filtering.
 			'suppress_filters' 	=> true,
 		) );
-		
+
 		return (int) $query->found_posts;
 	}
-	
+
 	/**
 	 * @param int $page
 	 * @param int $batch_size
@@ -410,10 +410,10 @@ final class Algolia_Searchable_Posts_Index extends Algolia_Index
 		if ( ! isset( $data['post_id'] ) ) {
 			return;
 		}
-			
+
 		return get_post( $data['post_id'] );
 	}
-	
+
 	/**
 	 * @param Algolia_Task $task
 	 */
