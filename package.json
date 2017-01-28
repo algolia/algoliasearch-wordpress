@@ -22,8 +22,8 @@
   "dependencies": {
     "algoliasearch": "^3.18",
     "autocomplete.js": "^0.23",
-    "tether": "^1.3.2",
-    "instantsearch.js": "^1.8.8"
+    "instantsearch.js": "^1.8.8",
+    "tether": "^1.3.2"
   },
   "devDependencies": {
     "tachyons": "^4.5.1"

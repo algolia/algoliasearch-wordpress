@@ -15,7 +15,7 @@ git clone --depth 1 git@github.com:techcrunch/wp-async-task.git && rm -rf wp-asy
 cd ../..
 
 # Update JS dependencies.
-docker run --rm -v $(pwd):/app node /bin/bash -c "cd /app; npm update"
+yarn install && yarn upgrade
 
 cp node_modules/algoliasearch/dist/algoliasearch.jquery.js assets/js/algoliasearch/
 cp node_modules/algoliasearch/dist/algoliasearch.jquery.min.js assets/js/algoliasearch/
