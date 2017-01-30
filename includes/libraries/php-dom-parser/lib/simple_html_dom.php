@@ -1019,14 +1019,14 @@ class simple_html_dom
     {
         if ($str)
         {
-            if (preg_match("/^http:\/\//i",$str) || is_file($str))
+            /*if (preg_match("/^http:\/\//i",$str) || is_file($str))
             {
                 $this->load_file($str);
             }
             else
-            {
+            {*/
                 $this->load($str, $lowercase, $stripRN, $defaultBRText, $defaultSpanText);
-            }
+            /*}*/
         }
         // Forcing tags to be closed implies that we don't trust the html, but it can lead to parsing errors if we SHOULD trust the html.
         if (!$forceTagsClosed) {

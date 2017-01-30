@@ -1,7 +1,10 @@
 ## CHANGELOG
 
+### 0.4.0
+- Avoid trying to use the dom string to load a file.
+
 ### 0.3.0
-- Add a way to limit the size of an attribute with `DOMParser::setAttributeMaxSize($attribute, $size)`
+- Add a way to limit the size of an attribute with `DOMParser::setAttributeMaxSize($attribute, $size)`.
 
 ### 0.2.0
 - Avoid loading the `simple_html_dom` library constants, functions and classes if already loaded.
