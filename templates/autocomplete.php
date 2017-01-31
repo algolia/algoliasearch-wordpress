@@ -94,6 +94,7 @@
 							label: config['label']
 						});
 					},
+					empty: wp.template('autocomplete-empty'),
 					suggestion: wp.template(config['tmpl_suggestion'])
 				}
 			});
@@ -110,7 +111,6 @@
 				openOnFocus: true,
 				templates: {}
 			};
-			/* Todo: Add empty template when we fixed https://github.com/algolia/autocomplete.js/issues/109 */
 
 			if(algolia.powered_by_enabled) {
 				config.templates.footer = wp.template('autocomplete-footer');
