@@ -63,7 +63,7 @@
 <script type="text/html" id="tmpl-autocomplete-empty">
 	<div class="autocomplete-empty">
 		<?php esc_html_e( 'No results matched your query ', 'algolia' ); ?>
-		<span class="empty-query">{{ data.query }}"</span>
+		<span class="empty-query">"{{ data.query }}"</span>
 	</div>
 </script>
 
