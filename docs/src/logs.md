@@ -7,7 +7,7 @@ layout: page.html
 
 There is a lot going on behind the scenes of the Algolia Search plugin for WordPress which is precisely why we provide you with some logs.
 
-<div class="alert alert-warning">If the plugin does not work for you and you have no errors logged on the Logs page of this plugin, please be sure to check for [PHP logs](#php-logs).</div>
+<div class="alert alert-warning">If the plugin does not work for you and you have no errors logged on the Logs page of this plugin, please be sure to check for [PHP logs](#php-logs-with-an-extension).</div>
 
 ## Log Levels
 
