@@ -185,4 +185,27 @@ Note however that we also exclude inputs that have an associated `no-autocomplet
 
 So to easily disable the Algolia autocomplete dropdown for a given search input, simply add the `no-autocomplete` class to it.
 
+## Customize autocomplete labels
 
+By default the plugin uses the post type label for each data source section.
+
+To customize the displayed label, you can add the following to your `functions.php` file of your theme:
+
+```php
+add_filter('algolia_autocomplete_config', function(array $config) {
+    $new_labels = array(
+        'searchable_posts' => 'All posts',
+        'posts_product' => 'Video',
+    );
+
+    foreach ($config as &$item) {
+        if(isset($new_labels[$item['index_id']])) {
+            $item['label'] = $new_labels[$item['index_id']];
+        }
+    }
+
+    return $config;
+});
+```
+
+In this example, the autocomplete will display "All posts" instead of "Searchable Posts" and "Video" instead of "Posts".
