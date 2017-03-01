@@ -1,10 +1,16 @@
 
-
  window.onload = function(){
   if ( navigator.userAgent.indexOf('Safari') != -1 ) {
     document.body.classList.add('safari')
   }
  }
+
+ communityHeader({
+    api_key: '52641df1ce4919ba42eb84595f4825c7',
+    index_name: 'wordpress_algolia',
+    input_selector: '#searchbox',
+    input_mobile_selector: '#searchbox'
+  });
 
 $(function () {
 
