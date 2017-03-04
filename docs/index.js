@@ -16,11 +16,11 @@ var imagemin    = require('metalsmith-imagemin');
 var algoliaComponents = require('algolia-components');
 var webpack = require('metalsmith-webpack')
 
-var communityHeaderData = JSON.parse(fs.readFileSync('./component_data/community_header.json').toString());
+var communityHeaderData = JSON.parse(fs.readFileSync('./component_data/communityHeader.json').toString());
 
 var sassPaths = [
     'node_modules/foundation-sites/scss',
-    'node_modules/algolia-components/dist/_community_header.css'
+    'node_modules/algolia-components/dist/communityHeader.css'
 ];
 
 var siteBuild = Metalsmith(__dirname)
@@ -31,7 +31,7 @@ var siteBuild = Metalsmith(__dirname)
         version: '1.7.0',
         time: new Date().getTime(),
         tweets:['666409672006606848','675635141713248256','684325213329305600','669552193419259904','672084577805012992','714625225359425536','669555344725696512','688027404741308417','783838738791227392','782584336323227648','787040561215582208','698839453469544448','687060441881796608','705467858961223680','665028633048821760','654785137272459265','661567388983279617','708574926962294784','707863195025858560'],
-        header: algoliaComponents.community_header.html.render(communityHeaderData)
+        header: algoliaComponents.communityHeader(communityHeaderData)
     })
 
     .source('./src')
@@ -58,8 +58,8 @@ var siteBuild = Metalsmith(__dirname)
     }))
 
     .use(asset({
-        src: './node_modules/algolia-components/dist/_community_header.js',
-        dest: './js/community_header.js'
+        src: './node_modules/algolia-components/dist/_communityHeader.js',
+        dest: './js/communityHeader.js'
     }))
 
     .use(imagemin({

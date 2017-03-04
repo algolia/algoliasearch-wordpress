@@ -1,12 +1,9 @@
 {
-  "mainLogo": "<img src='/img/algolia-logo-darkbg.svg'/>",
   "menu": {
     "community": {
       "style": "widelist",
       "view": "integrations",
       "label": "",
-      "logo": "<img src='/img/logo-community-text.svg'/>",
-      "caret": "",
       "dropdownItems": [{
         "name": "places.js",
         "url": "https://community.algolia.com/places/",
