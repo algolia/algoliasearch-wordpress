@@ -7,8 +7,7 @@
   },
   "sideMenu": [{
     "name": "Install",
-    "url": "/search-by-algolia-instant-relevant-results/",
-    "dropdownItems": null
+    "url": "/search-by-algolia-instant-relevant-results/"
   }, {
     "name": "Documentation",
     "url": "/installation.html"
