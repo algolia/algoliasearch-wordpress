@@ -2,36 +2,37 @@
   "menu": {
     "project": {
       "label": "WordPress plugin",
-      "url": "/"
+      "url": "/wordpress/"
     }
   },
   "sideMenu": [{
     "name": "Install",
-    "url": "/search-by-algolia-instant-relevant-results/",
-    "dropdownItems": null
+    "url": "/wordpress/search-by-algolia-instant-relevant-results/"
   }, {
     "name": "Documentation",
-    "url": "/installation.html"
+    "url": "/wordpress/installation.html"
   }, {
     "name": "FAQ",
-    "url": "/frequently-asked-questions.html"
+    "url": "/wordpress/frequently-asked-questions.html"
   }],
   "mobileMenu": [{
     "name": "Install",
-    "url": "/search-by-algolia-instant-relevant-results/"
+    "url": "/wordpress/search-by-algolia-instant-relevant-results/"
   }, {
     "name": "Documentation",
-    "url": "/installation.html"
+    "url": "/wordpress/installation.html"
   }, {
     "name": "Discourse",
+    "target": "_blank",
     "url": "https://discourse.algolia.com/c/wordpress"
   },{
     "name": "Blog",
     "url": "http://blog.algolia.com/",
+    "target": "_blank",
     "image": "<img src='/img/algolia-mark-blue.svg'/>"
   }, {
     "name": "FAQ",
-    "url": "/frequently-asked-questions.html"
+    "url": "/wordpress/frequently-asked-questions.html"
   }],
   "docSearch": {
     "input_selector": "searchbox",
