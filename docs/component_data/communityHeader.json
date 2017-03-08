@@ -7,17 +7,23 @@
   },
   "sideMenu": [{
     "name": "Install",
-    "url": "/wordpress/search-by-algolia-instant-relevant-results/"
+    "url": "https://wordpress.org/plugins/search-by-algolia-instant-relevant-results/",
+    "target": "_blank"
   }, {
     "name": "Documentation",
     "url": "/wordpress/installation.html"
   }, {
     "name": "FAQ",
     "url": "/wordpress/frequently-asked-questions.html"
+  },{
+    "name": "",
+    "url": "https://github.com/algolia/algoliasearch-wordpress",
+    "target": "_blank",
+    "image": "<img src='img/icon-github.svg'/>"
   }],
   "mobileMenu": [{
     "name": "Install",
-    "url": "/wordpress/search-by-algolia-instant-relevant-results/"
+    "url": "https://wordpress.org/plugins/search-by-algolia-instant-relevant-results/"
   }, {
     "name": "Documentation",
     "url": "/wordpress/installation.html"
@@ -29,7 +35,7 @@
     "name": "Blog",
     "url": "http://blog.algolia.com/",
     "target": "_blank",
-    "image": "<img src='/img/algolia-mark-blue.svg'/>"
+    "image": "<img src='img/algolia-mark-blue.svg'/>"
   }, {
     "name": "FAQ",
     "url": "/wordpress/frequently-asked-questions.html"
