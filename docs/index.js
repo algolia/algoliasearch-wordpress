@@ -13,7 +13,7 @@ var helpers     = require('metalsmith-register-helpers');
 var headingsid  = require('metalsmith-headings-identifier');
 var file        = require('./plugins/file/index.js');
 var imagemin    = require('metalsmith-imagemin');
-var algoliaComponents = require('algolia-components');
+var algoliaComponents = require('algolia-frontend-components');
 var webpack = require('metalsmith-webpack')
 
 var communityHeaderData = JSON.parse(fs.readFileSync('./component_data/communityHeader.json').toString());
@@ -58,7 +58,7 @@ var siteBuild = Metalsmith(__dirname)
     }))
 
     .use(asset({
-        src: './node_modules/algolia-components/dist/_communityHeader.js',
+        src: './node_modules/algolia-frontend-components/dist/_communityHeader.js',
         dest: './js/communityHeader.js'
     }))
 
