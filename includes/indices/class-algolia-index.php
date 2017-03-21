@@ -132,7 +132,9 @@ abstract class Algolia_Index
 	 */
 	public function sync( $item ) {
 		if ( $this->should_index( $item ) ) {
+            do_action( 'algolia_before_get_records', $item );
 			$records = $this->get_records( $item );
+            do_action( 'algolia_after_get_records', $item );
 
 			return $this->update_records( $item, $records );
 		}
@@ -235,8 +237,9 @@ abstract class Algolia_Index
 			if ( ! $this->should_index( $item ) ) {
 				continue;
 			}
-
+            do_action( 'algolia_before_get_records', $item );
 			$records = array_merge( $records, $this->get_records( $item ) );
+            do_action( 'algolia_after_get_records', $item );
 		}
 
 		if ( ! empty( $records ) ) {

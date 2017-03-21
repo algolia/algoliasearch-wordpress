@@ -194,7 +194,7 @@ final class Algolia_Searchable_Posts_Index extends Algolia_Index
 		$shared_attributes['taxonomies'] = array();
 		$shared_attributes['taxonomies_hierarchical'] = array();
 		foreach ( $taxonomy_objects as $taxonomy ) {
-			$terms = get_the_terms( $post->ID, $taxonomy->name );
+            $terms = wp_get_object_terms( $post->ID, $taxonomy->name );
 			$terms = is_array( $terms ) ? $terms : array();
 
 			if ( $taxonomy->hierarchical ) {
