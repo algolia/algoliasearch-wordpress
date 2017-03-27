@@ -2,7 +2,7 @@
   "name": "algoliasearch-wordpress-plugin-docs",
   "private": true,
   "dependencies": {
-    "algolia-frontend-components": "^0.0.18",
+    "algolia-frontend-components": "^0.0.22",
     "babel-runtime": "^6.11.6",
     "cheerio": "^0.20.0",
     "foundation-sites": "^6.2.3",
