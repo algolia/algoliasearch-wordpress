@@ -1,4 +1,4 @@
-/*! instantsearch.js 1.10.4 | © Algolia Inc. and other contributors; Licensed MIT | github.com/algolia/instantsearch.js */(function webpackUniversalModuleDefinition(root, factory) {
+/*! instantsearch.js 1.11.7 | © Algolia Inc. and other contributors; Licensed MIT | github.com/algolia/instantsearch.js */(function webpackUniversalModuleDefinition(root, factory) {
 	if(typeof exports === 'object' && typeof module === 'object')
 		module.exports = factory();
 	else if(typeof define === 'function' && define.amd)
@@ -113,55 +113,59 @@ return /******/ (function(modules) { // webpackBootstrap
 	
 	var _hitsPerPageSelector2 = _interopRequireDefault(_hitsPerPageSelector);
 	
-	var _menu = __webpack_require__(382);
+	var _infiniteHits = __webpack_require__(382);
+	
+	var _infiniteHits2 = _interopRequireDefault(_infiniteHits);
+	
+	var _menu = __webpack_require__(385);
 	
 	var _menu2 = _interopRequireDefault(_menu);
 	
-	var _refinementList = __webpack_require__(386);
+	var _refinementList = __webpack_require__(389);
 	
 	var _refinementList2 = _interopRequireDefault(_refinementList);
 	
-	var _numericRefinementList = __webpack_require__(388);
+	var _numericRefinementList = __webpack_require__(391);
 	
 	var _numericRefinementList2 = _interopRequireDefault(_numericRefinementList);
 	
-	var _numericSelector = __webpack_require__(390);
+	var _numericSelector = __webpack_require__(393);
 	
 	var _numericSelector2 = _interopRequireDefault(_numericSelector);
 	
-	var _pagination = __webpack_require__(391);
+	var _pagination = __webpack_require__(394);
 	
 	var _pagination2 = _interopRequireDefault(_pagination);
 	
-	var _priceRanges = __webpack_require__(400);
+	var _priceRanges = __webpack_require__(403);
 	
 	var _priceRanges2 = _interopRequireDefault(_priceRanges);
 	
-	var _searchBox = __webpack_require__(405);
+	var _searchBox = __webpack_require__(408);
 	
 	var _searchBox2 = _interopRequireDefault(_searchBox);
 	
-	var _rangeSlider = __webpack_require__(407);
+	var _rangeSlider = __webpack_require__(410);
 	
 	var _rangeSlider2 = _interopRequireDefault(_rangeSlider);
 	
-	var _sortBySelector = __webpack_require__(411);
+	var _sortBySelector = __webpack_require__(414);
 	
 	var _sortBySelector2 = _interopRequireDefault(_sortBySelector);
 	
-	var _starRating = __webpack_require__(412);
+	var _starRating = __webpack_require__(415);
 	
 	var _starRating2 = _interopRequireDefault(_starRating);
 	
-	var _stats = __webpack_require__(415);
+	var _stats = __webpack_require__(418);
 	
 	var _stats2 = _interopRequireDefault(_stats);
 	
-	var _toggle = __webpack_require__(418);
+	var _toggle = __webpack_require__(421);
 	
 	var _toggle2 = _interopRequireDefault(_toggle);
 	
-	var _analytics = __webpack_require__(422);
+	var _analytics = __webpack_require__(425);
 	
 	var _analytics2 = _interopRequireDefault(_analytics);
 	
@@ -171,17 +175,17 @@ return /******/ (function(modules) { // webpackBootstrap
 	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
-	// required for browsers not supporting Object.freeze (helper requirement)
-	var instantsearch = (0, _toFactory2.default)(_InstantSearch2.default);
-	
 	// required for IE <= 10 since move to babel6
+	var instantsearch = (0, _toFactory2.default)(_InstantSearch2.default); // required for browsers not supporting Object.freeze (helper requirement)
 	
 	instantsearch.widgets = {
+	  analytics: _analytics2.default,
 	  clearAll: _clearAll2.default,
 	  currentRefinedValues: _currentRefinedValues2.default,
 	  hierarchicalMenu: _hierarchicalMenu2.default,
 	  hits: _hits2.default,
 	  hitsPerPageSelector: _hitsPerPageSelector2.default,
+	  infiniteHits: _infiniteHits2.default,
 	  menu: _menu2.default,
 	  refinementList: _refinementList2.default,
 	  numericRefinementList: _numericRefinementList2.default,
@@ -193,8 +197,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	  sortBySelector: _sortBySelector2.default,
 	  starRating: _starRating2.default,
 	  stats: _stats2.default,
-	  toggle: _toggle2.default,
-	  analytics: _analytics2.default
+	  toggle: _toggle2.default
 	};
 	instantsearch.version = _version2.default;
 	instantsearch.createQueryString = _algoliasearchHelper2.default.url.getQueryStringFromState;
@@ -343,6 +346,9 @@ return /******/ (function(modules) { // webpackBootstrap
 	function defaultCreateURL() {
 	  return '#';
 	}
+	var defaultCreateAlgoliaClient = function defaultCreateAlgoliaClient(defaultAlgoliasearch, appId, apiKey) {
+	  return defaultAlgoliasearch(appId, apiKey);
+	};
 	
 	/**
 	 * @function instantsearch
@@ -354,6 +360,12 @@ return /******/ (function(modules) { // webpackBootstrap
 	 * @param  {function} [options.searchFunction] A hook that will be called each time a search needs to be done, with the
 	 * helper as a parameter. It's your responsibility to call helper.search(). This option allows you to avoid doing
 	 * searches at page load for example.
+	 * @param   {function} [options.createAlgoliaClient] Allows you to provide your own algolia client instead of
+	 * the one instantiated internally by instantsearch.js. Useful in situations where you need
+	 * to setup complex options on the client or if you need to share it easily.
+	 * Usage:
+	 * `createAlgoliaClient: function(algoliasearch, appId, apiKey) { return anyCustomClient; }`
+	 * We forward `algoliasearch` which is the original algoliasearch module imported inside instantsearch.js
 	 * @param  {Object} [options.searchParameters] Additional parameters to pass to
 	 * the Algolia API.
 	 * [Full documentation](https://community.algolia.com/algoliasearch-helper-js/reference.html#searchparameters)
@@ -397,7 +409,9 @@ return /******/ (function(modules) { // webpackBootstrap
 	        searchParameters = _ref$searchParameters === undefined ? {} : _ref$searchParameters,
 	        _ref$urlSync = _ref.urlSync,
 	        urlSync = _ref$urlSync === undefined ? null : _ref$urlSync,
-	        searchFunction = _ref.searchFunction;
+	        searchFunction = _ref.searchFunction,
+	        _ref$createAlgoliaCli = _ref.createAlgoliaClient,
+	        createAlgoliaClient = _ref$createAlgoliaCli === undefined ? defaultCreateAlgoliaClient : _ref$createAlgoliaCli;
 	
 	    _classCallCheck(this, InstantSearch);
 	
@@ -408,7 +422,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	      throw new Error(usage);
 	    }
 	
-	    var client = (0, _algoliasearchLite2.default)(appId, apiKey);
+	    var client = createAlgoliaClient(_algoliasearchLite2.default, appId, apiKey);
 	    client.addAlgoliaAgent('instantsearch.js ' + _version2.default);
 	
 	    _this.client = client;
@@ -760,6 +774,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	  var requestDebug = __webpack_require__(24)('algoliasearch:' + initialOpts.url);
 	
 	  var body;
+	  var additionalUA = initialOpts.additionalUA || '';
 	  var cache = initialOpts.cache;
 	  var client = this;
 	  var tries = 0;
@@ -774,9 +789,9 @@ return /******/ (function(modules) { // webpackBootstrap
 	    initialOpts.body.requests !== undefined) // client.search()
 	  ) {
 	    initialOpts.body.apiKey = this.apiKey;
-	    headers = this._computeRequestHeaders(false);
+	    headers = this._computeRequestHeaders(additionalUA, false);
 	  } else {
-	    headers = this._computeRequestHeaders();
+	    headers = this._computeRequestHeaders(additionalUA);
 	  }
 	
 	  if (initialOpts.body !== undefined) {
@@ -833,7 +848,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	        reqOpts.body = safeJSONStringify(reqOpts.jsonBody);
 	      }
 	      // re-compute headers, they could be omitting the API KEY
-	      headers = client._computeRequestHeaders();
+	      headers = client._computeRequestHeaders(additionalUA);
 	
 	      reqOpts.timeouts = client._getTimeoutsForRequest(initialOpts.hostType);
 	      client._setHostIndexByType(0, initialOpts.hostType);
@@ -1032,6 +1047,9 @@ return /******/ (function(modules) { // webpackBootstrap
 	
 	/*
 	* Transform search param object in query string
+	* @param {object} args arguments to add to the current query string
+	* @param {string} params current query string
+	* @return {string} the final query string
 	*/
 	AlgoliaSearchCore.prototype._getSearchParams = function(args, params) {
 	  if (args === undefined || args === null) {
@@ -1046,11 +1064,15 @@ return /******/ (function(modules) { // webpackBootstrap
 	  return params;
 	};
 	
-	AlgoliaSearchCore.prototype._computeRequestHeaders = function(withAPIKey) {
+	AlgoliaSearchCore.prototype._computeRequestHeaders = function(additionalUA, withAPIKey) {
 	  var forEach = __webpack_require__(10);
 	
+	  var ua = additionalUA ?
+	    this._ua + ';' + additionalUA :
+	    this._ua;
+	
 	  var requestHeaders = {
-	    'x-algolia-agent': this._ua,
+	    'x-algolia-agent': ua,
 	    'x-algolia-application-id': this.applicationID
 	  };
 	
@@ -1565,8 +1587,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	* Search inside the index using XMLHttpRequest request (Using a POST query to
 	* minimize number of OPTIONS queries: Cross-Origin Resource Sharing).
 	*
-	* @param query the full text query
-	* @param args (optional) if set, contains an object with query parameters:
+	* @param {string} [query] the full text query
+	* @param {object} [args] (optional) if set, contains an object with query parameters:
 	* - page: (integer) Pagination parameter used to select the page to retrieve.
 	*                   Page is zero-based and defaults to 0. Thus,
 	*                   to retrieve the 10th page you need to set page=9
@@ -1652,7 +1674,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	* - restrictSearchableAttributes: List of attributes you want to use for
 	* textual search (must be a subset of the attributesToIndex index setting)
 	* either comma separated or as an array
-	* @param callback the result callback called with two arguments:
+	* @param {function} [callback] the result callback called with two arguments:
 	*  error: null or Error('message'). If false, the content contains the error.
 	*  content: the server answer that contains the list of results.
 	*/
@@ -1663,8 +1685,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	* Search a record similar to the query inside the index using XMLHttpRequest request (Using a POST query to
 	* minimize number of OPTIONS queries: Cross-Origin Resource Sharing).
 	*
-	* @param query the similar query
-	* @param args (optional) if set, contains an object with query parameters.
+	* @param {string} [query] the similar query
+	* @param {object} [args] (optional) if set, contains an object with query parameters.
 	*   All search parameters are supported (see search function), restrictSearchableAttributes and facetFilters
 	*   are the two most useful to restrict the similar results and get more relevant content
 	*/
@@ -1739,8 +1761,9 @@ return /******/ (function(modules) { // webpackBootstrap
 	  var params = this.as._getSearchParams(queryParameters, '');
 	
 	  return this.as._jsonRequest({
-	    method: 'GET',
-	    url: '/1/indexes/' + encodeURIComponent(indexObj.indexName) + '/browse?' + params,
+	    method: 'POST',
+	    url: '/1/indexes/' + encodeURIComponent(indexObj.indexName) + '/browse',
+	    body: {params: params},
 	    hostType: 'read',
 	    callback: callback
 	  });
@@ -1761,8 +1784,9 @@ return /******/ (function(modules) { // webpackBootstrap
 	*/
 	IndexCore.prototype.browseFrom = function(cursor, callback) {
 	  return this.as._jsonRequest({
-	    method: 'GET',
-	    url: '/1/indexes/' + encodeURIComponent(this.indexName) + '/browse?cursor=' + encodeURIComponent(cursor),
+	    method: 'POST',
+	    url: '/1/indexes/' + encodeURIComponent(this.indexName) + '/browse',
+	    body: {cursor: cursor},
 	    hostType: 'read',
 	    callback: callback
 	  });
@@ -1812,7 +1836,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	  'index.searchForFacetValues(params[, callback])'
 	));
 	
-	IndexCore.prototype._search = function(params, url, callback) {
+	IndexCore.prototype._search = function(params, url, callback, additionalUA) {
 	  return this.as._jsonRequest({
 	    cache: this.cache,
 	    method: 'POST',
@@ -1824,7 +1848,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	      url: '/1/indexes/' + encodeURIComponent(this.indexName),
 	      body: {params: params}
 	    },
-	    callback: callback
+	    callback: callback,
+	    additionalUA: additionalUA
 	  });
 	};
 	
@@ -1924,7 +1949,20 @@ return /******/ (function(modules) { // webpackBootstrap
 	
 	var errors = __webpack_require__(8);
 	
+	/**
+	 * Creates a search method to be used in clients
+	 * @param {string} queryParam the name of the attribute used for the query
+	 * @param {string} url the url
+	 * @return {function} the search method
+	 */
 	function buildSearchMethod(queryParam, url) {
+	  /**
+	   * The search method. Prepares the data and send the query to Algolia.
+	   * @param {string} query the string used for query search
+	   * @param {object} args additional parameters to send with the search
+	   * @param {function} [callback] the callback to be called with the client gets the answer
+	   * @return {undefined|Promise} If the callback is not provided then this methods returns a Promise
+	   */
 	  return function search(query, args, callback) {
 	    // warn V2 users on how to search
 	    if (typeof query === 'function' && typeof args === 'object' ||
@@ -1934,17 +1972,19 @@ return /******/ (function(modules) { // webpackBootstrap
 	      throw new errors.AlgoliaSearchError('index.search usage is index.search(query, params, cb)');
 	    }
 	
+	    // Normalizing the function signature
 	    if (arguments.length === 0 || typeof query === 'function') {
-	      // .search(), .search(cb)
+	      // Usage : .search(), .search(cb)
 	      callback = query;
 	      query = '';
 	    } else if (arguments.length === 1 || typeof args === 'function') {
-	      // .search(query/args), .search(query, cb)
+	      // Usage : .search(query/args), .search(query, cb)
 	      callback = args;
 	      args = undefined;
 	    }
+	    // At this point we have 3 arguments with values
 	
-	    // .search(args), careful: typeof null === 'object'
+	    // Usage : .search(args) // careful: typeof null === 'object'
 	    if (typeof query === 'object' && query !== null) {
 	      args = query;
 	      query = undefined;
@@ -1958,12 +1998,18 @@ return /******/ (function(modules) { // webpackBootstrap
 	      params += queryParam + '=' + encodeURIComponent(query);
 	    }
 	
+	    var additionalUA;
 	    if (args !== undefined) {
+	      if (args.additionalUA) {
+	        additionalUA = args.additionalUA;
+	        delete args.additionalUA;
+	      }
 	      // `_getSearchParams` will augment params, do not be fooled by the = versus += from previous if
 	      params = this.as._getSearchParams(args, params);
 	    }
 	
-	    return this._search(params, url, callback);
+	
+	    return this._search(params, url, callback, additionalUA);
 	  };
 	}
 
@@ -2349,7 +2395,8 @@ return /******/ (function(modules) { // webpackBootstrap
 /* 24 */
 /***/ function(module, exports, __webpack_require__) {
 
-	/* WEBPACK VAR INJECTION */(function(process) {/**
+	/* WEBPACK VAR INJECTION */(function(process) {
+	/**
 	 * This is the web browser implementation of `debug()`.
 	 *
 	 * Expose `debug()` as the module.
@@ -2388,23 +2435,14 @@ return /******/ (function(modules) { // webpackBootstrap
 	 */
 	
 	function useColors() {
-	  // NB: In an Electron preload script, document will be defined but not fully
-	  // initialized. Since we know we're in Chrome, we'll just detect this case
-	  // explicitly
-	  if (typeof window !== 'undefined' && 'process' in window && window.process.type === 'renderer') {
-	    return true;
-	  }
-	
 	  // is webkit? http://stackoverflow.com/a/16459606/376773
 	  // document is undefined in react-native: https://github.com/facebook/react-native/pull/1632
 	  return (typeof document !== 'undefined' && 'WebkitAppearance' in document.documentElement.style) ||
 	    // is firebug? http://stackoverflow.com/a/398120/376773
-	    (typeof window !== 'undefined' && window.console && (console.firebug || (console.exception && console.table))) ||
+	    (window.console && (console.firebug || (console.exception && console.table))) ||
 	    // is firefox >= v31?
 	    // https://developer.mozilla.org/en-US/docs/Tools/Web_Console#Styling_messages
-	    (navigator.userAgent && navigator.userAgent.toLowerCase().match(/firefox\/(\d+)/) && parseInt(RegExp.$1, 10) >= 31) ||
-	    // double check webkit in userAgent just in case we are in a worker
-	    (navigator.userAgent && navigator.userAgent.toLowerCase().match(/applewebkit\/(\d+)/));
+	    (navigator.userAgent.toLowerCase().match(/firefox\/(\d+)/) && parseInt(RegExp.$1, 10) >= 31);
 	}
 	
 	/**
@@ -2426,7 +2464,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	 * @api public
 	 */
 	
-	function formatArgs(args) {
+	function formatArgs() {
+	  var args = arguments;
 	  var useColors = this.useColors;
 	
 	  args[0] = (useColors ? '%c' : '')
@@ -2436,10 +2475,10 @@ return /******/ (function(modules) { // webpackBootstrap
 	    + (useColors ? '%c ' : ' ')
 	    + '+' + exports.humanize(this.diff);
 	
-	  if (!useColors) return;
+	  if (!useColors) return args;
 	
 	  var c = 'color: ' + this.color;
-	  args.splice(1, 0, c, 'color: inherit')
+	  args = [args[0], c, 'color: inherit'].concat(Array.prototype.slice.call(args, 1));
 	
 	  // the final "%c" is somewhat tricky, because there could be other
 	  // arguments passed either before or after the %c, so we need to
@@ -2457,6 +2496,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	  });
 	
 	  args.splice(lastC, 0, c);
+	  return args;
 	}
 	
 	/**
@@ -2527,7 +2567,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	 * @api private
 	 */
 	
-	function localstorage() {
+	function localstorage(){
 	  try {
 	    return window.localStorage;
 	  } catch (e) {}
@@ -2733,7 +2773,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	 * Expose `debug()` as the module.
 	 */
 	
-	exports = module.exports = createDebug.debug = createDebug.default = createDebug;
+	exports = module.exports = debug.debug = debug;
 	exports.coerce = coerce;
 	exports.disable = disable;
 	exports.enable = enable;
@@ -2750,10 +2790,16 @@ return /******/ (function(modules) { // webpackBootstrap
 	/**
 	 * Map of special "%n" handling functions, for the debug "format" argument.
 	 *
-	 * Valid key names are a single, lower or upper-case letter, i.e. "n" and "N".
+	 * Valid key names are a single, lowercased letter, i.e. "n".
 	 */
 	
 	exports.formatters = {};
+	
+	/**
+	 * Previously assigned color.
+	 */
+	
+	var prevColor = 0;
 	
 	/**
 	 * Previous log timestamp.
@@ -2763,20 +2809,13 @@ return /******/ (function(modules) { // webpackBootstrap
 	
 	/**
 	 * Select a color.
-	 * @param {String} namespace
+	 *
 	 * @return {Number}
 	 * @api private
 	 */
 	
-	function selectColor(namespace) {
-	  var hash = 0, i;
-	
-	  for (i in namespace) {
-	    hash  = ((hash << 5) - hash) + namespace.charCodeAt(i);
-	    hash |= 0; // Convert to 32bit integer
-	  }
-	
-	  return exports.colors[Math.abs(hash) % exports.colors.length];
+	function selectColor() {
+	  return exports.colors[prevColor++ % exports.colors.length];
 	}
 	
 	/**
@@ -2787,13 +2826,17 @@ return /******/ (function(modules) { // webpackBootstrap
 	 * @api public
 	 */
 	
-	function createDebug(namespace) {
+	function debug(namespace) {
 	
-	  function debug() {
-	    // disabled?
-	    if (!debug.enabled) return;
+	  // define the `disabled` version
+	  function disabled() {
+	  }
+	  disabled.enabled = false;
 	
-	    var self = debug;
+	  // define the `enabled` version
+	  function enabled() {
+	
+	    var self = enabled;
 	
 	    // set `diff` timestamp
 	    var curr = +new Date();
@@ -2803,7 +2846,10 @@ return /******/ (function(modules) { // webpackBootstrap
 	    self.curr = curr;
 	    prevTime = curr;
 	
-	    // turn the `arguments` into a proper Array
+	    // add the `color` if not set
+	    if (null == self.useColors) self.useColors = exports.useColors();
+	    if (null == self.color && self.useColors) self.color = selectColor();
+	
 	    var args = new Array(arguments.length);
 	    for (var i = 0; i < args.length; i++) {
 	      args[i] = arguments[i];
@@ -2812,13 +2858,13 @@ return /******/ (function(modules) { // webpackBootstrap
 	    args[0] = exports.coerce(args[0]);
 	
 	    if ('string' !== typeof args[0]) {
-	      // anything else let's inspect with %O
-	      args.unshift('%O');
+	      // anything else let's inspect with %o
+	      args = ['%o'].concat(args);
 	    }
 	
 	    // apply any `formatters` transformations
 	    var index = 0;
-	    args[0] = args[0].replace(/%([a-zA-Z%])/g, function(match, format) {
+	    args[0] = args[0].replace(/%([a-z%])/g, function(match, format) {
 	      // if we encounter an escaped % then don't increase the array index
 	      if (match === '%%') return match;
 	      index++;
@@ -2834,24 +2880,19 @@ return /******/ (function(modules) { // webpackBootstrap
 	      return match;
 	    });
 	
-	    // apply env-specific formatting (colors, etc.)
-	    exports.formatArgs.call(self, args);
+	    // apply env-specific formatting
+	    args = exports.formatArgs.apply(self, args);
 	
 	    var logFn = enabled.log || exports.log || console.log.bind(console);
 	    logFn.apply(self, args);
 	  }
+	  enabled.enabled = true;
 	
-	  debug.namespace = namespace;
-	  debug.enabled = exports.enabled(namespace);
-	  debug.useColors = exports.useColors();
-	  debug.color = selectColor(namespace);
+	  var fn = exports.enabled(namespace) ? enabled : disabled;
 	
-	  // env-specific initialization logic for debug instances
-	  if ('function' === typeof exports.init) {
-	    exports.init(debug);
-	  }
+	  fn.namespace = namespace;
 	
-	  return debug;
+	  return fn;
 	}
 	
 	/**
@@ -2870,7 +2911,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	
 	  for (var i = 0; i < len; i++) {
 	    if (!split[i]) continue; // ignore empty strings
-	    namespaces = split[i].replace(/\*/g, '.*?');
+	    namespaces = split[i].replace(/[\\^$+?.()|[\]{}]/g, '\\$&').replace(/\*/g, '.*?');
 	    if (namespaces[0] === '-') {
 	      exports.skips.push(new RegExp('^' + namespaces.substr(1) + '$'));
 	    } else {
@@ -4795,7 +4836,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	'use strict';
 	
-	module.exports = '3.20.4';
+	module.exports = '3.21.1';
 
 
 /***/ },
@@ -4973,7 +5014,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	 */
 	function AlgoliaSearchHelper(client, index, options) {
 	  if (!client.addAlgoliaAgent) console.log('Please upgrade to the newest version of the JS Client.'); // eslint-disable-line
-	  else client.addAlgoliaAgent('JS Helper ' + version);
+	  else if (!doesClientAgentContainsHelper(client)) client.addAlgoliaAgent('JS Helper ' + version);
 	
 	  this.setClient(client);
 	  var opts = options || {};
@@ -5475,19 +5516,38 @@ return /******/ (function(modules) { // webpackBootstrap
 	 * @throws Error will throw an error if the facet is not declared in the settings of the helper
 	 * @fires change
 	 * @chainable
+	 * @deprecated since version 2.19.0, see {@link AlgoliaSearchHelper#toggleFacetRefinement}
 	 */
 	AlgoliaSearchHelper.prototype.toggleRefinement = function(facet, value) {
-	  this.state = this.state.setPage(0).toggleRefinement(facet, value);
+	  return this.toggleFacetRefinement(facet, value);
+	};
+	
+	/**
+	 * Adds or removes a filter to a facetted attribute with the `value` provided. If
+	 * the value is set then it removes it, otherwise it adds the filter.
+	 *
+	 * This method can be used for conjunctive, disjunctive and hierarchical filters.
+	 *
+	 * This method resets the current page to 0.
+	 * @param  {string} facet the facet to refine
+	 * @param  {string} value the associated value
+	 * @return {AlgoliaSearchHelper}
+	 * @throws Error will throw an error if the facet is not declared in the settings of the helper
+	 * @fires change
+	 * @chainable
+	 */
+	AlgoliaSearchHelper.prototype.toggleFacetRefinement = function(facet, value) {
+	  this.state = this.state.setPage(0).toggleFacetRefinement(facet, value);
 	
 	  this._change();
 	  return this;
 	};
 	
 	/**
-	 * @deprecated since version 2.4.0, see {@link AlgoliaSearchHelper#toggleRefinement}
+	 * @deprecated since version 2.4.0, see {@link AlgoliaSearchHelper#toggleFacetRefinement}
 	 */
 	AlgoliaSearchHelper.prototype.toggleRefine = function() {
-	  return this.toggleRefinement.apply(this, arguments);
+	  return this.toggleFacetRefinement.apply(this, arguments);
 	};
 	
 	/**
@@ -5761,7 +5821,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	 * helper.hasRefinements('material'); // true
 	 *
 	 * helper.hasRefinements('categories'); // false
-	 * helper.toggleRefinement('categories', 'kitchen > knife');
+	 * helper.toggleFacetRefinement('categories', 'kitchen > knife');
 	 * helper.hasRefinements('categories'); // true
 	 *
 	 */
@@ -6112,7 +6172,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	AlgoliaSearchHelper.prototype.setClient = function(newClient) {
 	  if (this.client === newClient) return this;
 	
-	  if (newClient.addAlgoliaAgent) newClient.addAlgoliaAgent('JS Helper ' + version);
+	  if (newClient.addAlgoliaAgent && !doesClientAgentContainsHelper(newClient)) newClient.addAlgoliaAgent('JS Helper ' + version);
 	  this.client = newClient;
 	
 	  return this;
@@ -6138,7 +6198,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	 * is `SearchParameters -> SearchParameters`.
 	 *
 	 * This method returns a new DerivedHelper which is an EventEmitter
-	 * that fires the same `search`, `results` and `error` events. Those
+	 * that fires the same `search`, `result` and `error` events. Those
 	 * events, however, will receive data specific to this DerivedHelper
 	 * and the SearchParameters that is returned by the call of the
 	 * parameter function.
@@ -6179,6 +6239,18 @@ return /******/ (function(modules) { // webpackBootstrap
 	 * @property {string} value the string use to filter the attribute
 	 * @property {string} type the type of filter: 'conjunctive', 'disjunctive', 'exclude'
 	 */
+	
+	
+	/*
+	 * This function tests if the _ua parameter of the client
+	 * already contains the JS Helper UA
+	 */
+	function doesClientAgentContainsHelper(client) {
+	  // this relies on JS Client internal variable, this might break if implementation changes
+	  var currentAgent = client._ua;
+	  return !currentAgent ? false :
+	    currentAgent.indexOf('JS Helper') !== -1;
+	}
 	
 	module.exports = AlgoliaSearchHelper;
 
@@ -7339,12 +7411,24 @@ return /******/ (function(modules) { // webpackBootstrap
 	   * @param  {string} value the associated value
 	   * @return {SearchParameters}
 	   * @throws will throw an error if the facet is not declared in the settings of the helper
+	   * @deprecated since version 2.19.0, see {@link SearchParameters#toggleFacetRefinement}
 	   */
 	  toggleRefinement: function toggleRefinement(facet, value) {
+	    return this.toggleFacetRefinement(facet, value);
+	  },
+	  /**
+	   * Generic toggle refinement method to use with facet, disjunctive facets
+	   * and hierarchical facets
+	   * @param  {string} facet the facet to refine
+	   * @param  {string} value the associated value
+	   * @return {SearchParameters}
+	   * @throws will throw an error if the facet is not declared in the settings of the helper
+	   */
+	  toggleFacetRefinement: function toggleFacetRefinement(facet, value) {
 	    if (this.isHierarchicalFacet(facet)) {
 	      return this.toggleHierarchicalFacetRefinement(facet, value);
 	    } else if (this.isConjunctiveFacet(facet)) {
-	      return this.toggleFacetRefinement(facet, value);
+	      return this.toggleConjunctiveFacetRefinement(facet, value);
 	    } else if (this.isDisjunctiveFacet(facet)) {
 	      return this.toggleDisjunctiveFacetRefinement(facet, value);
 	    }
@@ -7359,7 +7443,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	   * @param {value} value value used for filtering
 	   * @return {SearchParameters}
 	   */
-	  toggleFacetRefinement: function toggleFacetRefinement(facet, value) {
+	  toggleConjunctiveFacetRefinement: function toggleConjunctiveFacetRefinement(facet, value) {
 	    if (!this.isConjunctiveFacet(facet)) {
 	      throw new Error(facet + ' is not defined in the facets attribute of the helper configuration');
 	    }
@@ -15854,6 +15938,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	function SearchResults(state, results) {
 	  var mainSubResponse = results[0];
 	
+	  this._rawResults = results;
+	
 	  /**
 	   * query used to generate the results
 	   * @member {string}
@@ -21094,7 +21180,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	'use strict';
 	
-	module.exports = '2.18.0';
+	module.exports = '2.19.0';
 
 
 /***/ },
@@ -21374,7 +21460,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	 * @property {string} character the character used in the url
 	 * @property {function} onpopstate add an event listener for the URL change
 	 * @property {function} pushState creates a new entry in the browser history
-	 * @property {function} replaceState update the current entry of the browser history
 	 * @property {function} readUrl reads the query string of the parameters
 	 */
 	
@@ -21383,15 +21468,27 @@ return /******/ (function(modules) { // webpackBootstrap
 	 * @type {UrlUtil}
 	 */
 	var hashUrlUtils = {
+	  ignoreNextPopState: false,
 	  character: '#',
 	  onpopstate: function onpopstate(cb) {
-	    window.addEventListener('hashchange', cb);
+	    var _this = this;
+	
+	    window.addEventListener('hashchange', function (hash) {
+	      if (_this.ignoreNextPopState) {
+	        _this.ignoreNextPopState = false;
+	        return;
+	      }
+	
+	      cb(hash);
+	    });
 	  },
 	  pushState: function pushState(qs) {
+	    // hash change or location assign does trigger an hashchange event
+	    // so everytime we change it manually, we inform the code
+	    // to ignore the next hashchange event
+	    // see https://github.com/algolia/instantsearch.js/issues/2012
+	    this.ignoreNextPopState = true;
 	    window.location.assign(getFullURL(this.createURL(qs)));
-	  },
-	  replaceState: function replaceState(qs) {
-	    window.location.replace(getFullURL(this.createURL(qs)));
 	  },
 	  createURL: function createURL(qs) {
 	    return window.location.search + this.character + qs;
@@ -21414,11 +21511,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	    var getHistoryState = _ref.getHistoryState;
 	
 	    window.history.pushState(getHistoryState(), '', getFullURL(this.createURL(qs)));
-	  },
-	  replaceState: function replaceState(qs, _ref2) {
-	    var getHistoryState = _ref2.getHistoryState;
-	
-	    window.history.replaceState(getHistoryState(), '', getFullURL(this.createURL(qs)));
 	  },
 	  createURL: function createURL(qs) {
 	    return this.character + qs + document.location.hash;
@@ -21455,7 +21547,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	      return null;
 	    };
 	    this.threshold = options.threshold || 700;
-	    this.updateOnEveryKeyStroke = options.updateOnEveryKeyStroke !== undefined ? options.updateOnEveryKeyStroke : true;
 	    this.trackedParameters = options.trackedParameters || ['query', 'attribute:*', 'index', 'page', 'hitsPerPage'];
 	
 	    this.searchParametersFromUrl = AlgoliaSearchHelper.getConfigurationFromQueryString(this.urlUtils.readUrl(), { mapping: this.mapping });
@@ -21474,16 +21565,16 @@ return /******/ (function(modules) { // webpackBootstrap
 	    }
 	  }, {
 	    key: 'render',
-	    value: function render(_ref3) {
-	      var _this = this;
+	    value: function render(_ref2) {
+	      var _this2 = this;
 	
-	      var helper = _ref3.helper;
+	      var helper = _ref2.helper;
 	
 	      if (firstRender) {
 	        firstRender = false;
 	        this.onHistoryChange(this.onPopState.bind(this, helper));
-	        helper.on('change', function (state) {
-	          return _this.renderURLFromState(state);
+	        helper.on('search', function (state) {
+	          return _this2.renderURLFromState(state);
 	        });
 	      }
 	    }
@@ -21502,7 +21593,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	  }, {
 	    key: 'renderURLFromState',
 	    value: function renderURLFromState(state) {
-	      var _this2 = this;
+	      var _this3 = this;
 	
 	      var currentQueryString = this.urlUtils.readUrl();
 	      var foreignConfig = AlgoliaSearchHelper.getForeignConfigurationInQueryString(currentQueryString, { mapping: this.mapping });
@@ -21515,18 +21606,9 @@ return /******/ (function(modules) { // webpackBootstrap
 	        safe: true
 	      });
 	
-	      if (this.updateOnEveryKeyStroke === true) {
-	        if (this.timer() < this.threshold) {
-	          this.urlUtils.replaceState(qs, { getHistoryState: this.getHistoryState });
-	        } else {
-	          this.urlUtils.pushState(qs, { getHistoryState: this.getHistoryState });
-	        }
-	        return;
-	      }
-	
 	      clearTimeout(this.urlUpdateTimeout);
 	      this.urlUpdateTimeout = setTimeout(function () {
-	        _this2.urlUtils.pushState(qs, { getHistoryState: _this2.getHistoryState });
+	        _this3.urlUtils.pushState(qs, { getHistoryState: _this3.getHistoryState });
 	      }, this.threshold);
 	    }
 	
@@ -21534,8 +21616,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	
 	  }, {
 	    key: 'createURL',
-	    value: function createURL(state, _ref4) {
-	      var absolute = _ref4.absolute;
+	    value: function createURL(state, _ref3) {
+	      var absolute = _ref3.absolute;
 	
 	      var currentQueryString = this.urlUtils.readUrl();
 	      var filteredState = state.filter(this.trackedParameters);
@@ -21550,12 +21632,12 @@ return /******/ (function(modules) { // webpackBootstrap
 	  }, {
 	    key: 'onHistoryChange',
 	    value: function onHistoryChange(fn) {
-	      var _this3 = this;
+	      var _this4 = this;
 	
 	      this.urlUtils.onpopstate(function () {
-	        var qs = _this3.urlUtils.readUrl();
-	        var partialState = AlgoliaSearchHelper.getConfigurationFromQueryString(qs, { mapping: _this3.mapping });
-	        var fullState = (0, _assign2.default)({}, _this3.originalConfig, partialState);
+	        var qs = _this4.urlUtils.readUrl();
+	        var partialState = AlgoliaSearchHelper.getConfigurationFromQueryString(qs, { mapping: _this4.mapping });
+	        var fullState = (0, _assign2.default)({}, _this4.originalConfig, partialState);
 	        fn(fullState);
 	      });
 	    }
@@ -21604,7 +21686,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	Object.defineProperty(exports, "__esModule", {
 	  value: true
 	});
-	exports.default = '1.10.4';
+	exports.default = '1.11.7';
 
 /***/ },
 /* 345 */
@@ -21844,7 +21926,9 @@ return /******/ (function(modules) { // webpackBootstrap
 	
 	var ELEMENTS = 'a abbr address area article aside audio b base bdi bdo big blockquote body br button canvas caption cite code col colgroup data datalist dd del details dfn dialog div dl dt em embed fieldset figcaption figure footer form h1 h2 h3 h4 h5 h6 head header hgroup hr html i iframe img input ins kbd keygen label legend li link main map mark menu menuitem meta meter nav noscript object ol optgroup option output p param picture pre progress q rp rt ruby s samp script section select small source span strong style sub summary sup table tbody td textarea tfoot th thead time title tr track u ul var video wbr circle clipPath defs ellipse g image line linearGradient mask path pattern polygon polyline radialGradient rect stop svg text tspan'.split(' ');
 	
-	var REACT_ELEMENT_TYPE = (typeof Symbol === 'function' && Symbol.for && Symbol.for('react.element')) || 0xeac7;
+	var REACT_ELEMENT_TYPE = (typeof Symbol!=='undefined' && Symbol.for && Symbol.for('react.element')) || 0xeac7;
+	
+	var COMPONENT_WRAPPER_KEY = typeof Symbol!=='undefined' ? Symbol.for('__preactCompatWrapper') : '__preactCompatWrapper';
 	
 	// don't autobind these methods since they already have guaranteed context.
 	var AUTOBIND_BLACKLIST = {
@@ -21870,25 +21954,25 @@ return /******/ (function(modules) { // webpackBootstrap
 	var DEV = typeof process==='undefined' || !({"NODE_ENV":"production"}) || ("production")!=='production';
 	
 	// a component that renders nothing. Used to replace components for unmountComponentAtNode.
-	var EmptyComponent = function () { return null; };
+	function EmptyComponent() { return null; }
 	
 	
 	
 	// make react think we're react.
-	var VNode = preact.h('').constructor;
+	var VNode = preact.h('a', null).constructor;
 	VNode.prototype.$$typeof = REACT_ELEMENT_TYPE;
 	VNode.prototype.preactCompatUpgraded = false;
 	VNode.prototype.preactCompatNormalized = false;
 	
 	Object.defineProperty(VNode.prototype, 'type', {
-		get: function get() { return this.nodeName; },
-		set: function set(v) { this.nodeName = v; },
+		get: function() { return this.nodeName; },
+		set: function(v) { this.nodeName = v; },
 		configurable:true
 	});
 	
 	Object.defineProperty(VNode.prototype, 'props', {
-		get: function get$1() { return this.attributes; },
-		set: function set$1(v) { this.attributes = v; },
+		get: function() { return this.attributes; },
+		set: function(v) { this.attributes = v; },
 		configurable:true
 	});
 	
@@ -21896,8 +21980,9 @@ return /******/ (function(modules) { // webpackBootstrap
 	
 	var oldEventHook = preact.options.event;
 	preact.options.event = function (e) {
+		if (oldEventHook) { e = oldEventHook(e); }
 		e.persist = Object;
-		if (oldEventHook) e = oldEventHook(e);
+		e.nativeEvent = e;
 		return e;
 	};
 	
@@ -21910,27 +21995,35 @@ return /******/ (function(modules) { // webpackBootstrap
 			var tag = vnode.nodeName,
 				attrs = vnode.attributes;
 	
-			if (!attrs) attrs = vnode.attributes = {};
+			if (!attrs) { attrs = vnode.attributes = {}; }
 	
 			if (typeof tag==='function') {
 				if (tag[COMPONENT_WRAPPER_KEY]===true || (tag.prototype && 'isReactComponent' in tag.prototype)) {
+					if (vnode.children && !vnode.children.length) { vnode.children = undefined; }
+					if (vnode.children) { attrs.children = vnode.children; }
+	
 					if (!vnode.preactCompatNormalized) {
 						normalizeVNode(vnode);
 					}
 					handleComponentVNode(vnode);
 				}
 			}
-			else if (attrs) {
-				if (typeof vnode.nodeName==='string' && attrs.defaultValue) {
+			else {
+				if (vnode.children && !vnode.children.length) { vnode.children = undefined; }
+				if (vnode.children) { attrs.children = vnode.children; }
+	
+				if (attrs.defaultValue) {
 					if (!attrs.value && attrs.value!==0) {
 						attrs.value = attrs.defaultValue;
 					}
 					delete attrs.defaultValue;
 				}
+	
 				handleElementVNode(vnode, attrs);
 			}
 		}
-		if (oldVnodeHook) oldVnodeHook(vnode);
+	
+		if (oldVnodeHook) { oldVnodeHook(vnode); }
 	};
 	
 	function handleComponentVNode(vnode) {
@@ -21938,19 +22031,14 @@ return /******/ (function(modules) { // webpackBootstrap
 			a = vnode.attributes;
 	
 		vnode.attributes = {};
-		if (tag.defaultProps) extend(vnode.attributes, tag.defaultProps);
-		if (a) extend(vnode.attributes, a);
-		a = vnode.attributes;
-	
-		if (vnode.children && !vnode.children.length) vnode.children = undefined;
-	
-		if (vnode.children) a.children = vnode.children;
+		if (tag.defaultProps) { extend(vnode.attributes, tag.defaultProps); }
+		if (a) { extend(vnode.attributes, a); }
 	}
 	
 	function handleElementVNode(vnode, a) {
 		var shouldSanitize, attrs, i;
 		if (a) {
-			for (i in a) if ((shouldSanitize = CAMEL_PROPS.test(i))) break;
+			for (i in a) { if ((shouldSanitize = CAMEL_PROPS.test(i))) { break; } }
 			if (shouldSanitize) {
 				attrs = vnode.attributes = {};
 				for (i in a) {
@@ -21969,10 +22057,10 @@ return /******/ (function(modules) { // webpackBootstrap
 		var prev = parent && parent._preactCompatRendered;
 	
 		// ignore impossible previous renders
-		if (prev && prev.parentNode!==parent) prev = null;
+		if (prev && prev.parentNode!==parent) { prev = null; }
 	
 		// default to first Element child
-		if (!prev) prev = parent.children[0];
+		if (!prev) { prev = parent.children[0]; }
 	
 		// remove unaffected siblings
 		for (var i=parent.childNodes.length; i--; ) {
@@ -21982,25 +22070,25 @@ return /******/ (function(modules) { // webpackBootstrap
 		}
 	
 		var out = preact.render(vnode, parent, prev);
-		if (parent) parent._preactCompatRendered = out;
-		if (typeof callback==='function') callback();
+		if (parent) { parent._preactCompatRendered = out; }
+		if (typeof callback==='function') { callback(); }
 		return out && out._component || out.base;
 	}
 	
 	
-	var ContextProvider = function ContextProvider () {};
+	var ContextProvider = function () {};
 	
-	ContextProvider.prototype.getChildContext = function getChildContext () {
+	ContextProvider.prototype.getChildContext = function () {
 		return this.props.context;
 	};
-	ContextProvider.prototype.render = function render$1 (props) {
+	ContextProvider.prototype.render = function (props) {
 		return props.children[0];
 	};
 	
 	function renderSubtreeIntoContainer(parentComponent, vnode, container, callback) {
 		var wrap = preact.h(ContextProvider, { context: parentComponent.context }, vnode);
 		var c = render$1(wrap, container);
-		if (callback) callback(c);
+		if (callback) { callback(c); }
 		return c;
 	}
 	
@@ -22020,27 +22108,27 @@ return /******/ (function(modules) { // webpackBootstrap
 	
 	// This API is completely unnecessary for Preact, so it's basically passthrough.
 	var Children = {
-		map: function map(children, fn, ctx) {
-			if (children == null) return null;
+		map: function(children, fn, ctx) {
+			if (children == null) { return null; }
 			children = Children.toArray(children);
-			if (ctx && ctx!==children) fn = fn.bind(ctx);
+			if (ctx && ctx!==children) { fn = fn.bind(ctx); }
 			return children.map(fn);
 		},
-		forEach: function forEach(children, fn, ctx) {
-			if (children == null) return null;
+		forEach: function(children, fn, ctx) {
+			if (children == null) { return null; }
 			children = Children.toArray(children);
-			if (ctx && ctx!==children) fn = fn.bind(ctx);
+			if (ctx && ctx!==children) { fn = fn.bind(ctx); }
 			children.forEach(fn);
 		},
-		count: function count(children) {
+		count: function(children) {
 			return children && children.length || 0;
 		},
-		only: function only(children) {
+		only: function(children) {
 			children = Children.toArray(children);
-			if (children.length!==1) throw new Error('Children.only() expects only one child.');
+			if (children.length!==1) { throw new Error('Children.only() expects only one child.'); }
 			return children[0];
 		},
-		toArray: function toArray(children) {
+		toArray: function(children) {
 			return Array.isArray && Array.isArray(children) ? children : ARR.concat(children);
 		}
 	};
@@ -22077,14 +22165,12 @@ return /******/ (function(modules) { // webpackBootstrap
 	}
 	
 	
-	var COMPONENT_WRAPPER_KEY = typeof Symbol!=='undefined' ? Symbol.for('__preactCompatWrapper') : '__preactCompatWrapper';
-	
 	// wraps stateless functional components in a PropTypes validator
 	function wrapStatelessComponent(WrappedComponent) {
 		return createClass({
 			displayName: WrappedComponent.displayName || WrappedComponent.name,
-			render: function render$$1(props, state, context) {
-				return WrappedComponent(props, context);
+			render: function() {
+				return WrappedComponent(this.props, this.context);
 			}
 		});
 	}
@@ -22092,7 +22178,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	
 	function statelessComponentHook(Ctor) {
 		var Wrapped = Ctor[COMPONENT_WRAPPER_KEY];
-		if (Wrapped) return Wrapped===true ? Ctor : Wrapped;
+		if (Wrapped) { return Wrapped===true ? Ctor : Wrapped; }
 	
 		Wrapped = wrapStatelessComponent(Ctor);
 	
@@ -22141,7 +22227,7 @@ return /******/ (function(modules) { // webpackBootstrap
 		var children = [], len = arguments.length - 2;
 		while ( len-- > 0 ) children[ len ] = arguments[ len + 2 ];
 	
-		if (!isValidElement(element)) return element;
+		if (!isValidElement(element)) { return element; }
 		var elementProps = element.attributes || element.props;
 		var node = preact.h(
 			element.nodeName || element.type,
@@ -22174,7 +22260,7 @@ return /******/ (function(modules) { // webpackBootstrap
 		var nodeName = ref.nodeName;
 		var attributes = ref.attributes;
 	
-		if (!attributes || typeof nodeName!=='string') return;
+		if (!attributes || typeof nodeName!=='string') { return; }
 		var props = {};
 		for (var i in attributes) {
 			props[i.toLowerCase()] = i;
@@ -22183,12 +22269,11 @@ return /******/ (function(modules) { // webpackBootstrap
 			attributes.ondblclick = attributes[props.ondoubleclick];
 			delete attributes[props.ondoubleclick];
 		}
-		if (props.onchange) {
-			nodeName = nodeName.toLowerCase();
-			var attr = nodeName==='input' && /^che|rad/i.test(attributes.type) ? 'onclick' : 'oninput',
-				normalized = props[attr] || attr;
+		// for *textual inputs* (incl textarea), normalize `onChange` -> `onInput`:
+		if (props.onchange && (nodeName==='textarea' || (nodeName.toLowerCase()==='input' && !/^fil|che|rad/i.test(attributes.type)))) {
+			var normalized = props.oninput || 'oninput';
 			if (!attributes[normalized]) {
-				attributes[normalized] = multihook([attributes[props[attr]], attributes[props.onchange]]);
+				attributes[normalized] = multihook([attributes[normalized], attributes[props.onchange]]);
 				delete attributes[props.onchange];
 			}
 		}
@@ -22198,9 +22283,9 @@ return /******/ (function(modules) { // webpackBootstrap
 	function applyClassName(ref) {
 		var attributes = ref.attributes;
 	
-		if (!attributes) return;
+		if (!attributes) { return; }
 		var cl = attributes.className || attributes.class;
-		if (cl) attributes.className = cl;
+		if (cl) { attributes.className = cl; }
 	}
 	
 	
@@ -22215,13 +22300,15 @@ return /******/ (function(modules) { // webpackBootstrap
 	
 	
 	function shallowDiffers(a, b) {
-		for (var i in a) if (!(i in b)) return true;
-		for (var i$1 in b) if (a[i$1]!==b[i$1]) return true;
+		for (var i in a) { if (!(i in b)) { return true; } }
+		for (var i$1 in b) { if (a[i$1]!==b[i$1]) { return true; } }
 		return false;
 	}
 	
 	
-	var findDOMNode = function (component) { return component && component.base || component; };
+	function findDOMNode(component) {
+		return component && component.base || component;
+	}
 	
 	
 	function F(){}
@@ -22278,19 +22365,12 @@ return /******/ (function(modules) { // webpackBootstrap
 	
 	// apply a mapping of Arrays of mixin methods to a component prototype
 	function applyMixins(proto, mixins) {
-		for (var key in mixins) if (mixins.hasOwnProperty(key)) {
-			var hooks = proto[key] ? mixins[key].concat(proto[key]) : mixins[key];
-			if (
-				key==="getDefaultProps" ||
-				key==="getInitialState" ||
-				key==="getChildContext"
-			) {
-				proto[key] = multihook(hooks, mergeNoDupes);
-			}
-			else {
-				proto[key] = multihook(hooks);
-			}
-		}
+		for (var key in mixins) { if (mixins.hasOwnProperty(key)) {
+			proto[key] = multihook(
+				mixins[key].concat(proto[key] || ARR),
+				key==='getDefaultProps' || key==='getInitialState' || key==='getChildContext'
+			);
+		} }
 	}
 	
 	
@@ -22313,7 +22393,7 @@ return /******/ (function(modules) { // webpackBootstrap
 		}
 	}
 	
-	function multihook(hooks, mergeFn) {
+	function multihook(hooks, skipDuplicates) {
 		return function() {
 			var arguments$1 = arguments;
 			var this$1 = this;
@@ -22322,28 +22402,16 @@ return /******/ (function(modules) { // webpackBootstrap
 			for (var i=0; i<hooks.length; i++) {
 				var r = callMethod(this$1, hooks[i], arguments$1);
 	
-				if (mergeFn) {
-					ret = mergeFn(ret, r);
+				if (skipDuplicates && r!=null) {
+					if (!ret) { ret = {}; }
+					for (var key in r) { if (r.hasOwnProperty(key)) {
+						ret[key] = r[key];
+					} }
 				}
-				else if (typeof r!=='undefined') ret = r;
+				else if (typeof r!=='undefined') { ret = r; }
 			}
 			return ret;
 		};
-	}
-	
-	
-	// Used for lifecycle hooks like getInitialState to merge the return values
-	function mergeNoDupes(previous, current) {
-		if (current!=null) {
-			if (typeof current!=='object') throw new Error('Expected return value to be an object or null.');
-			if (!previous) previous = {};
-	
-			for (var key in current) if (current.hasOwnProperty(key)) {
-				if (previous.hasOwnProperty(key)) throw new Error('Duplicate key "' + key + '" found when merging return value.');
-				previous[key] = current[key];
-			}
-		}
-		return previous;
 	}
 	
 	
@@ -22357,7 +22425,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	function propsHook(props, context) {
 		var this$1 = this;
 	
-		if (!props) return;
+		if (!props) { return; }
 	
 		// React annoyingly special-cases single children, and some react components are ridiculously strict about this.
 		var c = props.children;
@@ -22380,7 +22448,7 @@ return /******/ (function(modules) { // webpackBootstrap
 					if (propTypes.hasOwnProperty(prop) && typeof propTypes[prop]==='function') {
 						var displayName = this$1.displayName || ctor.name;
 						var err = propTypes[prop](props, prop, displayName, 'prop');
-						if (err) console.error(new Error(err.message || err));
+						if (err) { console.error(new Error(err.message || err)); }
 					}
 				}
 			}
@@ -22402,35 +22470,34 @@ return /******/ (function(modules) { // webpackBootstrap
 	
 	function Component$1(props, context, opts) {
 		preact.Component.call(this, props, context);
-		if (this.getInitialState) this.state = this.getInitialState();
+		this.state = this.getInitialState ? this.getInitialState() : {};
 		this.refs = {};
 		this._refProxies = {};
 		if (opts!==BYPASS_HOOK) {
 			newComponentHook.call(this, props, context);
 		}
 	}
-	Component$1.prototype = new preact.Component();
-	extend(Component$1.prototype, {
+	extend(Component$1.prototype = new preact.Component(), {
 		constructor: Component$1,
 	
 		isReactComponent: {},
 	
-		replaceState: function replaceState(state, callback) {
+		replaceState: function(state, callback) {
 			var this$1 = this;
 	
 			this.setState(state, callback);
-			for (var i in this.state) {
+			for (var i in this$1.state) {
 				if (!(i in state)) {
 					delete this$1.state[i];
 				}
 			}
 		},
 	
-		getDOMNode: function getDOMNode() {
+		getDOMNode: function() {
 			return this.base;
 		},
 	
-		isMounted: function isMounted() {
+		isMounted: function() {
 			return !!this.base;
 		}
 	});
@@ -22440,7 +22507,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	function PureComponent(props, context) {
 		Component$1.call(this, props, context);
 	}
-	PureComponent.prototype = new Component$1({}, {}, BYPASS_HOOK);
+	F.prototype = Component$1.prototype;
+	PureComponent.prototype = new F();
 	PureComponent.prototype.shouldComponentUpdate = function(props, state) {
 		return shallowDiffers(this.props, props) || shallowDiffers(this.state, state);
 	};
@@ -22821,21 +22889,21 @@ return /******/ (function(modules) { // webpackBootstrap
 	        this.key = attributes && attributes.key;
 	    }
 	    function h(nodeName, attributes) {
-	        var lastSimple, child, simple, i, children = [];
+	        var children, lastSimple, child, simple, i;
 	        for (i = arguments.length; i-- > 2; ) stack.push(arguments[i]);
 	        if (attributes && attributes.children) {
 	            if (!stack.length) stack.push(attributes.children);
 	            delete attributes.children;
 	        }
-	        while (stack.length) if ((child = stack.pop()) instanceof Array) for (i = child.length; i--; ) stack.push(child[i]); else if (null != child && child !== !1) {
-	            if ('number' == typeof child || child === !0) child = String(child);
+	        while (stack.length) if ((child = stack.pop()) instanceof Array) for (i = child.length; i--; ) stack.push(child[i]); else if (null != child && child !== !0 && child !== !1) {
+	            if ('number' == typeof child) child = String(child);
 	            simple = 'string' == typeof child;
 	            if (simple && lastSimple) children[children.length - 1] += child; else {
-	                children.push(child);
+	                (children || (children = [])).push(child);
 	                lastSimple = simple;
 	            }
 	        }
-	        var p = new VNode(nodeName, attributes || void 0, children);
+	        var p = new VNode(nodeName, attributes || void 0, children || EMPTY_CHILDREN);
 	        if (options.vnode) options.vnode(p);
 	        return p;
 	    }
@@ -22919,7 +22987,9 @@ return /******/ (function(modules) { // webpackBootstrap
 	                if (!isString(old)) for (var i in old) if (!(i in value)) node.style[i] = '';
 	                for (var i in value) node.style[i] = 'number' == typeof value[i] && !NON_DIMENSION_PROPS[i] ? value[i] + 'px' : value[i];
 	            }
-	        } else if ('dangerouslySetInnerHTML' === name) node.innerHTML = value && value.__html || ''; else if ('o' == name[0] && 'n' == name[1]) {
+	        } else if ('dangerouslySetInnerHTML' === name) {
+	            if (value) node.innerHTML = value.__html || '';
+	        } else if ('o' == name[0] && 'n' == name[1]) {
 	            var l = node._listeners || (node._listeners = {});
 	            name = toLowerCase(name.substring(2));
 	            if (value) {
@@ -22964,7 +23034,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    }
 	    function diff(dom, vnode, context, mountAll, parent, componentRoot) {
 	        if (!diffLevel++) {
-	            isSvgMode = parent instanceof SVGElement;
+	            isSvgMode = parent && 'undefined' != typeof parent.ownerSVGElement;
 	            hydrating = dom && !(ATTR_KEY in dom);
 	        }
 	        var ret = idiff(dom, vnode, context, mountAll);
@@ -22976,17 +23046,16 @@ return /******/ (function(modules) { // webpackBootstrap
 	        return ret;
 	    }
 	    function idiff(dom, vnode, context, mountAll) {
-	        var originalAttributes = vnode && vnode.attributes;
+	        var ref = vnode && vnode.attributes && vnode.attributes.ref;
 	        while (isFunctionalComponent(vnode)) vnode = buildFunctionalComponent(vnode, context);
 	        if (null == vnode) vnode = '';
 	        if (isString(vnode)) {
-	            if (dom && dom instanceof Text) {
+	            if (dom && dom instanceof Text && dom.parentNode) {
 	                if (dom.nodeValue != vnode) dom.nodeValue = vnode;
 	            } else {
 	                if (dom) recollectNodeTree(dom);
 	                dom = document.createTextNode(vnode);
 	            }
-	            dom[ATTR_KEY] = !0;
 	            return dom;
 	        }
 	        if (isFunction(vnode.nodeName)) return buildComponentFromVNode(dom, vnode, context, mountAll);
@@ -23003,22 +23072,22 @@ return /******/ (function(modules) { // webpackBootstrap
 	            out[ATTR_KEY] = props = {};
 	            for (var a = out.attributes, i = a.length; i--; ) props[a[i].name] = a[i].value;
 	        }
-	        diffAttributes(out, vnode.attributes, props);
 	        if (!hydrating && vchildren && 1 === vchildren.length && 'string' == typeof vchildren[0] && fc && fc instanceof Text && !fc.nextSibling) {
 	            if (fc.nodeValue != vchildren[0]) fc.nodeValue = vchildren[0];
-	        } else if (vchildren && vchildren.length || fc) innerDiffNode(out, vchildren, context, mountAll);
-	        if (originalAttributes && 'function' == typeof originalAttributes.ref) (props.ref = originalAttributes.ref)(out);
+	        } else if (vchildren && vchildren.length || fc) innerDiffNode(out, vchildren, context, mountAll, !!props.dangerouslySetInnerHTML);
+	        diffAttributes(out, vnode.attributes, props);
+	        if (ref) (props.ref = ref)(out);
 	        isSvgMode = prevSvgMode;
 	        return out;
 	    }
-	    function innerDiffNode(dom, vchildren, context, mountAll) {
+	    function innerDiffNode(dom, vchildren, context, mountAll, absorb) {
 	        var j, c, vchild, child, originalChildren = dom.childNodes, children = [], keyed = {}, keyedLen = 0, min = 0, len = originalChildren.length, childrenLen = 0, vlen = vchildren && vchildren.length;
 	        if (len) for (var i = 0; i < len; i++) {
 	            var _child = originalChildren[i], props = _child[ATTR_KEY], key = vlen ? (c = _child._component) ? c.__key : props ? props.key : null : null;
 	            if (null != key) {
 	                keyedLen++;
 	                keyed[key] = _child;
-	            } else if (hydrating || props) children[childrenLen++] = _child;
+	            } else if (hydrating || absorb || props || _child instanceof Text) children[childrenLen++] = _child;
 	        }
 	        if (vlen) for (var i = 0; i < vlen; i++) {
 	            vchild = vchildren[i];
@@ -23062,8 +23131,9 @@ return /******/ (function(modules) { // webpackBootstrap
 	        }
 	    }
 	    function diffAttributes(dom, attrs, old) {
-	        for (var _name in old) if (!(attrs && _name in attrs) && null != old[_name]) setAccessor(dom, _name, old[_name], old[_name] = void 0, isSvgMode);
-	        if (attrs) for (var _name2 in attrs) if (!('children' === _name2 || 'innerHTML' === _name2 || _name2 in old && attrs[_name2] === ('value' === _name2 || 'checked' === _name2 ? dom[_name2] : old[_name2]))) setAccessor(dom, _name2, old[_name2], old[_name2] = attrs[_name2], isSvgMode);
+	        var name;
+	        for (name in old) if (!(attrs && name in attrs) && null != old[name]) setAccessor(dom, name, old[name], old[name] = void 0, isSvgMode);
+	        if (attrs) for (name in attrs) if (!('children' === name || 'innerHTML' === name || name in old && attrs[name] === ('value' === name || 'checked' === name ? dom[name] : old[name]))) setAccessor(dom, name, old[name], old[name] = attrs[name], isSvgMode);
 	    }
 	    function collectComponent(component) {
 	        var name = component.constructor.name, list = components[name];
@@ -23168,14 +23238,14 @@ return /******/ (function(modules) { // webpackBootstrap
 	        }
 	    }
 	    function buildComponentFromVNode(dom, vnode, context, mountAll) {
-	        var c = dom && dom._component, oldDom = dom, isDirectOwner = c && dom._componentConstructor === vnode.nodeName, isOwner = isDirectOwner, props = getNodeProps(vnode);
+	        var c = dom && dom._component, originalComponent = c, oldDom = dom, isDirectOwner = c && dom._componentConstructor === vnode.nodeName, isOwner = isDirectOwner, props = getNodeProps(vnode);
 	        while (c && !isOwner && (c = c._parentComponent)) isOwner = c.constructor === vnode.nodeName;
 	        if (c && isOwner && (!mountAll || c._component)) {
 	            setComponentProps(c, props, 3, context, mountAll);
 	            dom = c.base;
 	        } else {
-	            if (c && !isDirectOwner) {
-	                unmountComponent(c, !0);
+	            if (originalComponent && !isDirectOwner) {
+	                unmountComponent(originalComponent, !0);
 	                dom = oldDom = null;
 	            }
 	            c = createComponent(vnode.nodeName, props, context);
@@ -23223,6 +23293,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    }
 	    var options = {};
 	    var stack = [];
+	    var EMPTY_CHILDREN = [];
 	    var lcCache = {};
 	    var toLowerCase = function(s) {
 	        return lcCache[s] || (lcCache[s] = s.toLowerCase());
@@ -23688,25 +23759,11 @@ return /******/ (function(modules) { // webpackBootstrap
 	
 	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 	
-	var _react = __webpack_require__(348);
+	exports.default = function (ComposedComponent) {
+	  var _class, _temp;
 	
-	var _react2 = _interopRequireDefault(_react);
-	
-	var _reactDom = __webpack_require__(348);
-	
-	var _reactDom2 = _interopRequireDefault(_reactDom);
-	
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-	
-	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-	
-	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
-	
-	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; } /* eslint-disable react/no-find-dom-node */
-	
-	function autoHideContainer(ComposedComponent) {
-	  var AutoHide = function (_React$Component) {
-	    _inherits(AutoHide, _React$Component);
+	  return _temp = _class = function (_Component) {
+	    _inherits(AutoHide, _Component);
 	
 	    function AutoHide() {
 	      _classCallCheck(this, AutoHide);
@@ -23715,47 +23772,33 @@ return /******/ (function(modules) { // webpackBootstrap
 	    }
 	
 	    _createClass(AutoHide, [{
-	      key: 'componentDidMount',
-	      value: function componentDidMount() {
-	        this._hideOrShowContainer(this.props);
-	      }
-	    }, {
-	      key: 'componentWillReceiveProps',
-	      value: function componentWillReceiveProps(nextProps) {
-	        if (this.props.shouldAutoHideContainer === nextProps.shouldAutoHideContainer) {
-	          return;
-	        }
-	
-	        this._hideOrShowContainer(nextProps);
-	      }
-	    }, {
-	      key: 'shouldComponentUpdate',
-	      value: function shouldComponentUpdate(nextProps) {
-	        return nextProps.shouldAutoHideContainer === false;
-	      }
-	    }, {
-	      key: '_hideOrShowContainer',
-	      value: function _hideOrShowContainer(props) {
-	        var container = _reactDom2.default.findDOMNode(this).parentNode;
-	        container.style.display = props.shouldAutoHideContainer === true ? 'none' : '';
-	      }
-	    }, {
 	      key: 'render',
 	      value: function render() {
-	        return _react2.default.createElement(ComposedComponent, this.props);
+	        var shouldAutoHideContainer = this.props.shouldAutoHideContainer;
+	
+	        return _react2.default.createElement(
+	          'div',
+	          { style: { display: shouldAutoHideContainer ? 'none' : '' } },
+	          _react2.default.createElement(ComposedComponent, this.props)
+	        );
 	      }
 	    }]);
 	
 	    return AutoHide;
-	  }(_react2.default.Component);
+	  }(_react.Component), _class.displayName = ComposedComponent.name + '-AutoHide', _temp;
+	};
 	
-	  // precise displayName for ease of debugging (react dev tool, react warnings)
-	  AutoHide.displayName = ComposedComponent.name + '-AutoHide';
+	var _react = __webpack_require__(348);
 	
-	  return AutoHide;
-	}
-	
-	exports.default = autoHideContainer;
+	var _react2 = _interopRequireDefault(_react);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
 /***/ },
 /* 355 */
@@ -26048,7 +26091,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	        onChange: this.props.searchFacetValues,
 	        onValidate: function onValidate() {
 	          return _this2.refineFirstValue();
-	        } }) : null;
+	        },
+	        disabled: !this.props.isFromSearch && displayedFacetValues.length < limit }) : null;
 	
 	      var noResults = this.props.searchFacetValues && this.props.isFromSearch && this.props.facetValues.length === 0 ? _react2.default.createElement(_Template2.default, _extends({
 	        templateKey: 'noResults'
@@ -26253,11 +26297,13 @@ return /******/ (function(modules) { // webpackBootstrap
 	          placeholder = _props.placeholder,
 	          _onChange = _props.onChange;
 	
+	      var inputCssClasses = this.props.disabled ? 'sbx-sffv__input sbx-sffv__input-disabled' : 'sbx-sffv__input';
+	      var formCssClasses = this.props.disabled ? 'searchbox sbx-sffv sbx-sffv-disabled' : 'searchbox sbx-sffv';
 	
 	      return _react2.default.createElement(
 	        'form',
 	        { noValidate: 'novalidate',
-	          className: 'searchbox sbx-sffv',
+	          className: formCssClasses,
 	          onReset: function onReset() {
 	            _onChange('');
 	          },
@@ -26274,11 +26320,11 @@ return /******/ (function(modules) { // webpackBootstrap
 	        _react2.default.createElement(
 	          'div',
 	          { role: 'search', className: 'sbx-sffv__wrapper' },
-	          _react2.default.createElement('input', { type: 'search', name: 'search', placeholder: placeholder, autoComplete: 'off', required: 'required', className: 'sbx-sffv__input', onChange: function onChange(e) {
+	          _react2.default.createElement('input', { type: 'search', name: 'search', placeholder: placeholder, autoComplete: 'off', required: 'required', className: inputCssClasses, onChange: function onChange(e) {
 	              return _onChange(e.target.value);
 	            }, ref: function ref(i) {
 	              _this2.input = i;
-	            } }),
+	            }, disabled: this.props.disabled }),
 	          _ref3,
 	          _ref4
 	        )
@@ -26458,7 +26504,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    value: function renderWithResults() {
 	      var _this2 = this;
 	
-	      var renderedHits = (0, _map2.default)(this.props.results.hits, function (hit, position) {
+	      var renderedHits = (0, _map2.default)(this.props.hits, function (hit, position) {
 	        var data = _extends({}, hit, {
 	          __hitIndex: position
 	        });
@@ -26908,6 +26954,237 @@ return /******/ (function(modules) { // webpackBootstrap
 	  value: true
 	});
 	
+	var _react = __webpack_require__(348);
+	
+	var _react2 = _interopRequireDefault(_react);
+	
+	var _reactDom = __webpack_require__(348);
+	
+	var _reactDom2 = _interopRequireDefault(_reactDom);
+	
+	var _utils = __webpack_require__(351);
+	
+	var _classnames = __webpack_require__(353);
+	
+	var _classnames2 = _interopRequireDefault(_classnames);
+	
+	var _InfiniteHits = __webpack_require__(383);
+	
+	var _InfiniteHits2 = _interopRequireDefault(_InfiniteHits);
+	
+	var _defaultTemplates = __webpack_require__(384);
+	
+	var _defaultTemplates2 = _interopRequireDefault(_defaultTemplates);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } else { return Array.from(arr); } }
+	
+	var bem = (0, _utils.bemHelper)('ais-infinite-hits');
+	
+	/**
+	 * Display the list of results (hits) from the current search
+	 * @function infiniteHits
+	 * @param  {string|DOMElement} options.container CSS Selector or DOMElement to insert the widget
+	 * @param  {number} [options.hitsPerPage=20] The number of hits to display per page [*]
+	 * @param  {Object} [options.templates] Templates to use for the widget
+	 * @param  {string|Function} [options.templates.empty=""] Template to use when there are no results.
+	 * @param  {string|Function} [options.templates.item=""] Template to use for each result. This template will receive an object containing a single record.
+	 * @param  {string} [options.showMoreLabel="Show more results"] label used on the show more button
+	 * @param  {Object} [options.transformData] Method to change the object passed to the templates
+	 * @param  {Function} [options.transformData.empty] Method used to change the object passed to the `empty` template
+	 * @param  {Function} [options.transformData.item] Method used to change the object passed to the `item` template
+	 * @param  {Object} [options.cssClasses] CSS classes to add
+	 * @param  {string|string[]} [options.cssClasses.root] CSS class to add to the wrapping element
+	 * @param  {string|string[]} [options.cssClasses.empty] CSS class to add to the wrapping element when no results
+	 * @param  {string|string[]} [options.cssClasses.item] CSS class to add to each result
+	 * @return {Object}
+	 */
+	var usage = '\nUsage:\ninfiniteHits({\n  container,\n  [ cssClasses.{root,empty,item}={} ],\n  [ templates.{empty,item} | templates.{empty} ],\n  [ showMoreLabel="Show more results" ]\n  [ transformData.{empty,item} | transformData.{empty} ],\n  [ hitsPerPage=20 ]\n})';
+	function infiniteHits() {
+	  var _ref = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {},
+	      container = _ref.container,
+	      _ref$cssClasses = _ref.cssClasses,
+	      userCssClasses = _ref$cssClasses === undefined ? {} : _ref$cssClasses,
+	      _ref$showMoreLabel = _ref.showMoreLabel,
+	      showMoreLabel = _ref$showMoreLabel === undefined ? 'Show more results' : _ref$showMoreLabel,
+	      _ref$templates = _ref.templates,
+	      templates = _ref$templates === undefined ? _defaultTemplates2.default : _ref$templates,
+	      transformData = _ref.transformData,
+	      _ref$hitsPerPage = _ref.hitsPerPage,
+	      hitsPerPage = _ref$hitsPerPage === undefined ? 20 : _ref$hitsPerPage;
+	
+	  if (!container) {
+	    throw new Error('Must provide a container.' + usage);
+	  }
+	
+	  var containerNode = (0, _utils.getContainerNode)(container);
+	  var cssClasses = {
+	    root: (0, _classnames2.default)(bem(null), userCssClasses.root),
+	    item: (0, _classnames2.default)(bem('item'), userCssClasses.item),
+	    empty: (0, _classnames2.default)(bem(null, 'empty'), userCssClasses.empty),
+	    showmore: (0, _classnames2.default)(bem('showmore'), userCssClasses.showmore)
+	  };
+	
+	  var hitsCache = [];
+	
+	  var getShowMore = function getShowMore(helper) {
+	    return function () {
+	      return helper.nextPage().search();
+	    };
+	  };
+	
+	  return {
+	    getConfiguration: function getConfiguration() {
+	      return { hitsPerPage: hitsPerPage };
+	    },
+	    init: function init(_ref2) {
+	      var templatesConfig = _ref2.templatesConfig,
+	          helper = _ref2.helper;
+	
+	      this._templateProps = (0, _utils.prepareTemplateProps)({
+	        transformData: transformData,
+	        defaultTemplates: _defaultTemplates2.default,
+	        templatesConfig: templatesConfig,
+	        templates: templates
+	      });
+	
+	      this.showMore = getShowMore(helper);
+	    },
+	    render: function render(_ref3) {
+	      var results = _ref3.results,
+	          state = _ref3.state;
+	
+	      if (state.page === 0) {
+	        hitsCache = [];
+	      }
+	
+	      hitsCache = [].concat(_toConsumableArray(hitsCache), _toConsumableArray(results.hits));
+	
+	      var isLastPage = results.nbPages <= results.page + 1;
+	
+	      _reactDom2.default.render(_react2.default.createElement(_InfiniteHits2.default, {
+	        cssClasses: cssClasses,
+	        hits: hitsCache,
+	        results: results,
+	        showMore: this.showMore,
+	        showMoreLabel: showMoreLabel,
+	        isLastPage: isLastPage,
+	        templateProps: this._templateProps
+	      }), containerNode);
+	    }
+	  };
+	}
+	
+	exports.default = infiniteHits;
+
+/***/ },
+/* 383 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+	
+	var _react = __webpack_require__(348);
+	
+	var _react2 = _interopRequireDefault(_react);
+	
+	var _Hits = __webpack_require__(374);
+	
+	var _Hits2 = _interopRequireDefault(_Hits);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+	
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+	
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+	
+	var InfiniteHits = function (_React$Component) {
+	  _inherits(InfiniteHits, _React$Component);
+	
+	  function InfiniteHits() {
+	    _classCallCheck(this, InfiniteHits);
+	
+	    return _possibleConstructorReturn(this, (InfiniteHits.__proto__ || Object.getPrototypeOf(InfiniteHits)).apply(this, arguments));
+	  }
+	
+	  _createClass(InfiniteHits, [{
+	    key: 'render',
+	    value: function render() {
+	      var _props = this.props,
+	          cssClasses = _props.cssClasses,
+	          hits = _props.hits,
+	          results = _props.results,
+	          showMore = _props.showMore,
+	          showMoreLabel = _props.showMoreLabel,
+	          templateProps = _props.templateProps;
+	
+	      var btn = this.props.isLastPage ? _react2.default.createElement(
+	        'button',
+	        { disabled: true },
+	        showMoreLabel
+	      ) : _react2.default.createElement(
+	        'button',
+	        { onClick: showMore },
+	        showMoreLabel
+	      );
+	
+	      return _react2.default.createElement(
+	        'div',
+	        null,
+	        _react2.default.createElement(_Hits2.default, {
+	          cssClasses: cssClasses,
+	          hits: hits,
+	          results: results,
+	          templateProps: templateProps
+	        }),
+	        _react2.default.createElement(
+	          'div',
+	          { className: cssClasses.showmore },
+	          btn
+	        )
+	      );
+	    }
+	  }]);
+	
+	  return InfiniteHits;
+	}(_react2.default.Component);
+	
+	exports.default = InfiniteHits;
+
+/***/ },
+/* 384 */
+/***/ function(module, exports) {
+
+	'use strict';
+	
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	exports.default = {
+	  empty: 'No results',
+	  item: function item(data) {
+	    return JSON.stringify(data, null, 2);
+	  }
+	};
+
+/***/ },
+/* 385 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	
 	var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
 	
 	var _react = __webpack_require__(348);
@@ -26932,11 +27209,11 @@ return /******/ (function(modules) { // webpackBootstrap
 	
 	var _headerFooter2 = _interopRequireDefault(_headerFooter);
 	
-	var _getShowMoreConfig = __webpack_require__(383);
+	var _getShowMoreConfig = __webpack_require__(386);
 	
 	var _getShowMoreConfig2 = _interopRequireDefault(_getShowMoreConfig);
 	
-	var _defaultTemplates = __webpack_require__(385);
+	var _defaultTemplates = __webpack_require__(388);
 	
 	var _defaultTemplates2 = _interopRequireDefault(_defaultTemplates);
 	
@@ -27109,7 +27386,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	exports.default = menu;
 
 /***/ },
-/* 383 */
+/* 386 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -27122,7 +27399,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	
 	exports.default = getShowMoreConfig;
 	
-	var _defaultShowMoreTemplates = __webpack_require__(384);
+	var _defaultShowMoreTemplates = __webpack_require__(387);
 	
 	var _defaultShowMoreTemplates2 = _interopRequireDefault(_defaultShowMoreTemplates);
 	
@@ -27151,7 +27428,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	}
 
 /***/ },
-/* 384 */
+/* 387 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -27165,7 +27442,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	};
 
 /***/ },
-/* 385 */
+/* 388 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -27181,7 +27458,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	};
 
 /***/ },
-/* 386 */
+/* 389 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -27218,11 +27495,11 @@ return /******/ (function(modules) { // webpackBootstrap
 	
 	var _headerFooter2 = _interopRequireDefault(_headerFooter);
 	
-	var _getShowMoreConfig = __webpack_require__(383);
+	var _getShowMoreConfig = __webpack_require__(386);
 	
 	var _getShowMoreConfig2 = _interopRequireDefault(_getShowMoreConfig);
 	
-	var _defaultTemplates = __webpack_require__(387);
+	var _defaultTemplates = __webpack_require__(390);
 	
 	var _defaultTemplates2 = _interopRequireDefault(_defaultTemplates);
 	
@@ -27444,7 +27721,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	exports.default = refinementList;
 
 /***/ },
-/* 387 */
+/* 390 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -27459,7 +27736,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	};
 
 /***/ },
-/* 388 */
+/* 391 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -27500,7 +27777,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	
 	var _headerFooter2 = _interopRequireDefault(_headerFooter);
 	
-	var _defaultTemplates = __webpack_require__(389);
+	var _defaultTemplates = __webpack_require__(392);
 	
 	var _defaultTemplates2 = _interopRequireDefault(_defaultTemplates);
 	
@@ -27708,7 +27985,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	exports.default = numericRefinementList;
 
 /***/ },
-/* 389 */
+/* 392 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -27724,7 +28001,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	};
 
 /***/ },
-/* 390 */
+/* 393 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -27849,7 +28126,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	exports.default = numericSelector;
 
 /***/ },
-/* 391 */
+/* 394 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -27880,7 +28157,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	
 	var _autoHideContainer2 = _interopRequireDefault(_autoHideContainer);
 	
-	var _Pagination = __webpack_require__(392);
+	var _Pagination = __webpack_require__(395);
 	
 	var _Pagination2 = _interopRequireDefault(_Pagination);
 	
@@ -28015,7 +28292,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	exports.default = pagination;
 
 /***/ },
-/* 392 */
+/* 395 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -28034,17 +28311,17 @@ return /******/ (function(modules) { // webpackBootstrap
 	
 	var _forEach2 = _interopRequireDefault(_forEach);
 	
-	var _defaultsDeep = __webpack_require__(393);
+	var _defaultsDeep = __webpack_require__(396);
 	
 	var _defaultsDeep2 = _interopRequireDefault(_defaultsDeep);
 	
 	var _utils = __webpack_require__(351);
 	
-	var _Paginator = __webpack_require__(395);
+	var _Paginator = __webpack_require__(398);
 	
 	var _Paginator2 = _interopRequireDefault(_Paginator);
 	
-	var _PaginationLink = __webpack_require__(399);
+	var _PaginationLink = __webpack_require__(402);
 	
 	var _PaginationLink2 = _interopRequireDefault(_PaginationLink);
 	
@@ -28225,12 +28502,12 @@ return /******/ (function(modules) { // webpackBootstrap
 	exports.default = Pagination;
 
 /***/ },
-/* 393 */
+/* 396 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var apply = __webpack_require__(116),
 	    baseRest = __webpack_require__(113),
-	    customDefaultsMerge = __webpack_require__(394),
+	    customDefaultsMerge = __webpack_require__(397),
 	    mergeWith = __webpack_require__(338);
 	
 	/**
@@ -28261,7 +28538,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 /***/ },
-/* 394 */
+/* 397 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var baseMerge = __webpack_require__(257),
@@ -28295,7 +28572,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 /***/ },
-/* 395 */
+/* 398 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -28306,7 +28583,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	
 	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 	
-	var _range = __webpack_require__(396);
+	var _range = __webpack_require__(399);
 	
 	var _range2 = _interopRequireDefault(_range);
 	
@@ -28378,10 +28655,10 @@ return /******/ (function(modules) { // webpackBootstrap
 	exports.default = Paginator;
 
 /***/ },
-/* 396 */
+/* 399 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var createRange = __webpack_require__(397);
+	var createRange = __webpack_require__(400);
 	
 	/**
 	 * Creates an array of numbers (positive and/or negative) progressing from
@@ -28430,10 +28707,10 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 /***/ },
-/* 397 */
+/* 400 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var baseRange = __webpack_require__(398),
+	var baseRange = __webpack_require__(401),
 	    isIterateeCall = __webpack_require__(254),
 	    toFinite = __webpack_require__(232);
 	
@@ -28466,7 +28743,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 /***/ },
-/* 398 */
+/* 401 */
 /***/ function(module, exports) {
 
 	/* Built-in method references for those with the same name as other `lodash` methods. */
@@ -28500,7 +28777,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 /***/ },
-/* 399 */
+/* 402 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -28598,7 +28875,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	exports.default = PaginationLink;
 
 /***/ },
-/* 400 */
+/* 403 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -28619,11 +28896,11 @@ return /******/ (function(modules) { // webpackBootstrap
 	
 	var _utils = __webpack_require__(351);
 	
-	var _generateRanges2 = __webpack_require__(401);
+	var _generateRanges2 = __webpack_require__(404);
 	
 	var _generateRanges3 = _interopRequireDefault(_generateRanges2);
 	
-	var _defaultTemplates = __webpack_require__(402);
+	var _defaultTemplates = __webpack_require__(405);
 	
 	var _defaultTemplates2 = _interopRequireDefault(_defaultTemplates);
 	
@@ -28639,7 +28916,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	
 	var _classnames2 = _interopRequireDefault(_classnames);
 	
-	var _PriceRanges = __webpack_require__(403);
+	var _PriceRanges = __webpack_require__(406);
 	
 	var _PriceRanges2 = _interopRequireDefault(_PriceRanges);
 	
@@ -28837,7 +29114,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	exports.default = priceRanges;
 
 /***/ },
-/* 401 */
+/* 404 */
 /***/ function(module, exports) {
 
 	"use strict";
@@ -28930,7 +29207,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	exports.default = generateRanges;
 
 /***/ },
-/* 402 */
+/* 405 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -28945,7 +29222,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	};
 
 /***/ },
-/* 403 */
+/* 406 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -28966,7 +29243,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	
 	var _Template2 = _interopRequireDefault(_Template);
 	
-	var _PriceRangesForm = __webpack_require__(404);
+	var _PriceRangesForm = __webpack_require__(407);
 	
 	var _PriceRangesForm2 = _interopRequireDefault(_PriceRangesForm);
 	
@@ -29090,7 +29367,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	exports.default = PriceRanges;
 
 /***/ },
-/* 404 */
+/* 407 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -29213,7 +29490,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	exports.default = PriceRangesForm;
 
 /***/ },
-/* 405 */
+/* 408 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -29246,7 +29523,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	
 	var _hogan2 = _interopRequireDefault(_hogan);
 	
-	var _defaultTemplates = __webpack_require__(406);
+	var _defaultTemplates = __webpack_require__(409);
 	
 	var _defaultTemplates2 = _interopRequireDefault(_defaultTemplates);
 	
@@ -29540,7 +29817,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	exports.default = searchBox;
 
 /***/ },
-/* 406 */
+/* 409 */
 /***/ function(module, exports) {
 
 	"use strict";
@@ -29553,7 +29830,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	};
 
 /***/ },
-/* 407 */
+/* 410 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -29588,7 +29865,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	
 	var _classnames2 = _interopRequireDefault(_classnames);
 	
-	var _Slider = __webpack_require__(408);
+	var _Slider = __webpack_require__(411);
 	
 	var _Slider2 = _interopRequireDefault(_Slider);
 	
@@ -29783,7 +30060,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	exports.default = rangeSlider;
 
 /***/ },
-/* 408 */
+/* 411 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -29804,7 +30081,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	
 	var _omit2 = _interopRequireDefault(_omit);
 	
-	var _reactNouislider = __webpack_require__(409);
+	var _reactNouislider = __webpack_require__(412);
 	
 	var _reactNouislider2 = _interopRequireDefault(_reactNouislider);
 	
@@ -29852,11 +30129,17 @@ return /******/ (function(modules) { // webpackBootstrap
 	  }, {
 	    key: 'render',
 	    value: function render() {
-	      if (this.props.range.min === this.props.range.max) {
-	        // There's no need to try to render the Slider, it will not be usable
-	        // and will throw
-	        return null;
-	      }
+	      // display a `disabled` state of the `NoUiSlider` when range.min === range.max
+	      var _props$range = this.props.range,
+	          min = _props$range.min,
+	          max = _props$range.max;
+	
+	      var isDisabled = min === max;
+	
+	      // when range.min === range.max, we only want to add a little more to the max
+	      // to display the same value in the UI, but the `NoUiSlider` wont
+	      // throw an error since they are not the same value.
+	      var range = isDisabled ? { min: min, max: min + 0.0001 } : { min: min, max: max };
 	
 	      // setup pips
 	      var pips = void 0;
@@ -29876,12 +30159,14 @@ return /******/ (function(modules) { // webpackBootstrap
 	      return _react2.default.createElement(_reactNouislider2.default
 	      // NoUiSlider also accepts a cssClasses prop, but we don't want to
 	      // provide one.
-	      , _extends({}, (0, _omit2.default)(this.props, ['cssClasses']), {
+	      , _extends({}, (0, _omit2.default)(this.props, ['cssClasses', 'range']), {
 	        animate: false,
 	        behaviour: 'snap',
 	        connect: true,
 	        cssPrefix: cssPrefix,
 	        onChange: this.handleChange,
+	        range: range,
+	        disabled: isDisabled,
 	        pips: pips
 	      }));
 	    }
@@ -29893,7 +30178,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	exports.default = Slider;
 
 /***/ },
-/* 409 */
+/* 412 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -29914,7 +30199,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	
 	var _react2 = _interopRequireDefault(_react);
 	
-	var _nouisliderAlgoliaFork = __webpack_require__(410);
+	var _nouisliderAlgoliaFork = __webpack_require__(413);
 	
 	var _nouisliderAlgoliaFork2 = _interopRequireDefault(_nouisliderAlgoliaFork);
 	
@@ -30037,7 +30322,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 /***/ },
-/* 410 */
+/* 413 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;/*! nouislider-algolia-fork - 10.0.0 - 2016-11-02 18:17:49 */
@@ -32009,7 +32294,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	}));
 
 /***/ },
-/* 411 */
+/* 414 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -32124,7 +32409,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	exports.default = sortBySelector;
 
 /***/ },
-/* 412 */
+/* 415 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -32155,11 +32440,11 @@ return /******/ (function(modules) { // webpackBootstrap
 	
 	var _headerFooter2 = _interopRequireDefault(_headerFooter);
 	
-	var _defaultTemplates = __webpack_require__(413);
+	var _defaultTemplates = __webpack_require__(416);
 	
 	var _defaultTemplates2 = _interopRequireDefault(_defaultTemplates);
 	
-	var _defaultLabels = __webpack_require__(414);
+	var _defaultLabels = __webpack_require__(417);
 	
 	var _defaultLabels2 = _interopRequireDefault(_defaultLabels);
 	
@@ -32271,12 +32556,12 @@ return /******/ (function(modules) { // webpackBootstrap
 	
 	      var facetValues = [];
 	      var allValues = {};
-	      for (var v = max - 1; v >= 0; --v) {
+	      for (var v = max; v >= 0; --v) {
 	        allValues[v] = 0;
 	      }
 	      results.getFacetValues(attributeName).forEach(function (facet) {
 	        var val = Math.round(facet.name);
-	        if (!val || val > max - 1) {
+	        if (!val || val > max) {
 	          return;
 	        }
 	        for (var _v = val; _v >= 1; --_v) {
@@ -32345,7 +32630,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	exports.default = starRating;
 
 /***/ },
-/* 413 */
+/* 416 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -32361,7 +32646,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	};
 
 /***/ },
-/* 414 */
+/* 417 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -32374,7 +32659,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	};
 
 /***/ },
-/* 415 */
+/* 418 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -32401,7 +32686,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	
 	var _headerFooter2 = _interopRequireDefault(_headerFooter);
 	
-	var _Stats = __webpack_require__(416);
+	var _Stats = __webpack_require__(419);
 	
 	var _Stats2 = _interopRequireDefault(_Stats);
 	
@@ -32409,7 +32694,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	
 	var _classnames2 = _interopRequireDefault(_classnames);
 	
-	var _defaultTemplates = __webpack_require__(417);
+	var _defaultTemplates = __webpack_require__(420);
 	
 	var _defaultTemplates2 = _interopRequireDefault(_defaultTemplates);
 	
@@ -32503,7 +32788,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	exports.default = stats;
 
 /***/ },
-/* 416 */
+/* 419 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -32572,7 +32857,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	exports.default = Stats;
 
 /***/ },
-/* 417 */
+/* 420 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -32587,7 +32872,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	};
 
 /***/ },
-/* 418 */
+/* 421 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -32598,7 +32883,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	
 	var _utils = __webpack_require__(351);
 	
-	var _defaultTemplates = __webpack_require__(419);
+	var _defaultTemplates = __webpack_require__(422);
 	
 	var _defaultTemplates2 = _interopRequireDefault(_defaultTemplates);
 	
@@ -32618,11 +32903,11 @@ return /******/ (function(modules) { // webpackBootstrap
 	
 	var _RefinementList2 = _interopRequireDefault(_RefinementList);
 	
-	var _currentToggle = __webpack_require__(420);
+	var _currentToggle = __webpack_require__(423);
 	
 	var _currentToggle2 = _interopRequireDefault(_currentToggle);
 	
-	var _legacyToggle = __webpack_require__(421);
+	var _legacyToggle = __webpack_require__(424);
 	
 	var _legacyToggle2 = _interopRequireDefault(_legacyToggle);
 	
@@ -32748,7 +33033,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	exports.default = toggle;
 
 /***/ },
-/* 419 */
+/* 422 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -32763,7 +33048,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	};
 
 /***/ },
-/* 420 */
+/* 423 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -32784,7 +33069,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	
 	var _reactDom2 = _interopRequireDefault(_reactDom);
 	
-	var _defaultTemplates = __webpack_require__(419);
+	var _defaultTemplates = __webpack_require__(422);
 	
 	var _defaultTemplates2 = _interopRequireDefault(_defaultTemplates);
 	
@@ -32915,7 +33200,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	exports.default = currentToggle;
 
 /***/ },
-/* 421 */
+/* 424 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -32937,7 +33222,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	
 	var _reactDom2 = _interopRequireDefault(_reactDom);
 	
-	var _defaultTemplates = __webpack_require__(419);
+	var _defaultTemplates = __webpack_require__(422);
 	
 	var _defaultTemplates2 = _interopRequireDefault(_defaultTemplates);
 	
@@ -33048,7 +33333,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	}
 
 /***/ },
-/* 422 */
+/* 425 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -33062,16 +33347,19 @@ return /******/ (function(modules) { // webpackBootstrap
 	 * @param  {Function} [options.pushFunction] Push function called when data are supposed to be pushed to analytic service
 	 * @param  {int} [options.delay=3000] Number of milliseconds between last search key stroke and calling pushFunction
 	 * @param  {boolean} [options.triggerOnUIInteraction=false] Trigger pushFunction after click on page or redirecting the page
+	 * @param  {boolean} [options.pushInitialSearch=true] Trigger pushFunction after the initial search
 	 * @return {Object}
 	 */
-	var usage = 'Usage:\nanalytics({\n  pushFunction,\n  [ delay=3000 ],\n  [ triggerOnUIInteraction=false ]\n})';
+	var usage = 'Usage:\nanalytics({\n  pushFunction,\n  [ delay=3000 ],\n  [ triggerOnUIInteraction=false ],\n  [ pushInitialSearch=true ]\n})';
 	function analytics() {
 	  var _ref = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {},
 	      pushFunction = _ref.pushFunction,
 	      _ref$delay = _ref.delay,
 	      delay = _ref$delay === undefined ? 3000 : _ref$delay,
 	      _ref$triggerOnUIInter = _ref.triggerOnUIInteraction,
-	      triggerOnUIInteraction = _ref$triggerOnUIInter === undefined ? false : _ref$triggerOnUIInter;
+	      triggerOnUIInteraction = _ref$triggerOnUIInter === undefined ? false : _ref$triggerOnUIInter,
+	      _ref$pushInitialSearc = _ref.pushInitialSearch,
+	      pushInitialSearch = _ref$pushInitialSearc === undefined ? true : _ref$pushInitialSearc;
 	
 	  if (!pushFunction) {
 	    throw new Error(usage);
@@ -33158,6 +33446,11 @@ return /******/ (function(modules) { // webpackBootstrap
 	
 	  var pushTimeout = void 0;
 	
+	  var isInitialSearch = true;
+	  if (pushInitialSearch === true) {
+	    isInitialSearch = false;
+	  }
+	
 	  return {
 	    init: function init() {
 	      if (triggerOnUIInteraction === true) {
@@ -33173,6 +33466,12 @@ return /******/ (function(modules) { // webpackBootstrap
 	    render: function render(_ref2) {
 	      var results = _ref2.results,
 	          state = _ref2.state;
+	
+	      if (isInitialSearch === true) {
+	        isInitialSearch = false;
+	
+	        return;
+	      }
 	
 	      cachedState = { results: results, state: state };
 	
