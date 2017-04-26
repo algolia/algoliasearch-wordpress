@@ -87,9 +87,10 @@
 
 			var config = {
 				debug: algolia.debug,
-				hint: false,
+				hint: false, // Required given we use appendTo feature.
 				openOnFocus: true,
-				templates: {}
+				templates: {},
+        appendTo: 'body'
 			};
 			/* Todo: Add empty template when we fixed https://github.com/algolia/autocomplete.js/issues/109 */
 
@@ -103,67 +104,7 @@
 				/* Redirect the user when we detect a suggestion selection. */
 				window.location.href = suggestion.permalink;
 			});
-
-			var $autocomplete = $searchInput.parent();
-
-			/* Remove autocomplete.js default inline input search styles. */
-			$autocomplete.removeAttr('style');
-
-			/* Configure tether */
-			var $menu = $autocomplete.find('.aa-dropdown-menu');
-			var config = {
-				element: $menu,
-				target: this,
-				attachment: 'top left',
-				targetAttachment: 'bottom left',
-				constraints: [
-					{
-						to: 'window',
-						attachment: 'none element'
-					}
-				]
-			};
-
-			/* This will make sure the dropdown is no longer part of the same container as */
-			/* the search input container. */
-			/* It ensures styles are not overridden and limits theme breaking. */
-			var tether = new Tether(config);
-			tether.on('update', function(item) {
-				/* todo: fix the inverse of this: https://github.com/HubSpot/tether/issues/182 */
-				if (item.attachment.left == 'right' && item.attachment.top == 'top' && item.targetAttachment.left == 'left' && item.targetAttachment.top == 'bottom') {
-					config.attachment = 'top right';
-					config.targetAttachment = 'bottom right';
-
-					tether.setOptions(config, false);
-				}
-			});
-			$searchInput.on('autocomplete:updated', function() {
-				tether.position();
-			});
-			$searchInput.on('autocomplete:opened', function() {
-				updateDropdownWidth();
-			});
-
-
-			/* Trick to ensure the autocomplete is always above all. */
-			$menu.css('z-index', '99999');
-
-			/* Makes dropdown match the input size. */
-			var dropdownMinWidth = 200;
-			function updateDropdownWidth() {
-				var inputWidth = $searchInput.outerWidth();
-				if (inputWidth >= dropdownMinWidth) {
-					$menu.css('width', $searchInput.outerWidth());
-				} else {
-					$menu.css('width', dropdownMinWidth);
-				}
-				tether.position();
-			}
-			jQuery(window).on('resize', updateDropdownWidth);
 		});
-
-		/* This ensures that when the dropdown overflows the window, Thether can reposition it. */
-		jQuery('body').css('overflow-x', 'hidden');
 
 		jQuery(document).on("click", ".algolia-powered-by-link", function(e) {
 			e.preventDefault();

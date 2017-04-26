@@ -90,9 +90,6 @@ class Algolia_Template_Loader {
 		wp_enqueue_script( 'algolia-autocomplete' );
 		wp_enqueue_script( 'algolia-autocomplete-noconflict' );
 
-		// Lib useful for positioning the autocomplete.js dropdown.
-		wp_enqueue_script( 'tether' );
-
 		// Allow users to easily enqueue custom styles and scripts.
 		do_action( 'algolia_autocomplete_scripts' );
 	}
