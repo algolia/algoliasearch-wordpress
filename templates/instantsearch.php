@@ -61,21 +61,6 @@
 					},
 					searchParameters: {
 						facetingAfterDistinct: true
-					},
-					searchFunction: function(helper) {
-						/* helper does a setPage(0) on almost every method call */
-						/* see https://github.com/algolia/algoliasearch-helper-js/blob/7d9917135d4192bfbba1827fd9fbcfef61b8dd69/src/algoliasearch.helper.js#L645 */
-						/* and https://github.com/algolia/algoliasearch-helper-js/issues/121 */
-						var savedPage = helper.state.page;
-						if (search.helper.state.query === '') {
-							search.helper.setQueryParameter('distinct', false);
-							search.helper.setQueryParameter('filters', 'record_index=0');
-						} else {
-							search.helper.setQueryParameter('distinct', true);
-							search.helper.setQueryParameter('filters', '');
-						}
-						search.helper.setPage(savedPage);
-						helper.search();
 					}
 				});
 
