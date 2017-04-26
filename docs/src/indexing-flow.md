@@ -46,12 +46,12 @@ Indeed, before each post, term and user indexing, we decide if the item should b
 
 **Default decisions:**
 
-|Content Type|Rule
-|-|-
-|Searchable Post|We only index a post when it is in the `published` state and if its post type is not `excluded_from_search`.
-|Post|We only index a post when it is in the `published` state if it has no password.
-|Term|We only index a term if it has been assigned to at least 1 post (count > 0).
-|User|We index a user if he has authored at least 1 post.
+| Content Type    | Rule                                                                                                         |
+|:----------------|:-------------------------------------------------------------------------------------------------------------|
+| Searchable Post | We only index a post when it is in the `published` state and if its post type is not `excluded_from_search`. |
+| Post            | We only index a post when it is in the `published` state if it has no password.                              |
+| Term            | We only index a term if it has been assigned to at least 1 post (count > 0).                                 |
+| User            | We index a user if he has authored at least 1 post.                                                          |
 
 You can hook into the indexing decision making for searchable posts, posts, terms and users by using respectively the `algolia_should_index_searchable_post`, `algolia_should_index_post`, `algolia_should_index_term` and `algolia_should_index_user` filters.
 

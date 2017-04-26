@@ -130,6 +130,3 @@ function my_theme_dequeue_styles() {
 }
 add_action( 'wp_print_styles', 'my_theme_dequeue_styles', 100 );
 ```
-
-
-

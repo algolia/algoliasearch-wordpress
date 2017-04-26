@@ -238,5 +238,3 @@ define( 'ALGOLIA_POWERED_BY', false );
 ### My case is not listed here, what to do?
 
 If your problem is covered here, please submit an issue with the error details here: https://github.com/algolia/algoliasearch-wordpress/issues
-
-
