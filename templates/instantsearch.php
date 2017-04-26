@@ -36,20 +36,9 @@
 				</div>
 				<div class="excerpt">
 					<p>
-						<#
-						var attributes = ['content', 'title6', 'title5', 'title4', 'title3', 'title2', 'title1'];
-						var attribute_name;
-						var relevant_content = '';
-						for ( var index in attributes ) {
-							attribute_name = attributes[ index ];
-							if ( data._highlightResult[ attribute_name ].matchedWords.length > 0 ) {
-								relevant_content = data._snippetResult[ attribute_name ].value;
-							}
-						}
-
-						relevant_content = data._snippetResult[ attributes[ 0 ] ].value;
-						#>
-						{{{ relevant_content }}}
+            <# if ( data._snippetResult['content'] ) { #>
+              <span class="suggestion-post-content">{{{ data._snippetResult['content'].value }}}</span>
+            <# } #>
 					</p>
 				</div>
 			</div>
