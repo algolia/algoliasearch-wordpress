@@ -83,21 +83,6 @@
     margin: 0;
 }
 
-.ais-hits--tags {
-    margin-bottom: 1rem;
-}
-
-.ais-hits--tag {
-    background: #F2F2F2;
-    padding: 0px 7px;
-    border-radius: 2px;
-    display: inline-block;
-    margin-right: .5rem;
-    margin-bottom: .5rem;
-    font-size: 14px;
-}
-
-
 .ais-hits--item em, .ais-hits--item a em {
     font-style: normal;
     background: #FFFBCC;
