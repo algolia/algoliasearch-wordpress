@@ -75,20 +75,44 @@
 		/* setup default sources */
 		var sources = [];
 		jQuery.each(algolia.autocomplete.sources, function(i, config) {
+		  var suggestion_template = wp.template(config['tmpl_suggestion']);
 			sources.push({
 				source: algoliaAutocomplete.sources.hits(client.initIndex(config['index_name']), {
 					hitsPerPage: config['max_suggestions'],
 					attributesToSnippet: [
 						'content:10'
-					]
+					],
+          highlightPreTag: '__ais-highlight__',
+          highlightPostTag: '__/ais-highlight__'
 				}),
 				templates: {
 					header: function() {
 						return wp.template('autocomplete-header')({
-							label: config['label']
+							label: _.escape(config['label'])
 						});
 					},
-					suggestion: wp.template(config['tmpl_suggestion'])
+					suggestion: function(hit) {
+            for(var key in hit._highlightResult) {
+              // We do not deal with arrays.
+              if(typeof hit._highlightResult[key].value !== 'string') {
+                continue;
+              }
+              hit._highlightResult[key].value = _.escape(hit._highlightResult[key].value);
+              hit._highlightResult[key].value = hit._highlightResult[key].value.replace(/__ais-highlight__/g, '<em>').replace(/__\/ais-highlight__/g, '</em>');
+            }
+
+            for(var key in hit._snippetResult) {
+              // We do not deal with arrays.
+              if(typeof hit._snippetResult[key].value !== 'string') {
+                continue;
+              }
+
+              hit._snippetResult[key].value = _.escape(hit._snippetResult[key].value);
+              hit._snippetResult[key].value = hit._snippetResult[key].value.replace(/__ais-highlight__/g, '<em>').replace(/__\/ais-highlight__/g, '</em>');
+            }
+
+					  return suggestion_template(hit);
+          }
 				}
 			});
 
@@ -113,7 +137,7 @@
 
 			/* Instantiate autocomplete.js */
 			algoliaAutocomplete($searchInput[0], config, sources)
-			.on('autocomplete:selected', function(e, suggestion, datasetName) {
+			.on('autocomplete:selected', function(e, suggestion) {
 				/* Redirect the user when we detect a suggestion selection. */
 				window.location.href = suggestion.permalink;
 			});
