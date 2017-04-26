@@ -63,7 +63,7 @@
 <script type="text/html" id="tmpl-autocomplete-empty">
 	<div class="autocomplete-empty">
 		<?php esc_html_e( 'No results matched your query ', 'algolia' ); ?>
-		<span class="empty-query">{{ data.query }}"</span>
+		<span class="empty-query">"{{ data.query }}"</span>
 	</div>
 </script>
 
@@ -127,7 +127,10 @@
 				hint: false, // Required given we use appendTo feature.
 				openOnFocus: true,
 				templates: {},
-        appendTo: 'body'
+        appendTo: 'body',
+        templates: {
+          empty: wp.template('autocomplete-empty')
+        }
 			};
 			/* Todo: Add empty template when we fixed https://github.com/algolia/autocomplete.js/issues/109 */
 
