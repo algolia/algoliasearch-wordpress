@@ -36,21 +36,6 @@ define( 'ALGOLIA_SPLIT_POSTS', false );
 
 Then you will need to <span class="wp-btn">Re-index everything</span> from the `Indexing` page of the plugin.
 
-
-### I was using the Beta version of your plugin, what exactly has changed?
-
-Everything. Indeed we realized that the scope of our previous implementation was to large to be able to offer a good user experience.
-We have since focused on the core features of this new plugin which allows to seamlessly synchronize any kind of content type you have with Algolia.
-We also tried to be more close to the WordPress philosophy, allowing developers to easily extend this plugin so that it can be a good fit for any WordPress project.
-
-We will definitely add features in the future, so if you are really missing something, feel free to suggest
-
-### The previous Beta version of the plugin had some support for WooCommerce, what about this one?
-
-As stated earlier, we narrowed down the scope of this plugin for now. That being said, we really want to offer a flexible way to use Algolia in your WooComerce website in the future.
-
-If you are a developer and have built something based on this plugin, maybe we could work something out together fast enough!
-
 ### Can I customize the Autocomplete dropdown look & feel?
 
 Yes. You can find some detailed explanations on [this page](customize-autocomplete.html).
@@ -156,45 +141,6 @@ add_filter( 'algolia_indexing_batch_size', function() {
 ```
 
 If indexing doesn't work anymore after the change, it probably means you pushed the number to high. Checkout the logs in that case to be sure.
-
-
-
-### Can I remove non required thumbnail sizes from the records?
-
-By default the plugin pushes all the thumbnail sizes available so that you can easily switch the displayed format in your frontend integration.
-
-If you want to optimize the records size you can definitely remove non-used sizes.
-
-Let's say you only use `thumbnail` and the `medium` thumbnail sizes, here is how to remove all the others:
-
-```php
-<?php
-
-/**
- * @param array $shared_attributes
- *
- * @return array
- */
-function vm_post_shared_attributes( array $shared_attributes ) {
-	$keep_sizes = array( 'thumbnail', 'medium' );
-	$images = array();
-	foreach ( $shared_attributes['images'] as $size => $info ) {
-		if ( in_array( $size, $keep_sizes ) ) {
-			$images[$size] = $info;
-		}
-	}
-
-	$shared_attributes['images'] = $images;
-
-	return $shared_attributes;
-}
-
-// Remove the un-necessary sizes from the posts index.
-add_filter( 'algolia_post_shared_attributes', 'vm_post_shared_attributes' );
-
-// Also remove the un-necessary sizes from the searchable posts index.
-add_filter( 'algolia_searchable_post_shared_attributes', 'vm_post_shared_attributes' );
-```
 
 ### Can I push my custom user attributes?
 
