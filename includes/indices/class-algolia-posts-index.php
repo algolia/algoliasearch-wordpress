@@ -103,7 +103,6 @@ final class Algolia_Posts_Index extends Algolia_Index
 		foreach ( $parts as $i => $part ) {
 		    $record = $shared_attributes;
 			$record['objectID'] = $this->get_post_object_id( $post->ID, $i );
-			$record['record_index'] = $i;
 			$record['content'] = $part;
 			$records[] = $record;
 		}
