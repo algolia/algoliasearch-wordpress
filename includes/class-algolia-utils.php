@@ -85,8 +85,9 @@ class Algolia_Utils
 	public static function get_post_images( $post_id ) {
 		$images = array();
 		$post_thumbnail_id = get_post_thumbnail_id( (int) $post_id );
-		$sizes = get_intermediate_image_sizes();
+		
 		if ( $post_thumbnail_id ) {
+            $sizes = (array) apply_filters( 'algolia_post_images_sizes', array( 'thumbnail' ) );
 			foreach ( $sizes as $size ) {
 				$info = wp_get_attachment_image_src( $post_thumbnail_id, $size );
 				if ( ! $info ) {
