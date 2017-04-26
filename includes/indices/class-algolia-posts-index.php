@@ -100,39 +100,29 @@ final class Algolia_Posts_Index extends Algolia_Index
 			'style',
 		) );
 		$parser->setSharedAttributes( $shared_attributes );
+        $parser->setAttributeSelectors( array(
+            'content' => 'h1, h2, h3, h4, h5, h6, p, ul, ol, dl, table',
+        ) );
+
+        $content_max_size = 2000;
+        if ( defined( 'ALGOLIA_CONTENT_MAX_SIZE' ) ) {
+            $content_max_size = (int) ALGOLIA_CONTENT_MAX_SIZE;
+        }
+
+        apply_filters( 'algolia_post_parser', $parser );
+
+        $parser->setAttributeMaxSize( 'content', $content_max_size );
+
+        $records = $parser->parse( $post_content );
 
 		if ( defined( 'ALGOLIA_SPLIT_POSTS' ) && false === ALGOLIA_SPLIT_POSTS ) {
-			$parser->setAttributeSelectors( array(
-				'title1'  => 'h1#unused',
-				'title2'  => 'h2#unused',
-				'title3'  => 'h3#unused',
-				'title4'  => 'h4#unused',
-				'title5'  => 'h5#unused',
-				'title6'  => 'h6#unused',
-				'content' => 'h1, h2, h3, h4, h5, h6, p, ul, ol, dl, table',
-			) );
-
-			apply_filters( 'algolia_post_parser', $parser );
-
-			$records = $parser->parse( $post_content );
-
 			$merged = array_shift( $records );
 			foreach ( $records as $record ) {
 				$merged['content'] .= ' ' . $record['content'];
 			}
 
-			$merged['content'] = substr( $merged['content'], 0, 2000 );
+			$merged['content'] = substr( $merged['content'], 0, $content_max_size );
 			$records = array( $merged );
-		} else {
-			$content_max_size = 5000;
-			if ( defined( 'ALGOLIA_CONTENT_MAX_SIZE' ) ) {
-				$content_max_size = (int) ALGOLIA_CONTENT_MAX_SIZE;
-			}
-			$parser->setAttributeMaxSize( 'content', $content_max_size );
-			
-			apply_filters( 'algolia_post_parser', $parser );
-			
-			$records = $parser->parse( $post_content );
 		}
 
 		// Inject the objectID's.
