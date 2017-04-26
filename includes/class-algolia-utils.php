@@ -157,4 +157,66 @@ class Algolia_Utils
 		
 		return admin_url( 'admin-post.php', $scheme );
 	}
+
+	public static function prepare_content( $content ) {
+        $content = self::remove_content_noise( $content );
+
+	    return strip_tags( $content );
+    }
+
+    public static function remove_content_noise( $content ) {
+	    $noise_patterns = array(
+            // strip out comments
+            "'<!--(.*?)-->'is",
+            // strip out cdata
+            "'<!\[CDATA\[(.*?)\]\]>'is",
+            // Per sourceforge http://sourceforge.net/tracker/?func=detail&aid=2949097&group_id=218559&atid=1044037
+            // Script tags removal now preceeds style tag removal.
+            // strip out <script> tags
+            "'<\s*script[^>]*[^/]>(.*?)<\s*/\s*script\s*>'is",
+            "'<\s*script\s*>(.*?)<\s*/\s*script\s*>'is",
+            // strip out <style> tags
+            "'<\s*style[^>]*[^/]>(.*?)<\s*/\s*style\s*>'is",
+            "'<\s*style\s*>(.*?)<\s*/\s*style\s*>'is",
+            // strip out preformatted tags
+            "'<\s*(?:code)[^>]*>(.*?)<\s*/\s*(?:code)\s*>'is",
+        );
+
+	    foreach ( $noise_patterns as $pattern ) {
+	        $content = preg_replace($pattern, '', $content);
+        }
+
+        return $content;
+    }
+
+    /**
+     * @param string $content
+     *
+     * @return array
+     */
+    public static function explode_content( $content ) {
+        $max_size = 2000;
+        if ( defined( 'ALGOLIA_CONTENT_MAX_SIZE' ) ) {
+            $max_size = (int) ALGOLIA_CONTENT_MAX_SIZE;
+        }
+
+	    $parts = array();
+        while ( true ) {
+            $content = trim( (string) $content );
+            if ( mb_strlen( $content ) <= $max_size ) {
+                $parts[] = $content;
+
+                break;
+            }
+
+            $cutAtPosition = mb_strpos( $content, ' ', $max_size );
+            if ( false === $cutAtPosition ) {
+                $cutAtPosition = $max_size;
+            }
+            $parts[] = mb_strcut( $content, 0, $cutAtPosition );
+            $content = mb_strcut( $content, $cutAtPosition );
+        }
+
+        return $parts;
+    }
 }

@@ -92,43 +92,20 @@ final class Algolia_Posts_Index extends Algolia_Index
 		$shared_attributes = $this->get_post_shared_attributes( $post );
 
 		$post_content = apply_filters( 'the_content', $post->post_content );
-
-		$parser = new \Algolia\DOMParser();
-		$parser->setExcludeSelectors( array(
-			'pre',
-			'script',
-			'style',
-		) );
-		$parser->setSharedAttributes( $shared_attributes );
-        $parser->setAttributeSelectors( array(
-            'content' => 'h1, h2, h3, h4, h5, h6, p, ul, ol, dl, table',
-        ) );
-
-        $content_max_size = 2000;
-        if ( defined( 'ALGOLIA_CONTENT_MAX_SIZE' ) ) {
-            $content_max_size = (int) ALGOLIA_CONTENT_MAX_SIZE;
-        }
-
-        apply_filters( 'algolia_post_parser', $parser );
-
-        $parser->setAttributeMaxSize( 'content', $content_max_size );
-
-        $records = $parser->parse( $post_content );
+        $post_content = Algolia_Utils::prepare_content( $post_content );
+        $parts = Algolia_Utils::explode_content( $post_content );
 
 		if ( defined( 'ALGOLIA_SPLIT_POSTS' ) && false === ALGOLIA_SPLIT_POSTS ) {
-			$merged = array_shift( $records );
-			foreach ( $records as $record ) {
-				$merged['content'] .= ' ' . $record['content'];
-			}
-
-			$merged['content'] = substr( $merged['content'], 0, $content_max_size );
-			$records = array( $merged );
+			$parts = array_shift( $parts );
 		}
 
-		// Inject the objectID's.
-		foreach ( $records as $i => &$record ) {
+		$records = array();
+		foreach ( $parts as $i => $part ) {
+		    $record = $shared_attributes;
 			$record['objectID'] = $this->get_post_object_id( $post->ID, $i );
-			$record['record_index'] = (int) $i;
+			$record['record_index'] = $i;
+			$record['content'] = $part;
+			$records[] = $record;
 		}
 
 		$records = (array) apply_filters( 'algolia_post_records', $records, $post );
