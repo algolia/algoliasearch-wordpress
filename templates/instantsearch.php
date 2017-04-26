@@ -60,7 +60,9 @@
 						trackedParameters: ['query']
 					},
 					searchParameters: {
-						facetingAfterDistinct: true
+						facetingAfterDistinct: true,
+            highlightPreTag: '__ais-highlight__',
+            highlightPostTag: '__/ais-highlight__'
 					}
 				});
 
@@ -89,7 +91,32 @@
 						templates: {
 							empty: 'No results were found for "<strong>{{query}}</strong>".',
 							item: wp.template('instantsearch-hit')
-						}
+						},
+            transformData: {
+						  item: function (hit) {
+                console.log(hit);
+                for(var key in hit._highlightResult) {
+                  // We do not deal with arrays.
+                  if(typeof hit._highlightResult[key].value !== 'string') {
+                    continue;
+                  }
+                  hit._highlightResult[key].value = _.escape(hit._highlightResult[key].value);
+                  hit._highlightResult[key].value = hit._highlightResult[key].value.replace(/__ais-highlight__/g, '<em>').replace(/__\/ais-highlight__/g, '</em>');
+                }
+
+                for(var key in hit._snippetResult) {
+                  // We do not deal with arrays.
+                  if(typeof hit._snippetResult[key].value !== 'string') {
+                    continue;
+                  }
+
+                  hit._snippetResult[key].value = _.escape(hit._snippetResult[key].value);
+                  hit._snippetResult[key].value = hit._snippetResult[key].value.replace(/__ais-highlight__/g, '<em>').replace(/__\/ais-highlight__/g, '</em>');
+                }
+
+                return hit;
+              }
+            }
 					})
 				);
 
