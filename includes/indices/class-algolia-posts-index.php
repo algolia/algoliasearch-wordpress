@@ -213,12 +213,6 @@ final class Algolia_Posts_Index extends Algolia_Index
 		$settings = array(
 			'attributesToIndex' => array(
 				'unordered(post_title)',
-				'unordered(title1)',
-				'unordered(title2)',
-				'unordered(title3)',
-				'unordered(title4)',
-				'unordered(title5)',
-				'unordered(title6)',
 				'unordered(taxonomies)',
 				'unordered(content)',
 			),
@@ -235,12 +229,6 @@ final class Algolia_Posts_Index extends Algolia_Index
 			),
 			'attributesToSnippet' => array(
 				'post_title:30',
-				'title1:30',
-				'title2:30',
-				'title3:30',
-				'title4:30',
-				'title5:30',
-				'title6:30',
 				'content:30',
 			),
 			'snippetEllipsisText' => '…',
