@@ -12,22 +12,9 @@
 		<# } #>
 		<div class="suggestion-post-attributes">
 			<span class="suggestion-post-title">{{{ data._highlightResult.post_title.value }}}</span>
-
-			<#
-			var attributes = ['content', 'title6', 'title5', 'title4', 'title3', 'title2', 'title1'];
-			var attribute_name;
-			var relevant_content = '';
-			for ( var index in attributes ) {
-			attribute_name = attributes[ index ];
-			if ( data._highlightResult[ attribute_name ].matchedWords.length > 0 ) {
-			relevant_content = data._snippetResult[ attribute_name ].value;
-			break;
-			} else if( data._snippetResult[ attribute_name ].value !== '' ) {
-			relevant_content = data._snippetResult[ attribute_name ].value;
-			}
-			}
-			#>
-			<span class="suggestion-post-content">{{{ relevant_content }}}</span>
+      <# if ( data._snippetResult['content'] ) { #>
+        <span class="suggestion-post-content">{{{ data._snippetResult['content'].value }}}</span>
+			<# } #>
 		</div>
 	</a>
 </script>
@@ -79,13 +66,7 @@
 				source: algoliaAutocomplete.sources.hits(client.initIndex(config['index_name']), {
 					hitsPerPage: config['max_suggestions'],
 					attributesToSnippet: [
-						'content:10',
-						'title1:10',
-						'title2:10',
-						'title3:10',
-						'title4:10',
-						'title5:10',
-						'title6:10'
+						'content:10'
 					]
 				}),
 				templates: {
