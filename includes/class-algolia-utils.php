@@ -186,6 +186,9 @@ class Algolia_Utils
             "'<\s*style\s*>(.*?)<\s*/\s*style\s*>'is",
             // strip out preformatted tags
             "'<\s*(?:code)[^>]*>(.*?)<\s*/\s*(?:code)\s*>'is",
+            // strip out <pre> tags
+            "'<\s*pre[^>]*[^/]>(.*?)<\s*/\s*pre\s*>'is",
+            "'<\s*pre\s*>(.*?)<\s*/\s*pre\s*>'is",
         );
 
 	    foreach ( $noise_patterns as $pattern ) {
@@ -206,21 +209,26 @@ class Algolia_Utils
             $max_size = (int) ALGOLIA_CONTENT_MAX_SIZE;
         }
 
-	    $parts = array();
+        $parts = array();
+        $prefix = '';
         while ( true ) {
             $content = trim( (string) $content );
-            if ( mb_strlen( $content ) <= $max_size ) {
-                $parts[] = $content;
+            if ( strlen( $content ) <= $max_size ) {
+                $parts[] = $prefix . $content;
 
                 break;
             }
 
-            $cutAtPosition = mb_strpos( $content, ' ', $max_size );
+            $offset = -( strlen( $content ) - $max_size );
+            $cutAtPosition = strrpos( $content, ' ', $offset);
+
             if ( false === $cutAtPosition ) {
                 $cutAtPosition = $max_size;
             }
-            $parts[] = mb_strcut( $content, 0, $cutAtPosition );
-            $content = mb_strcut( $content, $cutAtPosition );
+            $parts[] =  $prefix . substr( $content, 0, $cutAtPosition );
+            $content =  substr( $content, $cutAtPosition );
+
+            $prefix = '… ';
         }
 
         return $parts;

@@ -108,6 +108,7 @@ final class Algolia_Searchable_Posts_Index extends Algolia_Index
             $record = $shared_attributes;
             $record['objectID'] = $this->get_post_object_id( $post->ID, $i );
             $record['content'] = $part;
+            $record['record_index'] = $i;
             $records[] = $record;
         }
 
@@ -199,6 +200,7 @@ final class Algolia_Searchable_Posts_Index extends Algolia_Index
 			'customRanking' => array(
 				'desc(is_sticky)',
 				'desc(post_date)',
+                'asc(record_index)',
 			),
 			'attributeForDistinct'  => 'post_id',
 			'distinct'              => true,
