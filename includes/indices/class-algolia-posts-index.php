@@ -161,7 +161,10 @@ final class Algolia_Posts_Index extends Algolia_Index
 				$shared_attributes['taxonomies_hierarchical'][ $taxonomy->name ] = Algolia_Utils::get_taxonomy_tree( $terms, $taxonomy->name );
 			}
 
-			$shared_attributes['taxonomies'][ $taxonomy->name ] = wp_list_pluck( $terms, 'name' );
+            $taxonomy_values = wp_list_pluck( $terms, 'name' );
+            if ( ! empty( $taxonomy_values ) ) {
+                $shared_attributes['taxonomies'][ $taxonomy->name ] = $taxonomy_values;
+            }
 		}
 		
 		
