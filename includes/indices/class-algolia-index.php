@@ -181,13 +181,6 @@ abstract class Algolia_Index
 	}
 
 	/**
-	 * @return Index
-	 */
-	protected function get_tmp_index() {
-		return $this->client->initIndex( (string) $this->get_tmp_name() );
-	}
-
-	/**
 	 * @param string $prefix
 	 *
 	 * @return string
@@ -198,13 +191,6 @@ abstract class Algolia_Index
 		}
 
 		return $prefix . $this->get_id();
-	}
-
-	/**
-	 * @return string
-	 */
-	protected function get_tmp_name() {
-		return $this->get_name() . '_tmp';
 	}
 	
 	/**
@@ -218,7 +204,7 @@ abstract class Algolia_Index
 		}
 		
 		if ( 1 === $page ) {
-			$this->create_tmp_index();
+		    $this->create_index_if_not_existing();
 		}
 
 		$batch_size = (int) $this->get_re_index_batch_size();
@@ -243,7 +229,7 @@ abstract class Algolia_Index
 		}
 
 		if ( ! empty( $records ) ) {
-			$index = $this->get_tmp_index();
+			$index = $this->get_index();
 			
 			$records = $this->sanitize_json_data( $records );
 			
@@ -252,11 +238,46 @@ abstract class Algolia_Index
 		}
 
 		if ( $page === $max_num_pages ) {
-			$this->deploy_tmp_index();
-			$this->sync_replicas();
 			do_action( 'algolia_re_indexed_items', $this->get_id() );
 		}
 	}
+
+	public function create_index_if_not_existing( $clear_if_existing = true )
+    {
+        $index = $this->get_index();
+
+        try {
+            $index->getSettings();
+            $index_exists = true;
+        } catch (\AlgoliaSearch\AlgoliaException $exception) {
+            $index_exists = false;
+        }
+
+        if ( $index_exists === true ) {
+
+            if ( $clear_if_existing === true ) {
+                $index->clearIndex();
+            }
+
+            // No need to go further in this case.
+            // We don't change anything when the index already exists.
+            // This means that to override, or go back to default settings you have to
+            // Clear the index and re-index again.
+            return;
+        }
+
+        $settings = $this->get_settings();
+        $index->setSettings( $settings ); // This will create the index.
+        $this->logger->log_operation( sprintf( "[1] Pushed settings to index '%s'.", $index->indexName ), $settings );
+
+        // Push synonyms.
+        $synonyms = $this->get_synonyms();
+        if ( ! empty( $synonyms ) ) {
+            $index->batchSynonyms( $synonyms );
+        }
+
+        $this->sync_replicas();
+    }
 
 	/**
 	 * Sanitize data to allow non UTF-8 content to pass.
@@ -304,10 +325,6 @@ abstract class Algolia_Index
 		$this->client->deleteIndex( $index_name );
 		$this->logger->log_operation( sprintf( "[1] Deleted index '%s'.", $index_name ) );
 
-		$tmp_name = $this->get_tmp_name();
-		$this->client->deleteIndex( $tmp_name );
-		$this->logger->log_operation( sprintf( "[1] Deleted temporary index '%s'.", $tmp_name ) );
-
 		do_action( 'algolia_de_indexed_items', $this->get_id() );
 	}
 
@@ -321,28 +338,6 @@ abstract class Algolia_Index
 		return $batch_size;
 	}
 
-	protected function create_tmp_index() {
-		$tmp_index = $this->get_tmp_index();
-
-		// Ensure the tmp index is in a clean state.
-		$tmp_index->clearIndex();
-		$this->logger->log_operation( sprintf( "[1] Cleared index '%s'.", $tmp_index->indexName ) );
-
-		// Set the temporary index settings.
-		$settings = $this->get_settings();
-		$tmp_index->setSettings( $settings );
-		$this->logger->log_operation( sprintf( "[1] Pushed settings to index '%s'.", $tmp_index->indexName ), $settings );
-		
-		// Set the synonyms.
-		$synonyms = $this->get_synonyms();
-		if ( ! empty( $synonyms ) ) {
-			// If synonyms are provided by WordPress, erase existing ones when we push them.
-			// In general though, users will handle the synonyms in the Algolia dashboard.
-			$tmp_index->batchSynonyms( $synonyms, false, true );
-			$this->logger->log_operation( sprintf( "[1] Pushed synonyms to index '%s'.", $tmp_index->indexName ), $synonyms );
-		}
-	}
-
 	/**
 	 * @return array
 	 */
@@ -352,13 +347,6 @@ abstract class Algolia_Index
 	 * @return array
 	 */
 	abstract protected function get_synonyms();
-
-	protected function deploy_tmp_index() {
-		$index_name = $this->get_name();
-		$tmp_name = $this->get_tmp_name();
-		$this->client->moveIndex( $tmp_name, $index_name );
-		$this->logger->log_operation( sprintf( '[1] Moved index %s to index %s', $tmp_name, $index_name ) );
-	}
 
 	/**
 	 * @return string
@@ -516,7 +504,7 @@ abstract class Algolia_Index
 		}
 
 		$this->get_index()->setSettings( array(
-			'slaves' => $replica_index_names
+			'replicas' => $replica_index_names
 		), false );
 
 		$client = $this->get_client();
