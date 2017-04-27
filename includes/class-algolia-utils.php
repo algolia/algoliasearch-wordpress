@@ -186,6 +186,9 @@ class Algolia_Utils
             "'<\s*style\s*>(.*?)<\s*/\s*style\s*>'is",
             // strip out preformatted tags
             "'<\s*(?:code)[^>]*>(.*?)<\s*/\s*(?:code)\s*>'is",
+            // strip out <pre> tags
+            "'<\s*pre[^>]*[^/]>(.*?)<\s*/\s*pre\s*>'is",
+            "'<\s*pre\s*>(.*?)<\s*/\s*pre\s*>'is",
         );
 
 	    foreach ( $noise_patterns as $pattern ) {
