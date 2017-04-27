@@ -164,9 +164,12 @@ final class Algolia_Searchable_Posts_Index extends Algolia_Index
             $terms = wp_get_object_terms( $post->ID, $taxonomy->name );
 			$terms = is_array( $terms ) ? $terms : array();
 
-			if ( $taxonomy->hierarchical ) {
-				$shared_attributes['taxonomies_hierarchical'][ $taxonomy->name ] = Algolia_Utils::get_taxonomy_tree( $terms, $taxonomy->name );
-			}
+            if ( $taxonomy->hierarchical ) {
+                $hierarchical_taxonomy_values = Algolia_Utils::get_taxonomy_tree( $terms, $taxonomy->name );
+                if ( ! empty( $hierarchical_taxonomy_values ) ) {
+                    $shared_attributes['taxonomies_hierarchical'][$taxonomy->name] = $hierarchical_taxonomy_values;
+                }
+            }
 
 			$taxonomy_values = wp_list_pluck( $terms, 'name' );
 			if ( ! empty( $taxonomy_values ) ) {
