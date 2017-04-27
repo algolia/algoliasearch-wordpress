@@ -30,7 +30,7 @@ final class Algolia_Posts_Index extends Algolia_Index
 	 */
 	public function get_admin_name() {
 		$post_type = get_post_type_object( $this->post_type );
-		
+
 		return null === $post_type ? $this->post_type : $post_type->labels->name;
 	}
 
@@ -91,7 +91,7 @@ final class Algolia_Posts_Index extends Algolia_Index
 	private function get_post_records( WP_Post $post ) {
 		$shared_attributes = $this->get_post_shared_attributes( $post );
 
-		$post_content = apply_filters( 'the_content', $post->post_content );
+		$post_content = apply_filters( 'the_content', preg_replace('/\[\/?et_pb.*?\]/', '', $post->post_content) );
 
 		$parser = new \Algolia\DOMParser();
 		$parser->setExcludeSelectors( array(
@@ -129,9 +129,9 @@ final class Algolia_Posts_Index extends Algolia_Index
 				$content_max_size = (int) ALGOLIA_CONTENT_MAX_SIZE;
 			}
 			$parser->setAttributeMaxSize( 'content', $content_max_size );
-			
+
 			apply_filters( 'algolia_post_parser', $parser );
-			
+
 			$records = $parser->parse( $post_content );
 		}
 
@@ -179,7 +179,7 @@ final class Algolia_Posts_Index extends Algolia_Index
 
 		$shared_attributes['permalink'] = get_permalink( $post );
 		$shared_attributes['post_mime_type'] = $post->post_mime_type;
-		
+
 
 		// Push all taxonomies by default, including custom ones.
 		$taxonomy_objects = get_object_taxonomies( $post->post_type, 'objects' );
@@ -197,8 +197,8 @@ final class Algolia_Posts_Index extends Algolia_Index
 
 			$shared_attributes['taxonomies'][ $taxonomy->name ] = wp_list_pluck( $terms, 'name' );
 		}
-		
-		
+
+
 		$shared_attributes['is_sticky'] = is_sticky( $post->ID ) ? 1 : 0;
 
 		if ( 'attachment' === $post->post_type ) {
@@ -215,7 +215,7 @@ final class Algolia_Posts_Index extends Algolia_Index
 
 		return $shared_attributes;
 	}
-	
+
 	/**
 	 * @return array
 	 */
@@ -367,7 +367,7 @@ final class Algolia_Posts_Index extends Algolia_Index
 
 		return (int) $query->found_posts;
 	}
-	
+
 	/**
 	 * @param int $page
 	 * @param int $batch_size
@@ -405,7 +405,7 @@ final class Algolia_Posts_Index extends Algolia_Index
 		if ( ! isset( $data['post_id'] ) ) {
 			return;
 		}
-			
+
 		return get_post( $data['post_id'] );
 	}
 
