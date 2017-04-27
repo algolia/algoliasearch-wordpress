@@ -206,21 +206,26 @@ class Algolia_Utils
             $max_size = (int) ALGOLIA_CONTENT_MAX_SIZE;
         }
 
-	    $parts = array();
+        $parts = array();
+        $prefix = '';
         while ( true ) {
             $content = trim( (string) $content );
-            if ( mb_strlen( $content ) <= $max_size ) {
-                $parts[] = $content;
+            if ( strlen( $content ) <= $max_size ) {
+                $parts[] = $prefix . $content;
 
                 break;
             }
 
-            $cutAtPosition = mb_strpos( $content, ' ', $max_size );
+            $offset = -( strlen( $content ) - $max_size );
+            $cutAtPosition = strrpos( $content, ' ', $offset);
+
             if ( false === $cutAtPosition ) {
                 $cutAtPosition = $max_size;
             }
-            $parts[] = mb_strcut( $content, 0, $cutAtPosition );
-            $content = mb_strcut( $content, $cutAtPosition );
+            $parts[] =  $prefix . substr( $content, 0, $cutAtPosition );
+            $content =  substr( $content, $cutAtPosition );
+
+            $prefix = '… ';
         }
 
         return $parts;
