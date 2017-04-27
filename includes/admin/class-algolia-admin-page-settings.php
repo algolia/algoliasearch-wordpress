@@ -108,18 +108,18 @@ class Algolia_Admin_Page_Settings
 			$this->section
 		);
 
-		/*add_settings_field(
+		add_settings_field(
 			'algolia_powered_by_enabled',
 			__( 'Remove Algolia powered by logo', 'algolia' ),
 			array( $this, 'powered_by_enabled_callback' ),
 			$this->slug,
 			$this->section
-		);*/
+		);
 
 		register_setting( $this->option_group, 'algolia_application_id', array( $this, 'sanitize_application_id' ) );
 		register_setting( $this->option_group, 'algolia_search_api_key', array( $this, 'sanitize_search_api_key' ) );
 		register_setting( $this->option_group, 'algolia_api_key', array( $this, 'sanitize_api_key' ) );
-		// register_setting( $this->option_group, 'algolia_powered_by_enabled', array( $this, 'sanitize_powered_by_enabled' ) );
+		register_setting( $this->option_group, 'algolia_powered_by_enabled', array( $this, 'sanitize_powered_by_enabled' ) );
 	}
 
 	public function application_id_callback() {
@@ -157,7 +157,7 @@ class Algolia_Admin_Page_Settings
 			$checked = ' checked';
 		}
 		echo "<input type='checkbox' name='algolia_powered_by_enabled' value='no' " . $checked . " />" .
-			'<p class="description" id="home-description">' . __( 'This will remove the Algolia logo from the autocomplete and the search page. We require that you keep the Algolia logo if you are using a free Hacker plan.', 'algolia' ) . '</p>';
+			'<p class="description" id="home-description">' . __( 'This will remove the Algolia logo from the autocomplete and the search page. We require that you keep the Algolia logo if you are using a free plan.', 'algolia' ) . '</p>';
 	}
 
 	public function sanitize_application_id( $value ) {
