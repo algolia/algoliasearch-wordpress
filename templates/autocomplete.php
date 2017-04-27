@@ -126,13 +126,11 @@
 				debug: algolia.debug,
 				hint: false, // Required given we use appendTo feature.
 				openOnFocus: true,
-				templates: {},
         appendTo: 'body',
         templates: {
           empty: wp.template('autocomplete-empty')
         }
 			};
-			/* Todo: Add empty template when we fixed https://github.com/algolia/autocomplete.js/issues/109 */
 
 			if(algolia.powered_by_enabled) {
 				config.templates.footer = wp.template('autocomplete-footer');
