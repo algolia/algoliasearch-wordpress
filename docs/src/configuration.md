@@ -108,12 +108,12 @@ Once enabled, you should now see that the form has expanded as follow:
 
 From here there are a couple of settings that you can customize.
 
-|Setting&nbsp;name    |Description
-|----------------|-----------
-|**Enable**          |Make search results for this index available through the autocomplete.
-|**Index**           |The name of the index, this is just here for you to know what each row is about.
-|**Max.&nbsp;Suggestions**|The maximum number of suggestions to display for this index. Only the `n` most relevant search results will be displayed for this index, and the others will be discarded.
-|**Position**        |Determines the display position of suggestions in relation to the other autocomplete enabled indices. The bigger the position, the lower the section will be in the display.
+| Setting&nbsp;name         | Description                                                                                                                                                                  |
+|:--------------------------|:-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| **Enable**                | Make search results for this index available through the autocomplete.                                                                                                       |
+| **Index**                 | The name of the index, this is just here for you to know what each row is about.                                                                                             |
+| **Max.&nbsp;Suggestions** | The maximum number of suggestions to display for this index. Only the `n` most relevant search results will be displayed for this index, and the others will be discarded.   |
+| **Position**              | Determines the display position of suggestions in relation to the other autocomplete enabled indices. The bigger the position, the lower the section will be in the display. |
 
 Let's keep the default settings and enable all 3 content types for the *find-as-you-type* autocomplete experience. Do not forget to hit the <span class="wp-btn">Save Changes</span> buttons once your finished.
 
@@ -154,9 +154,3 @@ With this option WordPress search will be powered by the [instantsearch.js](http
 You want to understand more in depth what Algolia is and how you can benefit from it? Please consult our getting started: https://www.algolia.com/doc/getting-started
 
 <div class="alert alert-warning">Struggling with something? Go to the [Q&A section](frequently-asked-questions.html).</div>
-
-
-
-
-
-

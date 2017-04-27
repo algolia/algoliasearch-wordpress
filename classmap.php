@@ -7,10 +7,6 @@ if ( ! defined( 'ALGOLIA_PATH' ) ) {
 // The Algolia Search PHP API Client.
 require_once ALGOLIA_PATH . 'includes/libraries/algoliasearch-client-php/algoliasearch.php';
 
-// The PHP DOM parser that splits posts into multiple Algolia records.
-require_once ALGOLIA_PATH . 'includes/libraries/php-dom-parser/lib/simple_html_dom.php';
-require_once ALGOLIA_PATH . 'includes/libraries/php-dom-parser/src/DOMParser.php';
-
 // The TechCrunch async task handling.
 require_once ALGOLIA_PATH . 'includes/libraries/wp-async-task/wp-async-task.php';
 

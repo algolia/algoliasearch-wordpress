@@ -20,10 +20,9 @@
   },
   "homepage": "https://community.algolia.com/wordpress",
   "dependencies": {
-    "algoliasearch": "^3.18",
-    "autocomplete.js": "^0.23",
-    "instantsearch.js": "^1.8.8",
-    "tether": "^1.3.2"
+    "algoliasearch": "^3.22.1",
+    "autocomplete.js": "^0.28.1",
+    "instantsearch.js": "^1.11.7"
   },
   "devDependencies": {
     "tachyons": "^4.5.1"

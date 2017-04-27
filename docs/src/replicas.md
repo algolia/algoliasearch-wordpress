@@ -18,10 +18,10 @@ In Algolia, to achieve different ranking on the same datasets, you can use Index
 
 To register custom index replicas, there are 2 filters:
 
-|Filter Name|Params
-|-|-
-|algolia_index_replicas|array $replicas, Algolia_Index $index
-|algolia\_{$index_id}_index_replicas|array $replicas, Algolia_Index $index
+| Filter Name                         | Params                                |
+|:------------------------------------|:--------------------------------------|
+| algolia_index_replicas              | array $replicas, Algolia_Index $index |
+| algolia\_{$index_id}_index_replicas | array $replicas, Algolia_Index $index |
 
 Here is an example of creating an index replica that will order results based on the lowest `price`.
 
@@ -65,4 +65,3 @@ function my_products_index_replicas( array $replicas) {
 }
 add_filter( 'algolia_posts_product_index_replicas', 'my_products_index_replicas');
 ```
-

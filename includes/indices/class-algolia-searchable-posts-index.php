@@ -93,56 +93,23 @@ final class Algolia_Searchable_Posts_Index extends Algolia_Index
 	 * @return array
 	 */
 	private function get_post_records( WP_Post $post ) {
-		$shared_attributes = $this->get_post_shared_attributes( $post );
+        $shared_attributes = $this->get_post_shared_attributes( $post );
 
-		$post_content = apply_filters( 'the_content', $post->post_content );
+        $post_content = apply_filters( 'the_content', $post->post_content );
+        $post_content = Algolia_Utils::prepare_content( $post_content );
+        $parts = Algolia_Utils::explode_content( $post_content );
 
-		$parser = new \Algolia\DOMParser();
-		$parser->setExcludeSelectors( array(
-			'pre',
-			'script',
-			'style',
-		) );
-		$parser->setSharedAttributes( $shared_attributes );
+        if ( defined( 'ALGOLIA_SPLIT_POSTS' ) && false === ALGOLIA_SPLIT_POSTS ) {
+            $parts = array_shift( $parts );
+        }
 
-		if ( defined( 'ALGOLIA_SPLIT_POSTS' ) && false === ALGOLIA_SPLIT_POSTS ) {
-			$parser->setAttributeSelectors( array(
-				'title1'  => 'h1#unused',
-				'title2'  => 'h2#unused',
-				'title3'  => 'h3#unused',
-				'title4'  => 'h4#unused',
-				'title5'  => 'h5#unused',
-				'title6'  => 'h6#unused',
-				'content' => 'h1, h2, h3, h4, h5, h6, p, ul, ol, dl, table',
-			) );
-
-			apply_filters( 'algolia_post_parser', $parser );
-			
-			$records = $parser->parse( $post_content );
-
-			$merged = array_shift( $records );
-			foreach ( $records as $record ) {
-				$merged['content'] .= ' ' . $record['content'];
-			}
-
-			$merged['content'] = substr( $merged['content'], 0, 2000 );
-			$records = array( $merged );
-		} else {
-			$content_max_size = 5000;
-			if ( defined( 'ALGOLIA_CONTENT_MAX_SIZE' ) ) {
-				$content_max_size = (int) ALGOLIA_CONTENT_MAX_SIZE;
-			}
-			$parser->setAttributeMaxSize( 'content', $content_max_size );
-
-			apply_filters( 'algolia_post_parser', $parser );
-			$records = $parser->parse( $post_content );
-		}
-
-		// Inject the objectID's.
-		foreach ( $records as $i => &$record ) {
-			$record['objectID'] = $this->get_post_object_id( $post->ID, $i );
-			$record['record_index'] = (int) $i;
-		}
+        $records = array();
+        foreach ( $parts as $i => $part ) {
+            $record = $shared_attributes;
+            $record['objectID'] = $this->get_post_object_id( $post->ID, $i );
+            $record['content'] = $part;
+            $records[] = $record;
+        }
 
 		$records = (array) apply_filters( 'algolia_searchable_post_records', $records, $post );
 		$records = (array) apply_filters( 'algolia_searchable_post_' . $post->post_type . '_records', $records, $post );
@@ -197,11 +164,17 @@ final class Algolia_Searchable_Posts_Index extends Algolia_Index
             $terms = wp_get_object_terms( $post->ID, $taxonomy->name );
 			$terms = is_array( $terms ) ? $terms : array();
 
-			if ( $taxonomy->hierarchical ) {
-				$shared_attributes['taxonomies_hierarchical'][ $taxonomy->name ] = Algolia_Utils::get_taxonomy_tree( $terms, $taxonomy->name );
-			}
+            if ( $taxonomy->hierarchical ) {
+                $hierarchical_taxonomy_values = Algolia_Utils::get_taxonomy_tree( $terms, $taxonomy->name );
+                if ( ! empty( $hierarchical_taxonomy_values ) ) {
+                    $shared_attributes['taxonomies_hierarchical'][$taxonomy->name] = $hierarchical_taxonomy_values;
+                }
+            }
 
-			$shared_attributes['taxonomies'][ $taxonomy->name ] = wp_list_pluck( $terms, 'name' );
+			$taxonomy_values = wp_list_pluck( $terms, 'name' );
+			if ( ! empty( $taxonomy_values ) ) {
+			    $shared_attributes['taxonomies'][ $taxonomy->name ] = $taxonomy_values;
+            }
 		}
 
 		$shared_attributes['is_sticky'] = is_sticky( $post->ID ) ? 1 : 0;
@@ -220,12 +193,6 @@ final class Algolia_Searchable_Posts_Index extends Algolia_Index
 		$settings = array(
 			'attributesToIndex' => array(
 				'unordered(post_title)',
-				'unordered(title1)',
-				'unordered(title2)',
-				'unordered(title3)',
-				'unordered(title4)',
-				'unordered(title5)',
-				'unordered(title6)',
 				'unordered(taxonomies)',
 				'unordered(content)',
 			),
@@ -243,12 +210,6 @@ final class Algolia_Searchable_Posts_Index extends Algolia_Index
 			),
 			'attributesToSnippet' => array(
 				'post_title:30',
-				'title1:30',
-				'title2:30',
-				'title3:30',
-				'title4:30',
-				'title5:30',
-				'title6:30',
 				'content:30',
 			),
 			'snippetEllipsisText' => '…',

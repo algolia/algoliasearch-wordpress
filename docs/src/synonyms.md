@@ -13,14 +13,14 @@ Be sure to understand how synonyms work by reading the [synonyms official docume
 
 Pushing your own synonyms is fairly simple by using the different `filters` the plugin provides.
 
-|Filter Name|Parameters
-|-|-
-|algolia_posts_index_synonyms|array $synonyms, string $post_type
-|algolia\_posts\_{$post_type}_index_synonyms|array $synonyms
-|algolia_searchable_posts_index_synonyms|array $synonyms
-|algolia_terms_index_synonyms|array $synonyms, string $taxonomy
-|algolia\_terms\_{$taxonomy}_index_synonyms|array $synonyms
-|algolia_users_index_synonyms|array $synonyms
+| Filter Name                                 | Parameters                         |
+|:--------------------------------------------|:-----------------------------------|
+| algolia_posts_index_synonyms                | array $synonyms, string $post_type |
+| algolia\_posts\_{$post_type}_index_synonyms | array $synonyms                    |
+| algolia_searchable_posts_index_synonyms     | array $synonyms                    |
+| algolia_terms_index_synonyms                | array $synonyms, string $taxonomy  |
+| algolia\_terms\_{$taxonomy}_index_synonyms  | array $synonyms                    |
+| algolia_users_index_synonyms                | array $synonyms                    |
 
 Example:
 

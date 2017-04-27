@@ -21,7 +21,3 @@ The Algolia autocomplete instance is now accessible under the `algoliaAutocomple
 **Required change on your side**
 
 If you previously implemented a custom `autocomplete.php` template, you need to replace occurrences of `autocomplete` with `algoliaAutocomplete` in your JavaScript implementations.
-
-
-
-

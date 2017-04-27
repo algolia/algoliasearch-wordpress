@@ -157,13 +157,13 @@ $settings = array(
 You can customize the settings pushed to Algolia for every content type.
 To do so simply use the available filters:
 
-|Filter Name|Params
-|-|-
-|algolia_posts_index_settings|`$settings`, the posts index settings. `$post_type`, the post type, like "page" or "post".
-|algolia\_posts\_{$post_type}_index_settings|`$settings`, the posts index settings.
-|algolia_terms_index_settings|`$settings`, the terms index settings. `$taxonomy`, the taxonomy like "post_tag" or "category".
-|algolia\_terms\_{$taxonomy}_index_settings|`$settings`, the terms index settings.
-|algolia_users_index_settings|`$settings`, the users index settings.
+| Filter Name                                 | Params                                                                                          |
+|:--------------------------------------------|:------------------------------------------------------------------------------------------------|
+| algolia_posts_index_settings                | `$settings`, the posts index settings. `$post_type`, the post type, like "page" or "post".      |
+| algolia\_posts\_{$post_type}_index_settings | `$settings`, the posts index settings.                                                          |
+| algolia_terms_index_settings                | `$settings`, the terms index settings. `$taxonomy`, the taxonomy like "post_tag" or "category". |
+| algolia\_terms\_{$taxonomy}_index_settings  | `$settings`, the terms index settings.                                                          |
+| algolia_users_index_settings                | `$settings`, the users index settings.                                                          |
 
 
 ## Custom Index Settings Example

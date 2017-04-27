@@ -29,27 +29,11 @@
 
 			<div class="ais-hits--content">
 				<h2 itemprop="name headline"><a href="{{ data.permalink }}" title="{{ data.post_title }}" itemprop="url">{{{ data._highlightResult.post_title.value }}}</a></h2>
-				<div class="ais-hits--tags">
-					<# for (var index in data.taxonomies.post_tag) { #>
-					<span class="ais-hits--tag">{{{ data._highlightResult.taxonomies.post_tag[index].value }}}</span>
-					<# } #>
-				</div>
 				<div class="excerpt">
 					<p>
-						<#
-						var attributes = ['content', 'title6', 'title5', 'title4', 'title3', 'title2', 'title1'];
-						var attribute_name;
-						var relevant_content = '';
-						for ( var index in attributes ) {
-							attribute_name = attributes[ index ];
-							if ( data._highlightResult[ attribute_name ].matchedWords.length > 0 ) {
-								relevant_content = data._snippetResult[ attribute_name ].value;
-							}
-						}
-
-						relevant_content = data._snippetResult[ attributes[ 0 ] ].value;
-						#>
-						{{{ relevant_content }}}
+            <# if ( data._snippetResult['content'] ) { #>
+              <span class="suggestion-post-content">{{{ data._snippetResult['content'].value }}}</span>
+            <# } #>
 					</p>
 				</div>
 			</div>
@@ -76,22 +60,9 @@
 						trackedParameters: ['query']
 					},
 					searchParameters: {
-						facetingAfterDistinct: true
-					},
-					searchFunction: function(helper) {
-						/* helper does a setPage(0) on almost every method call */
-						/* see https://github.com/algolia/algoliasearch-helper-js/blob/7d9917135d4192bfbba1827fd9fbcfef61b8dd69/src/algoliasearch.helper.js#L645 */
-						/* and https://github.com/algolia/algoliasearch-helper-js/issues/121 */
-						var savedPage = helper.state.page;
-						if (search.helper.state.query === '') {
-							search.helper.setQueryParameter('distinct', false);
-							search.helper.setQueryParameter('filters', 'record_index=0');
-						} else {
-							search.helper.setQueryParameter('distinct', true);
-							search.helper.setQueryParameter('filters', '');
-						}
-						search.helper.setPage(savedPage);
-						helper.search();
+						facetingAfterDistinct: true,
+            highlightPreTag: '__ais-highlight__',
+            highlightPostTag: '__/ais-highlight__'
 					}
 				});
 
@@ -120,7 +91,31 @@
 						templates: {
 							empty: 'No results were found for "<strong>{{query}}</strong>".',
 							item: wp.template('instantsearch-hit')
-						}
+						},
+            transformData: {
+						  item: function (hit) {
+                for(var key in hit._highlightResult) {
+                  // We do not deal with arrays.
+                  if(typeof hit._highlightResult[key].value !== 'string') {
+                    continue;
+                  }
+                  hit._highlightResult[key].value = _.escape(hit._highlightResult[key].value);
+                  hit._highlightResult[key].value = hit._highlightResult[key].value.replace(/__ais-highlight__/g, '<em>').replace(/__\/ais-highlight__/g, '</em>');
+                }
+
+                for(var key in hit._snippetResult) {
+                  // We do not deal with arrays.
+                  if(typeof hit._snippetResult[key].value !== 'string') {
+                    continue;
+                  }
+
+                  hit._snippetResult[key].value = _.escape(hit._snippetResult[key].value);
+                  hit._snippetResult[key].value = hit._snippetResult[key].value.replace(/__ais-highlight__/g, '<em>').replace(/__\/ais-highlight__/g, '</em>');
+                }
+
+                return hit;
+              }
+            }
 					})
 				);
 

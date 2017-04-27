@@ -238,15 +238,11 @@ class Algolia_Plugin {
 		wp_register_style( 'algolia-instantsearch', plugin_dir_url( __FILE__ ) . '../assets/css/algolia-instantsearch.css', array(), ALGOLIA_VERSION, 'screen' );
 
 		// JS.
-		wp_register_script( 'algolia-search', plugin_dir_url( __FILE__ ) . '../assets/js/algoliasearch/algoliasearch.jquery'.$suffix.'.js', array( 'jquery', 'wp-util' ), ALGOLIA_VERSION );
+		wp_register_script( 'algolia-search', plugin_dir_url( __FILE__ ) . '../assets/js/algoliasearch/algoliasearch.jquery'.$suffix.'.js', array( 'jquery', 'underscore', 'wp-util' ), ALGOLIA_VERSION );
 		wp_register_script( 'algolia-autocomplete', plugin_dir_url( __FILE__ ) . '../assets/js/autocomplete.js/autocomplete'.$suffix.'.js', array(), ALGOLIA_VERSION );
 		wp_register_script( 'algolia-autocomplete-noconflict', plugin_dir_url( __FILE__ ) . '../assets/js/autocomplete-noconflict.js', array(), ALGOLIA_VERSION );
-		
-		
-		wp_register_script( 'algolia-instantsearch', plugin_dir_url( __FILE__ ) . '../assets/js/instantsearch.js/instantsearch-preact'.$suffix.'.js', array(), ALGOLIA_VERSION );
 
-		// Vendor JS.
-		wp_register_script( 'tether', plugin_dir_url( __FILE__ ) . '../assets/js/tether/tether'.$suffix.'.js', array(), ALGOLIA_VERSION );
+		wp_register_script( 'algolia-instantsearch', plugin_dir_url( __FILE__ ) . '../assets/js/instantsearch.js/instantsearch-preact'.$suffix.'.js', array(), ALGOLIA_VERSION );
 	}
 
 	/**
