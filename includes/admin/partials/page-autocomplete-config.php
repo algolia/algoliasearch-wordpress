@@ -3,6 +3,7 @@
 		<tr>
 			<th><?php _e( 'Enable', 'algolia' ); ?></th>
 			<th><?php _e( 'Index', 'algolia' ); ?></th>
+			<th><?php _e( 'Label', 'algolia' ); ?></th>
 			<th><?php _e( 'Max. Suggestions', 'algolia' ); ?></th>
 			<th><?php _e( 'Position', 'algolia' ); ?></th>
 		</tr>
@@ -14,8 +15,11 @@
 				<input type="checkbox" name="algolia_autocomplete_config[<?php echo esc_attr( $index['index_id'] ); ?>][enabled]" <?php echo $index['enabled'] ? 'checked="checked"' : ''; ?>/>
 			</td>
 			<td>
-				<?php echo esc_html( $index['label'] ); ?>
+				<?php echo esc_html( $index['index_id'] ); ?>
 			</td>
+      <td>
+        <input type="text" name="algolia_autocomplete_config[<?php echo esc_attr( $index['index_id'] ); ?>][label]"  value="<?php echo esc_attr( $index['label'] ); ?>" />
+      </td>
 			<td>
 				<input type="number" name="algolia_autocomplete_config[<?php echo esc_attr( $index['index_id'] ); ?>][max_suggestions]"  value="<?php echo (int) $index['max_suggestions']; ?>" />
 			</td>
