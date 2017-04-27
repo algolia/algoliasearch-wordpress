@@ -69,13 +69,19 @@ class Algolia_Autocomplete_Config
 				continue;
 			}
 
-			$sanitized[] = array_merge(
-				$index->get_default_autocomplete_config(),
-				array(
-					'position'        => (int) $config['position'],
-					'max_suggestions' => (int) $config['max_suggestions'],
-				)
-			);
+			$merged_config = array_merge(
+                $index->get_default_autocomplete_config(),
+                array(
+                    'position'        => (int) $config['position'],
+                    'max_suggestions' => (int) $config['max_suggestions'],
+                )
+            );
+
+			if ( isset( $config['label'] ) && !empty( $config['label'] ) ) {
+                $merged_config['label'] = $config['label'];
+            }
+
+			$sanitized[] = $merged_config;
 		}
 
 		return $sanitized;
