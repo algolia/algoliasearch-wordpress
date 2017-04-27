@@ -165,22 +165,6 @@ function custom_user_record( array $record, WP_User $user ) {
 add_filter( 'algolia_user_record', 'custom_user_record', 10, 2 );
 ```
 
-### How do I remove the powered by Algolia logo?
-
-<div class="alert alert-warning">Please note that the powered by logo is mandatory if you are on a hacker plan (free plan).</div>
-
-To remove the powered by logo you must add the following to your `wp-config.php` file:
-
-```php
-<?php
-// [...]
-
-define( 'ALGOLIA_POWERED_BY', false );
-
-/* That's all, stop editing! Happy blogging. */
-// [...]
-```
-
 ### My case is not listed here, what to do?
 
 If your problem is covered here, please submit an issue with the error details here: https://github.com/algolia/algoliasearch-wordpress/issues
