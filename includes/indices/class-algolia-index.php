@@ -314,7 +314,7 @@ abstract class Algolia_Index
 	/**
 	 * @return int
 	 */
-	private function get_re_index_max_num_pages() {
+	public function get_re_index_max_num_pages() {
 		$items_count = $this->get_re_index_items_count();
 		
 		return (int) ceil( $items_count / $this->get_re_index_batch_size() );

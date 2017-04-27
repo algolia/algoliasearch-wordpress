@@ -40,6 +40,7 @@ class Algolia_Admin {
 	 */
 	public function enqueue_scripts() {
 		wp_enqueue_script( 'algolia-admin', plugin_dir_url( __FILE__ ) . 'js/algolia-admin.js', array( 'jquery' ), ALGOLIA_VERSION );
+		wp_enqueue_script( 'algolia-admin-reindex-button', plugin_dir_url( __FILE__ ) . 'js/reindex-button.js', array( 'jquery' ), ALGOLIA_VERSION );
 	}
 
 	/**

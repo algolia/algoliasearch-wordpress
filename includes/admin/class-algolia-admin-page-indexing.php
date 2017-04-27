@@ -41,6 +41,8 @@ class Algolia_Admin_Page_Indexing
 		add_action( 'update_option_algolia_index_name_prefix', array( $this, 'index_name_prefix_updated' ), 5, 2 );
 		add_action( 'update_option_algolia_synced_indices_ids', array( $this, 'synced_indices_ids_updated' ), 10, 2 );
 
+		add_action( 'wp_ajax_algolia_re_index', array( $this, 're_index' ) );
+
 		add_action( 'wp_ajax_algolia_run_queue', array( $this, 'run_queue' ) );
 		add_action( 'wp_ajax_algolia_stop_queue', array( $this, 'stop_queue' ) );
 		add_action( 'wp_ajax_algolia_queue_status', array( $this, 'queue_status' ) );
@@ -99,6 +101,38 @@ class Algolia_Admin_Page_Indexing
 			'recently_failed' => get_transient( 'algolia_recently_failed_task' ),
 		) );
 	}
+
+	public function re_index() {
+	    try {
+            $index_id = (string) $_POST['index_id'];
+
+            if ( ! isset( $_POST['page'] ) ) {
+                throw new RuntimeException('Page should be provided.');
+            }
+            $page = (int) $_POST['page'];
+
+            $index = $this->plugin->get_index($index_id);
+            if (null === $index) {
+                throw new RuntimeException(sprintf('Index named %s does not exist.', $index_id));
+            }
+
+            $total_pages = $index->get_re_index_max_num_pages();
+
+            if ($page <= $total_pages) {
+                $index->re_index($page);
+            }
+
+            $response = array(
+                'totalPagesCount' => $total_pages,
+                'finished'        => $page >= $total_pages,
+            );
+
+            wp_send_json($response);
+        } catch (\Exception $exception) {
+	        echo $exception->getMessage();
+	        throw $exception;
+        }
+    }
 
 	public function re_index_all() {
 		$ids = $this->plugin->get_settings()->get_synced_indices_ids();
