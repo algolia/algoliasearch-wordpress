@@ -16,7 +16,8 @@
 				<input type="checkbox" name="algolia_autocomplete_config[<?php echo esc_attr( $index['index_id'] ); ?>][enabled]" <?php echo $index['enabled'] ? 'checked="checked"' : ''; ?>/>
 			</td>
 			<td>
-				<?php echo esc_html( $index['index_id'] ); ?>
+        <?php echo esc_html($index['admin_name']); ?>
+        <br><small style="color: #999">Index name: <?php echo esc_html( $index['index_id'] ); ?></small>
 			</td>
       <td>
         <input type="text" name="algolia_autocomplete_config[<?php echo esc_attr( $index['index_id'] ); ?>][label]"  value="<?php echo esc_attr( $index['label'] ); ?>" />
