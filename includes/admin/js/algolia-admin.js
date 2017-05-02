@@ -3,6 +3,17 @@
 
 	$(function() {
 
+		function updateAutocompletePositions () {
+      $('.table-autocomplete .position-input').each(function(index, value) {
+        $(value).val(index);
+      });
+		}
+		$('.table-autocomplete tbody').sortable({
+      update: function() {
+        updateAutocompletePositions();
+      }
+		});
+
 		// Native Search page.
 		var $override_native_search = $("input[name='algolia_override_native_search']");
 		var $native_search_post_type = $("select[name='algolia_native_search_index_id']").parents('tr');
