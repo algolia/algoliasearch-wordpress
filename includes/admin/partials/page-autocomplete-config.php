@@ -6,6 +6,7 @@
 			<th><?php _e( 'Label', 'algolia' ); ?></th>
 			<th><?php _e( 'Max. Suggestions', 'algolia' ); ?></th>
 			<th><?php _e( 'Position', 'algolia' ); ?></th>
+			<th><?php _e( 'Actions', 'algolia' ); ?></th>
 		</tr>
 	</thead>
 	<tbody>
@@ -26,11 +27,14 @@
 			<td>
 				<input type="number" name="algolia_autocomplete_config[<?php echo esc_attr( $index['index_id'] ); ?>][position]"  value="<?php echo (int) $index['position']; ?>" />
 			</td>
+      <td>
+        <button class="algolia-reindex-button button button-primary" data-index="<?php echo esc_attr( $index['index_id'] ); ?>"><?php _e('Re-index', 'algolia'); ?></button>
+      </td>
 		</tr>
 		<?php endforeach; ?>
 		<?php if ( empty( $indices ) ) : ?>
 			<tr>
-				<td colspan="4" class="column-comments">
+				<td colspan="6" class="column-comments">
 					<em>You have no indexed content yet.</em>
 				</td>
 			</tr>
