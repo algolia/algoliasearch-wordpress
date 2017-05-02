@@ -36,8 +36,13 @@
     };
 
     $.post(ajaxurl, data, function(response) {
-      if(!response.totalPagesCount) {
+      if(typeof response.totalPagesCount === 'undefined') {
         alert('An error occurred');
+        resetButton($clickedButton);
+        return;
+      }
+
+      if(response.totalPagesCount === 0) {
         resetButton($clickedButton);
         return;
       }
