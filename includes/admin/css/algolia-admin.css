@@ -11,6 +11,9 @@
     width: auto;
 }
 
+.table-autocomplete .dashicons-move {
+    cursor: pointer;
+}
 
 /* Override admin menu styles for the algolia icon */
 @font-face {
