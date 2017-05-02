@@ -42,7 +42,6 @@ if ( is_admin() ) {
 	require_once ALGOLIA_PATH . 'includes/admin/class-algolia-admin.php';
 	require_once ALGOLIA_PATH . 'includes/admin/class-algolia-cache-helper.php';
 	require_once ALGOLIA_PATH . 'includes/admin/class-algolia-admin-page-autocomplete.php';
-	require_once ALGOLIA_PATH . 'includes/admin/class-algolia-admin-page-indexing.php';
 	require_once ALGOLIA_PATH . 'includes/admin/class-algolia-admin-page-logs.php';
 	require_once ALGOLIA_PATH . 'includes/admin/class-algolia-admin-page-native-search.php';
 	require_once ALGOLIA_PATH . 'includes/admin/class-algolia-admin-page-settings.php';

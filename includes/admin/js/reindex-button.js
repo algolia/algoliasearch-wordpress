@@ -36,6 +36,11 @@
     };
 
     $.post(ajaxurl, data, function(response) {
+      if(!response.totalPagesCount) {
+        alert('An error occurred');
+        resetButton($clickedButton);
+        return;
+      }
       progress = Math.round((currentPage / response.totalPagesCount)*100);
       updateIndexingPourcentage($clickedButton, progress);
 

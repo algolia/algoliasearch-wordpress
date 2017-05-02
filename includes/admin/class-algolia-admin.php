@@ -22,8 +22,9 @@ class Algolia_Admin {
 		if ( $api->is_reachable() ) {
 			new Algolia_Admin_Page_Autocomplete( $plugin->get_settings(), $this->plugin->get_autocomplete_config() );
 			new Algolia_Admin_Page_Native_Search( $plugin );
-			new Algolia_Admin_Page_Indexing( $plugin );
 			new Algolia_Admin_Page_Logs( $plugin->get_logger(), $plugin->get_settings() );
+
+			add_action( 'wp_ajax_algolia_re_index', array( $this, 're_index' ) );
 		}
 
 		new Algolia_Admin_Page_Settings( $plugin );
@@ -113,4 +114,36 @@ class Algolia_Admin {
 			<?php
 		}
 	}
+
+  public function re_index() {
+      try {
+          $index_id = (string) $_POST['index_id'];
+
+          if ( ! isset( $_POST['page'] ) ) {
+              throw new RuntimeException('Page should be provided.');
+          }
+          $page = (int) $_POST['page'];
+
+          $index = $this->plugin->get_index($index_id);
+          if (null === $index) {
+              throw new RuntimeException(sprintf('Index named %s does not exist.', $index_id));
+          }
+
+          $total_pages = $index->get_re_index_max_num_pages();
+
+          if ($page <= $total_pages) {
+              $index->re_index($page);
+          }
+
+          $response = array(
+              'totalPagesCount' => $total_pages,
+              'finished'        => $page >= $total_pages,
+          );
+
+          wp_send_json($response);
+      } catch (\Exception $exception) {
+          echo $exception->getMessage();
+          throw $exception;
+      }
+  }
 }
