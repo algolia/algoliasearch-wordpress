@@ -18,11 +18,14 @@ class Algolia_Autocomplete_Config
 	 * @return array
 	 */
 	public function get_form_data() {
-		$indices = $this->plugin->get_indices( array( 'enabled' => true ) );
+		$indices = $this->plugin->get_indices();
 		$config = array();
 
 		$existing_config = $this->get_config();
 		foreach ( $indices as $index ) {
+		    if($index->get_id() === 'searchable_posts') {
+		        continue;
+            }
 			/** @var Algolia_Index $index */
 			$index_config = $this->extract_index_config( $existing_config, $index->get_id() );
 			if ( $index_config ) {
@@ -54,15 +57,11 @@ class Algolia_Autocomplete_Config
 		if ( ! is_array( $data ) ) {
 			return array();
 		}
-		
+
 		$sanitized = array();
 
 		foreach ( $data as $index_id => $config ) {
 			$index = $this->plugin->get_index( $index_id );
-
-			if( null === $index || ! $index->is_enabled() ) {
-				continue;
-			}
 
 			// Remove disabled indices.
 			if ( ! isset( $config['enabled'] ) ) {
@@ -117,7 +116,7 @@ class Algolia_Autocomplete_Config
 			}
 			
 			$index = $this->plugin->get_index( $entry['index_id'] );
-			if ( null === $index || ! $index->is_enabled() ) {
+			if ( null === $index ) {
 				unset( $config[ $key ] );
 				continue;
 			}
