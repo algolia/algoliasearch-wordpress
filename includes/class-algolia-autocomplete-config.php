@@ -120,7 +120,7 @@ class Algolia_Autocomplete_Config
 				unset( $config[ $key ] );
 				continue;
 			}
-
+            $entry['index_name'] = $index->get_name();
 			$entry['enabled'] = true;
 		}
 
