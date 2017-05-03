@@ -148,7 +148,7 @@ class Algolia_Settings
 	 * @return bool
 	 */
 	public function should_override_search_in_backend() {
-		return $this->get_override_native_search() === 'backend';
+		return $this->get_override_native_search() === 'backend' || $this->should_override_search_with_instantsearch();
 	}
 
 	/**
