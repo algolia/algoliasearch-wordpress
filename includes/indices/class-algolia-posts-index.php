@@ -17,12 +17,12 @@ final class Algolia_Posts_Index extends Algolia_Index
 	}
 
 	/**
-	 * @param mixed $task_data
+	 * @param mixed $item
 	 *
 	 * @return bool
 	 */
-	public function supports( $task_data ) {
-		return isset( $task_data['post_type'] ) && $task_data['post_type'] === $this->post_type;
+	public function supports( $item ) {
+	    return $item instanceof WP_Post && $item->post_type === $this->post_type;
 	}
 
 	/**
@@ -49,10 +49,6 @@ final class Algolia_Posts_Index extends Algolia_Index
 	 * @return bool
 	 */
 	private function should_index_post( WP_Post $post ) {
-		if ( ! $this->post_type === $post->post_type ) {
-			return false;
-		}
-
 		$post_status = $post->post_status;
 
 		if ( 'inherit' === $post_status ) {
@@ -146,7 +142,6 @@ final class Algolia_Posts_Index extends Algolia_Index
 
 		$shared_attributes['permalink'] = get_permalink( $post );
 		$shared_attributes['post_mime_type'] = $post->post_mime_type;
-		
 
 		// Push all taxonomies by default, including custom ones.
 		$taxonomy_objects = get_object_taxonomies( $post->post_type, 'objects' );
@@ -170,8 +165,7 @@ final class Algolia_Posts_Index extends Algolia_Index
                 $shared_attributes['taxonomies'][ $taxonomy->name ] = $taxonomy_values;
             }
 		}
-		
-		
+
 		$shared_attributes['is_sticky'] = is_sticky( $post->ID ) ? 1 : 0;
 
 		if ( 'attachment' === $post->post_type ) {
@@ -250,7 +244,6 @@ final class Algolia_Posts_Index extends Algolia_Index
 		if ( ! empty( $dirty_object_ids ) ) {
 			$index = $this->get_index();
 			$index->deleteObjects( $dirty_object_ids );
-			$this->get_logger()->log_operation( sprintf( '[%d] Deleted %d records from index %s', count( $dirty_object_ids ), count( $dirty_object_ids ), $index->indexName ), $dirty_object_ids );
 		}
 	}
 
@@ -324,7 +317,7 @@ final class Algolia_Posts_Index extends Algolia_Index
 		$query = new WP_Query( array(
 			'post_type'   		    => $this->post_type,
 			'post_status' 		    => 'any', // Let the `should_index` take care of the filtering.
-			'suppress_filters' 	=> true,
+			'suppress_filters' 	    => true,
 		) );
 
 		return (int) $query->found_posts;
@@ -343,8 +336,8 @@ final class Algolia_Posts_Index extends Algolia_Index
 			'post_status'    	  => 'any',
 			'order'          	  => 'ASC',
 			'orderby'        	  => 'ID',
-			'paged'			 	        => $page,
-			'suppress_filters' 	=> true,
+			'paged'			 	  => $page,
+			'suppress_filters' 	  => true,
 		) );
 
 		return $query->posts;
@@ -358,30 +351,11 @@ final class Algolia_Posts_Index extends Algolia_Index
 	}
 
 	/**
-	 * @param Algolia_Task $task
-	 *
-	 * @return mixed
+	 * @param mixed $item
 	 */
-	protected function extract_item(Algolia_Task $task) {
-		$data = $task->get_data();
-		if ( ! isset( $data['post_id'] ) ) {
-			return;
-		}
-			
-		return get_post( $data['post_id'] );
-	}
-
-	/**
-	 * @param Algolia_Task $task
-	 */
-	public function delete_item( Algolia_Task $task ) {
-		$data = $task->get_data();
-		if ( ! isset( $data['post_id'] ) || ! is_int( $data['post_id'] ) ) {
-			return;
-		}
-
-		$index = $this->get_index();
-		$deleted_item_count = $index->deleteByQuery( '', array( 'filters' => 'post_id=' . $data['post_id'] ) );
-		$this->get_logger()->log_operation( sprintf( '[%d] Deleted %d records from index %s', $deleted_item_count, $deleted_item_count, $index->indexName ) );
+	public function delete_item( $item ) {
+		$this->assert_is_supported( $item );
+        $this->update_records( $item, array() );
+        // $this->get_index()->deleteByQuery( '', array( 'filters' => 'post_id=' . $item->ID ) );
 	}
 }

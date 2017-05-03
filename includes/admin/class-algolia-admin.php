@@ -20,7 +20,6 @@ class Algolia_Admin {
 		if ( $api->is_reachable() ) {
 			new Algolia_Admin_Page_Autocomplete( $plugin->get_settings(), $this->plugin->get_autocomplete_config() );
 			new Algolia_Admin_Page_Native_Search( $plugin );
-			new Algolia_Admin_Page_Logs( $plugin->get_logger(), $plugin->get_settings() );
 
 			add_action( 'wp_ajax_algolia_re_index', array( $this, 're_index' ) );
 		}
@@ -65,31 +64,6 @@ class Algolia_Admin {
 		}
 
 		$this->w3tc_notice();
-
-		if ( ! isset( $_GET['page'] ) || $_GET['page'] !== 'algolia-indexing' ) {
-			return;
-		}
-
-		
-		$url = Algolia_Utils::get_loopback_request_url();
-		$request_args = Algolia_Utils::get_loopback_request_args( array(
-			'timeout'     => 60,
-			'blocking'    => true,
-		) );
-		
-		$result = wp_remote_post( $url, $request_args );
-		if( ! $result instanceof WP_Error && $result['response']['code'] === 200 ) {
-			// Remote call check was successful.
-			return;
-		}
-
-		$this->plugin->get_logger()->log_error( 'wp_remote_post() check failed.', $result );
-
-		echo '<div class="error notice">
-				<p>' . esc_html__( "wp_remote_post() failed, indexing won't work. Checkout the logs for more details.", 'algolia' ) . '</p>
-				<p>URL called: ' . $url . '</p>
-				<p><code><pre>' . print_r( $result, true ) . '</pre></code></p>
-			</div>';
 	}
 
 	/**

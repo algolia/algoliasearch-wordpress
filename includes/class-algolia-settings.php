@@ -1,6 +1,5 @@
 <?php
 
-
 class Algolia_Settings
 {
 	/**
@@ -16,7 +15,6 @@ class Algolia_Settings
 		add_option( 'algolia_autocomplete_config', array() );
 		add_option( 'algolia_override_native_search', 'native' );
 		add_option( 'algolia_index_name_prefix', 'wp_' );
-		add_option( 'algolia_logging_enabled', 'no' );
 		add_option( 'algolia_api_is_reachable', 'no' );
 		add_option( 'algolia_powered_by_enabled', 'yes' );
 	}
@@ -90,8 +88,26 @@ class Algolia_Settings
 	 * @return array
 	 */
 	public function get_synced_indices_ids() {
-		return (array) get_option( 'algolia_synced_indices_ids', array() );
+	    $ids = array();
+
+	    // Gather indices used in autocomplete experience.
+        if ( $this->get_autocomplete_enabled() === 'yes' ) {
+            $config = $this->get_autocomplete_config();
+            foreach( $config as $index ) {
+                if( isset( $index['index_id'] ) ) {
+                    $ids[] = $index['index_id'];
+                }
+            }
+        }
+
+        // Push index used in instantsearch experience.
+        if ( $this->should_override_search_in_backend() || $this->should_override_search_with_instantsearch() ) {
+            $ids[] = $this->get_native_search_index_id();
+        }
+
+		return $ids;
 	}
+
 
 	/**
 	 * @return array
@@ -208,25 +224,6 @@ class Algolia_Settings
 	 */
 	public function is_index_name_prefix_in_config() {
 		return defined( 'ALGOLIA_INDEX_NAME_PREFIX' );
-	}
-
-
-	/**
-	 * @return bool
-	 */
-	public function get_logging_enabled() {
-		$enabled = get_option( 'algolia_logging_enabled', 'no' );
-		
-		return $enabled === 'yes';
-	}
-
-	/**
-	 * @param bool $flag
-	 */
-	public function set_logging_enabled( $flag ) {
-		$enabled = (bool) $flag === true ? 'yes' : 'no';
-		
-		update_option( 'algolia_logging_enabled', $enabled );
 	}
 
 	/**

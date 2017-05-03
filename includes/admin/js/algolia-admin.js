@@ -63,11 +63,5 @@
 		refresh_autocomplete_display();
 
 		$autocomplete_enabled.on('change', refresh_autocomplete_display);
-
-		// Logs page.
-		$(".display-logs").on("click", function(e) {
-			e.preventDefault();
-			$(e.currentTarget).parent().find(".log-details").toggle();
-		});
 	});
 })( jQuery );

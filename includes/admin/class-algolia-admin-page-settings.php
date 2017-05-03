@@ -230,7 +230,6 @@ class Algolia_Admin_Page_Settings
 			Algolia_API::assert_valid_credentials( $settings->get_application_id(), $value );
 		} catch ( Exception $exception ) {
 			$valid_credentials = false;
-			$this->plugin->get_logger()->log_error( 'Unable to validate credentials.', $exception );
 			add_settings_error(
 				$this->option_group,
 				'login_exception',
