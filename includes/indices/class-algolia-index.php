@@ -427,4 +427,25 @@ abstract class Algolia_Index
 	 */
 	abstract public function delete_item( $item );
 
+    /**
+     * Returns true if the index exists in Algolia.
+     * false otherwise.
+     *
+     * @return bool
+     * @throws \AlgoliaSearch\AlgoliaException
+     */
+	public function exists() {
+        try {
+            $this->get_index()->getSettings();
+        } catch( \AlgoliaSearch\AlgoliaException $exception ) {
+            if ( $exception->getMessage() === 'Index does not exist' ) {
+                return false;
+            }
+
+            throw $exception;
+        }
+
+        return true;
+    }
+
 }

@@ -53,6 +53,7 @@
       }
 
       if(response.totalPagesCount === 0) {
+        $clickedButton.parents('.error').fadeOut();
         resetButton($clickedButton);
         return;
       }
@@ -62,6 +63,7 @@
       if(response.finished !== true) {
         reIndex($clickedButton, index, ++currentPage);
       } else {
+        $clickedButton.parents('.error').fadeOut();
         resetButton($clickedButton);
       }
     }).fail(function(response) {

@@ -22,6 +22,7 @@ class Algolia_Admin {
 			new Algolia_Admin_Page_Native_Search( $plugin );
 
 			add_action( 'wp_ajax_algolia_re_index', array( $this, 're_index' ) );
+      add_action( 'admin_notices', array( $this, 'display_reindexing_notices' ) );
 		}
 
 		new Algolia_Admin_Page_Settings( $plugin );
@@ -87,6 +88,22 @@ class Algolia_Admin {
 		}
 	}
 
+	public function display_reindexing_notices() {
+	  $indices = $this->plugin->get_indices( array( 'enabled' => true ) );
+	  foreach ( $indices as $index ) {
+	    if ( $index->exists() ) {
+	      continue;
+      }
+
+?>
+      <div class="error">
+        <p>For Algolia search to work properly, you need to index: <strong><?php echo esc_html( $index->get_admin_name() ); ?></strong></p>
+        <p><button class="algolia-reindex-button button button-primary" data-index="<?php echo esc_attr( $index->get_id() ); ?>">Index now</button></p>
+      </div>
+<?php
+    }
+  }
+
   public function re_index() {
       try {
           $index_id = (string) $_POST['index_id'];
@@ -103,7 +120,7 @@ class Algolia_Admin {
 
           $total_pages = $index->get_re_index_max_num_pages();
 
-          if ($page <= $total_pages) {
+          if ( $page <= $total_pages || $total_pages === 0 ) {
               $index->re_index($page);
           }
 
