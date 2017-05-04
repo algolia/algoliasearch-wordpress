@@ -1,5 +1,22 @@
 ## Change Log
 
+### 1.17.0
+
+- add a strategy to keep state between PHP requests
+
+### 1.16.0
+
+- rename userKey to apiKey in the different keys related methods
+
+### 1.15.0
+
+- Make sure we don't have duplicated user agent
+- Allow more than one user agent prefix
+- Allow to specify attributesToRetrieve in getObjects method
+
+### 1.14.0
+- Better disjunctive faceting (included in the search method)
+
 ### 1.13.0
 - rename searchFacet to searchForFacetValues
 - better checks for curl handles
