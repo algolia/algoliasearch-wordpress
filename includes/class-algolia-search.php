@@ -1,7 +1,5 @@
 <?php
 
-use AlgoliaSearch\AlgoliaException;
-
 class Algolia_Search
 {
 	/**
@@ -15,22 +13,15 @@ class Algolia_Search
 	private $ranked_post_ids;
 
 	/**
-	 * @var Algolia_Logger
-	 */
-	private $logger;
-
-	/**
 	 * @var Algolia_Index
 	 */
 	private $index;
 
 	/**
 	 * @param Algolia_Index  $index
-	 * @param Algolia_Logger $logger
 	 */
-	public function __construct( Algolia_Index $index, Algolia_Logger $logger ) {
+	public function __construct( Algolia_Index $index ) {
 		$this->index = $index;
-		$this->logger = $logger;
 
 		add_action( 'pre_get_posts', array( $this, 'pre_get_posts' ) );
 	}
@@ -65,20 +56,14 @@ class Algolia_Search
 
 		$posts_per_page = (int) get_option( 'posts_per_page' );
 
-		// This can fail if the index is still queued.
-		try {
-			$params = apply_filters( 'algolia_search_params', array(
-				'attributesToRetrieve' => 'post_id',
-				'hitsPerPage'          => $posts_per_page,
-				'page'                 => $current_page - 1, // Algolia pages are zero indexed.
-			) );
-			
-			$results = $this->index->search( $query->query['s'], $params );
-		} catch ( AlgoliaException $exception ) {
-			$this->logger->log( 'An error occurred while performing a search.', $exception, Algolia_Logger::LEVEL_ERROR );
+        $params = apply_filters( 'algolia_search_params', array(
+            'attributesToRetrieve' => 'post_id',
+            'hitsPerPage'          => $posts_per_page,
+            'page'                 => $current_page - 1, // Algolia pages are zero indexed.
+        ) );
 
-			return;
-		}
+        $results = $this->index->search( $query->query['s'], $params );
+
 
 		add_filter( 'the_posts', array( $this, 'the_posts' ), 10, 2 );
 		add_filter( 'found_posts', array( $this, 'found_posts' ), 10, 2 );

@@ -112,7 +112,7 @@ class Algolia_Admin_Page_Native_Search
 	 * Display the page.
 	 */
 	public function display_page() {
-		require_once dirname( __FILE__ ) . '/partials/form-options.php';
+        require_once dirname( __FILE__ ) . '/partials/page-search.php';
 	}
 
 	/**

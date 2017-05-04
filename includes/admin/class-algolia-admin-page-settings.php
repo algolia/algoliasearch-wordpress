@@ -108,6 +108,14 @@ class Algolia_Admin_Page_Settings
 			$this->section
 		);
 
+        add_settings_field(
+            'algolia_index_name_prefix',
+            __( 'Index name prefix' ),
+            array( $this, 'index_name_prefix_callback' ),
+            $this->slug,
+            $this->section
+        );
+
 		add_settings_field(
 			'algolia_powered_by_enabled',
 			__( 'Remove Algolia powered by logo', 'algolia' ),
@@ -119,6 +127,7 @@ class Algolia_Admin_Page_Settings
 		register_setting( $this->option_group, 'algolia_application_id', array( $this, 'sanitize_application_id' ) );
 		register_setting( $this->option_group, 'algolia_search_api_key', array( $this, 'sanitize_search_api_key' ) );
 		register_setting( $this->option_group, 'algolia_api_key', array( $this, 'sanitize_api_key' ) );
+        register_setting( $this->option_group, 'algolia_index_name_prefix', array( $this, 'sanitize_index_name_prefix' ) );
 		register_setting( $this->option_group, 'algolia_powered_by_enabled', array( $this, 'sanitize_powered_by_enabled' ) );
 	}
 
@@ -149,6 +158,16 @@ class Algolia_Admin_Page_Settings
 		echo "<input type='password' name='algolia_api_key' class='regular-text' value='$setting' $disabled_html/>" .
 			'<p class="description" id="home-description">' . __( 'Your Algolia ADMIN API key (kept private).', 'algolia' ) . '</p>';
 	}
+
+    public function index_name_prefix_callback()
+    {
+        $settings = $this->plugin->get_settings();
+        $index_name_prefix = $settings->get_index_name_prefix();
+        $disabled_html = $settings->is_index_name_prefix_in_config() ? ' disabled' : '';
+
+        echo '<input type="text" name="algolia_index_name_prefix" value="' . esc_attr( $index_name_prefix ) . '" ' . $disabled_html . '/>' .
+            '<p class="description" id="home-description">' . __( 'This prefix will be prepended to your index names.', 'algolia' ) . '</p>';
+    }
 
 	public function powered_by_enabled_callback() {
 		$powered_by_enabled = $this->plugin->get_settings()->is_powered_by_enabled();
@@ -211,7 +230,6 @@ class Algolia_Admin_Page_Settings
 			Algolia_API::assert_valid_credentials( $settings->get_application_id(), $value );
 		} catch ( Exception $exception ) {
 			$valid_credentials = false;
-			$this->plugin->get_logger()->log_error( 'Unable to validate credentials.', $exception );
 			add_settings_error(
 				$this->option_group,
 				'login_exception',
@@ -255,6 +273,38 @@ class Algolia_Admin_Page_Settings
 
 		return $value;
 	}
+
+    /**
+     * @param $index_name_prefix
+     *
+     * @return string
+     */
+    public function is_valid_index_name_prefix( $index_name_prefix ) {
+        $to_validate = str_replace( '_', '', $index_name_prefix );
+
+        return ctype_alnum( $to_validate );
+    }
+
+    /**
+     * @param $value
+     *
+     * @return array
+     */
+    public function sanitize_index_name_prefix( $value ) {
+        if ( $this->is_valid_index_name_prefix( $value ) ) {
+            return $value;
+        }
+
+        add_settings_error(
+            $this->option_group,
+            'wrong_prefix',
+            __( 'Indices prefix can only contain alphanumeric characters and underscores.', 'algolia' )
+        );
+
+        $value = get_option( 'algolia_index_name_prefix' );
+
+        return $this->is_valid_index_name_prefix( $value ) ? $value : 'wp_';
+    }
 
 	/**
 	 * @param $value

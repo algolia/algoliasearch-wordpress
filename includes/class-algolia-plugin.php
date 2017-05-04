@@ -20,21 +20,6 @@ class Algolia_Plugin {
 	private $settings;
 
 	/**
-	 * @var Algolia_Task_Dispatcher
-	 */
-	private $task_dispatcher;
-
-	/**
-	 * @var Algolia_Task_Queue
-	 */
-	private $task_queue;
-
-	/**
-	 * @var Algolia_Logger
-	 */
-	private $logger;
-
-	/**
 	 * @var Algolia_Autocomplete_Config
 	 */
 	private $autocomplete_config;
@@ -78,64 +63,19 @@ class Algolia_Plugin {
 		add_action( 'wp_enqueue_scripts', array( $this, 'register_assets' ) );
 		add_action( 'admin_enqueue_scripts', array( $this, 'register_assets' ) );
 
-		/**
-		 * WP Header.
-		 *
-		 * @see  wc_generator_tag()
-		 */
-		add_action( 'get_the_generator_html', array( $this, 'append_generator_tag' ), 10, 2 );
-		add_action( 'get_the_generator_xhtml', array( $this, 'append_generator_tag' ), 10, 2 );
-
 		$this->settings = new Algolia_Settings();
-		$this->logger = new Algolia_Logger( $this->settings->get_logging_enabled() );
 
 		$this->api = new Algolia_API( $this->settings );
 
 		$this->compatibility = new Algolia_Compatibility();
 
-		add_action( 'init', array( $this, 'register_post_types'), 5 );
 		add_action( 'init', array( $this, 'load' ), 20 );
 	}
 
-	/**
-	 * Register Algolia post types.
-	 */
-	public function register_post_types() {
-		register_post_type( Algolia_Logger::$post_type,
-			array(
-				'labels' => array(
-					'name'          => __( 'Algolia Logs', 'algolia' ),
-					'singular_name' => __( 'Algolia Log', 'algolia' ),
-				),
-				'public'              => false,
-				'exclude_from_search' => true,
-				'rewrite'             => false,
-				'can_export'          => false,
-				'query_var'           => false,
-			)
-		);
-
-		register_post_type( Algolia_Task::$post_type,
-			array(
-				'labels' => array(
-					'name'          => __( 'Algolia Tasks', 'algolia' ),
-					'singular_name' => __( 'Algolia Task', 'algolia' ),
-				),
-				'public'              => false,
-				'exclude_from_search' => true,
-				'rewrite'             => false,
-				'can_export'          => false,
-				'query_var'           => false,
-			)
-		);
-	}
 
 	public function load() {
 		if ( $this->api->is_reachable() ) {
-			$this->task_queue = new Algolia_Task_Queue( $this->logger );
 			$this->load_indices();
-			$this->task_dispatcher = new Algolia_Task_Dispatcher( $this->get_indices() );
-			new Algolia_Task_Queue_Loopback_Async( $this->task_queue, $this->task_dispatcher, $this->logger );
 			$this->override_wordpress_search();
 			$this->autocomplete_config = new Algolia_Autocomplete_Config( $this );
 			$this->template_loader = new Algolia_Template_Loader( $this );
@@ -183,20 +123,6 @@ class Algolia_Plugin {
 	}
 
 	/**
-	 * @return Algolia_Task_Runner
-	 */
-	public function get_task_dispatcher() {
-		return $this->task_dispatcher;
-	}
-
-	/**
-	 * @return Algolia_Task_Queue
-	 */
-	public function get_task_queue() {
-		return $this->task_queue;
-	}
-
-	/**
 	 * Replaces native WordPresss search results by Algolia ranked results.
 	 */
 	private function override_wordpress_search() {
@@ -212,14 +138,7 @@ class Algolia_Plugin {
 			return;
 		}
 
-		new Algolia_Search( $index, $this->logger );
-	}
-
-	/**
-	 * @return Algolia_Logger
-	 */
-	public function get_logger() {
-		return $this->logger;
+		new Algolia_Search( $index );
 	}
 
 	/**
@@ -291,18 +210,17 @@ class Algolia_Plugin {
 
 		foreach ( $this->indices as $index ) {
 			$index->set_name_prefix( $index_name_prefix );
-			$index->set_logger( $this->logger );
 			$index->set_client( $client );
 
 			if ( in_array( $index->get_id(), $synced_indices_ids ) ) {
 				$index->set_enabled( true );
 
 				if ( $index->contains_only( 'posts' ) ) {
-					$this->changes_watchers[] = new Algolia_Post_Changes_Watcher( $this->task_queue, $index, $post_types_blacklist );
+					$this->changes_watchers[] = new Algolia_Post_Changes_Watcher( $index );
 				} elseif ( $index->contains_only( 'terms' ) ) {
-					$this->changes_watchers[] = new Algolia_Term_Changes_Watcher( $this->task_queue, $index, $taxonomies_blacklist );
+					$this->changes_watchers[] = new Algolia_Term_Changes_Watcher( $index );
 				} elseif ( $index->contains_only( 'users' ) ) {
-					$this->changes_watchers[] = new Algolia_User_Changes_Watcher( $this->task_queue, $index, $post_types_blacklist );
+					$this->changes_watchers[] = new Algolia_User_Changes_Watcher( $index );
 				}
 			}
 		}
@@ -354,7 +272,7 @@ class Algolia_Plugin {
 			}
 		}
 
-		return;
+		return null;
 	}
 
 	/**
@@ -378,22 +296,5 @@ class Algolia_Plugin {
 	 */
 	public function get_template_loader() {
 		return $this->template_loader;
-	}
-
-	/**
-	 * Output generator tag to aid debugging.
-	 *
-	 * @access public
-	 */
-	public function append_generator_tag( $gen, $type ) {
-		switch ( $type ) {
-			case 'html':
-				$gen .= "\n" . '<meta name="generator" content="Algolia ' . esc_attr( ALGOLIA_VERSION ) . '">';
-				break;
-			case 'xhtml':
-				$gen .= "\n" . '<meta name="generator" content="Algolia ' . esc_attr( ALGOLIA_VERSION ) . '" />';
-				break;
-		}
-		return $gen;
 	}
 }

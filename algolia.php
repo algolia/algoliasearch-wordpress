@@ -45,27 +45,6 @@ function algolia_load_textdomain() {
 }
 add_action( 'plugins_loaded', 'algolia_load_textdomain' );
 
-/**
- * The code that runs during plugin activation.
- * This action is documented in includes/class-algolia-activator.php.
- */
-function activate_algolia() {
-	require_once ALGOLIA_PATH . 'includes/class-algolia-activator.php';
-	Algolia_Activator::activate();
-}
-
-/**
- * The code that runs during plugin deactivation.
- * This action is documented in includes/class-algolia-deactivator.php.
- */
-function deactivate_algolia() {
-	require_once ALGOLIA_PATH . 'includes/class-algolia-deactivator.php';
-	Algolia_Deactivator::deactivate();
-}
-
-register_activation_hook( __FILE__, 'activate_algolia' );
-register_deactivation_hook( __FILE__, 'deactivate_algolia' );
-
 require_once ALGOLIA_PATH . 'classmap.php';
 
 $algolia = Algolia_Plugin::get_instance();

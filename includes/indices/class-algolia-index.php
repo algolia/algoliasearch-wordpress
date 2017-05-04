@@ -11,11 +11,6 @@ abstract class Algolia_Index
 	private $client;
 
 	/**
-	 * @var Algolia_Logger
-	 */
-	private $logger;
-
-	/**
 	 * @var bool
 	 */
 	private $enabled = false;
@@ -50,15 +45,22 @@ abstract class Algolia_Index
 
 	/**
 	 * A performing function that return true if the item can potentially
-	 * be subject for indexation or not. This will be used to determine if a task can be queued
-	 * for this index. As this function will be called synchronously during other operations,
+	 * be subject for indexation or not. This will be used to determine if an item is part of the index
+	 * As this function will be called synchronously during other operations,
 	 * it has to be as lightweight as possible. No db calls or huge loops.
 	 * 
-	 * @param mixed $task_data
+	 * @param mixed $item
 	 * 
 	 * @return bool
 	 */
-	abstract public function supports( $task_data );
+	abstract public function supports( $item );
+
+    public function assert_is_supported($item)
+    {
+        if( ! $this->supports( $item ) ) {
+            throw new RuntimeException('Item is no supported on this index.');
+        }
+    }
 
 	/**
 	 * @param Client $client
@@ -96,24 +98,6 @@ abstract class Algolia_Index
 	}
 	
 	/**
-	 * @param Algolia_Logger $logger
-	 */
-	final public function set_logger( Algolia_Logger $logger ) {
-		$this->logger = $logger;
-	}
-
-	/**
-	 * @return Algolia_Logger
-	 */
-	final protected function get_logger() {
-		if ( null === $this->client ) {
-			throw new LogicException( 'Logger has not been set.' );
-		}
-
-		return $this->logger;
-	}
-	
-	/**
 	 * @return bool
 	 */
 	final public function is_enabled() {
@@ -131,6 +115,7 @@ abstract class Algolia_Index
 	 * @param mixed $item
 	 */
 	public function sync( $item ) {
+	    $this->assert_is_supported( $item );
 		if ( $this->should_index( $item ) ) {
             do_action( 'algolia_before_get_records', $item );
 			$records = $this->get_records( $item );
@@ -139,7 +124,7 @@ abstract class Algolia_Index
 			return $this->update_records( $item, $records );
 		}
 
-		$this->update_records( $item, array() );
+		$this->delete_item( $item );
 	}
 	
 	/**
@@ -168,9 +153,6 @@ abstract class Algolia_Index
 		$index = $this->get_index();
 		$records = $this->sanitize_json_data( $records );
 		$index->addObjects( $records );
-
-		$records_count = count( $records );
-		$this->logger->log_operation( sprintf( '[%d] Added %d records to index %s', $records_count, $records_count, $index->indexName ) );
 	}
 	
 	/**
@@ -234,7 +216,6 @@ abstract class Algolia_Index
 			$records = $this->sanitize_json_data( $records );
 			
 			$index->addObjects( $records );
-			$this->logger->log_operation( sprintf( '[%d] Added %d records to index %s', count( $records ), count( $records ), $index->indexName ) );
 		}
 
 		if ( $page === $max_num_pages ) {
@@ -268,7 +249,6 @@ abstract class Algolia_Index
 
         $settings = $this->get_settings();
         $index->setSettings( $settings ); // This will create the index.
-        $this->logger->log_operation( sprintf( "[1] Pushed settings to index '%s'.", $index->indexName ), $settings );
 
         // Push synonyms.
         $synonyms = $this->get_synonyms();
@@ -314,7 +294,7 @@ abstract class Algolia_Index
 	/**
 	 * @return int
 	 */
-	private function get_re_index_max_num_pages() {
+	public function get_re_index_max_num_pages() {
 		$items_count = $this->get_re_index_items_count();
 		
 		return (int) ceil( $items_count / $this->get_re_index_batch_size() );
@@ -323,7 +303,6 @@ abstract class Algolia_Index
 	public function de_index_items() {
 		$index_name = $this->get_name();
 		$this->client->deleteIndex( $index_name );
-		$this->logger->log_operation( sprintf( "[1] Deleted index '%s'.", $index_name ) );
 
 		do_action( 'algolia_de_indexed_items', $this->get_id() );
 	}
@@ -360,92 +339,17 @@ abstract class Algolia_Index
 	 * @return array
 	 */
 	abstract protected function get_items( $page, $batch_size );
-
-	/**
-	 * @param string $from
-	 */
-	public function change_name_prefix( $from, $to ) {
-		$from_name = $this->get_name( $from );
-		$to_name = $this->get_name( $to );
-
-		// We need to unset the replicas prior to moving the master index.
-		$index = $this->client->initIndex( $from_name );
-		$task = $index->setSettings( array( 'replicas' => array() ) );
-
-		// Todo: We should make sure we wait on the same host here.
-		// Todo: For now this might fail on first attempt.
-		$index->waitTask( $task['taskID'], 1000 );
-		$this->logger->log_operation( sprintf( '[1] Unlink replicas from index %s.', $from_name ) );
-
-		$this->client->moveIndex( $from_name, $to_name );
-		$this->logger->log_operation( sprintf( '[1] Moved index from %s to %s.', $from_name, $to_name ) );
-
-		// Re-create the replicas here.
-		$this->sync_replicas();
-	}
 	
 	public function get_default_autocomplete_config() {
 		return array(
 			'index_id'        => $this->get_id(),
 			'index_name'      => $this->get_name(),
 			'label'           => $this->get_admin_name(),
+			'admin_name'      => $this->get_admin_name(),
 			'position'        => 10,
 			'max_suggestions' => 5,
 			'tmpl_suggestion' => 'autocomplete-post-suggestion'
 		);
-	}
-
-	/**
-	 * @param Algolia_Task $task
-	 *
-	 * @return mixed
-	 */
-	abstract protected function extract_item( Algolia_Task $task );
-
-	/**
-	 * @param Algolia_Task $task
-	 *
-	 * @return bool
-	 */
-	final public function handle_task( Algolia_Task $task ) {
-		do_action( 'algolia_before_handle_task', $task );
-		$data = $task->get_data();
-
-		switch ( $task->get_name() ) {
-			case 'sync_item':
-				$item = $this->extract_item( $task );
-
-				if ( null === $item ) {
-					$this->delete_item( $task );
-				} else {
-					$this->sync( $item );
-				}
-
-				break;
-			case 're_index_items':
-				$page = get_post_meta( $task->get_id(), 'algolia_task_re_index_page', true );
-				if ( ! $page ) {
-					$page = 1;
-				}
-				
-				$this->re_index( $page );
-
-				if ( ! $this->is_last_page_to_re_index( $page ) ) {
-					update_post_meta( $task->get_id(), 'algolia_task_re_index_page', ++$page );
-					update_post_meta( $task->get_id(), 'algolia_task_re_index_max_num_pages', $this->get_re_index_max_num_pages() );
-					
-					return false;
-				}
-				break;
-			case 'de_index_items':
-				$this->de_index_items();
-				break;
-			case 'change_name_prefix':
-				$this->change_name_prefix( $data['from'], $data['to'] );
-				break;
-		}
-
-		return true;
 	}
 
 	/**
@@ -489,8 +393,6 @@ abstract class Algolia_Index
 	}
 
 	private function sync_replicas() {
-		$index_name = $this->get_name();
-
 		$replicas = $this->get_replicas();
 		if ( empty( $replicas ) ) {
 			// No need to go further if there are no replicas!
@@ -517,16 +419,33 @@ abstract class Algolia_Index
 			$replica_index_name = $replica->get_replica_index_name( $this );
 			$index = $client->initIndex( $replica_index_name );
 			$index->setSettings( $settings );
-
-			$this->logger->log_operation( sprintf( '[1] Updated index replica %s settings.', $replica_index_name ) );
 		}
-
-		$this->logger->log_operation( sprintf( '[1] Updated index %s settings to sync replicas.', $index_name ) );
 	}
 
 	/**
-	 * @param Algolia_Task $task
+	 * @param mixed $item
 	 */
-	abstract public function delete_item( Algolia_Task $task );
+	abstract public function delete_item( $item );
+
+    /**
+     * Returns true if the index exists in Algolia.
+     * false otherwise.
+     *
+     * @return bool
+     * @throws \AlgoliaSearch\AlgoliaException
+     */
+	public function exists() {
+        try {
+            $this->get_index()->getSettings();
+        } catch( \AlgoliaSearch\AlgoliaException $exception ) {
+            if ( $exception->getMessage() === 'Index does not exist' ) {
+                return false;
+            }
+
+            throw $exception;
+        }
+
+        return true;
+    }
 
 }
