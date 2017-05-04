@@ -91,16 +91,15 @@ class Algolia_Settings
 	    $ids = array();
 
 	    // Gather indices used in autocomplete experience.
-        if ( $this->get_autocomplete_enabled() === 'yes' ) {
-            $config = $this->get_autocomplete_config();
-            foreach( $config as $index ) {
-                if( isset( $index['index_id'] ) ) {
-                    $ids[] = $index['index_id'];
-                }
+        $config = $this->get_autocomplete_config();
+        foreach( $config as $index ) {
+            if( isset( $index['index_id'] ) ) {
+                $ids[] = $index['index_id'];
             }
         }
 
         // Push index used in instantsearch experience.
+        // Todo: we should allow users to index without using the shipped search UI or backend implementation.
         if ( $this->should_override_search_in_backend() || $this->should_override_search_with_instantsearch() ) {
             $ids[] = $this->get_native_search_index_id();
         }
