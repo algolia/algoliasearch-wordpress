@@ -22,7 +22,10 @@ class Algolia_Admin {
 			new Algolia_Admin_Page_Native_Search( $plugin );
 
 			add_action( 'wp_ajax_algolia_re_index', array( $this, 're_index' ) );
-      add_action( 'admin_notices', array( $this, 'display_reindexing_notices' ) );
+
+			if ( isset( $_GET['page'] ) && substr( (string) $_GET['page'], 0, 7) === 'algolia' ) {
+          add_action( 'admin_notices', array( $this, 'display_reindexing_notices' ) );
+      }
 		}
 
 		new Algolia_Admin_Page_Settings( $plugin );
