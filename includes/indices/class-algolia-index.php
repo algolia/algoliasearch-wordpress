@@ -448,4 +448,9 @@ abstract class Algolia_Index
         return true;
     }
 
+    public function clear()
+    {
+        $this->get_index()->clearIndex();
+    }
+
 }
