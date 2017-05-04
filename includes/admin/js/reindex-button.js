@@ -5,6 +5,14 @@
     $reindexButtons.on('click', handleReindexButtonClick);
   });
 
+  var ongoing = 0;
+
+  $( window ).on('beforeunload', function() {
+    if (ongoing>0) {
+      return 'If you leave now, re-indexing tasks in progress will be aborted';
+    }
+  });
+
   function handleReindexButtonClick(e) {
 
     $clickedButton = $(e.currentTarget);
@@ -12,6 +20,8 @@
     if (!index) {
       throw new Error('Clicked button has no "data-index" set.');
     }
+
+    ongoing++;
 
     $clickedButton.attr('disabled', 'disabled');
     $clickedButton.data('originalText', $clickedButton.text());
@@ -61,6 +71,7 @@
   }
 
   function resetButton($clickedButton) {
+    ongoing--;
     $clickedButton.text($clickedButton.data('originalText'));
     $clickedButton.removeAttr('disabled');
     $clickedButton.data('currentPage', 1);
