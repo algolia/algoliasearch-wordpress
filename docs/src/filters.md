@@ -77,15 +77,12 @@ Here is the list of all available Filters.
 | algolia_index_replicas                                   | array $replicas, Algolia_Index $index                                            |
 | algolia\_{$index_id}_index_replicas                      | array $replicas, Algolia_Index $index                                            |
 | algolia_config                                           | array $config                                                                    |
-| algolia_task_queue_lock_ttl                              | int $ttl                                                                         |
 | algolia_indexing_batch_size                              | int $batch_size (default: 50)                                                    |
 | algolia\_{$index_id}_indexing_batch_size                 | int $batch_size                                                                  |
-| algolia_logs_per_page                                    | int $logs_per_page                                                               |
 | algolia_templates_path                                   | string $path (default: 'algolia/')                                               |
 | algolia_template_locations                               | array $locations                                                                 |
 | algolia_default_template                                 | string $template, string $file                                                   |
 | algolia_search_params                                    | array $params                                                                    |
-| algolia_loopback_request_args                            | array $request_args                                                              |
 | algolia_should_override_search_with_instantsearch        | bool $bool (default: depending on configuration)                                 |
 | algolia_post_images_sizes                                | array $sizes (default: only the 'thumbnail' size)                                |
 | algolia_get_post_images                                  | array $images (default: only the info about the 'thumbnail' size)                |

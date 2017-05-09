@@ -42,46 +42,12 @@ The above attributes are what we call `shared attributes`.
 
 Algolia is very performing when searching into small chunks of text. As posts can become large pieces of text, we have a mechanism splitting your posts into several Algolia records.
 
-Each record of a same post would have the same shared attributes and the following `content attributes`.
+Each record of a same post would have the same shared attributes and the content.
 
 | Attribute Name | Description                                                       |
 |:---------------|:------------------------------------------------------------------|
-| title{1-6}     | Content found in hierarchical dom elements of your post.          |
 | content        | Content found it the bottom most hierarchical level in your post. |
 
-To extract the content of the generated post DOM, we use the following library: https://github.com/algolia/php-dom-parser.
-
-By default, the parser will fetch content in your heading tags, from h1 to h6, to respectively fill the title1 to title 6.
-Then it will fetch the content in p, ul, ol, dl, table tags. We excluded the `pre` tag in this plugin.
-
-If you want to change the way you data is fetched, you can use an available filter to customize the parser:
-
-```php
-<?php
-
-function my_custom_parser( Algolia\DOMParser $parser ) {
-	// Custom selectors.
-	$parser->setAttributeSelectors( array(
-       'title1'  => 'title',
-       'title2'  => 'div.heading',
-       'title3'  => 'p.sub-header',
-       'title4'  => 'h4',
-       'title5'  => 'h5',
-       'title6'  => 'h6',
-       'content' => 'p, ul, ol, dl, table',
-   ) );
-
-   // Custom exlusion rules.
-   $parser->setExcludeSelectors( array(
-	'pre', '.related-articles', '#toc', '#social-medias'
-   ) );
-
-   return $parser;
-}
-
-add_filter( 'algolia_post_parser', 'my_custom_parser' );
-
-```
 
 ## Terms
 
