@@ -311,7 +311,7 @@ abstract class Algolia_Index
 	 * @return int
 	 */
 	protected function get_re_index_batch_size() {
-		$batch_size = (int) apply_filters( 'algolia_indexing_batch_size', 50 );
+		$batch_size = (int) apply_filters( 'algolia_indexing_batch_size', 100 );
 		$batch_size = (int) apply_filters( 'algolia_' . $this->get_id() . '_indexing_batch_size', $batch_size );
 
 		return $batch_size;
@@ -446,6 +446,11 @@ abstract class Algolia_Index
         }
 
         return true;
+    }
+
+    public function clear()
+    {
+        $this->get_index()->clearIndex();
     }
 
 }

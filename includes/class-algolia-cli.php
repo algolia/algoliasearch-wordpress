@@ -1,7 +1,7 @@
 <?php
 
 /**
- * Process Algolia Task Queue.
+ * Push and re-index records into Algolia indices.
  */
 class Algolia_CLI extends \WP_CLI_Command {
 
@@ -15,125 +15,82 @@ class Algolia_CLI extends \WP_CLI_Command {
 	}
 
 	/**
-	 * Process Algolia queue.
-	 * 
-	 * ## EXAMPLES
-	 *
-	 *     wp algolia process-queue
-	 *
-	 * @alias process-queue
-	 */
-	public function process_queue() {
-		if ( ! $this->plugin->get_api()->is_reachable() ) {
-			\WP_CLI::error( 'The configuration for this website does not allow to contact the Algolia API.');
-
-			return;
-		}
-
-		$queue = $this->plugin->get_task_queue();
-		$dispatcher = $this->plugin->get_task_dispatcher();
-
-		$count = $queue->get_queued_tasks_count();
-
-		if ( 0 === $count ) {
-			\WP_CLI::success( 'No tasks to process.');
-			
-			return;
-		}
-
-		if ( $queue->is_running() ) {
-			\WP_CLI::error( 'Queue is already running.');
-
-			return;
-		}
-
-		// Make sure we do not trigger http loopback.
-		remove_all_filters( 'algolia_process_queue' );
-
-		\WP_CLI::success( "About to process a total of $count task(s)." );
-
-		$notify = \WP_CLI\Utils\make_progress_bar( "Processing $count task(s)", $count );
-		
-		do {
-			$success = $queue->run( $dispatcher );
-
-			if ( false === $success ) {
-				$notify->finish();
-				\WP_CLI::error( "The queue processing was aborted.");
-
-				return;
-			}
-
-			$newCount = $queue->get_queued_tasks_count();
-
-			// One task can have many sub-tasks. Here we only need to tick on main tasks.
-			if ( $newCount < $count ) {
-				$notify->tick();
-			}
-			
-			$count = $newCount;
-		} while ( $count > 0 );
-
-		$notify->finish();
-
-		\WP_CLI::success( "All Done.");
-	}
-
-	/**
-	 * Re-index all indices.
-	 *
-	 * ## EXAMPLES
-	 *
-	 *     wp algolia re-index-all
-	 *
-	 * @alias re-index-all
-	 */
-	public function re_index_all() {
-		if ( ! $this->plugin->get_api()->is_reachable() ) {
-			\WP_CLI::error( 'The configuration for this website does not allow to contact the Algolia API.');
-
-			return;
-		}
-
-		$ids = $this->plugin->get_settings()->get_synced_indices_ids();
-		$queue = $this->plugin->get_task_queue();
-		foreach ( $ids as $id ) {
-			$queue->queue( 're_index_items', array( 'index_id' => $id ) );
-			\WP_CLI::success( "Queued [$id] for indexing.");
-		}
-	}
-
-	/**
-	 * Re-index the index passed as first parameter.
-	 *
-	 * ## OPTIONS
-	 *
-	 * <index_id>
-	 * : Index ID to re-index.
-	 *
+	 * Push all records to Algolia for a given index.
+     *
+     * ## OPTIONS
+     *
+     * [<indexName>]
+     * : The id of the index without the prefix.
+     *
+     * [--clear]
+     * : Clear all existing records prior to pushing the records.
+     *
+     * [--all]
+     * : Re-indexes all the enabled indices.
+     *
 	 * ## EXAMPLES
 	 *
 	 *     wp algolia re-index
 	 *
-	 * @alias re-index
+     * @alias re-index
 	 */
-	public function re_index( $args ) {
+	public function reindex($args, $assoc_args) {
 		if ( ! $this->plugin->get_api()->is_reachable() ) {
 			\WP_CLI::error( 'The configuration for this website does not allow to contact the Algolia API.');
-
-			return;
 		}
 
-		list( $index_id ) = $args;
+		if ( ! isset( $args[0] ) && ! isset( $assoc_args['all'] ) ) {
+            \WP_CLI::error( 'You need to either provide an index name or specify the --all argument to re-index all enabled indices.' );
+        }
 
-		$ids = $this->plugin->get_settings()->get_synced_indices_ids();
-		if ( ! in_array( $index_id, $ids ) ) {
-			return \WP_CLI::error( "Index ID '$index_id' does not exist, thus can not be re-indexed." );
-		}
+        if ( isset( $args[0] ) && isset( $assoc_args['all'] ) ) {
+            \WP_CLI::error( 'You can not give both an index name and the --all parameter.' );
+        }
 
-		$queue = $this->plugin->get_task_queue();
+        if ( $assoc_args['all'] ) {
+            $indices = $this->plugin->get_indices( array( 'enabled' => true ) );
+        } else {
+            $index = $this->plugin->get_index( $args[0] );
+            if ( ! $index ) {
+                \WP_CLI::error( sprintf( 'Index with id "%s" does not exist. Make sure you don\'t include the prefix.', $args[0] ) );
+            }
+            $indices = array( $index );
+        }
 
-		$queue->queue( 're_index_items', array( 'index_id' => $index_id ) );
-		\WP_CLI::success( "Queued [$index_id] for indexing.");
+        $clear = isset( $assoc_args['clear'] );
+
+		foreach( $indices as $index ) {
+		    $this->do_reindex( $index, $clear );
+        }
 	}
+
+	private function do_reindex( Algolia_Index $index, $clear ) {
+
+        if ( $clear ) {
+            WP_CLI::log( sprintf( __( 'About to clear index %s...', 'algolia' ), $index->get_name() ) );
+            $index->clear();
+            WP_CLI::success( sprintf( __( 'Correctly cleared index "%s".', 'algolia' ), $index->get_name() ) );
+        }
+
+        $total_pages = $index->get_re_index_max_num_pages();
+
+        if ( $total_pages === 0 ) {
+            $index->re_index( 1 );
+            \WP_CLI::success( sprintf( 'Index %s was created but no entries were sent.', $index->get_name() ) );
+
+            return;
+        }
+
+        $progress = \WP_CLI\Utils\make_progress_bar( sprintf( 'Processing %s pages of results.', $total_pages ), $total_pages );
+
+        $page = 1;
+        do {
+            $index->re_index($page++);
+            $progress->tick();
+        } while ( $page <= $total_pages );
+
+        $progress->finish();
+
+        \WP_CLI::success( sprintf( 'Indexed "%s" pages of results inside index "%s"', $total_pages, $index->get_name() ) );
+    }
 }
