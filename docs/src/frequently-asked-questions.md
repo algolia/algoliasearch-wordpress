@@ -34,7 +34,7 @@ Yes, you can turn off the post splitting by defining a constant in your WordPres
 define( 'ALGOLIA_SPLIT_POSTS', false );
 ```
 
-Then you will need to <span class="wp-btn">Re-index everything</span> from the `Indexing` page of the plugin.
+You will need to re-index the indices to see the change.
 
 ### Can I customize the Autocomplete dropdown look & feel?
 
@@ -77,52 +77,6 @@ This can be configured on the `Indexing` section of the plugin.
 
 1. First of all ensure the autocomplete feature is turned on on the Autocomplete page of the admin UI,
 1. Make sure you actually selected at least one index to display from that same page, and ensure those indices were created in Algolia,
-1. Make sure your theme calls the `wp_footer()` method in your template files.
-
-### How do I resolve `wp_remote()` errors on `indexing` admin page?
-
-It really depends what error you are getting, but here are a few know issues:
-
-**You are using an SSL certificate (your website url starts with `https://`):**
-
-Our plugin uses cURL and the underlying OpenSSL library to loop over the queued indexing tasks.
-
-If the OpenSSL library is too old, then you might face cURL error 35 with messages containing `handshake failure`, or `unknown protocol`.
-
-In that case you should ask your hosting provider to upgrade your cURL/OpenSSL version.
-
-If you are unable to upgrade your cURL/OpenSSL versions, and if your website can also be accessed over 'HTTP', you can force the loopback to access your website over HTTP by adding the following line to your wp-config.php file: `define( 'ALGOLIA_LOOPBACK_HTTP', true );`
-
-**Htaccess password protected:**
-
-If your /wp-admin section of your website is protected with Basic HTTP Authentication, you can use the `algolia_loopback_request_args` filter to add your username and password to the remote calls headers.
-
-```php
-<?php
-// In your current active theme functions.php.
-define( 'MY_USERNAME', 'test' );
-define( 'MY_PASSWORD', 'test' );
-
-function custom_loopback_request_args( array $request_args ) {
-	$request_args['headers']['Authorization'] = 'Basic ' . base64_encode( MY_USERNAME . ':' . MY_PASSWORD );
-
-	return $request_args;
-}
-
-add_filter( 'algolia_loopback_request_args', 'custom_loopback_request_args' );
-```
-
-**You are using Docker:**
-
-If you are using Docker, you should make sure that the domain name you are using is listed in the `/etc/hosts` file of your container.
-
-Port forwarding is currently unsupported, so you should use port 80 or 443 depending on if you are using http or https to access your website.
-
-**Does the instant search results work with IE9?**
-
-The default implementation will break on IE9. You can use the `useHash` option of the instantsearch.js library to enable support for IE9.
-
-See https://github.com/algolia/algoliasearch-wordpress/pull/375 for an example of how to enable IE9 support.
 
 ### The indexing is slow, can I optimize the required time?
 

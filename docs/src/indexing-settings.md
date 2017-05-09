@@ -46,12 +46,6 @@ Even though we do not yet provide out of the box usage of faceting in the plugin
 $settings = array(
 	'attributesToIndex' => array(
 		'unordered(post_title)',
-		'unordered(title1)',
-		'unordered(title2)',
-		'unordered(title3)',
-		'unordered(title4)',
-		'unordered(title5)',
-		'unordered(title6)',
 		'unordered(content)',
 	),
 	'customRanking' => array(
@@ -68,12 +62,6 @@ $settings = array(
 	),
 	'attributesToSnippet' => array(
 		'post_title:30',
-		'title1:30',
-		'title2:30',
-		'title3:30',
-		'title4:30',
-		'title5:30',
-		'title6:30',
 		'content:30',
 	),
 	'snippetEllipsisText' => '…',
@@ -88,12 +76,6 @@ $settings = array(
 $settings = array(
 	'attributesToIndex' => array(
 		'unordered(post_title)',
-		'unordered(title1)',
-		'unordered(title2)',
-		'unordered(title3)',
-		'unordered(title4)',
-		'unordered(title5)',
-		'unordered(title6)',
 		'unordered(content)',
 	),
 	'customRanking' => array(
@@ -109,12 +91,6 @@ $settings = array(
 	),
 	'attributesToSnippet' => array(
 		'post_title:30',
-		'title1:30',
-		'title2:30',
-		'title3:30',
-		'title4:30',
-		'title5:30',
-		'title6:30',
 		'content:30',
 	),
 	'snippetEllipsisText' => '…',
