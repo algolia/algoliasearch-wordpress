@@ -5,7 +5,7 @@
  * Plugin Name:       Search by Algolia – Instant & Relevant results
  * Plugin URI:        https://community.algolia.com/wordpress
  * Description:       Search by Algolia is the smartest way to improve search on your site. Autocomplete is included, along with full control over look, feel and relevance.
- * Version:           1.7.0
+ * Version:           2.0.0
  * Author:            Algolia
  * Author URI:        https://www.algolia.com/
  * License: 		  MIT License, GNU General Public License v2.0
@@ -30,7 +30,7 @@ if ( version_compare( $wp_version, '3.7.14', '<' ) ) {
 }
 
 // The Algolia Search plugin version.
-define( 'ALGOLIA_VERSION', '1.7.0' );
+define( 'ALGOLIA_VERSION', '2.0.0' );
 define( 'ALGOLIA_PLUGIN_BASENAME', plugin_basename(__FILE__) );
 
 if ( ! defined( 'ALGOLIA_PATH' ) ) {
@@ -44,27 +44,6 @@ function algolia_load_textdomain() {
 	load_plugin_textdomain( 'algolia', false, plugin_basename( dirname( __FILE__ ) ) . '/languages/' );
 }
 add_action( 'plugins_loaded', 'algolia_load_textdomain' );
-
-/**
- * The code that runs during plugin activation.
- * This action is documented in includes/class-algolia-activator.php.
- */
-function activate_algolia() {
-	require_once ALGOLIA_PATH . 'includes/class-algolia-activator.php';
-	Algolia_Activator::activate();
-}
-
-/**
- * The code that runs during plugin deactivation.
- * This action is documented in includes/class-algolia-deactivator.php.
- */
-function deactivate_algolia() {
-	require_once ALGOLIA_PATH . 'includes/class-algolia-deactivator.php';
-	Algolia_Deactivator::deactivate();
-}
-
-register_activation_hook( __FILE__, 'activate_algolia' );
-register_deactivation_hook( __FILE__, 'deactivate_algolia' );
 
 require_once ALGOLIA_PATH . 'classmap.php';
 

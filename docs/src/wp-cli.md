@@ -19,40 +19,18 @@ If you get the following message: `The configuration for this website does not a
 is not configured properly to reach the Algolia API (missing the API keys for example).
 </div>
 
-## Command: algolia process-queue
+## Command: algolia reindex [<indexName>] [--clear] [--all]
 
-The following command will process all the pending tasks of the queue.
+The following command will re-index all items belonging to a given index.
 
-By triggering the processing this way, you won't trigger any http remote call to loop over the task, making it a good alternative to the default indexing logic.
+If the `--all` parameter is passed, all enabled indices will be re-indexed.
 
-<div class="alert alert-warning">Please note that your queue must not be already running. You can go stop it from the Indexing page of the plugin if needed.</div>
-
-```bash
-wp algolia process-queue
-# or
-wp algolia process_queue
-```
-
-## Command: algolia re-index-all
-
-The following command will queue all indices for re-indexing.
-
-<div class="alert alert-warning">This does not trigger the processing of the queue. Please see the `process-queue` command to process all generated tasks.</div>
+If the `--clear` parameter is passed, all existing records will be cleared prior to pushing new records. Also works with in combination with the `--all` parameter.
 
 ```bash
-wp algolia re-index-all
+wp algolia reindex posts_post
 # or
-wp algolia re_index_all
-```
-
-## Command: algolia re-index
-
-The following command will queue a single index for re-indexing.
-
-<div class="alert alert-warning">This does not trigger the processing of the queue. Please see the `process-queue` command to process all generated tasks.</div>
-
-```bash
-wp algolia re-index <index_id>
+wp algolia reindex --all
 # or
-wp algolia re_index <index_id>
+wp algolia reindex --clear --all
 ```

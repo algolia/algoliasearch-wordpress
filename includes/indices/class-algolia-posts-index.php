@@ -17,12 +17,12 @@ final class Algolia_Posts_Index extends Algolia_Index
 	}
 
 	/**
-	 * @param mixed $task_data
+	 * @param mixed $item
 	 *
 	 * @return bool
 	 */
-	public function supports( $task_data ) {
-		return isset( $task_data['post_type'] ) && $task_data['post_type'] === $this->post_type;
+	public function supports( $item ) {
+	    return $item instanceof WP_Post && $item->post_type === $this->post_type;
 	}
 
 	/**
@@ -49,10 +49,6 @@ final class Algolia_Posts_Index extends Algolia_Index
 	 * @return bool
 	 */
 	private function should_index_post( WP_Post $post ) {
-		if ( ! $this->post_type === $post->post_type ) {
-			return false;
-		}
-
 		$post_status = $post->post_status;
 
 		if ( 'inherit' === $post_status ) {
@@ -92,53 +88,20 @@ final class Algolia_Posts_Index extends Algolia_Index
 		$shared_attributes = $this->get_post_shared_attributes( $post );
 
 		$post_content = apply_filters( 'the_content', $post->post_content );
-
-		$parser = new \Algolia\DOMParser();
-		$parser->setExcludeSelectors( array(
-			'pre',
-			'script',
-			'style',
-		) );
-		$parser->setSharedAttributes( $shared_attributes );
+        $post_content = Algolia_Utils::prepare_content( $post_content );
+        $parts = Algolia_Utils::explode_content( $post_content );
 
 		if ( defined( 'ALGOLIA_SPLIT_POSTS' ) && false === ALGOLIA_SPLIT_POSTS ) {
-			$parser->setAttributeSelectors( array(
-				'title1'  => 'h1#unused',
-				'title2'  => 'h2#unused',
-				'title3'  => 'h3#unused',
-				'title4'  => 'h4#unused',
-				'title5'  => 'h5#unused',
-				'title6'  => 'h6#unused',
-				'content' => 'h1, h2, h3, h4, h5, h6, p, ul, ol, dl, table',
-			) );
-
-			apply_filters( 'algolia_post_parser', $parser );
-
-			$records = $parser->parse( $post_content );
-
-			$merged = array_shift( $records );
-			foreach ( $records as $record ) {
-				$merged['content'] .= ' ' . $record['content'];
-			}
-
-			$merged['content'] = substr( $merged['content'], 0, 2000 );
-			$records = array( $merged );
-		} else {
-			$content_max_size = 5000;
-			if ( defined( 'ALGOLIA_CONTENT_MAX_SIZE' ) ) {
-				$content_max_size = (int) ALGOLIA_CONTENT_MAX_SIZE;
-			}
-			$parser->setAttributeMaxSize( 'content', $content_max_size );
-			
-			apply_filters( 'algolia_post_parser', $parser );
-			
-			$records = $parser->parse( $post_content );
+			$parts = array_shift( $parts );
 		}
 
-		// Inject the objectID's.
-		foreach ( $records as $i => &$record ) {
+		$records = array();
+		foreach ( $parts as $i => $part ) {
+		    $record = $shared_attributes;
 			$record['objectID'] = $this->get_post_object_id( $post->ID, $i );
-			$record['record_index'] = (int) $i;
+			$record['content'] = $part;
+            $record['record_index'] = $i;
+			$records[] = $record;
 		}
 
 		$records = (array) apply_filters( 'algolia_post_records', $records, $post );
@@ -179,7 +142,6 @@ final class Algolia_Posts_Index extends Algolia_Index
 
 		$shared_attributes['permalink'] = get_permalink( $post );
 		$shared_attributes['post_mime_type'] = $post->post_mime_type;
-		
 
 		// Push all taxonomies by default, including custom ones.
 		$taxonomy_objects = get_object_taxonomies( $post->post_type, 'objects' );
@@ -187,17 +149,23 @@ final class Algolia_Posts_Index extends Algolia_Index
 		$shared_attributes['taxonomies'] = array();
 		$shared_attributes['taxonomies_hierarchical'] = array();
 		foreach ( $taxonomy_objects as $taxonomy ) {
-			$terms = get_the_terms( $post->ID, $taxonomy->name );
+
+            $terms = wp_get_object_terms( $post->ID, $taxonomy->name );
 			$terms = is_array( $terms ) ? $terms : array();
 
 			if ( $taxonomy->hierarchical ) {
-				$shared_attributes['taxonomies_hierarchical'][ $taxonomy->name ] = Algolia_Utils::get_taxonomy_tree( $terms, $taxonomy->name );
+			    $hierarchical_taxonomy_values = Algolia_Utils::get_taxonomy_tree( $terms, $taxonomy->name );
+                if ( ! empty( $hierarchical_taxonomy_values ) ) {
+                    $shared_attributes['taxonomies_hierarchical'][$taxonomy->name] = $hierarchical_taxonomy_values;
+                }
 			}
 
-			$shared_attributes['taxonomies'][ $taxonomy->name ] = wp_list_pluck( $terms, 'name' );
+            $taxonomy_values = wp_list_pluck( $terms, 'name' );
+            if ( ! empty( $taxonomy_values ) ) {
+                $shared_attributes['taxonomies'][ $taxonomy->name ] = $taxonomy_values;
+            }
 		}
-		
-		
+
 		$shared_attributes['is_sticky'] = is_sticky( $post->ID ) ? 1 : 0;
 
 		if ( 'attachment' === $post->post_type ) {
@@ -222,18 +190,13 @@ final class Algolia_Posts_Index extends Algolia_Index
 		$settings = array(
 			'attributesToIndex' => array(
 				'unordered(post_title)',
-				'unordered(title1)',
-				'unordered(title2)',
-				'unordered(title3)',
-				'unordered(title4)',
-				'unordered(title5)',
-				'unordered(title6)',
 				'unordered(taxonomies)',
 				'unordered(content)',
 			),
 			'customRanking' => array(
 				'desc(is_sticky)',
 				'desc(post_date)',
+                'asc(record_index)',
 			),
 			'attributeForDistinct'  => 'post_id',
 			'distinct'              => true,
@@ -244,12 +207,6 @@ final class Algolia_Posts_Index extends Algolia_Index
 			),
 			'attributesToSnippet' => array(
 				'post_title:30',
-				'title1:30',
-				'title2:30',
-				'title3:30',
-				'title4:30',
-				'title5:30',
-				'title6:30',
 				'content:30',
 			),
 			'snippetEllipsisText' => '…',
@@ -287,7 +244,6 @@ final class Algolia_Posts_Index extends Algolia_Index
 		if ( ! empty( $dirty_object_ids ) ) {
 			$index = $this->get_index();
 			$index->deleteObjects( $dirty_object_ids );
-			$this->get_logger()->log_operation( sprintf( '[%d] Deleted %d records from index %s', count( $dirty_object_ids ), count( $dirty_object_ids ), $index->indexName ), $dirty_object_ids );
 		}
 	}
 
@@ -361,7 +317,7 @@ final class Algolia_Posts_Index extends Algolia_Index
 		$query = new WP_Query( array(
 			'post_type'   		    => $this->post_type,
 			'post_status' 		    => 'any', // Let the `should_index` take care of the filtering.
-			'suppress_filters' 	=> true,
+			'suppress_filters' 	    => true,
 		) );
 
 		return (int) $query->found_posts;
@@ -380,8 +336,8 @@ final class Algolia_Posts_Index extends Algolia_Index
 			'post_status'    	  => 'any',
 			'order'          	  => 'ASC',
 			'orderby'        	  => 'ID',
-			'paged'			 	        => $page,
-			'suppress_filters' 	=> true,
+			'paged'			 	  => $page,
+			'suppress_filters' 	  => true,
 		) );
 
 		return $query->posts;
@@ -395,30 +351,11 @@ final class Algolia_Posts_Index extends Algolia_Index
 	}
 
 	/**
-	 * @param Algolia_Task $task
-	 *
-	 * @return mixed
+	 * @param mixed $item
 	 */
-	protected function extract_item(Algolia_Task $task) {
-		$data = $task->get_data();
-		if ( ! isset( $data['post_id'] ) ) {
-			return;
-		}
-			
-		return get_post( $data['post_id'] );
-	}
-
-	/**
-	 * @param Algolia_Task $task
-	 */
-	public function delete_item( Algolia_Task $task ) {
-		$data = $task->get_data();
-		if ( ! isset( $data['post_id'] ) || ! is_int( $data['post_id'] ) ) {
-			return;
-		}
-
-		$index = $this->get_index();
-		$deleted_item_count = $index->deleteByQuery( '', array( 'filters' => 'post_id=' . $data['post_id'] ) );
-		$this->get_logger()->log_operation( sprintf( '[%d] Deleted %d records from index %s', $deleted_item_count, $deleted_item_count, $index->indexName ) );
+	public function delete_item( $item ) {
+		$this->assert_is_supported( $item );
+        $this->update_records( $item, array() );
+        // $this->get_index()->deleteByQuery( '', array( 'filters' => 'post_id=' . $item->ID ) );
 	}
 }

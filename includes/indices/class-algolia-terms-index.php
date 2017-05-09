@@ -132,7 +132,7 @@ final class Algolia_Terms_Index extends Algolia_Index
 			'order'        => 'ASC',
 			'orderby'      => 'id',
 			'offset'       => $offset,
-			'number'	      => $batch_size,
+			'number'	   => $batch_size,
 			'hide_empty'   => false, // Let users choose what to index.
 		);
 
@@ -140,36 +140,23 @@ final class Algolia_Terms_Index extends Algolia_Index
 		return get_terms( $this->taxonomy, $args );
 	}
 
-	/**
-	 * A performing function that return true if the item can potentially
-	 * be subject for indexation or not. This will be used to determine if a task can be queued
-	 * for this index. As this function will be called synchronously during other operations,
-	 * it has to be as lightweight as possible. No db calls or huge loops.
-	 *
-	 * @param mixed $task_data
-	 *
-	 * @return bool
-	 */
-	public function supports( $task_data )
+    /**
+     * A performing function that return true if the item can potentially
+     * be subject for indexation or not. This will be used to determine if an item is part of the index
+     * As this function will be called synchronously during other operations,
+     * it has to be as lightweight as possible. No db calls or huge loops.
+     *
+     * @param mixed $item
+     *
+     * @return bool
+     */
+	public function supports( $item )
 	{
-		return isset( $task_data['taxonomy'] ) && $task_data['taxonomy'] === $this->taxonomy;
-	}
-	
-	/**
-	 * @param Algolia_Task $task
-	 *
-	 * @return mixed
-	 */
-	protected function extract_item( Algolia_Task $task )
-	{
-		$data = $task->get_data();
-		if ( ! isset( $data['term_id'] ) ) {
-			return;
-		}
-		
-		$term = get_term( (int) $data['term_id'] );
-		
-		return  ! $term ? null : $term ;
+		return isset( $item->term_id )
+            && is_int( $item->term_id )
+            && isset( $item->taxonomy )
+            && $item->taxonomy === $this->taxonomy
+        ;
 	}
 
 	public function get_default_autocomplete_config() {
@@ -183,16 +170,10 @@ final class Algolia_Terms_Index extends Algolia_Index
 	}
 
 	/**
-	 * @param Algolia_Task $task
+	 * @param mixed $item
 	 */
-	public function delete_item( Algolia_Task $task ) {
-		$data = $task->get_data();
-		if ( ! isset( $data['term_id'] ) || ! is_int( $data['term_id'] ) ) {
-			return;
-		}
-
-		$index = $this->get_index();
-		$index->deleteObject( $data['term_id'] );
-		$this->get_logger()->log_operation( sprintf( '[1] Deleted 1 record from index %s', $index->indexName ) );
+	public function delete_item( $item ) {
+	    $this->assert_is_supported( $item );
+		$this->get_index()->deleteObject( $item->term_id );
 	}
 }

@@ -15,15 +15,17 @@ class Algolia_Admin {
 
 		add_action( 'admin_enqueue_scripts', array( $this, 'enqueue_styles' ) );
 		add_action( 'admin_enqueue_scripts', array( $this, 'enqueue_scripts' ) );
-		
-		new Algolia_Cache_Helper();
 
 		$api = $plugin->get_api();
 		if ( $api->is_reachable() ) {
 			new Algolia_Admin_Page_Autocomplete( $plugin->get_settings(), $this->plugin->get_autocomplete_config() );
 			new Algolia_Admin_Page_Native_Search( $plugin );
-			new Algolia_Admin_Page_Indexing( $plugin );
-			new Algolia_Admin_Page_Logs( $plugin->get_logger(), $plugin->get_settings() );
+
+			add_action( 'wp_ajax_algolia_re_index', array( $this, 're_index' ) );
+
+			if ( isset( $_GET['page'] ) && substr( (string) $_GET['page'], 0, 7) === 'algolia' ) {
+          add_action( 'admin_notices', array( $this, 'display_reindexing_notices' ) );
+      }
 		}
 
 		new Algolia_Admin_Page_Settings( $plugin );
@@ -39,7 +41,8 @@ class Algolia_Admin {
 	 * Enqueue scripts.
 	 */
 	public function enqueue_scripts() {
-		wp_enqueue_script( 'algolia-admin', plugin_dir_url( __FILE__ ) . 'js/algolia-admin.js', array( 'jquery' ), ALGOLIA_VERSION );
+		wp_enqueue_script( 'algolia-admin', plugin_dir_url( __FILE__ ) . 'js/algolia-admin.js', array( 'jquery', 'jquery-ui-sortable' ), ALGOLIA_VERSION );
+		wp_enqueue_script( 'algolia-admin-reindex-button', plugin_dir_url( __FILE__ ) . 'js/reindex-button.js', array( 'jquery' ), ALGOLIA_VERSION );
 	}
 
 	/**
@@ -65,31 +68,6 @@ class Algolia_Admin {
 		}
 
 		$this->w3tc_notice();
-
-		if ( ! isset( $_GET['page'] ) || $_GET['page'] !== 'algolia-indexing' ) {
-			return;
-		}
-
-		
-		$url = Algolia_Utils::get_loopback_request_url();
-		$request_args = Algolia_Utils::get_loopback_request_args( array(
-			'timeout'     => 60,
-			'blocking'    => true,
-		) );
-		
-		$result = wp_remote_post( $url, $request_args );
-		if( ! $result instanceof WP_Error && $result['response']['code'] === 200 ) {
-			// Remote call check was successful.
-			return;
-		}
-
-		$this->plugin->get_logger()->log_error( 'wp_remote_post() check failed.', $result );
-
-		echo '<div class="error notice">
-				<p>' . esc_html__( "wp_remote_post() failed, indexing won't work. Checkout the logs for more details.", 'algolia' ) . '</p>
-				<p>URL called: ' . $url . '</p>
-				<p><code><pre>' . print_r( $result, true ) . '</pre></code></p>
-			</div>';
 	}
 
 	/**
@@ -112,4 +90,52 @@ class Algolia_Admin {
 			<?php
 		}
 	}
+
+	public function display_reindexing_notices() {
+	  $indices = $this->plugin->get_indices( array( 'enabled' => true ) );
+	  foreach ( $indices as $index ) {
+	    if ( $index->exists() ) {
+	      continue;
+      }
+
+?>
+      <div class="error">
+        <p>For Algolia search to work properly, you need to index: <strong><?php echo esc_html( $index->get_admin_name() ); ?></strong></p>
+        <p><button class="algolia-reindex-button button button-primary" data-index="<?php echo esc_attr( $index->get_id() ); ?>">Index now</button></p>
+      </div>
+<?php
+    }
+  }
+
+  public function re_index() {
+      try {
+          $index_id = (string) $_POST['index_id'];
+
+          if ( ! isset( $_POST['page'] ) ) {
+              throw new RuntimeException('Page should be provided.');
+          }
+          $page = (int) $_POST['page'];
+
+          $index = $this->plugin->get_index($index_id);
+          if (null === $index) {
+              throw new RuntimeException(sprintf('Index named %s does not exist.', $index_id));
+          }
+
+          $total_pages = $index->get_re_index_max_num_pages();
+
+          if ( $page <= $total_pages || $total_pages === 0 ) {
+              $index->re_index($page);
+          }
+
+          $response = array(
+              'totalPagesCount' => $total_pages,
+              'finished'        => $page >= $total_pages,
+          );
+
+          wp_send_json($response);
+      } catch (\Exception $exception) {
+          echo $exception->getMessage();
+          throw $exception;
+      }
+  }
 }

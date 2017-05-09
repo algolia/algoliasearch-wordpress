@@ -31,12 +31,9 @@ In this example, we would simply log an array representation of the post that ha
 
 Here is the list of all available Actions.
 
-|Action Name|Params
-|-|-|
-|algolia_re_indexed_items|string $index_id
-|algolia_de_indexed_items|string $index_id
-|algolia_autocomplete_scripts|*none*
-|algolia_instantsearch_scripts|*none*
-|algolia_before_handle_task|Algolia_Task $task
-|algolia_task_handled|Algolia_Task $task
-
+| Action Name                   | Params           |
+|:------------------------------|:-----------------|
+| algolia_re_indexed_items      | string $index_id |
+| algolia_de_indexed_items      | string $index_id |
+| algolia_autocomplete_scripts  | *none*           |
+| algolia_instantsearch_scripts | *none*           |

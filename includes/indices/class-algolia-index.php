@@ -11,11 +11,6 @@ abstract class Algolia_Index
 	private $client;
 
 	/**
-	 * @var Algolia_Logger
-	 */
-	private $logger;
-
-	/**
 	 * @var bool
 	 */
 	private $enabled = false;
@@ -50,15 +45,22 @@ abstract class Algolia_Index
 
 	/**
 	 * A performing function that return true if the item can potentially
-	 * be subject for indexation or not. This will be used to determine if a task can be queued
-	 * for this index. As this function will be called synchronously during other operations,
+	 * be subject for indexation or not. This will be used to determine if an item is part of the index
+	 * As this function will be called synchronously during other operations,
 	 * it has to be as lightweight as possible. No db calls or huge loops.
 	 * 
-	 * @param mixed $task_data
+	 * @param mixed $item
 	 * 
 	 * @return bool
 	 */
-	abstract public function supports( $task_data );
+	abstract public function supports( $item );
+
+    public function assert_is_supported($item)
+    {
+        if( ! $this->supports( $item ) ) {
+            throw new RuntimeException('Item is no supported on this index.');
+        }
+    }
 
 	/**
 	 * @param Client $client
@@ -96,24 +98,6 @@ abstract class Algolia_Index
 	}
 	
 	/**
-	 * @param Algolia_Logger $logger
-	 */
-	final public function set_logger( Algolia_Logger $logger ) {
-		$this->logger = $logger;
-	}
-
-	/**
-	 * @return Algolia_Logger
-	 */
-	final protected function get_logger() {
-		if ( null === $this->client ) {
-			throw new LogicException( 'Logger has not been set.' );
-		}
-
-		return $this->logger;
-	}
-	
-	/**
 	 * @return bool
 	 */
 	final public function is_enabled() {
@@ -131,13 +115,16 @@ abstract class Algolia_Index
 	 * @param mixed $item
 	 */
 	public function sync( $item ) {
+	    $this->assert_is_supported( $item );
 		if ( $this->should_index( $item ) ) {
+            do_action( 'algolia_before_get_records', $item );
 			$records = $this->get_records( $item );
+            do_action( 'algolia_after_get_records', $item );
 
 			return $this->update_records( $item, $records );
 		}
 
-		$this->update_records( $item, array() );
+		$this->delete_item( $item );
 	}
 	
 	/**
@@ -166,9 +153,6 @@ abstract class Algolia_Index
 		$index = $this->get_index();
 		$records = $this->sanitize_json_data( $records );
 		$index->addObjects( $records );
-
-		$records_count = count( $records );
-		$this->logger->log_operation( sprintf( '[%d] Added %d records to index %s', $records_count, $records_count, $index->indexName ) );
 	}
 	
 	/**
@@ -176,13 +160,6 @@ abstract class Algolia_Index
 	 */
 	public function get_index() {
 		return $this->client->initIndex( (string) $this->get_name() );
-	}
-
-	/**
-	 * @return Index
-	 */
-	protected function get_tmp_index() {
-		return $this->client->initIndex( (string) $this->get_tmp_name() );
 	}
 
 	/**
@@ -197,13 +174,6 @@ abstract class Algolia_Index
 
 		return $prefix . $this->get_id();
 	}
-
-	/**
-	 * @return string
-	 */
-	protected function get_tmp_name() {
-		return $this->get_name() . '_tmp';
-	}
 	
 	/**
 	 * @param int $page
@@ -216,7 +186,7 @@ abstract class Algolia_Index
 		}
 		
 		if ( 1 === $page ) {
-			$this->create_tmp_index();
+		    $this->create_index_if_not_existing();
 		}
 
 		$batch_size = (int) $this->get_re_index_batch_size();
@@ -235,25 +205,59 @@ abstract class Algolia_Index
 			if ( ! $this->should_index( $item ) ) {
 				continue;
 			}
-
+            do_action( 'algolia_before_get_records', $item );
 			$records = array_merge( $records, $this->get_records( $item ) );
+            do_action( 'algolia_after_get_records', $item );
 		}
 
 		if ( ! empty( $records ) ) {
-			$index = $this->get_tmp_index();
+			$index = $this->get_index();
 			
 			$records = $this->sanitize_json_data( $records );
 			
 			$index->addObjects( $records );
-			$this->logger->log_operation( sprintf( '[%d] Added %d records to index %s', count( $records ), count( $records ), $index->indexName ) );
 		}
 
 		if ( $page === $max_num_pages ) {
-			$this->deploy_tmp_index();
-			$this->sync_replicas();
 			do_action( 'algolia_re_indexed_items', $this->get_id() );
 		}
 	}
+
+	public function create_index_if_not_existing( $clear_if_existing = true )
+    {
+        $index = $this->get_index();
+
+        try {
+            $index->getSettings();
+            $index_exists = true;
+        } catch (\AlgoliaSearch\AlgoliaException $exception) {
+            $index_exists = false;
+        }
+
+        if ( $index_exists === true ) {
+
+            if ( $clear_if_existing === true ) {
+                $index->clearIndex();
+            }
+
+            // No need to go further in this case.
+            // We don't change anything when the index already exists.
+            // This means that to override, or go back to default settings you have to
+            // Clear the index and re-index again.
+            return;
+        }
+
+        $settings = $this->get_settings();
+        $index->setSettings( $settings ); // This will create the index.
+
+        // Push synonyms.
+        $synonyms = $this->get_synonyms();
+        if ( ! empty( $synonyms ) ) {
+            $index->batchSynonyms( $synonyms );
+        }
+
+        $this->sync_replicas();
+    }
 
 	/**
 	 * Sanitize data to allow non UTF-8 content to pass.
@@ -290,7 +294,7 @@ abstract class Algolia_Index
 	/**
 	 * @return int
 	 */
-	private function get_re_index_max_num_pages() {
+	public function get_re_index_max_num_pages() {
 		$items_count = $this->get_re_index_items_count();
 		
 		return (int) ceil( $items_count / $this->get_re_index_batch_size() );
@@ -299,11 +303,6 @@ abstract class Algolia_Index
 	public function de_index_items() {
 		$index_name = $this->get_name();
 		$this->client->deleteIndex( $index_name );
-		$this->logger->log_operation( sprintf( "[1] Deleted index '%s'.", $index_name ) );
-
-		$tmp_name = $this->get_tmp_name();
-		$this->client->deleteIndex( $tmp_name );
-		$this->logger->log_operation( sprintf( "[1] Deleted temporary index '%s'.", $tmp_name ) );
 
 		do_action( 'algolia_de_indexed_items', $this->get_id() );
 	}
@@ -312,32 +311,10 @@ abstract class Algolia_Index
 	 * @return int
 	 */
 	protected function get_re_index_batch_size() {
-		$batch_size = (int) apply_filters( 'algolia_indexing_batch_size', 50 );
+		$batch_size = (int) apply_filters( 'algolia_indexing_batch_size', 100 );
 		$batch_size = (int) apply_filters( 'algolia_' . $this->get_id() . '_indexing_batch_size', $batch_size );
 
 		return $batch_size;
-	}
-
-	protected function create_tmp_index() {
-		$tmp_index = $this->get_tmp_index();
-
-		// Ensure the tmp index is in a clean state.
-		$tmp_index->clearIndex();
-		$this->logger->log_operation( sprintf( "[1] Cleared index '%s'.", $tmp_index->indexName ) );
-
-		// Set the temporary index settings.
-		$settings = $this->get_settings();
-		$tmp_index->setSettings( $settings );
-		$this->logger->log_operation( sprintf( "[1] Pushed settings to index '%s'.", $tmp_index->indexName ), $settings );
-		
-		// Set the synonyms.
-		$synonyms = $this->get_synonyms();
-		if ( ! empty( $synonyms ) ) {
-			// If synonyms are provided by WordPress, erase existing ones when we push them.
-			// In general though, users will handle the synonyms in the Algolia dashboard.
-			$tmp_index->batchSynonyms( $synonyms, false, true );
-			$this->logger->log_operation( sprintf( "[1] Pushed synonyms to index '%s'.", $tmp_index->indexName ), $synonyms );
-		}
 	}
 
 	/**
@@ -349,13 +326,6 @@ abstract class Algolia_Index
 	 * @return array
 	 */
 	abstract protected function get_synonyms();
-
-	protected function deploy_tmp_index() {
-		$index_name = $this->get_name();
-		$tmp_name = $this->get_tmp_name();
-		$this->client->moveIndex( $tmp_name, $index_name );
-		$this->logger->log_operation( sprintf( '[1] Moved index %s to index %s', $tmp_name, $index_name ) );
-	}
 
 	/**
 	 * @return string
@@ -369,92 +339,17 @@ abstract class Algolia_Index
 	 * @return array
 	 */
 	abstract protected function get_items( $page, $batch_size );
-
-	/**
-	 * @param string $from
-	 */
-	public function change_name_prefix( $from, $to ) {
-		$from_name = $this->get_name( $from );
-		$to_name = $this->get_name( $to );
-
-		// We need to unset the replicas prior to moving the master index.
-		$index = $this->client->initIndex( $from_name );
-		$task = $index->setSettings( array( 'replicas' => array() ) );
-
-		// Todo: We should make sure we wait on the same host here.
-		// Todo: For now this might fail on first attempt.
-		$index->waitTask( $task['taskID'], 1000 );
-		$this->logger->log_operation( sprintf( '[1] Unlink replicas from index %s.', $from_name ) );
-
-		$this->client->moveIndex( $from_name, $to_name );
-		$this->logger->log_operation( sprintf( '[1] Moved index from %s to %s.', $from_name, $to_name ) );
-
-		// Re-create the replicas here.
-		$this->sync_replicas();
-	}
 	
 	public function get_default_autocomplete_config() {
 		return array(
 			'index_id'        => $this->get_id(),
 			'index_name'      => $this->get_name(),
 			'label'           => $this->get_admin_name(),
+			'admin_name'      => $this->get_admin_name(),
 			'position'        => 10,
 			'max_suggestions' => 5,
 			'tmpl_suggestion' => 'autocomplete-post-suggestion'
 		);
-	}
-
-	/**
-	 * @param Algolia_Task $task
-	 *
-	 * @return mixed
-	 */
-	abstract protected function extract_item( Algolia_Task $task );
-
-	/**
-	 * @param Algolia_Task $task
-	 *
-	 * @return bool
-	 */
-	final public function handle_task( Algolia_Task $task ) {
-		do_action( 'algolia_before_handle_task', $task );
-		$data = $task->get_data();
-
-		switch ( $task->get_name() ) {
-			case 'sync_item':
-				$item = $this->extract_item( $task );
-
-				if ( null === $item ) {
-					$this->delete_item( $task );
-				} else {
-					$this->sync( $item );
-				}
-
-				break;
-			case 're_index_items':
-				$page = get_post_meta( $task->get_id(), 'algolia_task_re_index_page', true );
-				if ( ! $page ) {
-					$page = 1;
-				}
-				
-				$this->re_index( $page );
-
-				if ( ! $this->is_last_page_to_re_index( $page ) ) {
-					update_post_meta( $task->get_id(), 'algolia_task_re_index_page', ++$page );
-					update_post_meta( $task->get_id(), 'algolia_task_re_index_max_num_pages', $this->get_re_index_max_num_pages() );
-					
-					return false;
-				}
-				break;
-			case 'de_index_items':
-				$this->de_index_items();
-				break;
-			case 'change_name_prefix':
-				$this->change_name_prefix( $data['from'], $data['to'] );
-				break;
-		}
-
-		return true;
 	}
 
 	/**
@@ -498,8 +393,6 @@ abstract class Algolia_Index
 	}
 
 	private function sync_replicas() {
-		$index_name = $this->get_name();
-
 		$replicas = $this->get_replicas();
 		if ( empty( $replicas ) ) {
 			// No need to go further if there are no replicas!
@@ -513,7 +406,7 @@ abstract class Algolia_Index
 		}
 
 		$this->get_index()->setSettings( array(
-			'slaves' => $replica_index_names
+			'replicas' => $replica_index_names
 		), false );
 
 		$client = $this->get_client();
@@ -526,16 +419,38 @@ abstract class Algolia_Index
 			$replica_index_name = $replica->get_replica_index_name( $this );
 			$index = $client->initIndex( $replica_index_name );
 			$index->setSettings( $settings );
-
-			$this->logger->log_operation( sprintf( '[1] Updated index replica %s settings.', $replica_index_name ) );
 		}
-
-		$this->logger->log_operation( sprintf( '[1] Updated index %s settings to sync replicas.', $index_name ) );
 	}
 
 	/**
-	 * @param Algolia_Task $task
+	 * @param mixed $item
 	 */
-	abstract public function delete_item( Algolia_Task $task );
+	abstract public function delete_item( $item );
+
+    /**
+     * Returns true if the index exists in Algolia.
+     * false otherwise.
+     *
+     * @return bool
+     * @throws \AlgoliaSearch\AlgoliaException
+     */
+	public function exists() {
+        try {
+            $this->get_index()->getSettings();
+        } catch( \AlgoliaSearch\AlgoliaException $exception ) {
+            if ( $exception->getMessage() === 'Index does not exist' ) {
+                return false;
+            }
+
+            throw $exception;
+        }
+
+        return true;
+    }
+
+    public function clear()
+    {
+        $this->get_index()->clearIndex();
+    }
 
 }

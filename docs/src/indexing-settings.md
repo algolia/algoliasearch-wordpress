@@ -46,12 +46,6 @@ Even though we do not yet provide out of the box usage of faceting in the plugin
 $settings = array(
 	'attributesToIndex' => array(
 		'unordered(post_title)',
-		'unordered(title1)',
-		'unordered(title2)',
-		'unordered(title3)',
-		'unordered(title4)',
-		'unordered(title5)',
-		'unordered(title6)',
 		'unordered(content)',
 	),
 	'customRanking' => array(
@@ -68,12 +62,6 @@ $settings = array(
 	),
 	'attributesToSnippet' => array(
 		'post_title:30',
-		'title1:30',
-		'title2:30',
-		'title3:30',
-		'title4:30',
-		'title5:30',
-		'title6:30',
 		'content:30',
 	),
 	'snippetEllipsisText' => '…',
@@ -88,12 +76,6 @@ $settings = array(
 $settings = array(
 	'attributesToIndex' => array(
 		'unordered(post_title)',
-		'unordered(title1)',
-		'unordered(title2)',
-		'unordered(title3)',
-		'unordered(title4)',
-		'unordered(title5)',
-		'unordered(title6)',
 		'unordered(content)',
 	),
 	'customRanking' => array(
@@ -109,12 +91,6 @@ $settings = array(
 	),
 	'attributesToSnippet' => array(
 		'post_title:30',
-		'title1:30',
-		'title2:30',
-		'title3:30',
-		'title4:30',
-		'title5:30',
-		'title6:30',
 		'content:30',
 	),
 	'snippetEllipsisText' => '…',
@@ -157,13 +133,13 @@ $settings = array(
 You can customize the settings pushed to Algolia for every content type.
 To do so simply use the available filters:
 
-|Filter Name|Params
-|-|-
-|algolia_posts_index_settings|`$settings`, the posts index settings. `$post_type`, the post type, like "page" or "post".
-|algolia\_posts\_{$post_type}_index_settings|`$settings`, the posts index settings.
-|algolia_terms_index_settings|`$settings`, the terms index settings. `$taxonomy`, the taxonomy like "post_tag" or "category".
-|algolia\_terms\_{$taxonomy}_index_settings|`$settings`, the terms index settings.
-|algolia_users_index_settings|`$settings`, the users index settings.
+| Filter Name                                 | Params                                                                                          |
+|:--------------------------------------------|:------------------------------------------------------------------------------------------------|
+| algolia_posts_index_settings                | `$settings`, the posts index settings. `$post_type`, the post type, like "page" or "post".      |
+| algolia\_posts\_{$post_type}_index_settings | `$settings`, the posts index settings.                                                          |
+| algolia_terms_index_settings                | `$settings`, the terms index settings. `$taxonomy`, the taxonomy like "post_tag" or "category". |
+| algolia\_terms\_{$taxonomy}_index_settings  | `$settings`, the terms index settings.                                                          |
+| algolia_users_index_settings                | `$settings`, the users index settings.                                                          |
 
 
 ## Custom Index Settings Example

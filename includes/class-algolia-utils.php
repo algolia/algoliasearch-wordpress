@@ -84,9 +84,15 @@ class Algolia_Utils
 	 */
 	public static function get_post_images( $post_id ) {
 		$images = array();
-		$post_thumbnail_id = get_post_thumbnail_id( (int) $post_id );
-		$sizes = get_intermediate_image_sizes();
+
+		if ( get_post_type( $post_id ) === 'attachment') {
+		    $post_thumbnail_id = (int) $post_id;
+        } else {
+		    $post_thumbnail_id = get_post_thumbnail_id( (int) $post_id );
+        }
+
 		if ( $post_thumbnail_id ) {
+            $sizes = (array) apply_filters( 'algolia_post_images_sizes', array( 'thumbnail' ) );
 			foreach ( $sizes as $size ) {
 				$info = wp_get_attachment_image_src( $post_thumbnail_id, $size );
 				if ( ! $info ) {
@@ -157,4 +163,74 @@ class Algolia_Utils
 		
 		return admin_url( 'admin-post.php', $scheme );
 	}
+
+	public static function prepare_content( $content ) {
+        $content = self::remove_content_noise( $content );
+
+	    return strip_tags( $content );
+    }
+
+    public static function remove_content_noise( $content ) {
+	    $noise_patterns = array(
+            // strip out comments
+            "'<!--(.*?)-->'is",
+            // strip out cdata
+            "'<!\[CDATA\[(.*?)\]\]>'is",
+            // Per sourceforge http://sourceforge.net/tracker/?func=detail&aid=2949097&group_id=218559&atid=1044037
+            // Script tags removal now preceeds style tag removal.
+            // strip out <script> tags
+            "'<\s*script[^>]*[^/]>(.*?)<\s*/\s*script\s*>'is",
+            "'<\s*script\s*>(.*?)<\s*/\s*script\s*>'is",
+            // strip out <style> tags
+            "'<\s*style[^>]*[^/]>(.*?)<\s*/\s*style\s*>'is",
+            "'<\s*style\s*>(.*?)<\s*/\s*style\s*>'is",
+            // strip out preformatted tags
+            "'<\s*(?:code)[^>]*>(.*?)<\s*/\s*(?:code)\s*>'is",
+            // strip out <pre> tags
+            "'<\s*pre[^>]*[^/]>(.*?)<\s*/\s*pre\s*>'is",
+            "'<\s*pre\s*>(.*?)<\s*/\s*pre\s*>'is",
+        );
+
+	    foreach ( $noise_patterns as $pattern ) {
+	        $content = preg_replace($pattern, '', $content);
+        }
+
+        return $content;
+    }
+
+    /**
+     * @param string $content
+     *
+     * @return array
+     */
+    public static function explode_content( $content ) {
+        $max_size = 2000;
+        if ( defined( 'ALGOLIA_CONTENT_MAX_SIZE' ) ) {
+            $max_size = (int) ALGOLIA_CONTENT_MAX_SIZE;
+        }
+
+        $parts = array();
+        $prefix = '';
+        while ( true ) {
+            $content = trim( (string) $content );
+            if ( strlen( $content ) <= $max_size ) {
+                $parts[] = $prefix . $content;
+
+                break;
+            }
+
+            $offset = -( strlen( $content ) - $max_size );
+            $cutAtPosition = strrpos( $content, ' ', $offset);
+
+            if ( false === $cutAtPosition ) {
+                $cutAtPosition = $max_size;
+            }
+            $parts[] =  $prefix . substr( $content, 0, $cutAtPosition );
+            $content =  substr( $content, $cutAtPosition );
+
+            $prefix = '… ';
+        }
+
+        return $parts;
+    }
 }

@@ -116,7 +116,7 @@ class Algolia_Admin_Page_Autocomplete
 		add_settings_error(
 			$this->option_group,
 			'autocomplete_enabled',
-			__( 'Autocomplete configuration has been saved.', 'algolia' ),
+			__( 'Autocomplete configuration has been saved. Make sure to hit the "re-index" buttons of the different indices that are not indexed yet.', 'algolia' ),
 			'updated'
 		);
 

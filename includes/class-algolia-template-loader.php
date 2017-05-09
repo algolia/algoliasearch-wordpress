@@ -16,7 +16,7 @@ class Algolia_Template_Loader {
 		$this->plugin = $plugin;
 
 		// Inject Algolia configuration in a JavaScript variable.
-		add_filter( 'wp_footer', array( $this, 'load_algolia_config') );
+		add_filter( 'wp_head', array( $this, 'load_algolia_config') );
 
 		// Listen for native templates to override.
 		add_filter( 'template_include', array( $this, 'template_loader' ) );
@@ -24,7 +24,7 @@ class Algolia_Template_Loader {
 		// Load autocomplete.js search experience if its enabled.
 		if ( $this->should_load_autocomplete() ) {
 			add_filter( 'wp_enqueue_scripts', array( $this, 'enqueue_autocomplete_scripts' ) );
-			add_filter( 'wp_footer', array( $this, 'load_autocomplete_template' ), PHP_INT_MAX );
+			add_filter( 'wp_head', array( $this, 'load_autocomplete_template' ), PHP_INT_MAX );
 		}
 	}
 
@@ -55,7 +55,7 @@ class Algolia_Template_Loader {
 
 		$json_config = json_encode( $config );
 
-		echo '<script type="text/javascript">var algolia = ' . $json_config . '</script>';
+		echo '<script type="text/javascript">var algolia = ' . $json_config . ';</script>';
 	}
 
 	private function should_load_autocomplete() {
@@ -89,9 +89,6 @@ class Algolia_Template_Loader {
 		// Enqueue the autocomplete.js library.
 		wp_enqueue_script( 'algolia-autocomplete' );
 		wp_enqueue_script( 'algolia-autocomplete-noconflict' );
-
-		// Lib useful for positioning the autocomplete.js dropdown.
-		wp_enqueue_script( 'tether' );
 
 		// Allow users to easily enqueue custom styles and scripts.
 		do_action( 'algolia_autocomplete_scripts' );

@@ -3,40 +3,26 @@
 class Algolia_User_Changes_Watcher implements Algolia_Changes_Watcher
 {
 	/**
-	 * @var Algolia_Task_Queue
-	 */
-	private $queue;
-	
-	/**
 	 * @var Algolia_Index
 	 */
 	private $index;
-	
-	/**
-	 * @var array
-	 */
-	private $blacklisted_post_types;
 
 	/**
-	 * @param Algolia_Task_Queue $queue
-	 * @param Algolia_Index      $index
-	 * @param array              $blacklisted_post_types
+	 * @param Algolia_Index $index
 	 */
-	public function __construct( Algolia_Task_Queue $queue, Algolia_Index $index, array $blacklisted_post_types ) {
-		$this->queue = $queue;
+	public function __construct( Algolia_Index $index ) {
 		$this->index = $index;
-		$this->blacklisted_post_types = $blacklisted_post_types;
 	}
 
 	public function watch() {
 		// Fires immediately after an existing user is updated.
-		add_action( 'profile_update', array( $this, 'queue_sync_item' ) );
+		add_action( 'profile_update', array( $this, 'sync_item' ) );
 
 		// Fires immediately after a new user is registered.
-		add_action( 'user_register', array( $this, 'queue_sync_item' ) );
+		add_action( 'user_register', array( $this, 'sync_item' ) );
 
 		// Fires immediately before a user is deleted.
-		add_action( 'delete_user', array( $this, 'queue_sync_item' ) );
+		add_action( 'delete_user', array( $this, 'delete_item' ) );
 
 		// Fires once a post has been saved.
 		add_action( 'save_post', array( $this, 'on_save_post' ), 10, 2 );
@@ -49,22 +35,32 @@ class Algolia_User_Changes_Watcher implements Algolia_Changes_Watcher
 	/**
 	 * @param $user_id
 	 */
-	public function queue_sync_item( $user_id ) {
+	public function sync_item( $user_id ) {
 		if ( defined( 'DOING_AUTOSAVE' ) && DOING_AUTOSAVE ) {
 			return;
 		}
 
-		$task = array(
-			'index_id'      => $this->index->get_id(),
-			'user_id'       => (int) $user_id,
-		);
+        $user = get_user_by( 'id', $user_id );
 
-		if ( ! $this->index->supports( $task ) ) {
+		if ( ! $user || ! $this->index->supports( $user ) ) {
 			return;
 		}
 
-		$this->queue->queue( 'sync_item', $task );
+		$this->index->sync( $user );
 	}
+
+    /**
+     * @param int $user_id
+     */
+	public function delete_item( $user_id ) {
+        $user = get_user_by( 'id', $user_id );
+
+        if ( ! $user || ! $this->index->supports( $user ) ) {
+            return;
+        }
+
+        $this->index->delete_item( $user );
+    }
 
 	/**
 	 * Ensures that the user post count gets updated.
@@ -73,11 +69,7 @@ class Algolia_User_Changes_Watcher implements Algolia_Changes_Watcher
 	 * @param WP_Post $post
 	 */
 	public function on_save_post( $post_id, WP_Post $post ) {
-		if ( in_array( $post->post_type, $this->blacklisted_post_types, true ) ) {
-			return;
-		}
-		
-		$this->queue_sync_item( (int) $post->post_author );
+		$this->sync_item( (int) $post->post_author );
 	}
 
 	/**
@@ -87,11 +79,20 @@ class Algolia_User_Changes_Watcher implements Algolia_Changes_Watcher
 	 */
 	public function on_delete_post( $post_id ) {
 		$post = get_post( (int) $post_id );
-		
-		if ( ! $post || in_array( $post->post_type, $this->blacklisted_post_types, true ) ) {
+
+		if ( ! $post ) {
 			return;
 		}
 
-		$this->queue_sync_item( (int) $post->post_author );
+		$watcher = $this;
+		$author_id = $post->post_author;
+
+		// We delay the sync until after the post was deleted to propagate the change
+        // posts count change for the author.
+        // Todo: this is not optimal given it would be triggered for every future triggered hook.
+        // Todo: needs to be changed.
+        add_action( 'after_delete_post', function() use ( $watcher, $author_id ) {
+            $watcher->sync_item( $author_id );
+        } );
 	}
 }

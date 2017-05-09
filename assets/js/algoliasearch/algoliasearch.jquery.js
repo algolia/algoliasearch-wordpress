@@ -1,4 +1,4 @@
-/*! algoliasearch 3.20.2 | © 2014, 2015 Algolia SAS | github.com/algolia/algoliasearch-client-js */
+/*! algoliasearch 3.22.1 | © 2014, 2015 Algolia SAS | github.com/algolia/algoliasearch-client-js */
 (function(f){var g;if(typeof window!=='undefined'){g=window}else if(typeof self!=='undefined'){g=self}g.ALGOLIA_MIGRATION_LAYER=f()})(function(){var define,module,exports;return (function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof require=="function"&&require;if(!u&&a)return a(o,!0);if(i)return i(o,!0);var f=new Error("Cannot find module '"+o+"'");throw f.code="MODULE_NOT_FOUND",f}var l=n[o]={exports:{}};t[o][0].call(l.exports,function(e){var n=t[o][1][e];return s(n?n:e)},l,l.exports,e,t,n,r)}return n[o].exports}var i=typeof require=="function"&&require;for(var o=0;o<r.length;o++)s(r[o]);return s})({1:[function(require,module,exports){
 
 module.exports = function load (src, opts, cb) {
@@ -2851,13 +2851,20 @@ AlgoliaSearch.prototype.initIndex = function(indexName) {
 };
 
 /*
- * List all existing user keys with their associated ACLs
+ * @deprecated use client.listApiKeys
+ */
+AlgoliaSearch.prototype.listUserKeys = deprecate(function(callback) {
+  return this.listApiKeys(callback);
+}, deprecatedMessage('client.listUserKeys()', 'client.listApiKeys()'));
+
+/*
+ * List all existing api keys with their associated ACLs
  *
  * @param callback the result callback called with two arguments
  *  error: null or Error('message')
- *  content: the server answer with user keys list
+ *  content: the server answer with api keys list
  */
-AlgoliaSearch.prototype.listUserKeys = function(callback) {
+AlgoliaSearch.prototype.listApiKeys = function(callback) {
   return this._jsonRequest({
     method: 'GET',
     url: '/1/keys',
@@ -2867,14 +2874,21 @@ AlgoliaSearch.prototype.listUserKeys = function(callback) {
 };
 
 /*
- * Get ACL of a user key
+ * @deprecated see client.getApiKey
+ */
+AlgoliaSearch.prototype.getUserKeyACL = deprecate(function(key, callback) {
+  return this.getApiKey(key, callback);
+}, deprecatedMessage('client.getUserKeyACL()', 'client.getApiKey()'));
+
+/*
+ * Get an API key
  *
  * @param key
  * @param callback the result callback called with two arguments
  *  error: null or Error('message')
- *  content: the server answer with user keys list
+ *  content: the server answer with the right API key
  */
-AlgoliaSearch.prototype.getUserKeyACL = function(key, callback) {
+AlgoliaSearch.prototype.getApiKey = function(key, callback) {
   return this._jsonRequest({
     method: 'GET',
     url: '/1/keys/' + key,
@@ -2884,13 +2898,20 @@ AlgoliaSearch.prototype.getUserKeyACL = function(key, callback) {
 };
 
 /*
- * Delete an existing user key
+ * @deprecated see client.deleteApiKey
+ */
+AlgoliaSearch.prototype.deleteUserKey = deprecate(function(key, callback) {
+  return this.deleteApiKey(key, callback);
+}, deprecatedMessage('client.deleteUserKey()', 'client.deleteApiKey()'));
+
+/*
+ * Delete an existing API key
  * @param key
  * @param callback the result callback called with two arguments
  *  error: null or Error('message')
- *  content: the server answer with user keys list
+ *  content: the server answer with the date of deletion
  */
-AlgoliaSearch.prototype.deleteUserKey = function(key, callback) {
+AlgoliaSearch.prototype.deleteApiKey = function(key, callback) {
   return this._jsonRequest({
     method: 'DELETE',
     url: '/1/keys/' + key,
@@ -2898,6 +2919,13 @@ AlgoliaSearch.prototype.deleteUserKey = function(key, callback) {
     callback: callback
   });
 };
+
+/*
+ @deprecated see client.addApiKey
+ */
+AlgoliaSearch.prototype.addUserKey = deprecate(function(acls, params, callback) {
+  return this.addApiKey(acls, params, callback);
+}, deprecatedMessage('client.addUserKey()', 'client.addApiKey()'));
 
 /*
  * Add a new global API key
@@ -2920,7 +2948,7 @@ AlgoliaSearch.prototype.deleteUserKey = function(key, callback) {
  * @param {Object} params.queryParameters - Force the key to use specific query parameters
  * @param {Function} callback - The result callback called with two arguments
  *   error: null or Error('message')
- *   content: the server answer with user keys list
+ *   content: the server answer with the added API key
  * @return {Promise|undefined} Returns a promise if no callback given
  * @example
  * client.addUserKey(['search'], {
@@ -2936,9 +2964,9 @@ AlgoliaSearch.prototype.deleteUserKey = function(key, callback) {
  * })
  * @see {@link https://www.algolia.com/doc/rest_api#AddKey|Algolia REST API Documentation}
  */
-AlgoliaSearch.prototype.addUserKey = function(acls, params, callback) {
+AlgoliaSearch.prototype.addApiKey = function(acls, params, callback) {
   var isArray = require(8);
-  var usage = 'Usage: client.addUserKey(arrayOfAcls[, params, callback])';
+  var usage = 'Usage: client.addApiKey(arrayOfAcls[, params, callback])';
 
   if (!isArray(acls)) {
     throw new Error(usage);
@@ -2977,12 +3005,18 @@ AlgoliaSearch.prototype.addUserKey = function(acls, params, callback) {
 };
 
 /**
- * Add a new global API key
- * @deprecated Please use client.addUserKey()
+ * @deprecated Please use client.addApiKey()
  */
 AlgoliaSearch.prototype.addUserKeyWithValidity = deprecate(function(acls, params, callback) {
-  return this.addUserKey(acls, params, callback);
-}, deprecatedMessage('client.addUserKeyWithValidity()', 'client.addUserKey()'));
+  return this.addApiKey(acls, params, callback);
+}, deprecatedMessage('client.addUserKeyWithValidity()', 'client.addApiKey()'));
+
+/**
+ * @deprecated Please use client.updateApiKey()
+ */
+AlgoliaSearch.prototype.updateUserKey = deprecate(function(key, acls, params, callback) {
+  return this.updateApiKey(key, acls, params, callback);
+}, deprecatedMessage('client.updateUserKey()', 'client.updateApiKey()'));
 
 /**
  * Update an existing API key
@@ -3005,10 +3039,10 @@ AlgoliaSearch.prototype.addUserKeyWithValidity = deprecate(function(acls, params
  * @param {Object} params.queryParameters - Force the key to use specific query parameters
  * @param {Function} callback - The result callback called with two arguments
  *   error: null or Error('message')
- *   content: the server answer with user keys list
+ *   content: the server answer with the modified API key
  * @return {Promise|undefined} Returns a promise if no callback given
  * @example
- * client.updateUserKey('APIKEY', ['search'], {
+ * client.updateApiKey('APIKEY', ['search'], {
  *   validity: 300,
  *   maxQueriesPerIPPerHour: 2000,
  *   maxHitsPerQuery: 3,
@@ -3021,9 +3055,9 @@ AlgoliaSearch.prototype.addUserKeyWithValidity = deprecate(function(acls, params
  * })
  * @see {@link https://www.algolia.com/doc/rest_api#UpdateIndexKey|Algolia REST API Documentation}
  */
-AlgoliaSearch.prototype.updateUserKey = function(key, acls, params, callback) {
+AlgoliaSearch.prototype.updateApiKey = function(key, acls, params, callback) {
   var isArray = require(8);
-  var usage = 'Usage: client.updateUserKey(key, arrayOfAcls[, params, callback])';
+  var usage = 'Usage: client.updateApiKey(key, arrayOfAcls[, params, callback])';
 
   if (!isArray(acls)) {
     throw new Error(usage);
@@ -3314,7 +3348,9 @@ AlgoliaSearchCore.prototype.setExtraHeader = function(name, value) {
 * @param algoliaAgent the agent to add
 */
 AlgoliaSearchCore.prototype.addAlgoliaAgent = function(algoliaAgent) {
-  this._ua += ';' + algoliaAgent;
+  if (this._ua.indexOf(';' + algoliaAgent) === -1) {
+    this._ua += ';' + algoliaAgent;
+  }
 };
 
 /*
@@ -3326,6 +3362,7 @@ AlgoliaSearchCore.prototype._jsonRequest = function(initialOpts) {
   var requestDebug = require(1)('algoliasearch:' + initialOpts.url);
 
   var body;
+  var additionalUA = initialOpts.additionalUA || '';
   var cache = initialOpts.cache;
   var client = this;
   var tries = 0;
@@ -3340,9 +3377,9 @@ AlgoliaSearchCore.prototype._jsonRequest = function(initialOpts) {
     initialOpts.body.requests !== undefined) // client.search()
   ) {
     initialOpts.body.apiKey = this.apiKey;
-    headers = this._computeRequestHeaders(false);
+    headers = this._computeRequestHeaders(additionalUA, false);
   } else {
-    headers = this._computeRequestHeaders();
+    headers = this._computeRequestHeaders(additionalUA);
   }
 
   if (initialOpts.body !== undefined) {
@@ -3399,7 +3436,7 @@ AlgoliaSearchCore.prototype._jsonRequest = function(initialOpts) {
         reqOpts.body = safeJSONStringify(reqOpts.jsonBody);
       }
       // re-compute headers, they could be omitting the API KEY
-      headers = client._computeRequestHeaders();
+      headers = client._computeRequestHeaders(additionalUA);
 
       reqOpts.timeouts = client._getTimeoutsForRequest(initialOpts.hostType);
       client._setHostIndexByType(0, initialOpts.hostType);
@@ -3598,6 +3635,9 @@ AlgoliaSearchCore.prototype._jsonRequest = function(initialOpts) {
 
 /*
 * Transform search param object in query string
+* @param {object} args arguments to add to the current query string
+* @param {string} params current query string
+* @return {string} the final query string
 */
 AlgoliaSearchCore.prototype._getSearchParams = function(args, params) {
   if (args === undefined || args === null) {
@@ -3612,11 +3652,15 @@ AlgoliaSearchCore.prototype._getSearchParams = function(args, params) {
   return params;
 };
 
-AlgoliaSearchCore.prototype._computeRequestHeaders = function(withAPIKey) {
+AlgoliaSearchCore.prototype._computeRequestHeaders = function(additionalUA, withAPIKey) {
   var forEach = require(5);
 
+  var ua = additionalUA ?
+    this._ua + ';' + additionalUA :
+    this._ua;
+
   var requestHeaders = {
-    'x-algolia-agent': this._ua,
+    'x-algolia-agent': ua,
     'x-algolia-application-id': this.applicationID
   };
 
@@ -3949,6 +3993,11 @@ var deprecate = require(27);
 var deprecatedMessage = require(28);
 var exitPromise = require(30);
 var errors = require(29);
+
+var deprecateForwardToSlaves = deprecate(
+  function() {},
+  deprecatedMessage('forwardToSlaves', 'forwardToReplicas')
+);
 
 module.exports = Index;
 
@@ -4357,18 +4406,23 @@ Index.prototype.browseAll = function(query, queryParameters) {
       return;
     }
 
-    var queryString;
+    var body;
 
     if (cursor !== undefined) {
-      queryString = 'cursor=' + encodeURIComponent(cursor);
+      body = {
+        cursor: cursor
+      };
     } else {
-      queryString = params;
+      body = {
+        params: params
+      };
     }
 
     client._jsonRequest({
-      method: 'GET',
-      url: '/1/indexes/' + encodeURIComponent(index.indexName) + '/browse?' + queryString,
+      method: 'POST',
+      url: '/1/indexes/' + encodeURIComponent(index.indexName) + '/browse',
       hostType: 'read',
+      body: body,
       callback: browseCallback
     });
   }
@@ -4546,10 +4600,13 @@ Index.prototype.saveSynonym = function(synonym, opts, callback) {
     opts = {};
   }
 
+  if (opts.forwardToSlaves !== undefined) deprecateForwardToSlaves();
+  var forwardToReplicas = (opts.forwardToSlaves || opts.forwardToReplicas) ? 'true' : 'false';
+
   return this.as._jsonRequest({
     method: 'PUT',
     url: '/1/indexes/' + encodeURIComponent(this.indexName) + '/synonyms/' + encodeURIComponent(synonym.objectID) +
-      '?forwardToSlaves=' + (opts.forwardToSlaves ? 'true' : 'false'),
+      '?forwardToReplicas=' + forwardToReplicas,
     body: synonym,
     hostType: 'write',
     callback: callback
@@ -4573,10 +4630,13 @@ Index.prototype.deleteSynonym = function(objectID, opts, callback) {
     opts = {};
   }
 
+  if (opts.forwardToSlaves !== undefined) deprecateForwardToSlaves();
+  var forwardToReplicas = (opts.forwardToSlaves || opts.forwardToReplicas) ? 'true' : 'false';
+
   return this.as._jsonRequest({
     method: 'DELETE',
     url: '/1/indexes/' + encodeURIComponent(this.indexName) + '/synonyms/' + encodeURIComponent(objectID) +
-      '?forwardToSlaves=' + (opts.forwardToSlaves ? 'true' : 'false'),
+      '?forwardToReplicas=' + forwardToReplicas,
     hostType: 'write',
     callback: callback
   });
@@ -4590,10 +4650,13 @@ Index.prototype.clearSynonyms = function(opts, callback) {
     opts = {};
   }
 
+  if (opts.forwardToSlaves !== undefined) deprecateForwardToSlaves();
+  var forwardToReplicas = (opts.forwardToSlaves || opts.forwardToReplicas) ? 'true' : 'false';
+
   return this.as._jsonRequest({
     method: 'POST',
     url: '/1/indexes/' + encodeURIComponent(this.indexName) + '/synonyms/clear' +
-      '?forwardToSlaves=' + (opts.forwardToSlaves ? 'true' : 'false'),
+      '?forwardToReplicas=' + forwardToReplicas,
     hostType: 'write',
     callback: callback
   });
@@ -4607,10 +4670,13 @@ Index.prototype.batchSynonyms = function(synonyms, opts, callback) {
     opts = {};
   }
 
+  if (opts.forwardToSlaves !== undefined) deprecateForwardToSlaves();
+  var forwardToReplicas = (opts.forwardToSlaves || opts.forwardToReplicas) ? 'true' : 'false';
+
   return this.as._jsonRequest({
     method: 'POST',
     url: '/1/indexes/' + encodeURIComponent(this.indexName) + '/synonyms/batch' +
-      '?forwardToSlaves=' + (opts.forwardToSlaves ? 'true' : 'false') +
+      '?forwardToReplicas=' + forwardToReplicas +
       '&replaceExistingSynonyms=' + (opts.replaceExistingSynonyms ? 'true' : 'false'),
     hostType: 'write',
     body: synonyms,
@@ -4695,13 +4761,14 @@ Index.prototype.setSettings = function(settings, opts, callback) {
     opts = {};
   }
 
-  var forwardToSlaves = opts.forwardToSlaves || false;
+  if (opts.forwardToSlaves !== undefined) deprecateForwardToSlaves();
+  var forwardToReplicas = (opts.forwardToSlaves || opts.forwardToReplicas) ? 'true' : 'false';
 
   var indexObj = this;
   return this.as._jsonRequest({
     method: 'PUT',
-    url: '/1/indexes/' + encodeURIComponent(indexObj.indexName) + '/settings?forwardToSlaves='
-      + (forwardToSlaves ? 'true' : 'false'),
+    url: '/1/indexes/' + encodeURIComponent(indexObj.indexName) + '/settings?forwardToReplicas='
+      + forwardToReplicas,
     hostType: 'write',
     body: settings,
     callback: callback
@@ -4709,13 +4776,20 @@ Index.prototype.setSettings = function(settings, opts, callback) {
 };
 
 /*
-* List all existing user keys associated to this index
+ @deprecated see index.listApiKeys
+ */
+Index.prototype.listUserKeys = deprecate(function(callback) {
+  return this.listApiKeys(callback);
+}, deprecatedMessage('index.listUserKeys()', 'index.listApiKeys()'));
+
+/*
+* List all existing API keys to this index
 *
 * @param callback the result callback called with two arguments
 *  error: null or Error('message')
-*  content: the server answer with user keys list
+*  content: the server answer with API keys belonging to the index
 */
-Index.prototype.listUserKeys = function(callback) {
+Index.prototype.listApiKeys = function(callback) {
   var indexObj = this;
   return this.as._jsonRequest({
     method: 'GET',
@@ -4726,14 +4800,22 @@ Index.prototype.listUserKeys = function(callback) {
 };
 
 /*
-* Get ACL of a user key associated to this index
+ @deprecated see index.getApiKey
+ */
+Index.prototype.getUserKeyACL = deprecate(function(key, callback) {
+  return this.getApiKey(key, callback);
+}, deprecatedMessage('index.getUserKeyACL()', 'index.getApiKey()'));
+
+
+/*
+* Get an API key from this index
 *
 * @param key
 * @param callback the result callback called with two arguments
 *  error: null or Error('message')
-*  content: the server answer with user keys list
+*  content: the server answer with the right API key
 */
-Index.prototype.getUserKeyACL = function(key, callback) {
+Index.prototype.getApiKey = function(key, callback) {
   var indexObj = this;
   return this.as._jsonRequest({
     method: 'GET',
@@ -4744,14 +4826,21 @@ Index.prototype.getUserKeyACL = function(key, callback) {
 };
 
 /*
-* Delete an existing user key associated to this index
+ @deprecated see index.deleteApiKey
+ */
+Index.prototype.deleteUserKey = deprecate(function(key, callback) {
+  return this.deleteApiKey(key, callback);
+}, deprecatedMessage('index.deleteUserKey()', 'index.deleteApiKey()'));
+
+/*
+* Delete an existing API key associated to this index
 *
 * @param key
 * @param callback the result callback called with two arguments
 *  error: null or Error('message')
-*  content: the server answer with user keys list
+*  content: the server answer with the deletion date
 */
-Index.prototype.deleteUserKey = function(key, callback) {
+Index.prototype.deleteApiKey = function(key, callback) {
   var indexObj = this;
   return this.as._jsonRequest({
     method: 'DELETE',
@@ -4760,6 +4849,13 @@ Index.prototype.deleteUserKey = function(key, callback) {
     callback: callback
   });
 };
+
+/*
+ @deprecated see index.addApiKey
+ */
+Index.prototype.addUserKey = deprecate(function(acls, params, callback) {
+  return this.addApiKey(acls, params, callback);
+}, deprecatedMessage('index.addUserKey()', 'index.addApiKey()'));
 
 /*
 * Add a new API key to this index
@@ -4782,7 +4878,7 @@ Index.prototype.deleteUserKey = function(key, callback) {
 * @param {Object} params.queryParameters - Force the key to use specific query parameters
 * @param {Function} callback - The result callback called with two arguments
 *   error: null or Error('message')
-*   content: the server answer with user keys list
+*   content: the server answer with the added API key
 * @return {Promise|undefined} Returns a promise if no callback given
 * @example
 * index.addUserKey(['search'], {
@@ -4797,9 +4893,9 @@ Index.prototype.deleteUserKey = function(key, callback) {
 * })
 * @see {@link https://www.algolia.com/doc/rest_api#AddIndexKey|Algolia REST API Documentation}
 */
-Index.prototype.addUserKey = function(acls, params, callback) {
+Index.prototype.addApiKey = function(acls, params, callback) {
   var isArray = require(8);
-  var usage = 'Usage: index.addUserKey(arrayOfAcls[, params, callback])';
+  var usage = 'Usage: index.addApiKey(arrayOfAcls[, params, callback])';
 
   if (!isArray(acls)) {
     throw new Error(usage);
@@ -4837,12 +4933,18 @@ Index.prototype.addUserKey = function(acls, params, callback) {
 };
 
 /**
-* Add an existing user key associated to this index
-* @deprecated use index.addUserKey()
+* @deprecated use index.addApiKey()
 */
 Index.prototype.addUserKeyWithValidity = deprecate(function deprecatedAddUserKeyWithValidity(acls, params, callback) {
-  return this.addUserKey(acls, params, callback);
-}, deprecatedMessage('index.addUserKeyWithValidity()', 'index.addUserKey()'));
+  return this.addApiKey(acls, params, callback);
+}, deprecatedMessage('index.addUserKeyWithValidity()', 'index.addApiKey()'));
+
+/*
+ @deprecated see index.updateApiKey
+ */
+Index.prototype.updateUserKey = deprecate(function(key, acls, params, callback) {
+  return this.updateApiKey(key, acls, params, callback);
+}, deprecatedMessage('index.updateUserKey()', 'index.updateApiKey()'));
 
 /**
 * Update an existing API key of this index
@@ -4868,7 +4970,7 @@ Index.prototype.addUserKeyWithValidity = deprecate(function deprecatedAddUserKey
 *   content: the server answer with user keys list
 * @return {Promise|undefined} Returns a promise if no callback given
 * @example
-* index.updateUserKey('APIKEY', ['search'], {
+* index.updateApiKey('APIKEY', ['search'], {
 *   validity: 300,
 *   maxQueriesPerIPPerHour: 2000,
 *   maxHitsPerQuery: 3,
@@ -4880,9 +4982,9 @@ Index.prototype.addUserKeyWithValidity = deprecate(function deprecatedAddUserKey
 * })
 * @see {@link https://www.algolia.com/doc/rest_api#UpdateIndexKey|Algolia REST API Documentation}
 */
-Index.prototype.updateUserKey = function(key, acls, params, callback) {
+Index.prototype.updateApiKey = function(key, acls, params, callback) {
   var isArray = require(8);
-  var usage = 'Usage: index.updateUserKey(key, arrayOfAcls[, params, callback])';
+  var usage = 'Usage: index.updateApiKey(key, arrayOfAcls[, params, callback])';
 
   if (!isArray(acls)) {
     throw new Error(usage);
@@ -4992,8 +5094,8 @@ IndexCore.prototype.clearCache = function() {
 * Search inside the index using XMLHttpRequest request (Using a POST query to
 * minimize number of OPTIONS queries: Cross-Origin Resource Sharing).
 *
-* @param query the full text query
-* @param args (optional) if set, contains an object with query parameters:
+* @param {string} [query] the full text query
+* @param {object} [args] (optional) if set, contains an object with query parameters:
 * - page: (integer) Pagination parameter used to select the page to retrieve.
 *                   Page is zero-based and defaults to 0. Thus,
 *                   to retrieve the 10th page you need to set page=9
@@ -5079,7 +5181,7 @@ IndexCore.prototype.clearCache = function() {
 * - restrictSearchableAttributes: List of attributes you want to use for
 * textual search (must be a subset of the attributesToIndex index setting)
 * either comma separated or as an array
-* @param callback the result callback called with two arguments:
+* @param {function} [callback] the result callback called with two arguments:
 *  error: null or Error('message'). If false, the content contains the error.
 *  content: the server answer that contains the list of results.
 */
@@ -5090,8 +5192,8 @@ IndexCore.prototype.search = buildSearchMethod('query');
 * Search a record similar to the query inside the index using XMLHttpRequest request (Using a POST query to
 * minimize number of OPTIONS queries: Cross-Origin Resource Sharing).
 *
-* @param query the similar query
-* @param args (optional) if set, contains an object with query parameters.
+* @param {string} [query] the similar query
+* @param {object} [args] (optional) if set, contains an object with query parameters.
 *   All search parameters are supported (see search function), restrictSearchableAttributes and facetFilters
 *   are the two most useful to restrict the similar results and get more relevant content
 */
@@ -5166,8 +5268,9 @@ IndexCore.prototype.browse = function(query, queryParameters, callback) {
   var params = this.as._getSearchParams(queryParameters, '');
 
   return this.as._jsonRequest({
-    method: 'GET',
-    url: '/1/indexes/' + encodeURIComponent(indexObj.indexName) + '/browse?' + params,
+    method: 'POST',
+    url: '/1/indexes/' + encodeURIComponent(indexObj.indexName) + '/browse',
+    body: {params: params},
     hostType: 'read',
     callback: callback
   });
@@ -5188,8 +5291,9 @@ IndexCore.prototype.browse = function(query, queryParameters, callback) {
 */
 IndexCore.prototype.browseFrom = function(cursor, callback) {
   return this.as._jsonRequest({
-    method: 'GET',
-    url: '/1/indexes/' + encodeURIComponent(this.indexName) + '/browse?cursor=' + encodeURIComponent(cursor),
+    method: 'POST',
+    url: '/1/indexes/' + encodeURIComponent(this.indexName) + '/browse',
+    body: {cursor: cursor},
     hostType: 'read',
     callback: callback
   });
@@ -5239,7 +5343,7 @@ IndexCore.prototype.searchFacet = deprecate(function(params, callback) {
   'index.searchForFacetValues(params[, callback])'
 ));
 
-IndexCore.prototype._search = function(params, url, callback) {
+IndexCore.prototype._search = function(params, url, callback, additionalUA) {
   return this.as._jsonRequest({
     cache: this.cache,
     method: 'POST',
@@ -5251,7 +5355,8 @@ IndexCore.prototype._search = function(params, url, callback) {
       url: '/1/indexes/' + encodeURIComponent(this.indexName),
       body: {params: params}
     },
-    callback: callback
+    callback: callback,
+    additionalUA: additionalUA
   });
 };
 
@@ -5892,7 +5997,20 @@ module.exports = buildSearchMethod;
 
 var errors = require(29);
 
+/**
+ * Creates a search method to be used in clients
+ * @param {string} queryParam the name of the attribute used for the query
+ * @param {string} url the url
+ * @return {function} the search method
+ */
 function buildSearchMethod(queryParam, url) {
+  /**
+   * The search method. Prepares the data and send the query to Algolia.
+   * @param {string} query the string used for query search
+   * @param {object} args additional parameters to send with the search
+   * @param {function} [callback] the callback to be called with the client gets the answer
+   * @return {undefined|Promise} If the callback is not provided then this methods returns a Promise
+   */
   return function search(query, args, callback) {
     // warn V2 users on how to search
     if (typeof query === 'function' && typeof args === 'object' ||
@@ -5902,17 +6020,19 @@ function buildSearchMethod(queryParam, url) {
       throw new errors.AlgoliaSearchError('index.search usage is index.search(query, params, cb)');
     }
 
+    // Normalizing the function signature
     if (arguments.length === 0 || typeof query === 'function') {
-      // .search(), .search(cb)
+      // Usage : .search(), .search(cb)
       callback = query;
       query = '';
     } else if (arguments.length === 1 || typeof args === 'function') {
-      // .search(query/args), .search(query, cb)
+      // Usage : .search(query/args), .search(query, cb)
       callback = args;
       args = undefined;
     }
+    // At this point we have 3 arguments with values
 
-    // .search(args), careful: typeof null === 'object'
+    // Usage : .search(args) // careful: typeof null === 'object'
     if (typeof query === 'object' && query !== null) {
       args = query;
       query = undefined;
@@ -5926,12 +6046,18 @@ function buildSearchMethod(queryParam, url) {
       params += queryParam + '=' + encodeURIComponent(query);
     }
 
+    var additionalUA;
     if (args !== undefined) {
+      if (args.additionalUA) {
+        additionalUA = args.additionalUA;
+        delete args.additionalUA;
+      }
       // `_getSearchParams` will augment params, do not be fooled by the = versus += from previous if
       params = this.as._getSearchParams(args, params);
     }
 
-    return this._search(params, url, callback);
+
+    return this._search(params, url, callback, additionalUA);
   };
 }
 
@@ -6154,28 +6280,39 @@ var moduleStore = {
 
 var localStorageStore = {
   set: function(key, data) {
+    moduleStore.set(key, data); // always replicate localStorageStore to moduleStore in case of failure
+
     try {
       var namespace = JSON.parse(global.localStorage[localStorageNamespace]);
       namespace[key] = data;
       global.localStorage[localStorageNamespace] = JSON.stringify(namespace);
       return namespace[key];
     } catch (e) {
-      debug('localStorage set failed with', e);
-      cleanup();
-      store = moduleStore;
-      return store.set(key, data);
+      return localStorageFailure(key, e);
     }
   },
   get: function(key) {
-    return JSON.parse(global.localStorage[localStorageNamespace])[key] || null;
+    try {
+      return JSON.parse(global.localStorage[localStorageNamespace])[key] || null;
+    } catch (e) {
+      return localStorageFailure(key, e);
+    }
   }
 };
+
+function localStorageFailure(key, e) {
+  debug('localStorage failed with', e);
+  cleanup();
+  store = moduleStore;
+  return store.get(key);
+}
 
 store = supportsLocalStorage() ? localStorageStore : moduleStore;
 
 module.exports = {
   get: getOrSet,
-  set: getOrSet
+  set: getOrSet,
+  supportsLocalStorage: supportsLocalStorage
 };
 
 function getOrSet(key, data) {
@@ -6189,10 +6326,11 @@ function getOrSet(key, data) {
 function supportsLocalStorage() {
   try {
     if ('localStorage' in global &&
-      global.localStorage !== null &&
-      !global.localStorage[localStorageNamespace]) {
-      // actual creation of the namespace
-      global.localStorage.setItem(localStorageNamespace, JSON.stringify({}));
+      global.localStorage !== null) {
+      if (!global.localStorage[localStorageNamespace]) {
+        // actual creation of the namespace
+        global.localStorage.setItem(localStorageNamespace, JSON.stringify({}));
+      }
       return true;
     }
 
@@ -6216,6 +6354,6 @@ function cleanup() {
 },{"1":1}],36:[function(require,module,exports){
 'use strict';
 
-module.exports = '3.20.2';
+module.exports = '3.22.1';
 
 },{}]},{},[19]);

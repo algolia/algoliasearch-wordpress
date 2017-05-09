@@ -36,5 +36,3 @@ Still we recommend you use up to date versions for PHP and WordPress as we might
 ## Plugin Installation
 
 Please follow installation steps here: https://wordpress.org/plugins/search-by-algolia-instant-relevant-results/installation/
-
-

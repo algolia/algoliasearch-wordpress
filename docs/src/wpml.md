@@ -67,5 +67,3 @@ add_filter( 'algolia_searchable_posts_index_settings', 'my_posts_index_settings'
 ```
 
 <div class="alert alert-warning">Do not forget to hit the 're-index all' button after making such changes to indices configuration.</div>
-
-

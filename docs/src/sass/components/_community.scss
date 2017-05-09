@@ -139,10 +139,13 @@
   background-repeat: no-repeat;
   background-size: cover;
 
-   @media (max-width: $bp-medium + 280){
+  @media (max-width: $bp-medium + 280){
     min-height: 580px;
   }
 
+  @media (max-width: $bp-medium){
+    min-height: auto;
+  }
 
   .al-badge {
     display: inline-block;
@@ -191,6 +194,11 @@
   @extend .pr2;
   @extend .pv4;
 
+  @media (max-width: $bp-medium) {
+    padding: 60px 20px 0px 20px;
+    min-height: auto;
+  }
+
   .header--content__cta{
     margin: 20px 0 10px;
   }
@@ -198,7 +206,7 @@
   @media (max-width: $bp-small){
     width: 100%;
     text-align: center;
-    padding: 20px;
+
     .header--content__cta{
       width: 200px;
       margin: 20px auto 10px;
@@ -227,6 +235,10 @@
 
   &__page-subtitle {
     max-width: 420px;
+
+    @media (max-width: $bp-small) {
+      margin: 0 auto;
+    }
   }
 }
 

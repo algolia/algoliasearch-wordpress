@@ -46,12 +46,12 @@ Indeed, before each post, term and user indexing, we decide if the item should b
 
 **Default decisions:**
 
-|Content Type|Rule
-|-|-
-|Searchable Post|We only index a post when it is in the `published` state and if its post type is not `excluded_from_search`.
-|Post|We only index a post when it is in the `published` state if it has no password.
-|Term|We only index a term if it has been assigned to at least 1 post (count > 0).
-|User|We index a user if he has authored at least 1 post.
+| Content Type    | Rule                                                                                                         |
+|:----------------|:-------------------------------------------------------------------------------------------------------------|
+| Searchable Post | We only index a post when it is in the `published` state and if its post type is not `excluded_from_search`. |
+| Post            | We only index a post when it is in the `published` state if it has no password.                              |
+| Term            | We only index a term if it has been assigned to at least 1 post (count > 0).                                 |
+| User            | We index a user if he has authored at least 1 post.                                                          |
 
 You can hook into the indexing decision making for searchable posts, posts, terms and users by using respectively the `algolia_should_index_searchable_post`, `algolia_should_index_post`, `algolia_should_index_term` and `algolia_should_index_user` filters.
 
@@ -138,17 +138,4 @@ add_filter( 'algolia_should_index_searchable_post', 'exclude_post_types', 10, 2 
 
 ## Queue processing
 
-Every time a change of your content is detected, see [previous section](#triggers), we queue a synchronization task with the minimum required information for the task to be handled.
-
-When that happens, we directly try to trigger the processing of the queue. The queue follows the FIFO logic, and ensures there is only one task handled at the same time. For scalability reasons, each task handling is done in its own PHP process and triggered by an asynchronous http call.
-
-<div class="alert alert-warning">By default WordPress will ensure that your ssl certificate is valid on every remote call. If you have an invalid ssl certificate, the queue processing won't work.</div>
-
-## Queue processing troubleshooting
-
-Queue processing is the most critical part of the plugin. If the queue processing doesn't work, then the whole plugin becomes un-usable.
-
-If you have queue processing problems, please:
-- Make sure you take advantage of built in logs and WordPress logs, see the [Debugging](logs.html) section of the docs,
-- Check out the [FAQ](frequently-asked-questions.html) for answers,
-- If you don't manage to solve the issue by yourself, ask for help, see: [FAQ](frequently-asked-questions.html).
+Every time a change of your content is detected, see [previous section](#triggers), we synchronize the item.

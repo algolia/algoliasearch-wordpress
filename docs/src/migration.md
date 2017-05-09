@@ -86,4 +86,3 @@ define( 'ALGOLIA_INDEX_NAME_PREFIX', '<your_index_name_prefix>' );
 
 <div class="alert alert-info">Adding the constants to your `wp-config.php` will disable the editing of those fields via the admin panel.</div>
 <div class="alert alert-warning">When you are using the constant for setting the indices name prefix we have no way to detect the change so you should re-index your data form the admin panel.</div>
-

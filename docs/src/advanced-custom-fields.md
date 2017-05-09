@@ -140,4 +140,3 @@ function my_video_index_settings( array $settings ) {
 	return $settings;
 }
 ```
-

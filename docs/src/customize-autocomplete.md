@@ -184,5 +184,3 @@ By default, if the autocomplete feature is turned on, we will attach an Algolia 
 Note however that we also exclude inputs that have an associated `no-autocomplete` class.
 
 So to easily disable the Algolia autocomplete dropdown for a given search input, simply add the `no-autocomplete` class to it.
-
-

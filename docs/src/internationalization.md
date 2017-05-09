@@ -13,4 +13,3 @@ What it means though is that the WordPress admin user interface of the plugin is
 
 We are open for contributions if you want to share the translation for a given language.
 You can [read more about contributing here](contribute.html#missing-translations).
-

@@ -12,7 +12,6 @@
 @include foundation-thumbnail;
 @include foundation-visibility-classes;
 
-
 // Custom components.
 @import 'tachyons/tachyons';
 @import 'settings/settings';
@@ -24,7 +23,7 @@
 @import "components/footer";
 @import "components/search";
 @import "components/docs";
-
+@import "node_modules/algolia-frontend-components/dist/communityHeader";
 
 * {
   box-sizing: border-box;
