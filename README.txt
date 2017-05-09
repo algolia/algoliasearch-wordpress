@@ -101,6 +101,44 @@ Automatic updates should work like a charm; as always though, ensure you backup 
 
 == Changelog ==
 
+= 2.0.0 =
+To upgrade from 1.7.0, follow the [Upgrade instructions](https://community.algolia.com/wordpress/upgrade.html#from-1-7-0-to-2-0-0).
+
+## New features
+
+- Allow to re-order results by drag and drop from the autocomplete settings page
+- Allow to customize the header label of each result type of the autocomplete dropdown menu
+- Allow to disable powered by logo from the admin
+- Allow to re-index every index separatly
+- Keep existing index settings when re-indexing
+- Keep existing synonyms when re-indexing
+- Add a filter hook to specify the thumbnail formats to send to Algolia
+- Use new Algolia logo
+- Backend is now powered by Algolia when instantsearch.js is enabled in the frontend
+- New splitting strategy resulting in better relevancy and snippets
+- Add an "no results" template to the autocomplete dropdown
+
+## Enhancements & bug fixes
+
+- Remove custom post type algolia_task
+- Remove custom post type algolia_log
+- Do not rely on wp_footer begin called in themes
+- Bump number of items to index per batch up to 100
+- Updated JS dependencies
+- Update Algolia API Client
+- Remove local queue in favor of in browser queue
+- Remove the Algolia logger
+- Removed title 1-6 from records
+- Reduced the default size of json payloads
+- Push correct thumbnail URLs for attachments
+- Protect autocomplete and instantsearch from XSS
+- Remove outdated polyfills for empty search queries
+- Removed tether for autocomplete dropdown placement
+- Resolved conflict with Jetpack plugin
+- Resolved conflict with Toolset plugin
+- Fixed an issue were autocomplete settings needed to be saved again
+- The plugin does not push all image sizes anymore
+
 = 1.7.0 =
 
 To upgrade from 1.6.0, follow the [Upgrade instructions](https://community.algolia.com/wordpress/upgrade.html#from-1-6-0-to-1-7-0).
