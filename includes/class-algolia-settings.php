@@ -104,7 +104,7 @@ class Algolia_Settings
             $ids[] = $this->get_native_search_index_id();
         }
 
-		return $ids;
+        return (array) apply_filters( 'algolia_get_synced_indices_ids', $ids );
 	}
 
 
