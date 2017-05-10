@@ -1,0 +1,565 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR Algolia
+# This file is distributed under the same license as the algolia package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: algolia\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2016-10-31 16:43+0900\n"
+"PO-Revision-Date: 2016-11-01 16:38+0900\n"
+"Language-Team: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Poedit 1.8.11\n"
+"Last-Translator: aka <plastiktraume@gmail.com>\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+"Language: ja\n"
+
+#: algolia.php:23
+#, php-format
+msgid "Algolia plugin requires PHP 5.3 or higher. You’re still on %s."
+msgstr ""
+"Algolia プラグインは PHP 5.3 以上が必要です。このサーバの PHP のバージョンは "
+"%s です。"
+
+#: algolia.php:29
+#, php-format
+msgid ""
+"Algolia plugin requires at least WordPress in version 3.7.14., You are on %s"
+msgstr ""
+"Algolia プラグインは WordPress  3.7.14 以上が必要です。この WordPress のバー"
+"ジョンは %s です。"
+
+#: includes/admin/class-algolia-admin-page-autocomplete.php:53
+msgid "Algolia Search"
+msgstr "Aloglia サーチ"
+
+#: includes/admin/class-algolia-admin-page-autocomplete.php:61
+#: includes/admin/class-algolia-admin-page-autocomplete.php:62
+msgid "Autocomplete"
+msgstr "オートコンプリート"
+
+#: includes/admin/class-algolia-admin-page-autocomplete.php:79
+msgid "Enable autocomplete"
+msgstr "オートコンプリートを有効にする"
+
+#: includes/admin/class-algolia-admin-page-autocomplete.php:87
+msgid "Configuration"
+msgstr "設定"
+
+#: includes/admin/class-algolia-admin-page-autocomplete.php:119
+msgid "Autocomplete configuration has been saved."
+msgstr "オートコンプリートの設定が保存されました。"
+
+#: includes/admin/class-algolia-admin-page-autocomplete.php:154
+msgid ""
+"You have enabled the Algolia Autocomplete feature but did not choose any "
+"index to search in."
+msgstr ""
+"Algolia オートコンプリートの機能を有効化しました。検索対象のインデックスが未"
+"指定です。"
+
+#: includes/admin/class-algolia-admin-page-autocomplete.php:155
+#, php-format
+msgid ""
+"Please select one or multiple indices on the <a href=\"%s\">Algolia: "
+"Autocomplete configuration page</a>."
+msgstr ""
+"<a href=\"%s\">Algolia: オートコンプリート設定ページ</a>にて、一つ以上のイン"
+"デックスを選択してください。"
+
+#: includes/admin/class-algolia-admin-page-autocomplete.php:164
+msgid ""
+"The autocomplete feature adds a find-as-you-type dropdown menu to your "
+"search bar(s)."
+msgstr ""
+"オートコンプリート機能は検索バーに Find As You Type 形式のドロップダウンメ"
+"ニューを追加します。"
+
+#: includes/admin/class-algolia-admin-page-indexing.php:122
+msgid "All indices were queued for re-indexing."
+msgstr "全インデックスが再インデックスのキューに追加されました。"
+
+#: includes/admin/class-algolia-admin-page-indexing.php:128
+msgid "All pending tasks were deleted."
+msgstr "保留中の全タスクは削除されました。"
+
+#: includes/admin/class-algolia-admin-page-indexing.php:135
+#: includes/admin/class-algolia-admin-page-indexing.php:136
+msgid "Indexing"
+msgstr "インデックス中"
+
+#: includes/admin/class-algolia-admin-page-indexing.php:146
+msgid "Content Types"
+msgstr "コンテンツタイプ"
+
+#: includes/admin/class-algolia-admin-page-indexing.php:153
+msgid "Index name prefix"
+msgstr "インデックス名の接頭辞"
+
+#: includes/admin/class-algolia-admin-page-indexing.php:161
+msgid "Indices"
+msgstr "インデックス"
+
+#: includes/admin/class-algolia-admin-page-indexing.php:191
+msgid ""
+"Each Content type is pushed to its own Algolia index. Configure here the "
+"list of indices you want to use."
+msgstr ""
+"各コンテントタイプは独自の Aloglia インデックスへプッシュされます。ここで使用"
+"するインデックスのリストを設定します。"
+
+#: includes/admin/class-algolia-admin-page-indexing.php:202
+msgid "This prefix will be added to your index names."
+msgstr "この接頭辞は、あなたのインデックス名に追加されます。"
+
+#: includes/admin/class-algolia-admin-page-indexing.php:239
+msgid ""
+"Indices prefix can only contain alphanumeric characters and underscores."
+msgstr "インデックスの接頭辞は英数字とアンダースコアのみ使用できます。"
+
+#: includes/admin/class-algolia-admin-page-indexing.php:295
+#, php-format
+msgid "Queued re-indexing of: %s."
+msgstr "再インデックスのキュー: %s"
+
+#: includes/admin/class-algolia-admin-page-indexing.php:298
+#, php-format
+msgid "Queued de-indexing of: %s."
+msgstr "インデックスのキュー: %s"
+
+#: includes/admin/class-algolia-admin-page-indexing.php:329
+msgid ""
+"Your new index prefix has correctly been taken into account. If you had "
+"indexed data with the previous index prefix, the indices will be renamed to "
+"reflect the change."
+msgstr ""
+"あなたの新しいインデックス接頭辞は取り入れられます。もし、以前のインデックス"
+"接頭辞を持つ索引データがあった場合は、新しいものへ置き換えられます。"
+
+#: includes/admin/class-algolia-admin-page-indexing.php:361
+#, php-format
+msgid ""
+"You have no indexed content in Algolia. Please index some content on the <a "
+"href=\"%s\">Algolia: Indexing page</a>."
+msgstr ""
+"Algolia にインデックスされたコンテンツはありません。 <a href=\"%s\">Algolia: "
+"インデックス生成ページ</a>にてコンテンツをインデックスしてください。"
+
+#: includes/admin/class-algolia-admin-page-indexing.php:370
+msgid "Configure here the content types you want to push to Algolia."
+msgstr "ここでは Algolia へプッシュしたいコンテンツタイプが設定できます。"
+
+#: includes/admin/class-algolia-admin-page-indexing.php:371
+msgid ""
+"Changing configuration will automatically schedule a new indexation task."
+msgstr "設定の変更はインデクセーション・タスクの際に自動的に反映されます。"
+
+#: includes/admin/class-algolia-admin-page-logs.php:69
+msgid "The logs have been cleared."
+msgstr "ログが削除されました。"
+
+#: includes/admin/class-algolia-admin-page-logs.php:75
+msgid "Logging has been disabled."
+msgstr "ログ機能が無効になっています。"
+
+#: includes/admin/class-algolia-admin-page-logs.php:81
+msgid "Logging has been enabled."
+msgstr "ログ機能が有効になっています。"
+
+#: includes/admin/class-algolia-admin-page-logs.php:87
+msgid ""
+"Logging is currently turned off which means you are still able to navigate "
+"through existing entries but no additional ones will be added."
+msgstr ""
+"ログは現在無効化されています。既存のエントリーをナビゲートできますが、追加さ"
+"れるものはありません。"
+
+#: includes/admin/class-algolia-admin-page-logs.php:88
+msgid "Note however that errors will be logged even if logging is turned off."
+msgstr "ログ機能が無効になっていても、エラーログは記録されます。"
+
+#: includes/admin/class-algolia-admin-page-logs.php:95
+#: includes/admin/class-algolia-admin-page-logs.php:96
+msgid "Logs"
+msgstr "ログ"
+
+#: includes/admin/class-algolia-admin-page-native-search.php:44
+#: includes/admin/class-algolia-admin-page-native-search.php:45
+msgid "Search Page"
+msgstr "検索ページ"
+
+#: includes/admin/class-algolia-admin-page-native-search.php:62
+msgid "Search results"
+msgstr "検索結果"
+
+#: includes/admin/class-algolia-admin-page-native-search.php:88
+msgid "WordPress search is now based on Algolia!"
+msgstr "WordPress の検索機能が Algolia ベースのものに変更されました! "
+
+#: includes/admin/class-algolia-admin-page-native-search.php:95
+msgid "WordPress search is now based on Algolia instantsearch.js!"
+msgstr ""
+"WordPress の検索機能が Algolia instantsearch.js ベースのものに変更されました!"
+
+#: includes/admin/class-algolia-admin-page-native-search.php:103
+msgid ""
+"You chose to keep the WordPress native search instead of Algolia. If you are "
+"using the autocomplete feature of the plugin we highly recommend you turn "
+"Algolia search on instead of the WordPress native search."
+msgstr ""
+"Algolia ではなく WordPress ネイティブの検索機能を選択することができます。プラ"
+"グインのオートコンプリートプラグイン機能を使用している場合は、WordPress のネ"
+"イティブの検索機能ではなく、Algolia を選ぶことを強く推奨します。"
+
+#: includes/admin/class-algolia-admin-page-native-search.php:133
+#, php-format
+msgid ""
+"Searchable posts index needs to be checked on the <a href=\"%s\">Algolia: "
+"Indexing page</a> for the search results to be powered by Algolia."
+msgstr ""
+"検索可能な投稿の索引は、Algolia によって検索結果を提供するために <a href=\"%s"
+"\">Algolia: インデックス生成ぺージ</a>にてチェックボックスをオンにしてくてく"
+"ださい。"
+
+#: includes/admin/class-algolia-admin-page-native-search.php:142
+msgid ""
+"By enabling this plugin to override the native WordPress search, your search "
+"results will be powered by Algolia's typo-tolerant & relevant search "
+"algorithms."
+msgstr ""
+"プラグインを有効化することで WordPress のネイティブ検索を上書きします。これに"
+"より、 Algolia の typo-tolerant および関連検索アルゴリズムによって検索結果が"
+"出力されます。"
+
+#: includes/admin/class-algolia-admin-page-native-search.php:152
+msgid ""
+"You have no index containing only posts yet. Please index some content on "
+"the `Indexing` page."
+msgstr ""
+"まだ投稿のみを含む一切のインデックスがありません。`Indexing` ページにてコンテ"
+"ンツのインデックスしてください。"
+
+#: includes/admin/class-algolia-admin-page-settings.php:51
+#: includes/admin/class-algolia-admin-page-settings.php:71
+#: includes/admin/class-algolia-admin-page-settings.php:72
+msgid "Settings"
+msgstr "設定"
+
+#: includes/admin/class-algolia-admin-page-settings.php:61
+msgid "Algolia search"
+msgstr "Algolia 検索"
+
+#: includes/admin/class-algolia-admin-page-settings.php:89
+msgid "Application ID"
+msgstr "アプリケーション ID"
+
+#: includes/admin/class-algolia-admin-page-settings.php:97
+msgid "Search-only API key"
+msgstr "検索用 API キー"
+
+#: includes/admin/class-algolia-admin-page-settings.php:105
+msgid "Admin API key"
+msgstr "管理者用 API キー"
+
+#: includes/admin/class-algolia-admin-page-settings.php:128
+msgid "Your Algolia Application ID."
+msgstr "Algolia アプリケーション ID"
+
+#: includes/admin/class-algolia-admin-page-settings.php:134
+msgid "Your Algolia Search-only API key (public)."
+msgstr "Algolia 検索用 API キー (パブリック)"
+
+#: includes/admin/class-algolia-admin-page-settings.php:140
+msgid "Your Algolia ADMIN API key (kept private)."
+msgstr "Algolia 管理者用 API キー(第三者には教えないでください)"
+
+#: includes/admin/class-algolia-admin-page-settings.php:150
+msgid ""
+"This will remove the Algolia logo from the autocomplete and the search page. "
+"We require that you keep the Algolia logo if you are using a free Hacker "
+"plan."
+msgstr ""
+"Algolia のロゴをオートコンプリートや検索ページから削除できます。フリー・ハッ"
+"カープランで利用しているばあいはロゴを表示させてください。"
+
+#: includes/admin/class-algolia-admin-page-settings.php:160
+msgid "Application ID should not be empty."
+msgstr "アプリケーション ID は空欄にできません。"
+
+#: includes/admin/class-algolia-admin-page-settings.php:175
+msgid "Search-only API key should not be empty."
+msgstr "検索用 API キーは空欄にできません。"
+
+#: includes/admin/class-algolia-admin-page-settings.php:189
+msgid "API key should not be empty"
+msgstr "API キーは空欄にできません。"
+
+#: includes/admin/class-algolia-admin-page-settings.php:212
+msgid ""
+"We were unable to authenticate you against the Algolia servers with the "
+"provided information. Please ensure that you used an the Admin API key and a "
+"valid Application ID."
+msgstr ""
+"設定された情報では Alglia サーバへの認証を有効にできませんでした。ご利用の管"
+"理 API キーとアプリケーション ID を確認してください。"
+
+#: includes/admin/class-algolia-admin-page-settings.php:224
+msgid ""
+"It looks like your search API key is wrong. Ensure that the key you entered "
+"has only the search capability and nothing else. Also ensure that the key "
+"has no limited time validity."
+msgstr ""
+"検索 API キーが不正です。入力した検索 API キーが検索の権限のみが付与されてい"
+"ることを確認してください。また、キーの有効期限がないことを確認してください。"
+
+#: includes/admin/class-algolia-admin-page-settings.php:234
+msgid ""
+"We succesfully managed to connect to the Algolia servers with the provided "
+"information. Your search API key has also been checked and is OK."
+msgstr ""
+"入力された情報で Algolia サーバへの接続が成功しました。検索 API キーは正常な"
+"ものであるとチェックされました。"
+
+#: includes/admin/class-algolia-admin-page-settings.php:265
+msgid ""
+"Configure here your Algolia credentials. You can find them in the \"API Keys"
+"\" section of your Algolia dashboard."
+msgstr ""
+"Algolia のクレデンシャル情報を設定してください。Algolia ダッシュボードの "
+"\"API キー\" セクションで確認できます。"
+
+#: includes/admin/class-algolia-admin-page-settings.php:266
+msgid ""
+"Once you provide your Algolia Application ID and API key, this plugin will "
+"be able to securely communicate with Algolia servers."
+msgstr ""
+"Algolia アプリケーション ID と API キーを設定すると、プラグインは Algolia "
+"サーバとセキュアな通信が可能になります。"
+
+#: includes/admin/class-algolia-admin-page-settings.php:266
+msgid ""
+"We ensure your information is correct by testing them against the Algolia "
+"servers upon save."
+msgstr ""
+"入力された情報を保存する際に、Algolia サーバ対して情報のチェックを行っていま"
+"す。"
+
+#: includes/admin/class-algolia-admin-page-settings.php:267
+#, php-format
+msgid ""
+"No Algolia account yet? <a href=\"%s\">Follow this link</a> to create one "
+"for free in a couple of minutes!."
+msgstr ""
+"まだ Algolia のアカウントをつくっていませんか?  <a href=\"%s\">このリンクをク"
+"リックして</a>アカウントを作成してください。ほんの数分で作成できます!"
+
+#: includes/admin/class-algolia-admin.php:49
+msgid ""
+"Algolia Search requires the \"mbstring\" PHP extension to be enabled. Please "
+"contact your hosting provider."
+msgstr ""
+"Algolia サーチは、 PHP の拡張モジュール \"mbstring\" が有効でなくてはなりませ"
+"ん。ホスティング会社へご相談ください。"
+
+#: includes/admin/class-algolia-admin.php:53
+msgid ""
+"Algolia needs \"mbregex\" NOT to be disabled. Please contact your hosting "
+"provider."
+msgstr ""
+"Algolia は \"mbregex\" が無効化されていない必要があります。ホスティング会社へ"
+"ご相談ください。"
+
+#: includes/admin/class-algolia-admin.php:59
+msgid ""
+"Algolia Search requires the \"cURL\" PHP extension to be enabled. Please "
+"contact your hosting provider."
+msgstr ""
+"Algolia サーチは、 PHP の拡張モジュール \"cURL\" が有効でなくてはなりません。"
+"ホスティング会社へご相談ください。"
+
+#: includes/admin/class-algolia-admin.php:87
+msgid ""
+"wp_remote_post() failed, indexing won't work. Checkout the logs for more "
+"details."
+msgstr ""
+"wp_remote_post() の実行が失敗しました。索引の作成ができません。詳細はログを確"
+"認してください。"
+
+#: includes/admin/partials/form-override-search-option.php:5
+msgid "Do not use Algolia"
+msgstr "Algolia を使用しない"
+
+#: includes/admin/partials/form-override-search-option.php:14
+msgid "Use Algolia in the backend"
+msgstr "Algolia をバックエンドで使用する"
+
+#: includes/admin/partials/form-override-search-option.php:24
+msgid "Use Algolia with Instantsearch.js"
+msgstr "Algolia を Instantsearch.js と同時に使用する"
+
+#: includes/admin/partials/page-autocomplete-config.php:4
+msgid "Enable"
+msgstr "有効化"
+
+#: includes/admin/partials/page-autocomplete-config.php:5
+msgid "Index"
+msgstr "インデックス"
+
+#: includes/admin/partials/page-autocomplete-config.php:6
+msgid "Max. Suggestions"
+msgstr "最大候補数"
+
+#: includes/admin/partials/page-autocomplete-config.php:7
+msgid "Position"
+msgstr "ポジション"
+
+#: includes/admin/partials/page-autocomplete-config.php:37
+msgid "Configure here the indices you want to display in the dropdown menu."
+msgstr "ドロップダウンメニューに表示させたい索引を設定してください。"
+
+#: includes/admin/partials/page-autocomplete-config.php:39
+msgid ""
+"Use the `Max. Suggestions` column to configure the number of entries that "
+"will be displayed by section."
+msgstr ""
+"`最大候補数` カラムを使用してセクション内に表示させるエントリーの数を設定して"
+"ください。"
+
+#: includes/admin/partials/page-autocomplete-config.php:41
+msgid ""
+"Use the `Position` column to reflect the order of the sections in the "
+"dropdown menu."
+msgstr "`位置`カラムでドロップダウンメニューの順番を反映させてください。"
+
+#: includes/admin/partials/page-indexing.php:5
+msgid "Re-index everything"
+msgstr "全てを再インデックスする"
+
+#: includes/admin/partials/page-indexing.php:10
+msgid "Queue Monitoring"
+msgstr "キューのモニタリング"
+
+#: includes/admin/partials/page-indexing.php:21
+msgid "Queue status"
+msgstr "キューのステータス"
+
+#: includes/admin/partials/page-indexing.php:24
+msgid "Running"
+msgstr "実行中"
+
+#: includes/admin/partials/page-indexing.php:27
+msgid "Idle"
+msgstr "アイドル"
+
+#: includes/admin/partials/page-indexing.php:32
+msgid "Process queue"
+msgstr "キューを処理する"
+
+#: includes/admin/partials/page-indexing.php:35
+msgid "Stop queue processing"
+msgstr "キューの処理を停止する"
+
+#: includes/admin/partials/page-indexing.php:40
+msgid "Pending tasks"
+msgstr "保留中のタスク"
+
+#: includes/admin/partials/page-indexing.php:45
+msgid "Delete all pending tasks"
+msgstr "保留中のタスクを全て削除"
+
+#: includes/admin/partials/page-indexing.php:50
+msgid "Current task"
+msgstr "現在のタスク"
+
+#: includes/admin/partials/page-indexing.php:59
+msgid ""
+"One of your recent tasks failed. Please check the logs for more information."
+msgstr "直前のタスクが失敗しました。詳細はログを参照してください。"
+
+#: includes/admin/partials/page-logs.php:4
+msgid "Clear logs"
+msgstr "ログを削除"
+
+#: includes/admin/partials/page-logs.php:7
+msgid "Disable logging"
+msgstr "ログ機能を無効化"
+
+#: includes/admin/partials/page-logs.php:9
+msgid "Enable logging"
+msgstr "ログ機能を有効化"
+
+#: includes/admin/partials/page-logs.php:23
+msgid "All"
+msgstr "全て"
+
+#: includes/admin/partials/page-logs.php:28
+msgid "Info"
+msgstr "インフォメーション"
+
+#: includes/admin/partials/page-logs.php:33
+msgid "Operations"
+msgstr "操作"
+
+#: includes/admin/partials/page-logs.php:38
+msgid "Errors"
+msgstr "エラー"
+
+#: includes/admin/partials/page-logs.php:44
+msgid "items"
+msgstr "アイテム"
+
+#: includes/admin/partials/page-logs.php:59
+msgid "Level"
+msgstr "レベル"
+
+#: includes/admin/partials/page-logs.php:60
+msgid "Time"
+msgstr "時間"
+
+#: includes/admin/partials/page-logs.php:61
+msgid "Message"
+msgstr "メッセージ"
+
+#: includes/admin/partials/page-logs.php:62
+msgid "Data"
+msgstr "データ"
+
+#: includes/admin/partials/page-logs.php:76
+msgid "Show log details"
+msgstr "詳細なログを表示する"
+
+#: includes/class-algolia-plugin.php:81
+msgid "Algolia Logs"
+msgstr "Algolia ログ"
+
+#: includes/class-algolia-plugin.php:82
+msgid "Algolia Log"
+msgstr "Algolia ログ"
+
+#: includes/class-algolia-plugin.php:95
+msgid "Algolia Tasks"
+msgstr "Algolia タスク"
+
+#: includes/class-algolia-plugin.php:96
+msgid "Algolia Task"
+msgstr "Algolia タスク"
+
+#: includes/indices/class-algolia-searchable-posts-index.php:47
+msgid "Searchable posts"
+msgstr "検索可能な投稿"
+
+#: includes/indices/class-algolia-users-index.php:15
+msgid "Users"
+msgstr "ユーザー"
+
+#: templates/autocomplete.php:55
+msgid "Powered by"
+msgstr "Powered by"
+
+#: templates/autocomplete.php:65
+msgid "No results matched your query "
+msgstr "検索語句にマッチする結果はありませんでした。"
