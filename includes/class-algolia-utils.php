@@ -191,6 +191,11 @@ class Algolia_Utils
             "'<\s*pre\s*>(.*?)<\s*/\s*pre\s*>'is",
         );
 
+        //If there is ET builder (Divi), remove shortcodes
+        if(function_exists( 'et_pb_is_pagebuilder_used' )) {
+            $noise_patterns[] = '/\[\/?et_pb.*?\]/';
+        }
+
 	    foreach ( $noise_patterns as $pattern ) {
 	        $content = preg_replace($pattern, '', $content);
         }
