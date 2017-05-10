@@ -86,3 +86,4 @@ Here is the list of all available Filters.
 | algolia_should_override_search_with_instantsearch        | bool $bool (default: depending on configuration)                                 |
 | algolia_post_images_sizes                                | array $sizes (default: only the 'thumbnail' size)                                |
 | algolia_get_post_images                                  | array $images (default: only the info about the 'thumbnail' size)                |
+| algolia_get_synced_indices_ids                           | array $ids                                                                       |

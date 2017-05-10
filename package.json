@@ -1,6 +1,6 @@
 {
   "name": "algoliasearch-wordpress",
-  "version": "2.0.1",
+  "version": "2.1.0",
   "description": "Algolia Search plugin for WordPress is a drop in replacement for WordPress search. It also provides an optional \"as you type\" auto-complete experience.",
   "main": "index.js",
   "directories": {

@@ -1,3 +1,7 @@
+# 2.1.0
+
+- Introduce a new filter to allow to customize synced indices
+
 # 2.0.1
 
 - Fix an error that would display PHP notices on search results pages
