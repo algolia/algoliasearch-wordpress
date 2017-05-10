@@ -1,4 +1,9 @@
+# 2.0.1
+
+- Fix an error that would display PHP notices on search results pages
+
 # 2.0.0
+
 To upgrade from 1.7.0, follow the [Upgrade instructions](https://community.algolia.com/wordpress/upgrade.html#from-1-7-0-to-2-0-0).
 
 ## New features
