@@ -108,7 +108,7 @@ class Algolia_Template_Loader {
 	 */
 	public function template_loader( $template ) {
 		$settings = $this->plugin->get_settings();
-		if ( is_search() && $settings->should_override_search_with_instantsearch() ) {
+		if ( $settings->should_override_search_with_instantsearch() && is_search() ) {
 
 			return $this->load_instantsearch_template();
 		}
