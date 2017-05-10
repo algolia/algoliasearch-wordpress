@@ -57,7 +57,9 @@
 					indexName: algolia.indices.searchable_posts.name,
 					urlSync: {
 						mapping: {'q': 's'},
-						trackedParameters: ['query']
+						trackedParameters: ['query'],
+						// use #hash for browsers that are not supporting history methods (<= IE9)
+						useHash: !(window.history && 'pushState' in window.history)
 					},
 					searchParameters: {
 						facetingAfterDistinct: true,
