@@ -101,6 +101,10 @@ Automatic updates should work like a charm; as always though, ensure you backup 
 
 == Changelog ==
 
+= 2.1.0 =
+
+- Introduce a new filter to allow to customize synced indices
+
 = 2.0.1 =
 
 - Fix an error that would display PHP notices on search results pages
@@ -109,7 +113,7 @@ Automatic updates should work like a charm; as always though, ensure you backup 
 
 To upgrade from 1.7.0, follow the [Upgrade instructions](https://community.algolia.com/wordpress/upgrade.html#from-1-7-0-to-2-0-0).
 
-## New features
+**New features**
 
 - Allow to re-order results by drag and drop from the autocomplete settings page
 - Allow to customize the header label of each result type of the autocomplete dropdown menu
@@ -123,7 +127,7 @@ To upgrade from 1.7.0, follow the [Upgrade instructions](https://community.algol
 - New splitting strategy resulting in better relevancy and snippets
 - Add an "no results" template to the autocomplete dropdown
 
-## Enhancements & bug fixes
+**Enhancements & bug fixes**
 
 - Remove custom post type algolia_task
 - Remove custom post type algolia_log
