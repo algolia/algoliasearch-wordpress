@@ -83,7 +83,16 @@ class Algolia_Search
 
 		$query->set( 'posts_per_page', $posts_per_page );
 		$query->set( 'offset', 0 );
-		$query->set( 'post_type', 'any' );
+
+		$post_types = 'any';
+		if ( isset( $_GET['post_type'] ) ) {
+		    $post_type = get_post_type_object( $_GET['post_type'] );
+		    if (null !== $post_type) {
+		        $post_types = $post_type->name;
+            }
+        }
+
+		$query->set( 'post_type', $post_types );
 		$query->set( 'post__in', $post_ids );
 
 		// Todo: this actually still excludes trash and auto-drafts.
