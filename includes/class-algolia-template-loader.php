@@ -124,8 +124,7 @@ class Algolia_Template_Loader {
 			// Enqueue the instantsearch.js default styles.
 			wp_enqueue_style( 'algolia-instantsearch' );
 
-			// Ensure jQuery is loaded.
-			wp_enqueue_script( 'jquery' );
+
 
 			// Enqueue the instantsearch.js library.
 			wp_enqueue_script( 'algolia-instantsearch' );
