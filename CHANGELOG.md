@@ -1,3 +1,9 @@
+# 2.2.0
+
+- Ensure frontend dependencies are loaded (especially 'wp-util': wp.template())
+- Escape ET Divi builder shortcodes
+- Force autocomplete dropdown to be displayed above everything else
+
 # 2.1.0
 
 - Introduce a new filter to allow to customize synced indices
@@ -15,7 +21,7 @@ To upgrade from 1.7.0, follow the [Upgrade instructions](https://community.algol
 - Allow to re-order results by drag and drop from the autocomplete settings page
 - Allow to customize the header label of each result type of the autocomplete dropdown menu
 - Allow to disable powered by logo from the admin
-- Allow to re-index every index separatly
+- Allow to re-index every index separately
 - Keep existing index settings when re-indexing
 - Keep existing synonyms when re-indexing
 - Add a filter hook to specify the thumbnail formats to send to Algolia
