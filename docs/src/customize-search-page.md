@@ -111,7 +111,7 @@ search.start();
 
 ## Look & feel
 
-We provide with some default CSS rules that are located in the `algolia/assets/css/algolia-instantsearch.css`. You can very easily add your own CSS rules to your theme's stylesheet.
+We provide with some default CSS rules that are located in the `algolia/css/algolia-instantsearch.css`. You can very easily add your own CSS rules to your theme's stylesheet.
 
 If for any reason you don't want the default stylesheet to be included, you can remove it like this:
 
