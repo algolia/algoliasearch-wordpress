@@ -1,24 +1,4 @@
 {
-  "name": "algoliasearch-wordpress",
-  "version": "2.2.0",
-  "description": "Algolia Search plugin for WordPress is a drop in replacement for WordPress search. It also provides an optional \"as you type\" auto-complete experience.",
-  "main": "index.js",
-  "directories": {
-    "doc": "docs"
-  },
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/algolia/algoliasearch-wordpress.git"
-  },
-  "author": "",
-  "license": "(MIT OR Apache-2.0)",
-  "bugs": {
-    "url": "https://github.com/algolia/algoliasearch-wordpress/issues"
-  },
-  "homepage": "https://community.algolia.com/wordpress",
   "dependencies": {
     "algoliasearch": "^3.22.1",
     "autocomplete.js": "^0.28.1",

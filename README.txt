@@ -101,6 +101,12 @@ Automatic updates should work like a charm; as always though, ensure you backup 
 
 == Changelog ==
 
+= 2.2.1 =
+
+- Rename 'page' variable to 'p' for ajax calls to avoid certain conflicts
+- Move CSS and JS files out of assets/ directory to prepare for publishing all tags
+- Avoid conflict with Polylang plugin
+
 = 2.2.0 =
 
 - Ensure frontend dependencies are loaded (especially 'wp-util': wp.template())

@@ -49,6 +49,7 @@ class Algolia_Compatibility {
      */
     private function is_wpml_enabled()
     {
-        return function_exists( 'icl_object_id' );
+        // See https://github.com/algolia/algoliasearch-wordpress/issues/567
+        return function_exists( 'icl_object_id' )  && ! class_exists( 'Polylang' );
     }
 }
