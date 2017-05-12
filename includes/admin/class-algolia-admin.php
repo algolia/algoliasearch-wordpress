@@ -111,10 +111,10 @@ class Algolia_Admin {
       try {
           $index_id = (string) $_POST['index_id'];
 
-          if ( ! isset( $_POST['page'] ) ) {
+          if ( ! isset( $_POST['p'] ) ) {
               throw new RuntimeException('Page should be provided.');
           }
-          $page = (int) $_POST['page'];
+          $page = (int) $_POST['p'];
 
           $index = $this->plugin->get_index($index_id);
           if (null === $index) {

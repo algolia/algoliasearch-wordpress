@@ -42,7 +42,7 @@
     var data = {
       'action': 'algolia_re_index',
       'index_id': index,
-      'page': currentPage
+      'p': currentPage
     };
 
     $.post(ajaxurl, data, function(response) {
