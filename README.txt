@@ -105,6 +105,7 @@ Automatic updates should work like a charm; as always though, ensure you backup 
 
 - Rename 'page' variable to 'p' for ajax calls to avoid certain conflicts
 - Move CSS and JS files out of assets/ directory to prepare for publishing all tags
+- Avoid conflict with Polylang plugin
 
 = 2.2.0 =
 
