@@ -107,7 +107,7 @@
           },
           suggestion: function (hit) {
             for (var key in hit._highlightResult) {
-              // We do not deal with arrays.
+              /* We do not deal with arrays. */
               if (typeof hit._highlightResult[key].value !== 'string') {
                 continue;
               }
@@ -116,7 +116,7 @@
             }
 
             for (var key in hit._snippetResult) {
-              // We do not deal with arrays.
+              /* We do not deal with arrays. */
               if (typeof hit._snippetResult[key].value !== 'string') {
                 continue;
               }
@@ -138,7 +138,7 @@
 
       var config = {
         debug: algolia.debug,
-        hint: false, // Required given we use appendTo feature.
+        hint: false,
         openOnFocus: true,
         appendTo: 'body',
         templates: {
@@ -151,10 +151,18 @@
       }
 
       /* Instantiate autocomplete.js */
-      algoliaAutocomplete($searchInput[0], config, sources)
+      var autocomplete = algoliaAutocomplete($searchInput[0], config, sources)
       .on('autocomplete:selected', function (e, suggestion) {
         /* Redirect the user when we detect a suggestion selection. */
         window.location.href = suggestion.permalink;
+      });
+
+      /* Force the dropdown to be re-drawn on scroll to handle fixed containers. */
+      jQuery(window).scroll(function() {
+        if(autocomplete.autocomplete.getWrapper().style.display === "block") {
+          autocomplete.autocomplete.close();
+          autocomplete.autocomplete.open();
+        }
       });
     });
 
