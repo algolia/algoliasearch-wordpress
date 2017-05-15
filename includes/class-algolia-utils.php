@@ -196,6 +196,11 @@ class Algolia_Utils
             $noise_patterns[] = '/\[\/?et_pb.*?\]/';
         }
 
+				// If there is Aesop Story Engine, remove shortcodes.
+				if ( defined( 'AI_CORE_VERSION' ) ) {
+					$noise_patterns[] = '\[\/?aesop_.*?\]/';
+				}
+
 	    foreach ( $noise_patterns as $pattern ) {
 	        $content = preg_replace( $pattern, '', $content );
         }
