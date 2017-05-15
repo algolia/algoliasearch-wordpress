@@ -1,7 +1,9 @@
+.algolia-autocomplete {
+    z-index: 999999 !important;
+}
 .aa-dropdown-menu {
     /* we set the width in JS */
     font-family: sans-serif;
-    z-index: 999999;
     background-color: #fff;
     border-top: none;
     border-bottom-left-radius: 4px;
