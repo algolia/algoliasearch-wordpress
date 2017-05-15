@@ -3,7 +3,7 @@ Contributors: algolia, rayrutjes
 Tags: Search, Algolia, Autocomplete, instant-search, relevant search, search highlight, faceted search, find-as-you-type search, suggest, search by category, ajax search, better search, custom search
 Requires at least: 4.4
 Tested up to: 4.7
-Stable tag: trunk
+Stable tag: 2.2.2
 License: MIT License, GNU General Public License v2.0
 
 Search by Algolia is the smartest way to improve search on your site. Autocomplete is included, along with full control over look, feel and relevance.
@@ -100,6 +100,10 @@ Automatic updates should work like a charm; as always though, ensure you backup 
 6. Instant-search results page example.
 
 == Changelog ==
+
+= 2.2.2 =
+
+- Correctly position autocomplete dropdown when located inside a fixed container
 
 = 2.2.1 =
 

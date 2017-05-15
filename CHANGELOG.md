@@ -1,3 +1,7 @@
+# 2.2.2
+
+- Correctly position autocomplete dropdown when located inside a fixed container
+
 # 2.2.1
 
 - Rename 'page' variable to 'p' for ajax calls to avoid certain conflicts
