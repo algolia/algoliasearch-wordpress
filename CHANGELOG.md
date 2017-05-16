@@ -1,3 +1,8 @@
+# 2.2.3
+
+- Fallback to native search if Algolia call fails on search page
+- Avoid displaying fatal error when failing to reach Algolia in the admin
+
 # 2.2.2
 
 - Correctly position autocomplete dropdown when located inside a fixed container
