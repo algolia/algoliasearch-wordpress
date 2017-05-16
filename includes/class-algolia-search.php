@@ -62,7 +62,13 @@ class Algolia_Search
             'page'                 => $current_page - 1, // Algolia pages are zero indexed.
         ) );
 
-        $results = $this->index->search( $query->query['s'], $params );
+        try {
+            $results = $this->index->search( $query->query['s'], $params );
+        } catch ( \AlgoliaSearch\AlgoliaException $exception ) {
+            error_log( $exception->getMessage() );
+
+            return;
+        }
 
 
 		add_filter( 'the_posts', array( $this, 'the_posts' ), 10, 2 );
