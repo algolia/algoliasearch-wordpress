@@ -82,7 +82,7 @@ This can be configured on the `Indexing` section of the plugin.
 
 Yes, it depends on your servers capacities though and the number of plugins you have enabled.
 
-By default we only index 50 items per indexing process to ensure we don't reach PHP max execution time or memory limits.
+By default we only index 100 items per indexing process to ensure we don't reach PHP max execution time or memory limits.
 
 Here is a way to increase the number of items indexed on each PHP indexing process:
 
