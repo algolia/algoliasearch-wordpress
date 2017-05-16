@@ -442,7 +442,9 @@ abstract class Algolia_Index
                 return false;
             }
 
-            throw $exception;
+            error_log( $exception->getMessage() );
+
+            return false;
         }
 
         return true;
