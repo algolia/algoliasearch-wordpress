@@ -31,3 +31,5 @@ docs
 .github
 .php_cs
 CHANGELOG.md
+yarn.lock
+CONTRIBUTING.md
