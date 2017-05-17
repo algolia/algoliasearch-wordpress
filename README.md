@@ -25,4 +25,4 @@ To contribute, simply edit the markdown formatted files located in `docs/src/*.m
 6. Create a PR and merge it once it has been re-checked
 7. Create a release on GitHub
 8. Publish the docs `cd docs && make release`
-9. Switch to `svn` branch and run `bin/publish.sh`
+9. Run `bin/release.sh`
