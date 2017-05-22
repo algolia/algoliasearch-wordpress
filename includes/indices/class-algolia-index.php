@@ -234,18 +234,23 @@ abstract class Algolia_Index
             $index_exists = false;
         }
 
-        if ( $index_exists === true ) {
+	    if ( $index_exists === true ) {
 
-            if ( $clear_if_existing === true ) {
-                $index->clearIndex();
-            }
+		    if ( $clear_if_existing === true ) {
+			    $index->clearIndex();
+		    }
 
-            // No need to go further in this case.
-            // We don't change anything when the index already exists.
-            // This means that to override, or go back to default settings you have to
-            // Clear the index and re-index again.
-            return;
-        }
+		    $force_settings_update = (bool) apply_filters( 'algolia_force_settings_update', false, $this->get_id() );
+		    $force_settings_update = (bool) apply_filters( 'algolia_' . $this->get_id() . '_force_settings_update', $force_settings_update );
+		    if ( $force_settings_update !== true ) {
+			    // No need to go further in this case.
+			    // We don't change anything when the index already exists.
+			    // This means that to override, or go back to default settings you have to
+			    // Clear the index and re-index again or use the 'algolia_force_settings_update' filter
+			    // to force a settings update
+			    return;
+		    }
+	    }
 
         $settings = $this->get_settings();
         $index->setSettings( $settings ); // This will create the index.
