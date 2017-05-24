@@ -55,7 +55,7 @@ Here is the list of all available Filters.
 | algolia_searchable_posts_index_settings                  | array $settings                                                                  |
 | algolia_searchable_post_shared_attributes                | array $shared_attributes, WP_Post $post                                          |
 | algolia_searchable_posts_index_synonyms                  | array $synonyms                                                                  |
-| algolia_should_force_settings_update                     | bool $should_force_update, Algolia_Index $index                                  |
+| algolia_should_force_settings_update                     | bool $should_force_update (default: false), string $index_id                     |
 | algolia_should_index_post                                | bool $should_index, WP_Post $post                                                |
 | algolia_post_parser                                      | Algolia\DOMParser $parser                                                        |
 | algolia_post_shared_attributes                           | array $shared_attributes, WP_Post $post                                          |
