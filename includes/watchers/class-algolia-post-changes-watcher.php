@@ -21,7 +21,6 @@ class Algolia_Post_Changes_Watcher implements Algolia_Changes_Watcher
 		// Fires before a post is deleted, at the start of wp_delete_post().
 		// At this stage the post metas are still available, and we need them.
 		add_action( 'before_delete_post', array( $this, 'delete_item' ) );
-		add_action( 'delete_attachment', array( $this, 'delete_item' ) );
 
 		// Handle meta changes after the change occurred.
 		add_action( 'added_post_meta', array( $this, 'on_meta_change' ), 10, 4 );
@@ -31,6 +30,7 @@ class Algolia_Post_Changes_Watcher implements Algolia_Changes_Watcher
 		// Handle attachment changes. These are required because the other post hooks are not triggered.
 		add_action( 'add_attachment', array( $this, 'sync_item' ) );
 		add_action( 'attachment_updated', array( $this, 'sync_item' ) );
+		add_action( 'delete_attachment', array( $this, 'delete_item' ) );
 	}
 
 	/**
