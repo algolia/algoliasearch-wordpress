@@ -240,9 +240,8 @@ abstract class Algolia_Index
 			    $index->clearIndex();
 		    }
 
-		    $force_settings_update = (bool) apply_filters( 'algolia_force_settings_update', false, $this->get_id() );
-		    $force_settings_update = (bool) apply_filters( 'algolia_' . $this->get_id() . '_force_settings_update', $force_settings_update );
-		    if ( $force_settings_update !== true ) {
+		    $force_settings_update = (bool) apply_filters( 'algolia_should_force_settings_update', false, $this->get_id() );
+		    if ( $force_settings_update === false ) {
 			    // No need to go further in this case.
 			    // We don't change anything when the index already exists.
 			    // This means that to override, or go back to default settings you have to
