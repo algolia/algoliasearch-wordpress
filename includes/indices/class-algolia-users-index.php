@@ -39,7 +39,7 @@ final class Algolia_Users_Index extends Algolia_Index
 	protected function get_records( $item )
 	{
 		$record = array();
-		$record['objectID'] = $item->ID;
+		$record['objectID'] = apply_filters( 'algolia_get_user_object_id', $item->ID, $item->ID );
 		$record['user_id'] = $item->ID;
 		$record['display_name'] = $item->display_name;
 		$record['posts_url'] = get_author_posts_url( $item->ID, $item->user_nicename );

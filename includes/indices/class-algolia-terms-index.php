@@ -53,7 +53,7 @@ final class Algolia_Terms_Index extends Algolia_Index
 	protected function get_records( $item )
 	{
 		$record = array();
-		$record['objectID'] = $item->term_id;
+		$record['objectID'] = apply_filters( 'algolia_get_term_object_id', $item->term_id, $item->term_id );
 		$record['term_id'] = $item->term_id;
 		$record['taxonomy'] = $item->taxonomy;
 		$record['name'] = $item->name;

@@ -254,7 +254,9 @@ final class Algolia_Posts_Index extends Algolia_Index
 	 * @return string
 	 */
 	private function get_post_object_id( $post_id, $record_index ) {
-		return $post_id . '-' . $record_index;
+	    $object_id = $post_id . '-' . $record_index;
+
+		return apply_filters( 'algolia_get_post_object_id', $object_id, $post_id, $record_index );
 	}
 
 	/**
