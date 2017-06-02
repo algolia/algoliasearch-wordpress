@@ -200,6 +200,8 @@ class Algolia_Utils
 	        $content = preg_replace( $pattern, '', $content );
         }
 
+        $content = strip_shortcodes($content);
+
         return $content;
     }
 
