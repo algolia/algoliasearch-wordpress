@@ -92,7 +92,7 @@ final class Algolia_Posts_Index extends Algolia_Index
         $parts = Algolia_Utils::explode_content( $post_content );
 
 		if ( defined( 'ALGOLIA_SPLIT_POSTS' ) && false === ALGOLIA_SPLIT_POSTS ) {
-			$parts = array_shift( $parts );
+			$parts = array( array_shift( $parts ) );
 		}
 
 		$records = array();
