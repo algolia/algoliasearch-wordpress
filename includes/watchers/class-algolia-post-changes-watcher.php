@@ -30,6 +30,7 @@ class Algolia_Post_Changes_Watcher implements Algolia_Changes_Watcher
 		// Handle attachment changes. These are required because the other post hooks are not triggered.
 		add_action( 'add_attachment', array( $this, 'sync_item' ) );
 		add_action( 'attachment_updated', array( $this, 'sync_item' ) );
+		add_action( 'delete_attachment', array( $this, 'delete_item' ) );
 	}
 
 	/**
