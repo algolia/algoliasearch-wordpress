@@ -223,7 +223,7 @@ abstract class Algolia_Index
 		}
 	}
 
-	public function create_index_if_not_existing( $clear_if_existing = true )
+	public function create_index_if_not_existing()
     {
         $index = $this->get_index();
 
@@ -235,11 +235,6 @@ abstract class Algolia_Index
         }
 
 	    if ( $index_exists === true ) {
-
-		    if ( $clear_if_existing === true ) {
-			    $index->clearIndex();
-		    }
-
 		    $force_settings_update = (bool) apply_filters( 'algolia_should_force_settings_update', false, $this->get_id() );
 		    if ( $force_settings_update === false ) {
 			    // No need to go further in this case.
