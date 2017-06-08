@@ -22,6 +22,7 @@ class Algolia_Admin {
 			new Algolia_Admin_Page_Native_Search( $plugin );
 
 			add_action( 'wp_ajax_algolia_re_index', array( $this, 're_index' ) );
+			add_action( 'wp_ajax_algolia_push_settings', array( $this, 'push_settings' ) );
 
 			if ( isset( $_GET['page'] ) && substr( (string) $_GET['page'], 0, 7) === 'algolia' ) {
           add_action( 'admin_notices', array( $this, 'display_reindexing_notices' ) );
@@ -43,6 +44,7 @@ class Algolia_Admin {
 	public function enqueue_scripts() {
 		wp_enqueue_script( 'algolia-admin', plugin_dir_url( __FILE__ ) . 'js/algolia-admin.js', array( 'jquery', 'jquery-ui-sortable' ), ALGOLIA_VERSION );
 		wp_enqueue_script( 'algolia-admin-reindex-button', plugin_dir_url( __FILE__ ) . 'js/reindex-button.js', array( 'jquery' ), ALGOLIA_VERSION );
+		wp_enqueue_script( 'algolia-admin-push-settings-button', plugin_dir_url( __FILE__ ) . 'js/push-settings-button.js', array( 'jquery' ), ALGOLIA_VERSION );
 	}
 
 	/**
@@ -138,4 +140,26 @@ class Algolia_Admin {
           throw $exception;
       }
   }
+
+    public function push_settings() {
+        try {
+            if ( ! isset( $_POST['index_id'] ) ) {
+                throw new RuntimeException('index_id should be provided.');
+            }
+            $index_id = (string) $_POST['index_id'];
+
+            $index = $this->plugin->get_index($index_id);
+            if (null === $index) {
+                throw new RuntimeException(sprintf('Index named %s does not exist.', $index_id));
+            }
+
+            $index->push_settings();
+
+            $response = array( 'success' => true );
+            wp_send_json($response);
+        } catch (\Exception $exception) {
+            echo $exception->getMessage();
+            throw $exception;
+        }
+    }
 }
