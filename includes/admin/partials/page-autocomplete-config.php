@@ -1,11 +1,11 @@
 <table class="widefat table-autocomplete">
 	<thead>
 		<tr>
-      <th><?php _e( 'Re-order', 'algolia' ); ?></th>
-			<th><?php _e( 'Enable', 'algolia' ); ?></th>
+      <th style="width: 20px;"></th>
+			<th style="width: 75px;"><?php _e( 'Enable', 'algolia' ); ?></th>
 			<th><?php _e( 'Index', 'algolia' ); ?></th>
 			<th><?php _e( 'Label', 'algolia' ); ?></th>
-			<th><?php _e( 'Max. Suggestions', 'algolia' ); ?></th>
+			<th style="width: 75px;"><?php _e( 'Max. Suggestions', 'algolia' ); ?></th>
 			<th><?php _e( 'Actions', 'algolia' ); ?></th>
 		</tr>
 	</thead>
@@ -27,10 +27,11 @@
         <input type="text" name="algolia_autocomplete_config[<?php echo esc_attr( $index['index_id'] ); ?>][label]"  value="<?php echo esc_attr( $index['label'] ); ?>" />
       </td>
 			<td>
-				<input type="number" name="algolia_autocomplete_config[<?php echo esc_attr( $index['index_id'] ); ?>][max_suggestions]"  value="<?php echo (int) $index['max_suggestions']; ?>" />
+				<input style="width: 40px; text-align: center;" type="number" name="algolia_autocomplete_config[<?php echo esc_attr( $index['index_id'] ); ?>][max_suggestions]"  value="<?php echo (int) $index['max_suggestions']; ?>" />
 			</td>
       <td>
         <button class="algolia-reindex-button button button-primary" data-index="<?php echo esc_attr( $index['index_id'] ); ?>"><?php _e('Re-index', 'algolia'); ?></button>
+        <button class="algolia-push-settings-button button" data-index="<?php echo esc_attr( $index['index_id'] ); ?>"><?php _e('Push Settings', 'algolia'); ?></button>
       </td>
 		</tr>
 		<?php endforeach; ?>
