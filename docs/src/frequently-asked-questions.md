@@ -119,6 +119,34 @@ function custom_user_record( array $record, WP_User $user ) {
 add_filter( 'algolia_user_record', 'custom_user_record', 10, 2 );
 ```
 
-### My case is not listed here, what to do?
+### Can I display results coming from multiple websites?
 
-If your problem is covered here, please submit an issue with the error details here: https://github.com/algolia/algoliasearch-wordpress/issues
+Yes, but only if all those those websites are WordPress websites using this plugin.
+
+In that case, you need to:
+
+1. Customize the object ids to make them unique across the different websites
+1. Configure both websites to use the same index prefix
+1. Re-index all indices from all websites
+
+**Warning: this has no impact on Algolia used in the backend given that you can only load posts that are available in the current database.**
+
+Here is an example on how to customize the object ids:
+
+```php
+// To be added to the functions.php file of your active theme.
+// Can also be shipped into a custom plugin.
+function scope_object_id_to_current_website( $object_id ) {
+  return 'mywebsite.com_' . $object_id;
+}
+
+add_filter( 'algolia_get_post_object_id', 'scope_object_id_to_current_website' );
+add_filter( 'algolia_get_term_object_id', 'scope_object_id_to_current_website' );
+add_filter( 'algolia_get_user_object_id', 'scope_object_id_to_current_website' );
+```
+
+This code will prefix all object IDs so that records originating from different indices do not conflict.
+
+### Your question remains unanswered
+
+If your question is not covered by this FAQ page, please [open an issue](https://github.com/algolia/algoliasearch-wordpress/issues).
