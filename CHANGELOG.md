@@ -1,3 +1,10 @@
+# 2.3.0
+
+- Feat: Add a button for every index to push the settings
+- Feat: Add a filter to force settings update when re-indexing
+- Fix: Fix a regression when post splitting was disabled
+- Fix: Make sure attachments get removed from Algolia when deleted
+
 # 2.2.3
 
 - Fallback to native search if Algolia call fails on search page
