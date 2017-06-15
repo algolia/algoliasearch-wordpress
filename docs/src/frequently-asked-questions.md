@@ -119,6 +119,30 @@ function custom_user_record( array $record, WP_User $user ) {
 add_filter( 'algolia_user_record', 'custom_user_record', 10, 2 );
 ```
 
+### Can I use custom thumbnail sizes?
+
+Yes,
+
+If the thumbnail size you are willing to display is medium, you can do:
+
+```html
+<# if ( data.images.medium ) { #>
+    <img class="suggestion-post-thumbnail" src="{{ data.images.medium.url }}" alt="{{ data.post_title }}">
+<# } #>
+```
+
+Since version 2.x of the plugin, we do not push all thumbnail sizes by default to avoid huge record payloads.
+
+You now need to use a filter hook that allows you to specify the thumbnail sizes you want to push. i.e.
+
+```php
+add_filter('algolia_post_images_sizes', function($sizes) {
+    $sizes[] = 'medium';
+
+    return $sizes;
+});
+```
+
 ### My case is not listed here, what to do?
 
 If your problem is covered here, please submit an issue with the error details here: https://github.com/algolia/algoliasearch-wordpress/issues
