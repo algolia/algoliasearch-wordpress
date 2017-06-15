@@ -23,9 +23,6 @@ class Algolia_Autocomplete_Config
 
 		$existing_config = $this->get_config();
 		foreach ( $indices as $index ) {
-		    if($index->get_id() === 'searchable_posts') {
-		        continue;
-            }
 			/** @var Algolia_Index $index */
 			$index_config = $this->extract_index_config( $existing_config, $index->get_id() );
 			if ( $index_config ) {

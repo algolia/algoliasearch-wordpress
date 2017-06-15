@@ -32,7 +32,7 @@ final class Algolia_Searchable_Posts_Index extends Algolia_Index
 	 * @return string The name displayed in the admin UI.
 	 */
 	public function get_admin_name() {
-		return __( 'Searchable posts', 'algolia' );
+		return __( 'All posts', 'algolia' );
 	}
 
 	/**
