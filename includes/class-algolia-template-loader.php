@@ -39,7 +39,8 @@ class Algolia_Template_Loader {
 			'powered_by_enabled'   => $settings->is_powered_by_enabled(),
 			'query' 			   => isset( $_GET['s'] ) ? esc_html( $_GET['s'] ) : '',
 			'autocomplete'         => array(
-				'sources'     => $autocomplete_config->get_config(),
+				'sources'        => $autocomplete_config->get_config(),
+                'input_selector' => (string) apply_filters( 'algolia_autocomplete_input_selector', "input[name='s']:not('.no-autocomplete')" ),
 			),
 			'indices' => array(),
 		);

@@ -78,7 +78,7 @@ Here is the list of all available Filters.
 | algolia_index_replicas                                   | array $replicas, Algolia_Index $index                                            |
 | algolia\_{$index_id}_index_replicas                      | array $replicas, Algolia_Index $index                                            |
 | algolia_config                                           | array $config                                                                    |
-| algolia_indexing_batch_size                              | int $batch_size (default: 100)                                                    |
+| algolia_indexing_batch_size                              | int $batch_size (default: 100)                                                   |
 | algolia\_{$index_id}_indexing_batch_size                 | int $batch_size                                                                  |
 | algolia_templates_path                                   | string $path (default: 'algolia/')                                               |
 | algolia_template_locations                               | array $locations                                                                 |

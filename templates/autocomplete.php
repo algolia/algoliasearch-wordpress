@@ -133,7 +133,7 @@
     });
 
     /* Setup dropdown menus */
-    jQuery("input[name='s']:not('.no-autocomplete')").each(function (i) {
+    jQuery(algolia.autocomplete.input_selector).each(function (i) {
       var $searchInput = jQuery(this);
 
       var config = {
