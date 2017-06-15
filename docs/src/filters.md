@@ -47,6 +47,7 @@ Here is the list of all available Filters.
 | Filter Name                                              | Params                                                                           |
 |:---------------------------------------------------------|:---------------------------------------------------------------------------------|
 | algolia_autocomplete_config                              | $config                                                                          |
+| algolia_autocomplete_input_selector                      | string $input_selector, defaults to "input[name='s']:not('.no-autocomplete')"    |
 | algolia_post_types_blacklist                             | array $blacklist, defaults to array( 'nav_menu_item', revision' )                |
 | algolia_taxonomies_blacklist                             | array $blacklist, defaults to array( 'nav_menu', link_category', 'post_format' ) |
 | algolia_should_index_searchable_post                     | bool $should_index, WP_Post $post                                                |
