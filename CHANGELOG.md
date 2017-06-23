@@ -1,3 +1,14 @@
+<a name="2.4.0"></a>
+# [2.4.0](https://github.com/algolia/algoliasearch-wordpress/compare/2.3.0...2.4.0) (2017-06-23)
+
+
+### Features
+
+* **autocomplete:** add a hook to allow to customize autocomplete input selector ([f373380](https://github.com/algolia/algoliasearch-wordpress/commit/f373380))
+* **autocomplete:** allow to use the same index as on the search page ([8398760](https://github.com/algolia/algoliasearch-wordpress/commit/8398760))
+
+
+
 # 2.3.0
 
 - Feat: Add a button for every index to push the settings

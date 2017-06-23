@@ -2,9 +2,9 @@
 # This file is distributed under the MIT License, GNU General Public License v2.0.
 msgid ""
 msgstr ""
-"Project-Id-Version: Search by Algolia – Instant & Relevant results 2.3.0\n"
+"Project-Id-Version: Search by Algolia – Instant & Relevant results 2.4.0\n"
 "Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/algolia\n"
-"POT-Creation-Date: 2017-06-23 13:16:41+00:00\n"
+"POT-Creation-Date: 2017-06-23 13:24:58+00:00\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
