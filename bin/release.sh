@@ -11,7 +11,7 @@ readonly SYNC_SCRIPT_TAG="v0.3.0"
 readonly PLUGIN_SLUG="search-by-algolia-instant-relevant-results"
 readonly PLUGIN_GITHUB_REPOSITORY="https://github.com/algolia/algoliasearch-wordpress"
 readonly SVN_USER="algolia"
-readonly ASSETS_DIRECTORY="assets"
+readonly ASSETS_DIRECTORY=".wordpress.org"
 
 create_temporary_directory () {
   mkdir -p "$TMP_DIR"
@@ -26,10 +26,10 @@ download_sync_script () {
 sync_plugin_with_wordpress_org () {
   cd "$TMP_DIR"
   ./sync.sh \
-    --plugin-name=$PLUGIN_SLUG \
-    --git-repo=$PLUGIN_GITHUB_REPOSITORY \
-    --svn-user=$SVN_USER \
-    --assets-dir=$ASSETS_DIRECTORY
+    --plugin-name="$PLUGIN_SLUG" \
+    --git-repo="$PLUGIN_GITHUB_REPOSITORY" \
+    --svn-user="$SVN_USER" \
+    --assets-dir="$ASSETS_DIRECTORY"
 }
 
 create_temporary_directory

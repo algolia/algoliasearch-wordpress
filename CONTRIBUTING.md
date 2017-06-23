@@ -28,6 +28,21 @@ You can login to Wordpress admin dashboard please do that through the [login](ht
 **username** : admin
 **password** : password
 
-### Need Help?
+## Need Help?
 
 * Let us have it! Don't hesitate to open a new issue on GitHub if you run into trouble or have any tips that we need to know and please be as specific as you can be when describing your issue so that we will have the needed information to reproduce and resolve the issue. **Please keep in mind that the more information about the issue you give us, the faster we will be at resolving it.**
+
+
+## Releasing
+
+To release, you need to first create a release branch by running:
+```bash
+bin/release-branch.sh
+```
+
+This script will output all the un-committed changes so that you can choose what kind of version bump you want to operate.
+
+Once the release branch is merged into master, you can update the plugin on wordpress.org by running the following:
+```bash
+bin/publish.sh
+```
