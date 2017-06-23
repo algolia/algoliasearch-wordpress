@@ -35,10 +35,10 @@ readonly PACKAGE_VERSION=$(< package.json grep version \
 
 # Here we need to update versions in files
 readonly SEMVER_REGEX=[[:digit:]]\.[[:digit:]]\.[[:digit:]]
-sed -i "s/\(Version:[[:space:]]+\)$SEMVER_REGEX/\1$PACKAGE_VERSION/g" ./algolia.php
-sed -i "s/\('ALGOLIA_VERSION',[[:space:]]+'\)$SEMVER_REGEX/\1$PACKAGE_VERSION/g" ./algolia.php
-sed -i "s/\(Stable tag:[[:space:]]+\)$SEMVER_REGEX/\1$PACKAGE_VERSION/" ./readme.txt
-sed -i "s/\(version:[[:space:]]+'\)$SEMVER_REGEX/\1$PACKAGE_VERSION/" ./docs/index.js
+sed -i "s/\(Version:           \)$SEMVER_REGEX/\1$PACKAGE_VERSION/g" ./algolia.php
+sed -i "s/\('ALGOLIA_VERSION', '\)$SEMVER_REGEX/\1$PACKAGE_VERSION/g" ./algolia.php
+sed -i "s/\(Stable tag: \)$SEMVER_REGEX/\1$PACKAGE_VERSION/" ./readme.txt
+sed -i "s/\(version: '\)$SEMVER_REGEX/\1$PACKAGE_VERSION/" ./docs/index.js
 
 if ! grunt; then
   echo "Failed to build dist files, aborting..."
