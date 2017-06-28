@@ -302,6 +302,7 @@ final class Algolia_Searchable_Posts_Index extends Algolia_Index
 			'post_type'   		    => $this->post_types,
 			'post_status' 		    => 'any', // Let the `should_index` take care of the filtering.
 			'suppress_filters'      => true,
+			'cache_results'  		=> false
 		) );
 		
 		return (int) $query->found_posts;
