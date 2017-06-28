@@ -299,9 +299,12 @@ final class Algolia_Searchable_Posts_Index extends Algolia_Index
 	 */
 	protected function get_re_index_items_count() {
 		$query = new WP_Query( array(
-			'post_type'   		    => $this->post_types,
-			'post_status' 		    => 'any', // Let the `should_index` take care of the filtering.
-			'suppress_filters'      => true,
+			'post_type'   		    	=> $this->post_types,
+			'post_status' 		    	=> 'any', // Let the `should_index` take care of the filtering.
+			'suppress_filters'      	=> true,
+			'cache_results'  			=> false,
+	        'lazy_load_term_meta'   	=> false,
+      		'update_post_term_cache' 	=> false
 		) );
 		
 		return (int) $query->found_posts;
@@ -315,13 +318,16 @@ final class Algolia_Searchable_Posts_Index extends Algolia_Index
 	 */
 	protected function get_items( $page, $batch_size ) {
 		$query = new WP_Query( array(
-			'post_type'      	  => $this->post_types,
-			'posts_per_page' 	  => $batch_size,
-			'post_status'    	  => 'any',
-			'order'          	  => 'ASC',
-			'orderby'        	  => 'ID',
-			'paged'			 	  => $page,
-			'suppress_filters' 	  => true,
+			'post_type'      	  		=> $this->post_types,
+			'posts_per_page' 	  		=> $batch_size,
+			'post_status'    	  		=> 'any',
+			'order'          	  		=> 'ASC',
+			'orderby'        	  		=> 'ID',
+			'paged'			 	  		=> $page,
+			'suppress_filters' 	  		=> true,
+			'cache_results'  			=> false,
+	        'lazy_load_term_meta'   	=> false,
+      		'update_post_term_cache' 	=> false
 		) );
 
 		return $query->posts;
