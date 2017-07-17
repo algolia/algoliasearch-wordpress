@@ -113,13 +113,13 @@ add_filter( 'algolia_search_order', function() {
 
 Your search page should now return results from oldest to newest one.
 
-You could also dynamically register switch ordering based on a `$_GET` parameter:
+You could also dynamically switch ordering based on a `$_GET` parameter:
 
 ```
 <?php
 
 add_filter( 'algolia_search_order_by', function( $attribute_name ) {
-	if ( isset( $_GET['orderby'] && $_GET['orderby'] === 'date-asc' ) {
+	if ( isset( $_GET['orderby'] ) && $_GET['orderby'] === 'date-asc' ) {
 		return 'post_date';
 	}
 
@@ -127,7 +127,7 @@ add_filter( 'algolia_search_order_by', function( $attribute_name ) {
 } );
 
 add_filter( 'algolia_search_order', function( $order ) {
-	if ( isset( $_GET['orderby'] && $_GET['orderby'] === 'date-asc' ) {
+	if ( isset( $_GET['orderby'] ) && $_GET['orderby'] === 'date-asc' ) {
 		return 'asc';
 	}
 
