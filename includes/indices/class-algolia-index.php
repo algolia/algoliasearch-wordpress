@@ -86,9 +86,49 @@ abstract class Algolia_Index
 	 *
 	 * @return array
 	 */
-	final public function search( $query, $args = null ) {
+	final public function search( $query, $args = null, $order_by = null, $order = 'desc' ) {
+
+	    if ( $order_by !== null ) {
+	        return $this->search_in_replica( $query, $args, $order_by, $order );
+        }
+
 		return $this->get_index()->search( $query, $args );
 	}
+
+    /**
+     * @param string $query
+     * @param array  $args
+     * @param string $order_by
+     * @param string $order
+     *
+     * @return array
+     */
+	private function search_in_replica( $query, $args, $order_by, $order = 'desc' ) {
+        $replica = $this->get_replica( $order_by, $order );
+        $replica_name = $replica->get_replica_index_name( $this );
+
+        $index = $this->client->initIndex( $replica_name );
+
+        return $index->search( $query, $args );
+    }
+
+    /**
+     * @param $attribute_name
+     * @param $order
+     *
+     * @return Algolia_Index_Replica
+     */
+    private function get_replica( $attribute_name, $order ) {
+        $replicas = $this->get_replicas();
+        foreach( $replicas as $replica ) {
+            /** @var Algolia_Index_Replica $replica */
+            if ( $replica->get_attribute_name() === $attribute_name && $replica->get_order() === $order ) {
+                return $replica;
+            }
+        }
+
+        throw new RuntimeException( sprintf( 'Unable to find replica for attribute "%s" with order "%s".', $attribute_name, $order ) );
+    }
 
 	/**
 	 * @param bool $flag
