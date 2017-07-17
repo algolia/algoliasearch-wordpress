@@ -180,6 +180,9 @@ class Algolia_Admin_Page_Settings
 	}
 
 	public function sanitize_application_id( $value ) {
+	    if ( $this->plugin->get_settings()->is_application_id_in_config() ) {
+	        $value = $this->plugin->get_settings()->get_application_id();
+        }
 		$value = sanitize_text_field( $value );
 
 		if ( empty( $value ) ) {
@@ -195,6 +198,9 @@ class Algolia_Admin_Page_Settings
 	}
 
 	public function sanitize_search_api_key( $value ) {
+        if ( $this->plugin->get_settings()->is_search_api_key_in_config() ) {
+            $value = $this->plugin->get_settings()->get_search_api_key();
+        }
 		$value = sanitize_text_field( $value );
 
 		if ( empty( $value ) ) {
@@ -209,6 +215,9 @@ class Algolia_Admin_Page_Settings
 	}
 
 	public function sanitize_api_key( $value ) {
+        if ( $this->plugin->get_settings()->is_api_key_in_config() ) {
+            $value = $this->plugin->get_settings()->get_api_key();
+        }
 		$value = sanitize_text_field( $value );
 
 		if ( empty( $value ) ) {
@@ -291,6 +300,10 @@ class Algolia_Admin_Page_Settings
      * @return array
      */
     public function sanitize_index_name_prefix( $value ) {
+        if ( $this->plugin->get_settings()->is_index_name_prefix_in_config() ) {
+            $value = $this->plugin->get_settings()->get_index_name_prefix();
+        }
+
         if ( $this->is_valid_index_name_prefix( $value ) ) {
             return $value;
         }
