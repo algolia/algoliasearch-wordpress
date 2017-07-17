@@ -1,3 +1,24 @@
+<a name="2.5.0"></a>
+# [2.5.0](https://github.com/algolia/algoliasearch-wordpress/compare/v2.4.0...v2.5.0) (2017-07-17)
+
+
+### Bug Fixes
+
+* **admin:** properly handle configuration in constants ([d07a801](https://github.com/algolia/algoliasearch-wordpress/commit/d07a801))
+* **indexing:** send un-escaped content to Algolia ([f89fefe](https://github.com/algolia/algoliasearch-wordpress/commit/f89fefe))
+
+
+### Features
+
+* **search:** add hooks to allow search on replica in the backend ([5b353ce](https://github.com/algolia/algoliasearch-wordpress/commit/5b353ce))
+
+
+### Performance Improvements
+
+* **indexing:** disable caching on posts retrieval when indexing ([519bf73](https://github.com/algolia/algoliasearch-wordpress/commit/519bf73))
+
+
+
 <a name="2.4.0"></a>
 # [2.4.0](https://github.com/algolia/algoliasearch-wordpress/compare/2.3.0...2.4.0) (2017-06-23)
 
