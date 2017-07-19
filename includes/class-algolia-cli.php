@@ -39,25 +39,27 @@ class Algolia_CLI extends \WP_CLI_Command {
 			WP_CLI::error( 'The configuration for this website does not allow to contact the Algolia API.' );
 		}
 
-		if ( ! isset( $args[0] ) && ! isset( $assoc_args['all'] ) ) {
+		$index_id = isset( $args[0] ) ? $args[0] : null;
+		$clear    = WP_CLI\Utils\get_flag_value( $assoc_args, 'clear' );
+		$all      = WP_CLI\Utils\get_flag_value( $assoc_args, 'all' );
+
+		if ( ! $index_id && ! $all ) {
 			WP_CLI::error( 'You need to either provide an index name or specify the --all argument to re-index all enabled indices.' );
 		}
 
-		if ( isset( $args[0] ) && isset( $assoc_args['all'] ) ) {
+		if ( $index_id && $all ) {
 			WP_CLI::error( 'You can not give both an index name and the --all parameter.' );
 		}
 
-		if ( $assoc_args['all'] ) {
+		if ( $all ) {
 			$indices = $this->plugin->get_indices( array( 'enabled' => true ) );
 		} else {
-			$index = $this->plugin->get_index( $args[0] );
+			$index = $this->plugin->get_index( $index_id );
 			if ( ! $index ) {
-				WP_CLI::error( sprintf( 'Index with id "%s" does not exist. Make sure you don\'t include the prefix.', $args[0] ) );
+				WP_CLI::error( sprintf( 'Index with id "%s" does not exist. Make sure you don\'t include the prefix.', $index_id ) );
 			}
 			$indices = array( $index );
 		}
-
-		$clear = isset( $assoc_args['clear'] );
 
 		foreach ( $indices as $index ) {
 			$this->do_reindex( $index, $clear );
