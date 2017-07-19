@@ -171,7 +171,7 @@ class Algolia_Utils
     }
 
     public static function remove_content_noise( $content ) {
-	    $noise_patterns = (array) apply_filters( 'algolia_strip_patterns', array(
+	    $noise_patterns = array(
             // strip out comments.
             "'<!--(.*?)-->'is",
             // strip out cdata.
@@ -189,12 +189,14 @@ class Algolia_Utils
             // strip out <pre> tags.
             "'<\s*pre[^>]*[^/]>(.*?)<\s*/\s*pre\s*>'is",
             "'<\s*pre\s*>(.*?)<\s*/\s*pre\s*>'is",
-        ) );
+        );
 
         // If there is ET builder (Divi), remove shortcodes.
         if ( function_exists( 'et_pb_is_pagebuilder_used' ) ) {
             $noise_patterns[] = '/\[\/?et_pb.*?\]/';
         }
+
+        $noise_patterns = (array) apply_filters( 'algolia_strip_patterns', $noise_patterns );
 
 	    foreach ( $noise_patterns as $pattern ) {
 	        $content = preg_replace( $pattern, '', $content );
