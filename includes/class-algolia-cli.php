@@ -11,7 +11,7 @@ class Algolia_CLI extends \WP_CLI_Command {
 	private $plugin;
 
 	public function __construct() {
-		$this->plugin = \Algolia_Plugin::get_instance();
+		$this->plugin = Algolia_Plugin::get_instance();
 	}
 
 	/**
@@ -36,15 +36,15 @@ class Algolia_CLI extends \WP_CLI_Command {
 	 */
 	public function reindex( $args, $assoc_args ) {
 		if ( ! $this->plugin->get_api()->is_reachable() ) {
-			\WP_CLI::error( 'The configuration for this website does not allow to contact the Algolia API.' );
+			WP_CLI::error( 'The configuration for this website does not allow to contact the Algolia API.' );
 		}
 
 		if ( ! isset( $args[0] ) && ! isset( $assoc_args['all'] ) ) {
-			\WP_CLI::error( 'You need to either provide an index name or specify the --all argument to re-index all enabled indices.' );
+			WP_CLI::error( 'You need to either provide an index name or specify the --all argument to re-index all enabled indices.' );
 		}
 
 		if ( isset( $args[0] ) && isset( $assoc_args['all'] ) ) {
-			\WP_CLI::error( 'You can not give both an index name and the --all parameter.' );
+			WP_CLI::error( 'You can not give both an index name and the --all parameter.' );
 		}
 
 		if ( $assoc_args['all'] ) {
@@ -52,7 +52,7 @@ class Algolia_CLI extends \WP_CLI_Command {
 		} else {
 			$index = $this->plugin->get_index( $args[0] );
 			if ( ! $index ) {
-				\WP_CLI::error( sprintf( 'Index with id "%s" does not exist. Make sure you don\'t include the prefix.', $args[0] ) );
+				WP_CLI::error( sprintf( 'Index with id "%s" does not exist. Make sure you don\'t include the prefix.', $args[0] ) );
 			}
 			$indices = array( $index );
 		}
@@ -76,12 +76,12 @@ class Algolia_CLI extends \WP_CLI_Command {
 
 		if ( $total_pages === 0 ) {
 			$index->re_index( 1 );
-			\WP_CLI::success( sprintf( 'Index %s was created but no entries were sent.', $index->get_name() ) );
+			WP_CLI::success( sprintf( 'Index %s was created but no entries were sent.', $index->get_name() ) );
 
 			return;
 		}
 
-		$progress = \WP_CLI\Utils\make_progress_bar( sprintf( 'Processing %s pages of results.', $total_pages ), $total_pages );
+		$progress = WP_CLI\Utils\make_progress_bar( sprintf( 'Processing %s pages of results.', $total_pages ), $total_pages );
 
 		$page = 1;
 		do {
@@ -91,6 +91,6 @@ class Algolia_CLI extends \WP_CLI_Command {
 
 		$progress->finish();
 
-		\WP_CLI::success( sprintf( 'Indexed "%s" pages of results inside index "%s"', $total_pages, $index->get_name() ) );
+		WP_CLI::success( sprintf( 'Indexed "%s" pages of results inside index "%s"', $total_pages, $index->get_name() ) );
 	}
 }
