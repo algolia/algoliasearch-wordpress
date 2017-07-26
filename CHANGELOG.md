@@ -1,3 +1,18 @@
+<a name="2.6.0"></a>
+# [2.6.0](https://github.com/algolia/algoliasearch-wordpress/compare/v2.5.0...v2.6.0) (2017-07-26)
+
+
+### Bug Fixes
+
+* **wp-cli:** Fixes PHP notice in WP-CLI when 'all' parameter isn't provided ([c528a3f](https://github.com/algolia/algoliasearch-wordpress/commit/c528a3f))
+
+
+### Features
+
+* **indexing:** add a filter to customize tags to remove from content ([fed2bf4](https://github.com/algolia/algoliasearch-wordpress/commit/fed2bf4))
+
+
+
 <a name="2.5.0"></a>
 # [2.5.0](https://github.com/algolia/algoliasearch-wordpress/compare/v2.4.0...v2.5.0) (2017-07-17)
 
