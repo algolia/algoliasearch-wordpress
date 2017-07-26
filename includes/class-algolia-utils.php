@@ -196,6 +196,8 @@ class Algolia_Utils
             $noise_patterns[] = '/\[\/?et_pb.*?\]/';
         }
 
+        $noise_patterns = (array) apply_filters( 'algolia_strip_patterns', $noise_patterns );
+
 	    foreach ( $noise_patterns as $pattern ) {
 	        $content = preg_replace( $pattern, '', $content );
         }
