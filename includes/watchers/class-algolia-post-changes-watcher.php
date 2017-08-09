@@ -1,5 +1,7 @@
 <?php
 
+use AlgoliaSearch\AlgoliaException;
+
 class Algolia_Post_Changes_Watcher implements Algolia_Changes_Watcher
 {
 	/**
@@ -46,7 +48,11 @@ class Algolia_Post_Changes_Watcher implements Algolia_Changes_Watcher
             return;
         }
 
-		$this->index->sync( $post );
+        try {
+            $this->index->sync( $post );
+        } catch ( AlgoliaException $exception ) {
+            error_log( $exception->getMessage() );
+        }
 	}
 
     /**
@@ -58,7 +64,11 @@ class Algolia_Post_Changes_Watcher implements Algolia_Changes_Watcher
             return;
         }
 
-        $this->index->delete_item( $post );
+        try {
+            $this->index->delete_item( $post );
+        } catch ( AlgoliaException $exception ) {
+            error_log( $exception->getMessage() );
+        }
     }
 
 	/**
@@ -70,6 +80,7 @@ class Algolia_Post_Changes_Watcher implements Algolia_Changes_Watcher
 		if ( '_thumbnail_id' !== $meta_key ) {
 			return;
 		}
-		$this->sync_item( $object_id );
+
+        $this->sync_item( $object_id );
 	}
 }

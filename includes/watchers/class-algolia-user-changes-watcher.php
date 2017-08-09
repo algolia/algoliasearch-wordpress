@@ -1,5 +1,7 @@
 <?php
 
+use AlgoliaSearch\AlgoliaException;
+
 class Algolia_User_Changes_Watcher implements Algolia_Changes_Watcher
 {
 	/**
@@ -46,7 +48,11 @@ class Algolia_User_Changes_Watcher implements Algolia_Changes_Watcher
 			return;
 		}
 
-		$this->index->sync( $user );
+        try {
+            $this->index->sync( $user );
+        } catch ( AlgoliaException $exception ) {
+            error_log( $exception->getMessage() );
+        }
 	}
 
     /**
@@ -59,7 +65,11 @@ class Algolia_User_Changes_Watcher implements Algolia_Changes_Watcher
             return;
         }
 
-        $this->index->delete_item( $user );
+        try {
+            $this->index->delete_item( $user );
+        } catch ( AlgoliaException $exception ) {
+            error_log( $exception->getMessage() );
+        }
     }
 
 	/**

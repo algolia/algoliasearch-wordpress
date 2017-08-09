@@ -1,5 +1,7 @@
 <?php
 
+use AlgoliaSearch\AlgoliaException;
+
 class Algolia_Term_Changes_Watcher implements Algolia_Changes_Watcher
 {
 	/**
@@ -41,7 +43,11 @@ class Algolia_Term_Changes_Watcher implements Algolia_Changes_Watcher
 			return;
 		}
 
-		$this->index->sync( $term );
+        try {
+            $this->index->sync( $term );
+        } catch ( AlgoliaException $exception ) {
+            error_log( $exception->getMessage() );
+        }
 	}
 
     /**
@@ -58,7 +64,6 @@ class Algolia_Term_Changes_Watcher implements Algolia_Changes_Watcher
         foreach ( $terms_to_sync as $term_id ) {
             $this->sync_item( $term_id );
         }
-
     }
 
     /**
@@ -72,6 +77,10 @@ class Algolia_Term_Changes_Watcher implements Algolia_Changes_Watcher
             return;
         }
 
-		$this->index->delete_item( $deleted_term );
+        try {
+            $this->index->delete_item( $deleted_term );
+        } catch ( AlgoliaException $exception ) {
+            error_log( $exception->getMessage() );
+        }
 	}
 }
