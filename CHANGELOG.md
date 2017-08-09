@@ -1,3 +1,13 @@
+<a name="2.6.1"></a>
+## [2.6.1](https://github.com/algolia/algoliasearch-wordpress/compare/2.6.0...2.6.1) (2017-08-09)
+
+
+### Bug Fixes
+
+* **indexing:** avoid throwing fatal error in admin ([966d55c](https://github.com/algolia/algoliasearch-wordpress/commit/966d55c))
+
+
+
 <a name="2.6.0"></a>
 # [2.6.0](https://github.com/algolia/algoliasearch-wordpress/compare/v2.5.0...v2.6.0) (2017-07-26)
 
