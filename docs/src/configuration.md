@@ -32,14 +32,16 @@ If you provided the correct keys, a green success message will appear, otherwise
 
 <div class="alert alert-warning">For security reasons, the Search-Only API key should only have the `search` ACL has it will be display publicly in your html templates.</div>
 
+Once you have correctly provided WordPress with your Algolia keys you will now see that the Algolia Search menu entry has now expanded:
 
-## Indexing
+![expanded menu](img/configuration/menu-expanded.png)
 
-Once you have correctly provided WordPress with your Algolia keys as explained in [the previous step](#algolia-credentials), you will now see that the Algolia Search menu entry has now expanded:
 
-![expanded menu](img/configuration/menu-exanded.png)
+## Autocomplete dropdown menu
 
-For now, lets head to the `Indexing` entry where you will be able to tell WordPress which indices you want to synchronize with Algolia.
+
+
+Now, lets head to the `Autocomplete` entry where you will be able to tell WordPress which indices you want to synchronize with Algolia.
 
 You should now be facing a list of checkboxes like:
 
