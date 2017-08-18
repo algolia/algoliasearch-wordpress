@@ -6,7 +6,7 @@ layout: page.html
 
 ## Introduction
 
-Actions are a way to execute something at a given point in time or after something happened.
+Actions are a way to execute code at a given point in time throughout the lifecyle of your WordPress website.
 
 ## Action Example
 
@@ -25,7 +25,7 @@ add_action( 'algolia_posts_index_post_updated', 'mb_log_post_index_updated' );
 
 Note that an action does not need to return anything. If it does, it will be ignored anyway.
 
-In this example, we would simply log an array representation of the post that has been re-indexed.
+In this example, we would log an array representation of the post that has been re-indexed.
 
 ## Actions Reference
 
