@@ -1,3 +1,13 @@
+<a name="2.7.0"></a>
+# [2.7.0](https://github.com/algolia/algoliasearch-wordpress/compare/2.6.1...2.7.0) (2017-09-04)
+
+
+### Features
+
+* **indexing:** trap content outputted by plugins ([dad0705](https://github.com/algolia/algoliasearch-wordpress/commit/dad0705))
+
+
+
 <a name="2.6.1"></a>
 ## [2.6.1](https://github.com/algolia/algoliasearch-wordpress/compare/2.6.0...2.6.1) (2017-08-09)
 
