@@ -139,3 +139,11 @@ add_filter( 'algolia_should_index_searchable_post', 'exclude_post_types', 10, 2 
 ## Queue processing
 
 Every time a change of your content is detected, see [previous section](#triggers), we synchronize the item.
+
+You can disable automatic sychronization by removing all the watchers using the `algolia_changes_watchers` filter:
+
+```php
+add_filter( 'algolia_changes_watchers', function() {
+    return array();
+} );
+```
