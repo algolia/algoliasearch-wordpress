@@ -3,6 +3,7 @@
 **Tags:** Search, Algolia, Autocomplete, instant-search, relevant search, search highlight, faceted search, find-as-you-type search, suggest, search by category, ajax search, better search, custom search  
 **Requires at least:** 4.4  
 **Tested up to:** 4.8  
+**Requires PHP:** 5.3  
 **Stable tag:** 2.7.0  
 **License:** MIT License, GNU General Public License v2.0  
 
