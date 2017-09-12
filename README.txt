@@ -16,7 +16,8 @@ The plugin provides relevant search results in milliseconds, ensuring that your 
 = About pricing =
 
 This plugin relies on the [Algolia service](https://www.algolia.com/) which requires you to [create an account here](https://www.algolia.com/users/sign_up).
-Algolia offers its Search as a Service provider on a incremental payment program, including a free Hacker Plan which includes 10,000 records & 100,000 operations per month. Beyond that, plans start at $49/month.
+Algolia offers its Search as a Service provider on a incremental payment program, including a free Community Plan which includes 10,000 records & 100,000 indexing operations per month. 
+Beyond that, plans start at $35/month.
 
 Note that there isn’t a direct correlation between the number of posts in WordPress and the number of records in Algolia.
 Also note that we only offer support to paying plans.
