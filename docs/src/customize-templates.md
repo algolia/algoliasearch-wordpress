@@ -22,8 +22,8 @@ By default, the plugin will look for the template files in your theme in differe
 
 1. In the root folder of your theme, e.g. `wp-content/themes/yourtheme/autocomplete.php`
 1. In a folder named `algolia`, e.g. `wp-content/themes/yourtheme/algolia/autocomplete.php`
-1. In a custom defined directory like explained in the (Customize template folder name section)[#customize-templates-folder-name]
-1. At custom locations like explained in (Customize template names and location)[#customize-template-names-and-location]
+1. In a custom defined directory like explained in the [Customize template folder name section](#customize-templates-folder-name)
+1. At custom locations like explained in [Customize template names and location](#customize-template-names-and-location)
 1. In the plugin's `templates` folder if none of the preceeding matched.
 
 <div class="alert alert-warning">
