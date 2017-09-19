@@ -45,7 +45,7 @@ This will also disable tasks being generated for that content type.
 Here is the list of all available Filters.
 
 | Filter Name                                              | Params                                                                                                      |
-|:---------------------------------------------------------|:------------------------------------------------------------------------------------------------------------|
+|----------------------------------------------------------|-------------------------------------------------------------------------------------------------------------|
 | algolia_autocomplete_config                              | $config                                                                                                     |
 | algolia_autocomplete_input_selector                      | string $input_selector, defaults to "input[name='s']:not('.no-autocomplete')"                               |
 | algolia_post_types_blacklist                             | array $blacklist, defaults to array( 'nav_menu_item', revision' )                                           |
@@ -89,4 +89,5 @@ Here is the list of all available Filters.
 | algolia_post_images_sizes                                | array $sizes (default: only the 'thumbnail' size)                                                           |
 | algolia_get_post_images                                  | array $images (default: only the info about the 'thumbnail' size)                                           |
 | algolia_get_synced_indices_ids                           | array $ids                                                                                                  |
-| algolia_strip_patterns                                   | array $noise_patterns (default: regular expressions to strip comments, cdata, script, style, code, and pre) | 
+| algolia_strip_patterns                                   | array $noise_patterns (default: regular expressions to strip comments, cdata, script, style, code, and pre) |
+| algolia_searchable_post_types                            | array $post_types                                                                                           |
