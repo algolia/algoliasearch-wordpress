@@ -175,6 +175,7 @@ class Algolia_Plugin {
 
 		// Add a searchable posts index.
 		$searchable_post_types = get_post_types( array( 'exclude_from_search' => false ), 'names' );
+		$searchable_post_types = (array) apply_filters( 'algolia_searchable_post_types', $searchable_post_types );
 		$this->indices[] = new Algolia_Searchable_Posts_Index( $searchable_post_types );
 
 		// Add one posts index per post type.

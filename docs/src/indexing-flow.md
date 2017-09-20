@@ -47,7 +47,7 @@ Indeed, before each post, term and user indexing, we decide if the item should b
 **Default decisions:**
 
 | Content Type    | Rule                                                                                                         |
-|:----------------|:-------------------------------------------------------------------------------------------------------------|
+|-----------------|--------------------------------------------------------------------------------------------------------------|
 | Searchable Post | We only index a post when it is in the `published` state and if its post type is not `excluded_from_search`. |
 | Post            | We only index a post when it is in the `published` state if it has no password.                              |
 | Term            | We only index a term if it has been assigned to at least 1 post (count > 0).                                 |
@@ -134,7 +134,19 @@ function exclude_post_types( $should_index, WP_Post $post )
 add_filter( 'algolia_should_index_searchable_post', 'exclude_post_types', 10, 2 );
 ```
 
+**Add post type to `searchable_posts_index`**
 
+By default, the plugin will only index post types that are not flagged as excluded from search.
+
+If you want to manually determine the post types you want to index, you can use the `algolia_searchable_post_types` filter:
+
+```php
+add_filter( 'algolia_searchable_post_types', function( $post_types ) {
+    $post_types[] = 'custom_post_type';
+
+    return $post_types;
+} );
+```
 
 ## Queue processing
 
