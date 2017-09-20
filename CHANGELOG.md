@@ -1,3 +1,14 @@
+<a name="2.8.0"></a>
+# [2.8.0](https://github.com/algolia/algoliasearch-wordpress/compare/2.7.0...2.8.0) (2017-09-20)
+
+
+### Features
+
+* **indexing:** introduce a way to filter indexed searchable post types ([693ecfa](https://github.com/algolia/algoliasearch-wordpress/commit/693ecfa))
+* **readme:** Adds minimum required PHP version to READMEs ([aabd4ef](https://github.com/algolia/algoliasearch-wordpress/commit/aabd4ef))
+
+
+
 <a name="2.7.0"></a>
 # [2.7.0](https://github.com/algolia/algoliasearch-wordpress/compare/2.6.1...2.7.0) (2017-09-04)
 
