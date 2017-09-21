@@ -23,6 +23,8 @@ For that reason we introduced our custom logs like explained in the previous sec
 
 When you are unable to debug your issues with the provided logs, it probably means you have PHP exceptions that are being raised behind the scenes.
 
+<div class="alert alert-warning">For performances reasons, logging will only occur if `WP_DEBUG` is defined to `true`.</div>
+
 **To access your PHP logs you should:**
 
 1. Turn WordPress debug mode on:
@@ -36,8 +38,6 @@ When you are unable to debug your issues with the provided logs, it probably mea
 	define( 'WP_DEBUG_LOG', true );
 	// [...]
 	```
-
-	<div class="alert alert-warning">If these lines are already there, be sure they are defined to `true`.</div>
 
 2. Re-try the operations you expect to go wrong, like hitting the <span class="wp-btn">Process queue</span> button on the Indexing page of the plugin.
 3. Check what has been logged in the `wp-content/debug.log` file.
