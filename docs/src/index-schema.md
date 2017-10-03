@@ -30,6 +30,7 @@ By default here are the attributes we push to Algolia for every post:
 | post_date         | The first publication date as a unix timestamp.                                                |
 | post_modified     | The last time the post was updated as a unix timestamp.                                        |
 | comment_count     | The number of comments for the post.                                                           |
+| menu_order        | Position in the menu.                                                                          |
 | post_author       | The post author as an array containing the `author_ID`, the `display_name` and the `user_url`. |
 | thumbnail_url     | The url to the featured image of the post.                                                     |
 | permalink         | The url to the public page of the post.                                                        |
