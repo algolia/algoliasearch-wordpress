@@ -35,19 +35,32 @@ Once you have correctly provided WordPress with your Algolia keys you will now s
 </p>
 
 
-## Indexing
+## Autocomplete & Indexing
 
-Before you can search anything with Algolia, you need to synchronize your data.
+The easiest way to offer your users a nice *find-as-you-type* search experience is through our autocomplete feature, which shows a dropdown menu below the search bar.
 
-Now, let's head to the `Autocomplete` submenu where you will be able to tell WordPress what content you want to synchronize with Algolia.
+![autocomplete preview](img/configuration/autocomplete-preview.png)
 
-You should now be facing a list of elements like:
+Now, let's head to the `Autocomplete` submenu. To enable the Autocomplete feature, tick the box above the configuration table:
+
+![autocomplete form](img/configuration/autocomplete-form.png)
+
+Before you can search anything with Algolia, you need to synchronize your data. You should now be facing a list of elements like:
 
 ![indices form](img/configuration/indices-form.png)
 
 <div class="alert alert-warning">Please note that if you have already installed third party plugins to your WordPress installation, you might have more entries than in the above screenshot which is perfectly fine.</div>
 
 The Algolia Search plugin uses WordPress core features such as **Custom Post Types**, **Custom Taxonomies** or **Users** to find potential content types to index. Any plugin creating new *Post Types* or *Taxonomies* will automatically be listed here an eligible for synchronization with Algolia.
+
+
+| Setting&nbsp;name         | Description                                                                                                                                                                  |
+|:--------------------------|:-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| **Enable**                | Make search results for this index available through the autocomplete.                                                                                                       |
+| **Index**                 | The type of data <br> And the name of the index name in Algolia dashboard |
+| **Max.&nbsp;Suggestions** | The maximum number of suggestions to display for this index. Only the `n` most relevant search results will be displayed for this index, and the others will be discarded.   |
+| **Position**              | Determines the display position of suggestions in relation to the other autocomplete enabled indices. The bigger the position, the lower the section will be in the display. |
+
 
 Let's proceed by choosing the indices you want to make searchable on your website, for example **Posts**, **Pages** and **Users**. Simply check the corresponding checkboxes and click on <span class="wp-btn">Save Changes</span>.
 
@@ -57,37 +70,6 @@ Green validation messages should confirm that the selected indices are about to 
 
 Click on the <span class="wp-btn">Index now</span> button to quickly send your content to Algolia. After that everything will be kept in sync automatically.
 
-
-## Autocomplete
-
-Now that Algolia knows about your content, it is time to offer your users a nice *find-as-you-type* search experience.
-First of all, here is the search experience you will get out of the box at the end of this section:
-
-![autocomplete preview](img/configuration/autocomplete-preview.png)
-
-To enable the Autocomplete feature, tick the box above the configuration table:
-
-![autocomplete form](img/configuration/autocomplete-form.png)
-
-You are able to enable or disable the autocomplete feature at any time by simply checking or un-checking the checkbox.
-For now, check the box!
-
-Once enabled, you should now see that the form has expanded as follow:
-
-![autocomplete form expanded](img/configuration/autocomplete-form-expanded.png)
-
-From here there are a couple of settings that you can customize.
-
-| Setting&nbsp;name         | Description                                                                                                                                                                  |
-|:--------------------------|:-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| **Enable**                | Make search results for this index available through the autocomplete.                                                                                                       |
-| **Index**                 | The type of data <br> And the name of the index name in Algolia dashboard |
-| **Max.&nbsp;Suggestions** | The maximum number of suggestions to display for this index. Only the `n` most relevant search results will be displayed for this index, and the others will be discarded.   |
-| **Position**              | Determines the display position of suggestions in relation to the other autocomplete enabled indices. The bigger the position, the lower the section will be in the display. |
-
-Let's keep the default settings and enable all 3 content types for the *find-as-you-type* autocomplete experience. Do not forget to hit the <span class="wp-btn">Save Changes</span> buttons once your finished.
-
-<div class="alert alert-info">You should now be able to use the Algolia powered autocomplete on your website.</div>
 
 ## Search Page
 
