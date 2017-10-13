@@ -1,3 +1,13 @@
+<a name="2.8.1"></a>
+## [2.8.1](https://github.com/algolia/algoliasearch-wordpress/compare/2.8.0...2.8.1) (2017-10-13)
+
+
+### Bug Fixes
+
+* **indexing:** send unescaped terms to Algolia ([d85815f](https://github.com/algolia/algoliasearch-wordpress/commit/d85815f))
+
+
+
 <a name="2.8.0"></a>
 # [2.8.0](https://github.com/algolia/algoliasearch-wordpress/compare/2.7.0...2.8.0) (2017-09-20)
 
