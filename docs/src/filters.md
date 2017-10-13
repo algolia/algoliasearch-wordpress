@@ -93,3 +93,4 @@ Here is the list of all available Filters.
 | algolia_get_synced_indices_ids                           | array $ids                                                                                                  |
 | algolia_strip_patterns                                   | array $noise_patterns (default: regular expressions to strip comments, cdata, script, style, code, and pre) |
 | algolia_searchable_post_types                            | array $post_types                                                                                           |
+| algolia_native_search_index_id                           | string $index_id                                                                                            |
