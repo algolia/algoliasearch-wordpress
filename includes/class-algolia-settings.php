@@ -160,10 +160,10 @@ class Algolia_Settings
 	}
 
 	/**
-	 * @return bool
+	 * @return string
 	 */
 	public function get_native_search_index_id() {
-		return 'searchable_posts';
+	    return (string) apply_filters( 'algolia_native_search_index_id', 'searchable_posts' );
 	}
 
 	/**

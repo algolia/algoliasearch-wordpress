@@ -165,7 +165,7 @@ function vm_posts_index_settings( array $settings ) {
 }
 ```
 
-<div class="alert alert-warning">After making changes to settings, you need to re-index the indices. To do so, simply click on the `Re-index everything` button on the `Indexing` admin page of this plugin:</div>
+<div class="alert alert-warning">After making changes to settings, you need to re-index the indices. To do so, simply click on the `Re-index` button on the admin page of this plugin:</div>
 
 ![Re-index everything button](img/custom-attributes/re-index-everything.png)
 
@@ -173,49 +173,7 @@ Your data is now safely stored in Algolia, used in the ranking formula but un-re
 
 ## Sync data with Algolia
 
-We now have everything ready, the only missing part is to sync the posts with Algolia.
-
-2 possible ways to achive this would be:
-
-1. Listen for the WordPress `updated_post_meta` action hook, and queue a `sync_post` task every time a new visit has been noticed
-2. Schedule a re-index task at a given interval
-
-In this case, we certainly do not want to trigger a sync task every time a visitor accesses a page of your website. So let's follow the second path.
-
-```php
-<?php
-
-// Queues re-indexation of every post type.
-function vm_re_index_posts() {
-	/** @var Algolia_Plugin $algolia */
-	global $algolia;
-
-	$task_queue = $algolia->get_task_queue();
-
-	$indices = $algolia->get_indices( array(
-		'enabled' => true,
-		'contains' => 'posts',
-	) );
-	foreach ( $indices as $index ) {
-		$task_queue->queue( 're_index_items', array( 'index_id' => $index->get_id() ) );
-	}
-}
-// This action is required for wp_schedule_event binding.
-add_action( 'vm_re_index_posts', 'vm_re_index_posts' );
-
-
-// Registers the recurring vm_re_index_posts event.
-function wp_register_re_index_posts() {
-	if ( ! wp_next_scheduled( 'vm_re_index_posts' ) ) {
-		wp_schedule_event( time(), 'daily', 'vm_re_index_posts' );
-	}
-}
-
-// Only register the event on WordPress init.
-add_action( 'init', 'wp_register_re_index_posts' );
-```
-
-We now have a fully functional plugin that will force a re-indexation of all post types every day.
+To push your page visits along with your records to Algolia, the easiest is to hit the `re-index` button from the admin interface.
 
 ## Complete Plugin Code
 
@@ -274,36 +232,5 @@ function vm_posts_index_settings( array $settings ) {
 }
 
 add_filter( 'algolia_posts_index_settings', 'vm_posts_index_settings' );
-
-
-// Queues re-indexation of every post type.
-function vm_re_index_posts() {
-	/** @var Algolia_Plugin $algolia */
-	global $algolia;
-
-	$task_queue = $algolia->get_task_queue();
-
-	$indices = $algolia->get_indices( array(
-		'enabled' => true,
-		'contains' => 'posts',
-	) );
-	foreach ( $indices as $index ) {
-		$task_queue->queue( 're_index_items', array( 'index_id' => $index->get_id() ) );
-	}
-}
-// This action is required for wp_schedule_event binding.
-add_action( 'vm_re_index_posts', 'vm_re_index_posts' );
-
-
-// Registers the recurring vm_re_index_posts event.
-function wp_register_re_index_posts() {
-	if ( ! wp_next_scheduled( 'vm_re_index_posts' ) ) {
-		wp_schedule_event( time(), 'daily', 'vm_re_index_posts' );
-	}
-}
-
-// Only register the event on WordPress init.
-add_action( 'init', 'wp_register_re_index_posts' );
-
 
 ```

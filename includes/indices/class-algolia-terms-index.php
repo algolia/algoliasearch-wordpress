@@ -56,7 +56,7 @@ final class Algolia_Terms_Index extends Algolia_Index
 		$record['objectID'] = $item->term_id;
 		$record['term_id'] = $item->term_id;
 		$record['taxonomy'] = $item->taxonomy;
-		$record['name'] = $item->name;
+		$record['name'] = html_entity_decode( $item->name );
 		$record['description'] = $item->description;
 		$record['slug'] = $item->slug;
 		$record['posts_count'] = (int) $item->count;
