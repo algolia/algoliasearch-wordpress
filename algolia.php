@@ -41,9 +41,13 @@ if ( ! defined( 'ALGOLIA_PATH' ) ) {
  * I18n.
  */
 function algolia_load_textdomain() {
+    $locale = apply_filters('plugin_locale', get_locale(), 'algolia');
+
+    load_textdomain('algolia', WP_LANG_DIR . '/algolia/algolia-' . $locale . '.mo');
 	load_plugin_textdomain( 'algolia', false, plugin_basename( dirname( __FILE__ ) ) . '/languages/' );
 }
-add_action( 'plugins_loaded', 'algolia_load_textdomain' );
+
+add_action( 'init', 'algolia_load_textdomain' );
 
 require_once ALGOLIA_PATH . 'classmap.php';
 
