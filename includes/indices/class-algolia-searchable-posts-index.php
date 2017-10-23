@@ -80,6 +80,10 @@ final class Algolia_Searchable_Posts_Index extends Algolia_Index
         $removed = remove_filter( 'the_content', 'wptexturize', 10 );
 
         $post_content = apply_filters( 'the_content', $post->post_content );
+		
+	if ( !empty( $shared_attributes[ 'content' ] ) ) {
+		$post_content .= apply_filters( 'the_content', $shared_attributes[ 'content' ] );
+	}
 
         if ( $removed === true ) {
             add_filter( 'the_content', 'wptexturize', 10 );
