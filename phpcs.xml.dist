@@ -13,6 +13,8 @@
 
  <arg name="colors" />
 
+ <rule ref="WordPress"></rule>
+
  <config name="testVersion" value="5.3-"/>
  <rule ref="PHPCompatibility"></rule>
 
