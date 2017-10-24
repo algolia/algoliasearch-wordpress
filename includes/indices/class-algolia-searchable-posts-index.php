@@ -77,13 +77,11 @@ final class Algolia_Searchable_Posts_Index extends Algolia_Index
 	private function get_post_records( WP_Post $post ) {
         $shared_attributes = $this->get_post_shared_attributes( $post );
 
-        $removed = remove_filter( 'the_content', 'wptexturize', 10 );
-
-        $post_content = apply_filters( 'the_content', $post->post_content );
+		$removed = remove_filter( 'the_content', 'wptexturize', 10 );
 		
-	if ( !empty( $shared_attributes[ 'content' ] ) ) {
-		$post_content .= apply_filters( 'the_content', $shared_attributes[ 'content' ] );
-	}
+
+		$post_content = apply_filters( 'algolia_searchable_post_content', $post->post_content );
+		$post_content = apply_filters( 'the_content', $post_content );
 
         if ( $removed === true ) {
             add_filter( 'the_content', 'wptexturize', 10 );
