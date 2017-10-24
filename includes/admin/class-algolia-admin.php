@@ -130,7 +130,7 @@ class Algolia_Admin {
 			$total_pages = $index->get_re_index_max_num_pages();
 
 			ob_start();
-			if ( $page <= $total_pages || $total_pages === 0 ) {
+			if ( $page <= $total_pages || 0 === $total_pages ) {
 				$index->re_index( $page );
 			}
 			ob_end_clean();

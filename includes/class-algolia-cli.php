@@ -73,14 +73,16 @@ class Algolia_CLI extends \WP_CLI_Command {
 	private function do_reindex( Algolia_Index $index, $clear ) {
 
 		if ( $clear ) {
+			/* translators: the placeholder will contain the name of the index. */
 			WP_CLI::log( sprintf( __( 'About to clear index %s...', 'algolia' ), $index->get_name() ) );
 			$index->clear();
+			/* translators: the placeholder will contain the name of the index. */
 			WP_CLI::success( sprintf( __( 'Correctly cleared index "%s".', 'algolia' ), $index->get_name() ) );
 		}
 
 		$total_pages = $index->get_re_index_max_num_pages();
 
-		if ( $total_pages === 0 ) {
+		if ( 0 === $total_pages ) {
 			$index->re_index( 1 );
 			WP_CLI::success( sprintf( 'Index %s was created but no entries were sent.', $index->get_name() ) );
 

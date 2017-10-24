@@ -1,7 +1,7 @@
 
 <div class="input-radio">
 	<label>
-		<input type="radio" value="native" name="algolia_override_native_search" <?php if ( $value === 'native' ) :
+		<input type="radio" value="native" name="algolia_override_native_search" <?php if ( 'native' === $value ) :
 ?>checked<?php endif; ?>>
 		<?php esc_html_e( 'Do not use Algolia', 'algolia' ); ?>
 	</label>
@@ -13,7 +13,7 @@
 	<label>
 		<input type="radio" value="backend" name="algolia_override_native_search" 
 		<?php
-		if ( $value === 'backend' ) :
+		if ( 'backend' === $value ) :
 ?>
 checked<?php endif; ?>>
 		<?php esc_html_e( 'Use Algolia in the backend', 'algolia' ); ?>
@@ -27,7 +27,7 @@ checked<?php endif; ?>>
 	<label>
 		<input type="radio" value="instantsearch" name="algolia_override_native_search" 
 		<?php
-		if ( $value === 'instantsearch' ) :
+		if ( 'instantsearch' === $value ) :
 ?>
 checked<?php endif; ?>>
 		<?php esc_html_e( 'Use Algolia with Instantsearch.js', 'algolia' ); ?>

@@ -326,7 +326,7 @@ class Algolia_Admin_Page_Settings {
 	 * @return string
 	 */
 	public function sanitize_powered_by_enabled( $value ) {
-		return $value === 'no' ? 'no' : 'yes';
+		return 'no' === $value ? 'no' : 'yes';
 	}
 
 	/**

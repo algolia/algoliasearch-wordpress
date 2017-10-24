@@ -230,14 +230,14 @@ class Algolia_Settings {
 	public function get_api_is_reachable() {
 		$enabled = get_option( 'algolia_api_is_reachable', 'no' );
 
-		return $enabled === 'yes';
+		return 'yes' === $enabled;
 	}
 
 	/**
 	 * @param bool $flag
 	 */
 	public function set_api_is_reachable( $flag ) {
-		$value = (bool) $flag === true ? 'yes' : 'no';
+		$value = (bool) true === $flag ? 'yes' : 'no';
 		update_option( 'algolia_api_is_reachable', $value );
 	}
 
@@ -247,7 +247,7 @@ class Algolia_Settings {
 	public function is_powered_by_enabled() {
 		$enabled = get_option( 'algolia_powered_by_enabled', 'yes' );
 
-		return $enabled === 'yes';
+		return 'yes' === $enabled;
 	}
 
 	public function enable_powered_by() {

@@ -87,7 +87,7 @@ abstract class Algolia_Index {
 	 */
 	final public function search( $query, $args = null, $order_by = null, $order = 'desc' ) {
 
-		if ( $order_by !== null ) {
+		if ( null !== $order_by ) {
 			return $this->search_in_replica( $query, $args, $order_by, $order );
 		}
 
@@ -272,14 +272,14 @@ abstract class Algolia_Index {
 			$index_exists = false;
 		}
 
-		if ( $index_exists === true ) {
+		if ( true === $index_exists ) {
 
-			if ( $clear_if_existing === true ) {
+			if ( true === $clear_if_existing ) {
 				$index->clearIndex();
 			}
 
 			$force_settings_update = (bool) apply_filters( 'algolia_should_force_settings_update', false, $this->get_id() );
-			if ( $force_settings_update === false ) {
+			if ( false === $force_settings_update ) {
 				// No need to go further in this case.
 				// We don't change anything when the index already exists.
 				// This means that to override, or go back to default settings you have to

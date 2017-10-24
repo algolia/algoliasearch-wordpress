@@ -20,12 +20,14 @@ if ( ! defined( 'WPINC' ) ) {
 
 // Check for required PHP version.
 if ( version_compare( PHP_VERSION, '5.3', '<' ) ) {
+	/* translators: the placeholder always contains the plugin version. */
 	exit( sprintf( esc_html__( 'Algolia plugin requires PHP 5.3 or higher. You’re still on %s.', 'algolia' ), esc_html( PHP_VERSION ) ) );
 }
 
 // Check for required WordPress version.
 global $wp_version;
 if ( version_compare( $wp_version, '3.7.14', '<' ) ) {
+	/* translators: the placeholder always contains the plugin version. */
 	exit( sprintf( esc_html__( 'Algolia plugin requires at least WordPress in version 3.7.14., You are on %s', 'algolia' ) , esc_html( $wp_version ) ) );
 }
 

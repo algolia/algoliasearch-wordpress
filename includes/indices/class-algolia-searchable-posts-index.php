@@ -81,7 +81,7 @@ final class Algolia_Searchable_Posts_Index extends Algolia_Index {
 
 		$post_content = apply_filters( 'the_content', $post->post_content );
 
-		if ( $removed === true ) {
+		if ( true === $removed ) {
 			add_filter( 'the_content', 'wptexturize', 10 );
 		}
 
