@@ -7,6 +7,7 @@
  <file>uninstall.php</file>
  <file>index.php</file>
  <file>includes</file>
+ <file>css</file>
  <file>templates</file>
  
  <exclude-pattern>includes/libraries</exclude-pattern>
