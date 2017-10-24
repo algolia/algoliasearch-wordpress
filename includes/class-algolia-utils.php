@@ -54,11 +54,11 @@ class Algolia_Utils {
 	 * @return array
 	 */
 	public static function get_taxonomy_tree( array $terms, $taxonomy, $separator = ' > ' ) {
-		$termIds = wp_list_pluck( $terms, 'term_id' );
+		$term_ids = wp_list_pluck( $terms, 'term_id' );
 
 		$parents = array();
-		foreach ( $termIds as $termId ) {
-			$path = self::get_term_parents( $termId, $taxonomy, $separator );
+		foreach ( $term_ids as $term_id ) {
+			$path = self::get_term_parents( $term_id, $taxonomy, $separator );
 			$parents[] = rtrim( $path, $separator );
 		}
 
@@ -66,10 +66,10 @@ class Algolia_Utils {
 		foreach ( $parents as $parent ) {
 			$levels = explode( $separator, $parent );
 
-			$previousLvl = '';
+			$previous_lvl = '';
 			foreach ( $levels as $index => $level ) {
-				$terms[ 'lvl' . $index ][] = $previousLvl . $level;
-				$previousLvl .= $level . $separator;
+				$terms[ 'lvl' . $index ][] = $previous_lvl . $level;
+				$previous_lvl .= $level . $separator;
 
 				// Make sure we have not duplicate.
 				// The call to `array_values` ensures that we do not end up with an object in JSON.
@@ -181,7 +181,7 @@ class Algolia_Utils {
 			"'<!\[CDATA\[(.*?)\]\]>'is",
 			// Per sourceforge http://sourceforge.net/tracker/?func=detail&aid=2949097&group_id=218559&atid=1044037
 			// Script tags removal now preceeds style tag removal.
-			// strip out <script> tags
+			// strip out <script> tags.
 			"'<\s*script[^>]*[^/]>(.*?)<\s*/\s*script\s*>'is",
 			"'<\s*script\s*>(.*?)<\s*/\s*script\s*>'is",
 			// strip out <style> tags.
@@ -230,13 +230,13 @@ class Algolia_Utils {
 			}
 
 			$offset = -( strlen( $content ) - $max_size );
-			$cutAtPosition = strrpos( $content, ' ', $offset );
+			$cut_at_position = strrpos( $content, ' ', $offset );
 
-			if ( false === $cutAtPosition ) {
-				$cutAtPosition = $max_size;
+			if ( false === $cut_at_position ) {
+				$cut_at_position = $max_size;
 			}
-			$parts[] = $prefix . substr( $content, 0, $cutAtPosition );
-			$content = substr( $content, $cutAtPosition );
+			$parts[] = $prefix . substr( $content, 0, $cut_at_position );
+			$content = substr( $content, $cut_at_position );
 
 			$prefix = '… ';
 		}
