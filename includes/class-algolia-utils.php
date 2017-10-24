@@ -113,60 +113,6 @@ class Algolia_Utils {
 		return (array) apply_filters( 'algolia_get_post_images', $images );
 	}
 
-	/**
-	 * @param array $args
-	 *
-	 * @return string
-	 */
-	public static function get_loopback_request_args( array $args = array() ) {
-		$request_args = array(
-			'timeout'       => 1,
-			'blocking'      => false,
-			'sslverify'     => apply_filters( 'https_local_ssl_verify', true ),
-			'headers'       => array(
-				'cookie' => self::get_current_cookies_for_loopback_request(),
-			),
-		);
-
-		$request_args = array_merge( $request_args, $args );
-
-		return (array) apply_filters( 'algolia_loopback_request_args', $request_args );
-	}
-
-	/**
-	 * @return string
-	 */
-	public static function get_current_cookies_for_loopback_request() {
-		if ( ! is_array( $_COOKIE ) ) {
-			return '';
-		}
-
-		$cookies = array();
-		foreach ( $_COOKIE as $name => $value ) {
-			// Only accept string Cookie entries.
-			if ( ! is_string( $value ) ) {
-				continue;
-			}
-
-			// Do not allow non WordPress Cookie entries.
-			if ( strpos( $name, 'wordpress_' ) !== 0 ) {
-				continue;
-			}
-			$cookies[] = "$name=" . urlencode( $value );
-		}
-
-		return implode( '; ', $cookies );
-	}
-
-	/**
-	 * @return string
-	 */
-	public static function get_loopback_request_url() {
-		$scheme = ( defined( 'ALGOLIA_LOOPBACK_HTTP' ) && ALGOLIA_LOOPBACK_HTTP === true ) ? 'http' : 'admin' ;
-
-		return admin_url( 'admin-post.php', $scheme );
-	}
-
 	public static function prepare_content( $content ) {
 		$content = self::remove_content_noise( $content );
 
