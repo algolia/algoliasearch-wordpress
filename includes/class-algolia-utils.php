@@ -1,34 +1,36 @@
 <?php
 
-class Algolia_Utils
-{
+class Algolia_Utils {
+
 	/**
 	 * Retrieve term parents with separator.
 	 *
-	 * @param int $id Term ID.
+	 * @param int    $id Term ID.
 	 * @param string $taxonomy
 	 * @param string $separator Optional, default is '/'. How to separate terms.
-	 * @param bool $nicename Optional, default is false. Whether to use nice name for display.
-	 * @param array $visited Optional. Already linked to terms to prevent duplicates.
+	 * @param bool   $nicename Optional, default is false. Whether to use nice name for display.
+	 * @param array  $visited Optional. Already linked to terms to prevent duplicates.
 	 * @return string|WP_Error A list of terms parents on success, WP_Error on failure.
 	 */
 	public static function get_term_parents( $id, $taxonomy, $separator = '/', $nicename = false, $visited = array() ) {
 		$chain = '';
 		$parent = get_term( $id, $taxonomy );
-		if ( is_wp_error( $parent ) )
+		if ( is_wp_error( $parent ) ) {
 			return $parent;
+		}
 
-		if ( $nicename )
+		if ( $nicename ) {
 			$name = $parent->slug;
-		else
+		} else {
 			$name = $parent->name;
+		}
 
-		if ( $parent->parent && ( $parent->parent != $parent->term_id ) && !in_array( $parent->parent, $visited ) ) {
+		if ( $parent->parent && ( $parent->parent != $parent->term_id ) && ! in_array( $parent->parent, $visited ) ) {
 			$visited[] = $parent->parent;
 			$chain .= self::get_term_parents( $parent->parent, $taxonomy, $separator, $nicename, $visited );
 		}
 
-		$chain .= $name.$separator;
+		$chain .= $name . $separator;
 
 		return $chain;
 	}
@@ -42,6 +44,7 @@ class Algolia_Utils
 	 * );.
 	 *
 	 * This is useful when building hierarchical menus.
+	 *
 	 * @see https://community.algolia.com/instantsearch.js/documentation/#hierarchicalmenu
 	 *
 	 * @param array  $terms
@@ -85,14 +88,14 @@ class Algolia_Utils
 	public static function get_post_images( $post_id ) {
 		$images = array();
 
-		if ( get_post_type( $post_id ) === 'attachment') {
-		    $post_thumbnail_id = (int) $post_id;
-        } else {
-		    $post_thumbnail_id = get_post_thumbnail_id( (int) $post_id );
-        }
+		if ( get_post_type( $post_id ) === 'attachment' ) {
+			$post_thumbnail_id = (int) $post_id;
+		} else {
+			$post_thumbnail_id = get_post_thumbnail_id( (int) $post_id );
+		}
 
 		if ( $post_thumbnail_id ) {
-            $sizes = (array) apply_filters( 'algolia_post_images_sizes', array( 'thumbnail' ) );
+			$sizes = (array) apply_filters( 'algolia_post_images_sizes', array( 'thumbnail' ) );
 			foreach ( $sizes as $size ) {
 				$info = wp_get_attachment_image_src( $post_thumbnail_id, $size );
 				if ( ! $info ) {
@@ -117,10 +120,10 @@ class Algolia_Utils
 	 */
 	public static function get_loopback_request_args( array $args = array() ) {
 		$request_args = array(
-			'timeout'   	=> 1,
-			'blocking'  	=> false,
-			'sslverify' 	=> apply_filters( 'https_local_ssl_verify', true ),
-			'headers'   	=> array(
+			'timeout'       => 1,
+			'blocking'      => false,
+			'sslverify'     => apply_filters( 'https_local_ssl_verify', true ),
+			'headers'       => array(
 				'cookie' => self::get_current_cookies_for_loopback_request(),
 			),
 		);
@@ -160,84 +163,84 @@ class Algolia_Utils
 	 */
 	public static function get_loopback_request_url() {
 		$scheme = ( defined( 'ALGOLIA_LOOPBACK_HTTP' ) && ALGOLIA_LOOPBACK_HTTP === true ) ? 'http' : 'admin' ;
-		
+
 		return admin_url( 'admin-post.php', $scheme );
 	}
 
 	public static function prepare_content( $content ) {
-        $content = self::remove_content_noise( $content );
+		$content = self::remove_content_noise( $content );
 
-	    return strip_tags( $content );
-    }
+		return strip_tags( $content );
+	}
 
-    public static function remove_content_noise( $content ) {
-	    $noise_patterns = array(
-            // strip out comments.
-            "'<!--(.*?)-->'is",
-            // strip out cdata.
-            "'<!\[CDATA\[(.*?)\]\]>'is",
-            // Per sourceforge http://sourceforge.net/tracker/?func=detail&aid=2949097&group_id=218559&atid=1044037
-            // Script tags removal now preceeds style tag removal.
-            // strip out <script> tags
-            "'<\s*script[^>]*[^/]>(.*?)<\s*/\s*script\s*>'is",
-            "'<\s*script\s*>(.*?)<\s*/\s*script\s*>'is",
-            // strip out <style> tags.
-            "'<\s*style[^>]*[^/]>(.*?)<\s*/\s*style\s*>'is",
-            "'<\s*style\s*>(.*?)<\s*/\s*style\s*>'is",
-            // strip out preformatted tags.
-            "'<\s*(?:code)[^>]*>(.*?)<\s*/\s*(?:code)\s*>'is",
-            // strip out <pre> tags.
-            "'<\s*pre[^>]*[^/]>(.*?)<\s*/\s*pre\s*>'is",
-            "'<\s*pre\s*>(.*?)<\s*/\s*pre\s*>'is",
-        );
+	public static function remove_content_noise( $content ) {
+		$noise_patterns = array(
+			// strip out comments.
+			"'<!--(.*?)-->'is",
+			// strip out cdata.
+			"'<!\[CDATA\[(.*?)\]\]>'is",
+			// Per sourceforge http://sourceforge.net/tracker/?func=detail&aid=2949097&group_id=218559&atid=1044037
+			// Script tags removal now preceeds style tag removal.
+			// strip out <script> tags
+			"'<\s*script[^>]*[^/]>(.*?)<\s*/\s*script\s*>'is",
+			"'<\s*script\s*>(.*?)<\s*/\s*script\s*>'is",
+			// strip out <style> tags.
+			"'<\s*style[^>]*[^/]>(.*?)<\s*/\s*style\s*>'is",
+			"'<\s*style\s*>(.*?)<\s*/\s*style\s*>'is",
+			// strip out preformatted tags.
+			"'<\s*(?:code)[^>]*>(.*?)<\s*/\s*(?:code)\s*>'is",
+			// strip out <pre> tags.
+			"'<\s*pre[^>]*[^/]>(.*?)<\s*/\s*pre\s*>'is",
+			"'<\s*pre\s*>(.*?)<\s*/\s*pre\s*>'is",
+		);
 
-        // If there is ET builder (Divi), remove shortcodes.
-        if ( function_exists( 'et_pb_is_pagebuilder_used' ) ) {
-            $noise_patterns[] = '/\[\/?et_pb.*?\]/';
-        }
+		// If there is ET builder (Divi), remove shortcodes.
+		if ( function_exists( 'et_pb_is_pagebuilder_used' ) ) {
+			$noise_patterns[] = '/\[\/?et_pb.*?\]/';
+		}
 
-        $noise_patterns = (array) apply_filters( 'algolia_strip_patterns', $noise_patterns );
+		$noise_patterns = (array) apply_filters( 'algolia_strip_patterns', $noise_patterns );
 
-	    foreach ( $noise_patterns as $pattern ) {
-	        $content = preg_replace( $pattern, '', $content );
-        }
+		foreach ( $noise_patterns as $pattern ) {
+			$content = preg_replace( $pattern, '', $content );
+		}
 
-        return $content;
-    }
+		return $content;
+	}
 
-    /**
-     * @param string $content
-     *
-     * @return array
-     */
-    public static function explode_content( $content ) {
-        $max_size = 2000;
-        if ( defined( 'ALGOLIA_CONTENT_MAX_SIZE' ) ) {
-            $max_size = (int) ALGOLIA_CONTENT_MAX_SIZE;
-        }
+	/**
+	 * @param string $content
+	 *
+	 * @return array
+	 */
+	public static function explode_content( $content ) {
+		$max_size = 2000;
+		if ( defined( 'ALGOLIA_CONTENT_MAX_SIZE' ) ) {
+			$max_size = (int) ALGOLIA_CONTENT_MAX_SIZE;
+		}
 
-        $parts = array();
-        $prefix = '';
-        while ( true ) {
-            $content = trim( (string) $content );
-            if ( strlen( $content ) <= $max_size ) {
-                $parts[] = $prefix . $content;
+		$parts = array();
+		$prefix = '';
+		while ( true ) {
+			$content = trim( (string) $content );
+			if ( strlen( $content ) <= $max_size ) {
+				$parts[] = $prefix . $content;
 
-                break;
-            }
+				break;
+			}
 
-            $offset = -( strlen( $content ) - $max_size );
-            $cutAtPosition = strrpos( $content, ' ', $offset);
+			$offset = -( strlen( $content ) - $max_size );
+			$cutAtPosition = strrpos( $content, ' ', $offset );
 
-            if ( false === $cutAtPosition ) {
-                $cutAtPosition = $max_size;
-            }
-            $parts[] =  $prefix . substr( $content, 0, $cutAtPosition );
-            $content =  substr( $content, $cutAtPosition );
+			if ( false === $cutAtPosition ) {
+				$cutAtPosition = $max_size;
+			}
+			$parts[] = $prefix . substr( $content, 0, $cutAtPosition );
+			$content = substr( $content, $cutAtPosition );
 
-            $prefix = '… ';
-        }
+			$prefix = '… ';
+		}
 
-        return $parts;
-    }
+		return $parts;
+	}
 }

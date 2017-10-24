@@ -52,7 +52,11 @@ class Algolia_CLI extends \WP_CLI_Command {
 		}
 
 		if ( $all ) {
-			$indices = $this->plugin->get_indices( array( 'enabled' => true ) );
+			$indices = $this->plugin->get_indices(
+				array(
+					'enabled' => true,
+				)
+			);
 		} else {
 			$index = $this->plugin->get_index( $index_id );
 			if ( ! $index ) {

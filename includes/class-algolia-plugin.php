@@ -123,7 +123,7 @@ class Algolia_Plugin {
 	}
 
 	/**
-	 * Replaces native WordPresss search results by Algolia ranked results.
+	 * Replaces native WordPress search results by Algolia ranked results.
 	 */
 	private function override_wordpress_search() {
 		// Do not override native search if the feature is not enabled.
@@ -148,8 +148,7 @@ class Algolia_Plugin {
 		return $this->autocomplete_config;
 	}
 
-	public function register_assets()
-	{
+	public function register_assets() {
 		$suffix = defined( 'SCRIPT_DEBUG' ) && SCRIPT_DEBUG ? '' : '.min';
 
 		// CSS.
@@ -157,11 +156,11 @@ class Algolia_Plugin {
 		wp_register_style( 'algolia-instantsearch', plugin_dir_url( __FILE__ ) . '../css/algolia-instantsearch.css', array(), ALGOLIA_VERSION, 'screen' );
 
 		// JS.
-		wp_register_script( 'algolia-search', plugin_dir_url( __FILE__ ) . '../js/algoliasearch/algoliasearch.jquery'.$suffix.'.js', array( 'jquery', 'underscore', 'wp-util' ), ALGOLIA_VERSION );
-		wp_register_script( 'algolia-autocomplete', plugin_dir_url( __FILE__ ) . '../js/autocomplete.js/autocomplete'.$suffix.'.js', array( 'jquery', 'underscore', 'wp-util' ), ALGOLIA_VERSION );
+		wp_register_script( 'algolia-search', plugin_dir_url( __FILE__ ) . '../js/algoliasearch/algoliasearch.jquery' . $suffix . '.js', array( 'jquery', 'underscore', 'wp-util' ), ALGOLIA_VERSION );
+		wp_register_script( 'algolia-autocomplete', plugin_dir_url( __FILE__ ) . '../js/autocomplete.js/autocomplete' . $suffix . '.js', array( 'jquery', 'underscore', 'wp-util' ), ALGOLIA_VERSION );
 		wp_register_script( 'algolia-autocomplete-noconflict', plugin_dir_url( __FILE__ ) . '../js/autocomplete-noconflict.js', array( 'algolia-autocomplete' ), ALGOLIA_VERSION );
 
-		wp_register_script( 'algolia-instantsearch', plugin_dir_url( __FILE__ ) . '../js/instantsearch.js/instantsearch-preact'.$suffix.'.js', array( 'jquery', 'underscore', 'wp-util' ), ALGOLIA_VERSION );
+		wp_register_script( 'algolia-instantsearch', plugin_dir_url( __FILE__ ) . '../js/instantsearch.js/instantsearch-preact' . $suffix . '.js', array( 'jquery', 'underscore', 'wp-util' ), ALGOLIA_VERSION );
 	}
 
 	/**
@@ -174,7 +173,11 @@ class Algolia_Plugin {
 		$index_name_prefix = $this->settings->get_index_name_prefix();
 
 		// Add a searchable posts index.
-		$searchable_post_types = get_post_types( array( 'exclude_from_search' => false ), 'names' );
+		$searchable_post_types = get_post_types(
+			array(
+				'exclude_from_search' => false,
+			), 'names'
+		);
 		$searchable_post_types = (array) apply_filters( 'algolia_searchable_post_types', $searchable_post_types );
 		$this->indices[] = new Algolia_Searchable_Posts_Index( $searchable_post_types );
 
@@ -246,16 +249,20 @@ class Algolia_Plugin {
 		$indices = $this->indices;
 
 		if ( isset( $args['enabled'] ) && true === $args['enabled'] ) {
-			$indices = array_filter( $indices, function( $index ) {
-				return $index->is_enabled();
-			} );
+			$indices = array_filter(
+				$indices, function( $index ) {
+					return $index->is_enabled();
+				}
+			);
 		}
 
 		if ( isset( $args['contains'] ) ) {
 			$contains = (string) $args['contains'];
-			$indices = array_filter( $indices, function( $index ) use ( $contains ) {
-				return $index->contains_only( $contains );
-			} );
+			$indices = array_filter(
+				$indices, function( $index ) use ( $contains ) {
+					return $index->contains_only( $contains );
+				}
+			);
 		}
 
 		return $indices;

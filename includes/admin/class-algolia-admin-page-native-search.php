@@ -1,7 +1,7 @@
 <?php
 
-class Algolia_Admin_Page_Native_Search
-{
+class Algolia_Admin_Page_Native_Search {
+
 	/**
 	 * @var string
 	 */
@@ -112,7 +112,7 @@ class Algolia_Admin_Page_Native_Search
 	 * Display the page.
 	 */
 	public function display_page() {
-        require_once dirname( __FILE__ ) . '/partials/page-search.php';
+		require_once dirname( __FILE__ ) . '/partials/page-search.php';
 	}
 
 	/**
@@ -146,10 +146,12 @@ class Algolia_Admin_Page_Native_Search
 		echo '<p>' . esc_html__( 'By enabling this plugin to override the native WordPress search, your search results will be powered by Algolia\'s typo-tolerant & relevant search algorithms.', 'algolia' ) . '</p>';
 
 		// todo: replace this with a check on the searchable_posts_index
-		$indices = $this->plugin->get_indices( array(
-			'enabled'  => true,
-			'contains' => 'posts',
-		) );
+		$indices = $this->plugin->get_indices(
+			array(
+				'enabled'  => true,
+				'contains' => 'posts',
+			)
+		);
 
 		if ( empty( $indices ) ) {
 			echo '<div class="error-message">' .

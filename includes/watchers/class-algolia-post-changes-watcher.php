@@ -2,8 +2,8 @@
 
 use AlgoliaSearch\AlgoliaException;
 
-class Algolia_Post_Changes_Watcher implements Algolia_Changes_Watcher
-{
+class Algolia_Post_Changes_Watcher implements Algolia_Changes_Watcher {
+
 	/**
 	 * @var Algolia_Index
 	 */
@@ -15,7 +15,7 @@ class Algolia_Post_Changes_Watcher implements Algolia_Changes_Watcher
 	public function __construct( Algolia_Index $index ) {
 		$this->index = $index;
 	}
-	
+
 	public function watch() {
 		// Fires once a post has been saved.
 		add_action( 'save_post', array( $this, 'sync_item' ) );
@@ -43,44 +43,44 @@ class Algolia_Post_Changes_Watcher implements Algolia_Changes_Watcher
 			return;
 		}
 
-        $post = get_post( (int) $post_id );
-        if ( ! $post || ! $this->index->supports( $post ) ) {
-            return;
-        }
+		$post = get_post( (int) $post_id );
+		if ( ! $post || ! $this->index->supports( $post ) ) {
+			return;
+		}
 
-        try {
-            $this->index->sync( $post );
-        } catch ( AlgoliaException $exception ) {
-            error_log( $exception->getMessage() );
-        }
+		try {
+			$this->index->sync( $post );
+		} catch ( AlgoliaException $exception ) {
+			error_log( $exception->getMessage() );
+		}
 	}
 
-    /**
-     * @param int $post_id
-     */
-    public function delete_item( $post_id ) {
-        $post = get_post( (int) $post_id );
-        if ( ! $post || ! $this->index->supports( $post ) ) {
-            return;
-        }
+	/**
+	 * @param int $post_id
+	 */
+	public function delete_item( $post_id ) {
+		$post = get_post( (int) $post_id );
+		if ( ! $post || ! $this->index->supports( $post ) ) {
+			return;
+		}
 
-        try {
-            $this->index->delete_item( $post );
-        } catch ( AlgoliaException $exception ) {
-            error_log( $exception->getMessage() );
-        }
-    }
+		try {
+			$this->index->delete_item( $post );
+		} catch ( AlgoliaException $exception ) {
+			error_log( $exception->getMessage() );
+		}
+	}
 
 	/**
 	 * @param string|array $meta_id
-	 * @param int $object_id
-	 * @param string $meta_key
+	 * @param int          $object_id
+	 * @param string       $meta_key
 	 */
 	public function on_meta_change( $meta_id, $object_id, $meta_key ) {
 		if ( '_thumbnail_id' !== $meta_key ) {
 			return;
 		}
 
-        $this->sync_item( $object_id );
+		$this->sync_item( $object_id );
 	}
 }

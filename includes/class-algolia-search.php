@@ -1,7 +1,7 @@
 <?php
 
-class Algolia_Search
-{
+class Algolia_Search {
+
 	/**
 	 * @var int
 	 */
@@ -18,7 +18,7 @@ class Algolia_Search
 	private $index;
 
 	/**
-	 * @param Algolia_Index  $index
+	 * @param Algolia_Index $index
 	 */
 	public function __construct( Algolia_Index $index ) {
 		$this->index = $index;
@@ -56,22 +56,24 @@ class Algolia_Search
 
 		$posts_per_page = (int) get_option( 'posts_per_page' );
 
-        $params = apply_filters( 'algolia_search_params', array(
-            'attributesToRetrieve' => 'post_id',
-            'hitsPerPage'          => $posts_per_page,
-            'page'                 => $current_page - 1, // Algolia pages are zero indexed.
-        ) );
+		$params = apply_filters(
+			'algolia_search_params', array(
+				'attributesToRetrieve' => 'post_id',
+				'hitsPerPage'          => $posts_per_page,
+				'page'                 => $current_page - 1, // Algolia pages are zero indexed.
+			)
+		);
 
-        $order_by = apply_filters( 'algolia_search_order_by', null );
-        $order = apply_filters( 'algolia_search_order', 'desc' );
+		$order_by = apply_filters( 'algolia_search_order_by', null );
+		$order = apply_filters( 'algolia_search_order', 'desc' );
 
-        try {
-            $results = $this->index->search( $query->query['s'], $params, $order_by, $order );
-        } catch ( \AlgoliaSearch\AlgoliaException $exception ) {
-            error_log( $exception->getMessage() );
+		try {
+			$results = $this->index->search( $query->query['s'], $params, $order_by, $order );
+		} catch ( \AlgoliaSearch\AlgoliaException $exception ) {
+			error_log( $exception->getMessage() );
 
-            return;
-        }
+			return;
+		}
 
 		add_filter( 'the_posts', array( $this, 'the_posts' ), 10, 2 );
 		add_filter( 'found_posts', array( $this, 'found_posts' ), 10, 2 );
@@ -94,11 +96,11 @@ class Algolia_Search
 
 		$post_types = 'any';
 		if ( isset( $_GET['post_type'] ) ) {
-		    $post_type = get_post_type_object( $_GET['post_type'] );
-		    if (null !== $post_type) {
-		        $post_types = $post_type->name;
-            }
-        }
+			$post_type = get_post_type_object( $_GET['post_type'] );
+			if ( null !== $post_type ) {
+				$post_types = $post_type->name;
+			}
+		}
 
 		$query->set( 'post_type', $post_types );
 		$query->set( 'post__in', $post_ids );
@@ -141,7 +143,7 @@ class Algolia_Search
 	/**
 	 * This hook returns the actual real number of results available in Algolia.
 	 *
-	 * @param int $found_posts
+	 * @param int      $found_posts
 	 * @param WP_Query $query
 	 *
 	 * @return int
@@ -156,7 +158,7 @@ class Algolia_Search
 	 * We don't want to filter by anything but the actual list of post_ids resulting
 	 * from the Algolia search.
 	 *
-	 * @param string $search
+	 * @param string   $search
 	 * @param WP_Query $query
 	 *
 	 * @return string
@@ -168,7 +170,7 @@ class Algolia_Search
 	/**
 	 * Removes remaining unused SQL pieces.
 	 *
-	 * @param array $pieces
+	 * @param array    $pieces
 	 * @param WP_Query $query
 	 *
 	 * @return mixed

@@ -12,27 +12,27 @@
 	<tbody>
 		<?php foreach ( $indices as $index ) : ?>
 		<tr>
-      <td>
-        <span class="dashicons dashicons-move"></span>
-        <input type="hidden" class="position-input" name="algolia_autocomplete_config[<?php echo esc_attr( $index['index_id'] ); ?>][position]"  value="<?php echo (int) $index['position']; ?>" />
-      </td>
+	  <td>
+		<span class="dashicons dashicons-move"></span>
+		<input type="hidden" class="position-input" name="algolia_autocomplete_config[<?php echo esc_attr( $index['index_id'] ); ?>][position]"  value="<?php echo (int) $index['position']; ?>" />
+	  </td>
 			<td>
 				<input type="checkbox" name="algolia_autocomplete_config[<?php echo esc_attr( $index['index_id'] ); ?>][enabled]" <?php echo $index['enabled'] ? 'checked="checked"' : ''; ?>/>
 			</td>
 			<td>
-        <?php echo esc_html($index['admin_name']); ?>
-        <br><small style="color: #999">Index name: <?php echo esc_html( $index['index_id'] ); ?></small>
+		<?php echo esc_html( $index['admin_name'] ); ?>
+		<br><small style="color: #999">Index name: <?php echo esc_html( $index['index_id'] ); ?></small>
 			</td>
-      <td>
-        <input type="text" name="algolia_autocomplete_config[<?php echo esc_attr( $index['index_id'] ); ?>][label]"  value="<?php echo esc_attr( $index['label'] ); ?>" />
-      </td>
+	  <td>
+		<input type="text" name="algolia_autocomplete_config[<?php echo esc_attr( $index['index_id'] ); ?>][label]"  value="<?php echo esc_attr( $index['label'] ); ?>" />
+	  </td>
 			<td>
 				<input style="width: 40px; text-align: center;" type="number" name="algolia_autocomplete_config[<?php echo esc_attr( $index['index_id'] ); ?>][max_suggestions]"  value="<?php echo (int) $index['max_suggestions']; ?>" />
 			</td>
-      <td>
-        <button class="algolia-reindex-button button button-primary" data-index="<?php echo esc_attr( $index['index_id'] ); ?>"><?php _e('Re-index', 'algolia'); ?></button>
-        <button class="algolia-push-settings-button button" data-index="<?php echo esc_attr( $index['index_id'] ); ?>"><?php _e('Push Settings', 'algolia'); ?></button>
-      </td>
+	  <td>
+		<button class="algolia-reindex-button button button-primary" data-index="<?php echo esc_attr( $index['index_id'] ); ?>"><?php _e( 'Re-index', 'algolia' ); ?></button>
+		<button class="algolia-push-settings-button button" data-index="<?php echo esc_attr( $index['index_id'] ); ?>"><?php _e( 'Push Settings', 'algolia' ); ?></button>
+	  </td>
 		</tr>
 		<?php endforeach; ?>
 	</tbody>

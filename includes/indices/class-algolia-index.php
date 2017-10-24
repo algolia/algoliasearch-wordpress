@@ -3,8 +3,8 @@
 use AlgoliaSearch\Client;
 use AlgoliaSearch\Index;
 
-abstract class Algolia_Index
-{
+abstract class Algolia_Index {
+
 	/**
 	 * @var Client
 	 */
@@ -21,7 +21,7 @@ abstract class Algolia_Index
 	private $name_prefix = '';
 
 	/**
-	 * @var string|null Should be one of posts, terms or users or left null. 
+	 * @var string|null Should be one of posts, terms or users or left null.
 	 */
 	protected $contains_only;
 
@@ -39,7 +39,7 @@ abstract class Algolia_Index
 		if ( null === $this->contains_only ) {
 			return false;
 		}
-		
+
 		return $this->contains_only === $type;
 	}
 
@@ -48,19 +48,18 @@ abstract class Algolia_Index
 	 * be subject for indexation or not. This will be used to determine if an item is part of the index
 	 * As this function will be called synchronously during other operations,
 	 * it has to be as lightweight as possible. No db calls or huge loops.
-	 * 
+	 *
 	 * @param mixed $item
-	 * 
+	 *
 	 * @return bool
 	 */
 	abstract public function supports( $item );
 
-    public function assert_is_supported($item)
-    {
-        if( ! $this->supports( $item ) ) {
-            throw new RuntimeException('Item is no supported on this index.');
-        }
-    }
+	public function assert_is_supported( $item ) {
+		if ( ! $this->supports( $item ) ) {
+			throw new RuntimeException( 'Item is no supported on this index.' );
+		}
+	}
 
 	/**
 	 * @param Client $client
@@ -76,59 +75,59 @@ abstract class Algolia_Index
 		if ( null === $this->client ) {
 			throw new LogicException( 'Client has not been set.' );
 		}
-		
+
 		return $this->client;
 	}
 
 	/**
-	 * @param string $query
+	 * @param string     $query
 	 * @param array|null $args
 	 *
 	 * @return array
 	 */
 	final public function search( $query, $args = null, $order_by = null, $order = 'desc' ) {
 
-	    if ( $order_by !== null ) {
-	        return $this->search_in_replica( $query, $args, $order_by, $order );
-        }
+		if ( $order_by !== null ) {
+			return $this->search_in_replica( $query, $args, $order_by, $order );
+		}
 
 		return $this->get_index()->search( $query, $args );
 	}
 
-    /**
-     * @param string $query
-     * @param array  $args
-     * @param string $order_by
-     * @param string $order
-     *
-     * @return array
-     */
+	/**
+	 * @param string $query
+	 * @param array  $args
+	 * @param string $order_by
+	 * @param string $order
+	 *
+	 * @return array
+	 */
 	private function search_in_replica( $query, $args, $order_by, $order = 'desc' ) {
-        $replica = $this->get_replica( $order_by, $order );
-        $replica_name = $replica->get_replica_index_name( $this );
+		$replica = $this->get_replica( $order_by, $order );
+		$replica_name = $replica->get_replica_index_name( $this );
 
-        $index = $this->client->initIndex( $replica_name );
+		$index = $this->client->initIndex( $replica_name );
 
-        return $index->search( $query, $args );
-    }
+		return $index->search( $query, $args );
+	}
 
-    /**
-     * @param $attribute_name
-     * @param $order
-     *
-     * @return Algolia_Index_Replica
-     */
-    private function get_replica( $attribute_name, $order ) {
-        $replicas = $this->get_replicas();
-        foreach( $replicas as $replica ) {
-            /** @var Algolia_Index_Replica $replica */
-            if ( $replica->get_attribute_name() === $attribute_name && $replica->get_order() === $order ) {
-                return $replica;
-            }
-        }
+	/**
+	 * @param $attribute_name
+	 * @param $order
+	 *
+	 * @return Algolia_Index_Replica
+	 */
+	private function get_replica( $attribute_name, $order ) {
+		$replicas = $this->get_replicas();
+		foreach ( $replicas as $replica ) {
+			/** @var Algolia_Index_Replica $replica */
+			if ( $replica->get_attribute_name() === $attribute_name && $replica->get_order() === $order ) {
+				return $replica;
+			}
+		}
 
-        throw new RuntimeException( sprintf( 'Unable to find replica for attribute "%s" with order "%s".', $attribute_name, $order ) );
-    }
+		throw new RuntimeException( sprintf( 'Unable to find replica for attribute "%s" with order "%s".', $attribute_name, $order ) );
+	}
 
 	/**
 	 * @param bool $flag
@@ -136,7 +135,7 @@ abstract class Algolia_Index
 	final public function set_enabled( $flag ) {
 		$this->enabled = (bool) $flag;
 	}
-	
+
 	/**
 	 * @return bool
 	 */
@@ -155,18 +154,18 @@ abstract class Algolia_Index
 	 * @param mixed $item
 	 */
 	public function sync( $item ) {
-	    $this->assert_is_supported( $item );
+		$this->assert_is_supported( $item );
 		if ( $this->should_index( $item ) ) {
-            do_action( 'algolia_before_get_records', $item );
+			do_action( 'algolia_before_get_records', $item );
 			$records = $this->get_records( $item );
-            do_action( 'algolia_after_get_records', $item );
+			do_action( 'algolia_after_get_records', $item );
 
 			return $this->update_records( $item, $records );
 		}
 
 		$this->delete_item( $item );
 	}
-	
+
 	/**
 	 * @param $item
 	 *
@@ -176,7 +175,7 @@ abstract class Algolia_Index
 
 	/**
 	 * @param $item
-	 * 
+	 *
 	 * @return array
 	 */
 	abstract protected function get_records( $item );
@@ -194,7 +193,7 @@ abstract class Algolia_Index
 		$records = $this->sanitize_json_data( $records );
 		$index->addObjects( $records );
 	}
-	
+
 	/**
 	 * @return Index
 	 */
@@ -214,7 +213,7 @@ abstract class Algolia_Index
 
 		return $prefix . $this->get_id();
 	}
-	
+
 	/**
 	 * @param int $page
 	 */
@@ -224,9 +223,9 @@ abstract class Algolia_Index
 		if ( $page < 1 ) {
 			throw new InvalidArgumentException( 'Page should be superior to 0.' );
 		}
-		
+
 		if ( 1 === $page ) {
-		    $this->create_index_if_not_existing();
+			$this->create_index_if_not_existing();
 		}
 
 		$batch_size = (int) $this->get_re_index_batch_size();
@@ -245,16 +244,16 @@ abstract class Algolia_Index
 			if ( ! $this->should_index( $item ) ) {
 				continue;
 			}
-            do_action( 'algolia_before_get_records', $item );
+			do_action( 'algolia_before_get_records', $item );
 			$records = array_merge( $records, $this->get_records( $item ) );
-            do_action( 'algolia_after_get_records', $item );
+			do_action( 'algolia_after_get_records', $item );
 		}
 
 		if ( ! empty( $records ) ) {
 			$index = $this->get_index();
-			
+
 			$records = $this->sanitize_json_data( $records );
-			
+
 			$index->addObjects( $records );
 		}
 
@@ -263,57 +262,56 @@ abstract class Algolia_Index
 		}
 	}
 
-	public function create_index_if_not_existing( $clear_if_existing = true )
-    {
-        $index = $this->get_index();
+	public function create_index_if_not_existing( $clear_if_existing = true ) {
+		$index = $this->get_index();
 
-        try {
-            $index->getSettings();
-            $index_exists = true;
-        } catch (\AlgoliaSearch\AlgoliaException $exception) {
-            $index_exists = false;
-        }
+		try {
+			$index->getSettings();
+			$index_exists = true;
+		} catch ( \AlgoliaSearch\AlgoliaException $exception ) {
+			$index_exists = false;
+		}
 
-	    if ( $index_exists === true ) {
+		if ( $index_exists === true ) {
 
-		    if ( $clear_if_existing === true ) {
-			    $index->clearIndex();
-		    }
+			if ( $clear_if_existing === true ) {
+				$index->clearIndex();
+			}
 
-		    $force_settings_update = (bool) apply_filters( 'algolia_should_force_settings_update', false, $this->get_id() );
-		    if ( $force_settings_update === false ) {
-			    // No need to go further in this case.
-			    // We don't change anything when the index already exists.
-			    // This means that to override, or go back to default settings you have to
-			    // Clear the index and re-index again or use the 'algolia_force_settings_update' filter
-			    // to force a settings update
-			    return;
-		    }
-	    }
+			$force_settings_update = (bool) apply_filters( 'algolia_should_force_settings_update', false, $this->get_id() );
+			if ( $force_settings_update === false ) {
+				// No need to go further in this case.
+				// We don't change anything when the index already exists.
+				// This means that to override, or go back to default settings you have to
+				// Clear the index and re-index again or use the 'algolia_force_settings_update' filter
+				// to force a settings update
+				return;
+			}
+		}
 
-        $this->push_settings();
-    }
+		$this->push_settings();
+	}
 
-    public function push_settings() {
-	    $index = $this->get_index();
+	public function push_settings() {
+		$index = $this->get_index();
 
-        // This will create the index if it does not exist.
-        $settings = $this->get_settings();
-        $index->setSettings( $settings );
+		// This will create the index if it does not exist.
+		$settings = $this->get_settings();
+		$index->setSettings( $settings );
 
-        // Push synonyms.
-        $synonyms = $this->get_synonyms();
-        if ( ! empty( $synonyms ) ) {
-            $index->batchSynonyms( $synonyms );
-        }
+		// Push synonyms.
+		$synonyms = $this->get_synonyms();
+		if ( ! empty( $synonyms ) ) {
+			$index->batchSynonyms( $synonyms );
+		}
 
-        $this->sync_replicas();
-    }
+		$this->sync_replicas();
+	}
 
 	/**
 	 * Sanitize data to allow non UTF-8 content to pass.
 	 * Here we use a private function introduced in WP 4.1.
-	 * 
+	 *
 	 * @param $data
 	 *
 	 * @return mixed
@@ -323,7 +321,7 @@ abstract class Algolia_Index
 		if ( function_exists( '_wp_json_sanity_check' ) ) {
 			return _wp_json_sanity_check( $data, 512 );
 		}
-		
+
 		return $data;
 	}
 
@@ -347,7 +345,7 @@ abstract class Algolia_Index
 	 */
 	public function get_re_index_max_num_pages() {
 		$items_count = $this->get_re_index_items_count();
-		
+
 		return (int) ceil( $items_count / $this->get_re_index_batch_size() );
 	}
 
@@ -382,7 +380,7 @@ abstract class Algolia_Index
 	 * @return string
 	 */
 	abstract public function get_id();
-	
+
 	/**
 	 * @param int $page
 	 * @param int $batch_size
@@ -390,7 +388,7 @@ abstract class Algolia_Index
 	 * @return array
 	 */
 	abstract protected function get_items( $page, $batch_size );
-	
+
 	public function get_default_autocomplete_config() {
 		return array(
 			'index_id'        => $this->get_id(),
@@ -399,7 +397,7 @@ abstract class Algolia_Index
 			'admin_name'      => $this->get_admin_name(),
 			'position'        => 10,
 			'max_suggestions' => 5,
-			'tmpl_suggestion' => 'autocomplete-post-suggestion'
+			'tmpl_suggestion' => 'autocomplete-post-suggestion',
 		);
 	}
 
@@ -415,12 +413,12 @@ abstract class Algolia_Index
 				'name'         => $replica->get_replica_index_name( $this ),
 			);
 		}
-		
+
 		return array(
-			'name' 		  => $this->get_name(),
-			'id'   		  => $this->get_id(),
-			'enabled' 	  => $this->enabled,
-			'replicas'    => $items
+			'name'        => $this->get_name(),
+			'id'          => $this->get_id(),
+			'enabled'     => $this->enabled,
+			'replicas'    => $items,
 		);
 	}
 
@@ -456,9 +454,11 @@ abstract class Algolia_Index
 			$replica_index_names[] = $replica->get_replica_index_name( $this );
 		}
 
-		$this->get_index()->setSettings( array(
-			'replicas' => $replica_index_names
-		), false );
+		$this->get_index()->setSettings(
+			array(
+				'replicas' => $replica_index_names,
+			), false
+		);
 
 		$client = $this->get_client();
 
@@ -478,32 +478,31 @@ abstract class Algolia_Index
 	 */
 	abstract public function delete_item( $item );
 
-    /**
-     * Returns true if the index exists in Algolia.
-     * false otherwise.
-     *
-     * @return bool
-     * @throws \AlgoliaSearch\AlgoliaException
-     */
+	/**
+	 * Returns true if the index exists in Algolia.
+	 * false otherwise.
+	 *
+	 * @return bool
+	 * @throws \AlgoliaSearch\AlgoliaException
+	 */
 	public function exists() {
-        try {
-            $this->get_index()->getSettings();
-        } catch( \AlgoliaSearch\AlgoliaException $exception ) {
-            if ( $exception->getMessage() === 'Index does not exist' ) {
-                return false;
-            }
+		try {
+			$this->get_index()->getSettings();
+		} catch ( \AlgoliaSearch\AlgoliaException $exception ) {
+			if ( $exception->getMessage() === 'Index does not exist' ) {
+				return false;
+			}
 
-            error_log( $exception->getMessage() );
+			error_log( $exception->getMessage() );
 
-            return false;
-        }
+			return false;
+		}
 
-        return true;
-    }
+		return true;
+	}
 
-    public function clear()
-    {
-        $this->get_index()->clearIndex();
-    }
+	public function clear() {
+		$this->get_index()->clearIndex();
+	}
 
 }

@@ -1,7 +1,7 @@
 <?php
 
-class Algolia_Admin_Page_Autocomplete
-{
+class Algolia_Admin_Page_Autocomplete {
+
 	/**
 	 * @var string
 	 */
@@ -21,12 +21,12 @@ class Algolia_Admin_Page_Autocomplete
 	 * @var string
 	 */
 	private $option_group = 'algolia_autocomplete';
-	
+
 	/**
 	 * @var Algolia_Settings
 	 */
 	private $settings;
-	
+
 	/**
 	 * @var Algolia_Autocomplete_Config
 	 */
@@ -39,7 +39,7 @@ class Algolia_Admin_Page_Autocomplete
 	public function __construct( Algolia_Settings $settings, Algolia_Autocomplete_Config $autocomplete_config ) {
 		$this->settings = $settings;
 		$this->autocomplete_config = $autocomplete_config;
-		
+
 		add_action( 'admin_menu', array( $this, 'add_page' ) );
 		add_action( 'admin_init', array( $this, 'add_settings' ) );
 		add_action( 'admin_notices', array( $this, 'display_errors' ) );
@@ -95,7 +95,7 @@ class Algolia_Admin_Page_Autocomplete
 	}
 
 	/**
-	 * 
+	 *
 	 */
 	public function autocomplete_enabled_callback() {
 		$value = $this->settings->get_autocomplete_enabled();
@@ -145,10 +145,10 @@ class Algolia_Admin_Page_Autocomplete
 	 */
 	public function display_errors() {
 		settings_errors( $this->option_group );
-		
+
 		if ( defined( 'ALGOLIA_HIDE_HELP_NOTICES' ) && ALGOLIA_HIDE_HELP_NOTICES ) {
 			return;
-		} 
+		}
 
 		$is_enabled = 'yes' === $this->settings->get_autocomplete_enabled();
 		$indices = $this->autocomplete_config->get_config();

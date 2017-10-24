@@ -8,7 +8,7 @@
  * Version:           2.8.1
  * Author:            Algolia
  * Author URI:        https://www.algolia.com/
- * License: 		  MIT License, GNU General Public License v2.0
+ * License:           MIT License, GNU General Public License v2.0
  * Text Domain:       algolia
  * Domain Path:       /languages/
  */
@@ -31,7 +31,7 @@ if ( version_compare( $wp_version, '3.7.14', '<' ) ) {
 
 // The Algolia Search plugin version.
 define( 'ALGOLIA_VERSION', '2.8.1' );
-define( 'ALGOLIA_PLUGIN_BASENAME', plugin_basename(__FILE__) );
+define( 'ALGOLIA_PLUGIN_BASENAME', plugin_basename( __FILE__ ) );
 
 if ( ! defined( 'ALGOLIA_PATH' ) ) {
 	define( 'ALGOLIA_PATH', plugin_dir_path( __FILE__ ) );
@@ -41,9 +41,9 @@ if ( ! defined( 'ALGOLIA_PATH' ) ) {
  * I18n.
  */
 function algolia_load_textdomain() {
-    $locale = apply_filters('plugin_locale', get_locale(), 'algolia');
+	$locale = apply_filters( 'plugin_locale', get_locale(), 'algolia' );
 
-    load_textdomain('algolia', WP_LANG_DIR . '/algolia/algolia-' . $locale . '.mo');
+	load_textdomain( 'algolia', WP_LANG_DIR . '/algolia/algolia-' . $locale . '.mo' );
 	load_plugin_textdomain( 'algolia', false, plugin_basename( dirname( __FILE__ ) ) . '/languages/' );
 }
 
@@ -53,7 +53,7 @@ require_once ALGOLIA_PATH . 'classmap.php';
 
 $algolia = Algolia_Plugin::get_instance();
 
-if ( defined('WP_CLI') && WP_CLI ) {
+if ( defined( 'WP_CLI' ) && WP_CLI ) {
 	include ALGOLIA_PATH . '/includes/class-algolia-cli.php';
 	WP_CLI::add_command( 'algolia', new Algolia_CLI() );
 }
