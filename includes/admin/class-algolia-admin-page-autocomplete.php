@@ -102,8 +102,9 @@ class Algolia_Admin_Page_Autocomplete {
 		$indices = $this->autocomplete_config->get_form_data();
 		$checked = 'yes' === $value ? 'checked ' : '';
 		$disabled = empty( $indices ) ? 'disabled ' : '';
-
-		echo "<input type='checkbox' name='algolia_autocomplete_enabled' value='yes' $checked $disabled/>";
+?>
+		<input type='checkbox' name='algolia_autocomplete_enabled' value='yes' <?php echo esc_html( $checked . ' ' . $disabled ); ?>/>
+<?php
 	}
 
 	/**
@@ -154,9 +155,11 @@ class Algolia_Admin_Page_Autocomplete {
 		$indices = $this->autocomplete_config->get_config();
 
 		if ( true === $is_enabled && empty( $indices ) ) {
+			/* translators: placeholder contains the URL to the autocomplete configuration page. */
+			$message = sprintf( __( 'Please select one or multiple indices on the <a href="%s">Algolia: Autocomplete configuration page</a>.', 'algolia' ), esc_url( admin_url( 'admin.php?page=' . $this->slug ) ) );
 			echo '<div class="error notice">
 					  <p>' . esc_html__( 'You have enabled the Algolia Autocomplete feature but did not choose any index to search in.', 'algolia' ) . '</p>
-					  <p>' . sprintf( __( 'Please select one or multiple indices on the <a href="%s">Algolia: Autocomplete configuration page</a>.', 'algolia' ), admin_url( 'admin.php?page=' . $this->slug ) ) . '</p>
+					  <p>' . wp_kses_post( $message ) . '</p>
 				  </div>';
 		}
 	}

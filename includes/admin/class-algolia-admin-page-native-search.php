@@ -133,8 +133,10 @@ class Algolia_Admin_Page_Native_Search {
 
 		$searchable_posts_index = $this->plugin->get_index( 'searchable_posts' );
 		if ( false === $searchable_posts_index->is_enabled() && isset( $_GET['page'] ) && $_GET['page'] === $this->slug ) {
+			/* translators: placeholder contains the link to the indexing page. */
+			$message = sprintf( __( 'Searchable posts index needs to be checked on the <a href="%s">Algolia: Indexing page</a> for the search results to be powered by Algolia.', 'algolia' ), esc_url( admin_url( 'admin.php?page=algolia-indexing' ) ) );
 			echo '<div class="error notice">
-					  <p>' . sprintf( __( 'Searchable posts index needs to be checked on the <a href="%s">Algolia: Indexing page</a> for the search results to be powered by Algolia.', 'algolia' ), admin_url( 'admin.php?page=algolia-indexing' ) ) . '</p>
+					  <p>' . wp_kses_post( $message ) . '</p>
 				  </div>';
 		}
 	}
@@ -155,7 +157,7 @@ class Algolia_Admin_Page_Native_Search {
 
 		if ( empty( $indices ) ) {
 			echo '<div class="error-message">' .
-					__( 'You have no index containing only posts yet. Please index some content on the `Indexing` page.', 'algolia' ) .
+					esc_html( __( 'You have no index containing only posts yet. Please index some content on the `Indexing` page.', 'algolia' ) ) .
 					'</div>';
 		}
 	}

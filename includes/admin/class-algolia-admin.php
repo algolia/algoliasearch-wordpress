@@ -85,9 +85,11 @@ class Algolia_Admin {
 		$settings = array_map( 'trim', $config->get_array( 'dbcache.reject.sql' ) );
 
 		if ( $enabled && ! in_array( 'algolia_', $settings ) ) {
+			/* translators: placeholder contains the URL to the caching plugin's config page. */
+			$message = sprintf( __( 'In order for <strong>database caching</strong> to work with Algolia you must add <code>algolia_</code> to the "Ignored Query Stems" option in W3 Total Cache settings <a href="%s">here</a>.', 'algolia' ), esc_url( admin_url( 'admin.php?page=w3tc_dbcache' ) ) );
 			?>
 			<div class="error">
-				<p><?php printf( __( 'In order for <strong>database caching</strong> to work with Algolia you must add <code>algolia_</code> to the "Ignored Query Stems" option in W3 Total Cache settings <a href="%s">here</a>.', 'algolia' ), admin_url( 'admin.php?page=w3tc_dbcache' ) ); ?></p>
+				<p><?php echo wp_kses_post( $message ); ?></p>
 			</div>
 			<?php
 		}
@@ -115,6 +117,9 @@ class Algolia_Admin {
 
 	public function re_index() {
 		try {
+			if ( ! isset( $_POST['index_id'] ) ) {
+				throw new RuntimeException( 'Index ID should be provided.' );
+			}
 			$index_id = (string) $_POST['index_id'];
 
 			if ( ! isset( $_POST['p'] ) ) {
@@ -142,7 +147,7 @@ class Algolia_Admin {
 
 			wp_send_json( $response );
 		} catch ( \Exception $exception ) {
-			echo $exception->getMessage();
+			echo esc_html( $exception->getMessage() );
 			throw $exception;
 		}
 	}
@@ -166,7 +171,7 @@ class Algolia_Admin {
 			);
 			wp_send_json( $response );
 		} catch ( \Exception $exception ) {
-			echo $exception->getMessage();
+			echo esc_html( $exception->getMessage() );
 			throw $exception;
 		}
 	}

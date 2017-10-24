@@ -136,38 +136,43 @@ class Algolia_Admin_Page_Settings {
 	public function application_id_callback() {
 
 		$settings = $this->plugin->get_settings();
-		$setting = esc_attr( $settings->get_application_id() );
+		$setting = $settings->get_application_id();
 		$disabled_html = $settings->is_application_id_in_config() ? ' disabled' : '';
-
-		echo "<input type='text' name='algolia_application_id' class='regular-text' value='$setting' $disabled_html/>" .
-			'<p class="description" id="home-description">' . __( 'Your Algolia Application ID.', 'algolia' ) . '</p>';
+?>
+		<input type="text" name="algolia_application_id" class="regular-text" value="<?php echo esc_attr( $setting ); ?>" <?php echo esc_html( $disabled_html ); ?>/>
+		<p class="description" id="home-description"><?php esc_html_e( 'Your Algolia Application ID.', 'algolia' ); ?></p>
+<?php
 	}
 
 	public function search_api_key_callback() {
 		$settings = $this->plugin->get_settings();
-		$setting = esc_attr( $settings->get_search_api_key() );
+		$setting = $settings->get_search_api_key();
 		$disabled_html = $settings->is_search_api_key_in_config() ? ' disabled' : '';
 
-		echo "<input type='text' name='algolia_search_api_key' class='regular-text' value='$setting' $disabled_html/>" .
-			'<p class="description" id="home-description">' . __( 'Your Algolia Search-only API key (public).', 'algolia' ) . '</p>';
+?>
+		<input type="text" name="algolia_search_api_key" class="regular-text" value="<?php echo esc_attr( $setting ); ?>" <?php echo esc_html( $disabled_html ); ?>/>
+		<p class="description" id="home-description"><?php esc_html_e( 'Your Algolia Search-only API key (public).', 'algolia' ); ?></p>
+<?php
 	}
 
 	public function api_key_callback() {
 		$settings = $this->plugin->get_settings();
-		$setting = esc_attr( $settings->get_api_key() );
+		$setting = $settings->get_api_key();
 		$disabled_html = $settings->is_api_key_in_config() ? ' disabled' : '';
-
-		echo "<input type='password' name='algolia_api_key' class='regular-text' value='$setting' $disabled_html/>" .
-			'<p class="description" id="home-description">' . __( 'Your Algolia ADMIN API key (kept private).', 'algolia' ) . '</p>';
+?>
+		<input type="password" name="algolia_api_key" class="regular-text" value="<?php echo esc_attr( $setting ); ?>" <?php echo esc_html( $disabled_html ); ?>/>
+		<p class="description" id="home-description"><?php esc_html_e( 'Your Algolia ADMIN API key (kept private).', 'algolia' ); ?></p>
+<?php
 	}
 
 	public function index_name_prefix_callback() {
 		$settings = $this->plugin->get_settings();
 		$index_name_prefix = $settings->get_index_name_prefix();
 		$disabled_html = $settings->is_index_name_prefix_in_config() ? ' disabled' : '';
-
-		echo '<input type="text" name="algolia_index_name_prefix" value="' . esc_attr( $index_name_prefix ) . '" ' . $disabled_html . '/>' .
-			'<p class="description" id="home-description">' . __( 'This prefix will be prepended to your index names.', 'algolia' ) . '</p>';
+?>
+		<input type="text" name="algolia_index_name_prefix" value="<?php echo esc_attr( $setting ); ?>" <?php echo esc_html( $disabled_html ); ?>/>
+		<p class="description" id="home-description"><?php esc_html_e( 'This prefix will be prepended to your index names.', 'algolia' ); ?></p>
+<?php
 	}
 
 	public function powered_by_enabled_callback() {
@@ -176,8 +181,8 @@ class Algolia_Admin_Page_Settings {
 		if ( ! $powered_by_enabled ) {
 			$checked = ' checked';
 		}
-		echo "<input type='checkbox' name='algolia_powered_by_enabled' value='no' " . $checked . ' />' .
-			'<p class="description" id="home-description">' . __( 'This will remove the Algolia logo from the autocomplete and the search page. We require that you keep the Algolia logo if you are using a free plan.', 'algolia' ) . '</p>';
+		echo "<input type='checkbox' name='algolia_powered_by_enabled' value='no' " . esc_html( $checked ) . ' />' .
+			'<p class="description" id="home-description">' . esc_html( __( 'This will remove the Algolia logo from the autocomplete and the search page. We require that you keep the Algolia logo if you are using a free plan.', 'algolia' ) ) . '</p>';
 	}
 
 	public function sanitize_application_id( $value ) {
@@ -252,8 +257,7 @@ class Algolia_Admin_Page_Settings {
 				$this->option_group,
 				'no_connection',
 				__(
-					'We were unable to authenticate you against the Algolia servers with the provided information. ' .
-					'Please ensure that you used an the Admin API key and a valid Application ID.',
+					'We were unable to authenticate you against the Algolia servers with the provided information. Please ensure that you used an the Admin API key and a valid Application ID.',
 					'algolia'
 				)
 			);
@@ -264,8 +268,7 @@ class Algolia_Admin_Page_Settings {
 					$this->option_group,
 					'wrong_search_API_key',
 					__(
-						'It looks like your search API key is wrong. Ensure that the key you entered has only the search capability and nothing else. ' .
-						'Also ensure that the key has no limited time validity.',
+						'It looks like your search API key is wrong. Ensure that the key you entered has only the search capability and nothing else. Also ensure that the key has no limited time validity.',
 						'algolia'
 					)
 				);
@@ -343,6 +346,7 @@ class Algolia_Admin_Page_Settings {
 	public function print_section_settings() {
 		echo '<p>' . esc_html__( 'Configure here your Algolia credentials. You can find them in the "API Keys" section of your Algolia dashboard.', 'algolia' ) . '</p>';
 		echo '<p>' . esc_html__( 'Once you provide your Algolia Application ID and API key, this plugin will be able to securely communicate with Algolia servers.', 'algolia' ) . ' ' . esc_html__( 'We ensure your information is correct by testing them against the Algolia servers upon save.', 'algolia' ) . '</p>';
-		echo '<p>' . sprintf( __( 'No Algolia account yet? <a href="%s">Follow this link</a> to create one for free in a couple of minutes!.', 'algolia' ), 'https://www.algolia.com/users/sign_up?utm_medium=extension&utm_source=WordPress&utm_campaign=admin' ) . '</p>';
+		/* translators: the placeholder contains the URL to Algolia's website. */
+		echo '<p>' . wp_kses_post( sprintf( __( 'No Algolia account yet? <a href="%s">Follow this link</a> to create one for free in a couple of minutes!.', 'algolia' ), 'https://www.algolia.com/users/sign_up?utm_medium=extension&utm_source=WordPress&utm_campaign=admin' ) ) . '</p>';
 	}
 }

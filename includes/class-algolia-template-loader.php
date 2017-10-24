@@ -60,7 +60,7 @@ class Algolia_Template_Loader {
 
 		$json_config = json_encode( $config );
 
-		echo '<script type="text/javascript">var algolia = ' . $json_config . ';</script>';
+		echo '<script type="text/javascript">var algolia = ' . esc_js( $json_config ) . ';</script>';
 	}
 
 	private function should_load_autocomplete() {
