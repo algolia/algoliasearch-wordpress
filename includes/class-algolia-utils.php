@@ -167,6 +167,9 @@ class Algolia_Utils
 	public static function prepare_content( $content ) {
         $content = self::remove_content_noise( $content );
 
+        /* Make sure there is always a space between text delimited by different tags. */
+        $content = str_replace('</', ' </', $content);
+
 	    return strip_tags( $content );
     }
 

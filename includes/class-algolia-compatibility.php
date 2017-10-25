@@ -4,12 +4,24 @@ class Algolia_Compatibility {
 
     private $current_language;
 
+    private $table_press_loaded = false;
+
 	public function __construct() {
+		add_action( 'algolia_before_get_records', array( $this, 'register_tablepress_shortcodes' ) );
 		add_action( 'algolia_before_get_records', array( $this, 'register_vc_shortcodes' ) );
 		add_action( 'algolia_before_get_records', array( $this, 'enable_yoast_frontend' ) );
 		add_action( 'algolia_before_get_records', array( $this, 'wpml_switch_language' ) );
 		add_action( 'algolia_after_get_records', array( $this, 'wpml_switch_back_language' ) );
 	}
+
+	public function register_tablepress_shortcodes() {
+	    if ( ! class_exists( 'TablePress' ) || true === $this->table_press_loaded ) {
+	        return;
+        }
+        $frontend = TablePress::load_controller('frontend');
+        $frontend->init_shortcodes();
+        $this->table_press_loaded = true;
+    }
 
 	public function enable_yoast_frontend() {
 		if ( class_exists( 'WPSEO_Frontend' ) && method_exists( 'WPSEO_Frontend', 'get_instance' ) ) {
