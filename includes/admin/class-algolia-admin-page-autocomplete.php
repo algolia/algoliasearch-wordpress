@@ -110,7 +110,7 @@ class Algolia_Admin_Page_Autocomplete {
 	/**
 	 * @param $value
 	 *
-	 * @return array
+	 * @return string
 	 */
 	public function sanitize_autocomplete_enabled( $value ) {
 
