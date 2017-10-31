@@ -97,8 +97,6 @@ class Algolia_Autocomplete_Config {
 				return $entry;
 			}
 		}
-
-		return;
 	}
 
 	/**

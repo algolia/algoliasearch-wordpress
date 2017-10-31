@@ -58,9 +58,7 @@ class Algolia_Template_Loader {
 		// Give developers a last chance to alter the configuration.
 		$config = (array) apply_filters( 'algolia_config', $config );
 
-		$json_config = json_encode( $config );
-
-		echo '<script type="text/javascript">var algolia = ' . esc_js( $json_config ) . ';</script>';
+		echo '<script type="text/javascript">var algolia = ' . wp_json_encode( $config ) . ';</script>';
 	}
 
 	private function should_load_autocomplete() {
