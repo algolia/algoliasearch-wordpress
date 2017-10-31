@@ -1,7 +1,7 @@
 <?php
 
-class Algolia_Admin_Page_Autocomplete
-{
+class Algolia_Admin_Page_Autocomplete {
+
 	/**
 	 * @var string
 	 */
@@ -21,12 +21,12 @@ class Algolia_Admin_Page_Autocomplete
 	 * @var string
 	 */
 	private $option_group = 'algolia_autocomplete';
-	
+
 	/**
 	 * @var Algolia_Settings
 	 */
 	private $settings;
-	
+
 	/**
 	 * @var Algolia_Autocomplete_Config
 	 */
@@ -39,7 +39,7 @@ class Algolia_Admin_Page_Autocomplete
 	public function __construct( Algolia_Settings $settings, Algolia_Autocomplete_Config $autocomplete_config ) {
 		$this->settings = $settings;
 		$this->autocomplete_config = $autocomplete_config;
-		
+
 		add_action( 'admin_menu', array( $this, 'add_page' ) );
 		add_action( 'admin_init', array( $this, 'add_settings' ) );
 		add_action( 'admin_notices', array( $this, 'display_errors' ) );
@@ -95,21 +95,22 @@ class Algolia_Admin_Page_Autocomplete
 	}
 
 	/**
-	 * 
+	 *
 	 */
 	public function autocomplete_enabled_callback() {
 		$value = $this->settings->get_autocomplete_enabled();
 		$indices = $this->autocomplete_config->get_form_data();
 		$checked = 'yes' === $value ? 'checked ' : '';
 		$disabled = empty( $indices ) ? 'disabled ' : '';
-
-		echo "<input type='checkbox' name='algolia_autocomplete_enabled' value='yes' $checked $disabled/>";
+?>
+		<input type='checkbox' name='algolia_autocomplete_enabled' value='yes' <?php echo esc_html( $checked . ' ' . $disabled ); ?>/>
+<?php
 	}
 
 	/**
 	 * @param $value
 	 *
-	 * @return array
+	 * @return string
 	 */
 	public function sanitize_autocomplete_enabled( $value ) {
 
@@ -145,18 +146,20 @@ class Algolia_Admin_Page_Autocomplete
 	 */
 	public function display_errors() {
 		settings_errors( $this->option_group );
-		
+
 		if ( defined( 'ALGOLIA_HIDE_HELP_NOTICES' ) && ALGOLIA_HIDE_HELP_NOTICES ) {
 			return;
-		} 
+		}
 
 		$is_enabled = 'yes' === $this->settings->get_autocomplete_enabled();
 		$indices = $this->autocomplete_config->get_config();
 
 		if ( true === $is_enabled && empty( $indices ) ) {
+			/* translators: placeholder contains the URL to the autocomplete configuration page. */
+			$message = sprintf( __( 'Please select one or multiple indices on the <a href="%s">Algolia: Autocomplete configuration page</a>.', 'algolia' ), esc_url( admin_url( 'admin.php?page=' . $this->slug ) ) );
 			echo '<div class="error notice">
 					  <p>' . esc_html__( 'You have enabled the Algolia Autocomplete feature but did not choose any index to search in.', 'algolia' ) . '</p>
-					  <p>' . sprintf( __( 'Please select one or multiple indices on the <a href="%s">Algolia: Autocomplete configuration page</a>.', 'algolia' ), admin_url( 'admin.php?page=' . $this->slug ) ) . '</p>
+					  <p>' . wp_kses_post( $message ) . '</p>
 				  </div>';
 		}
 	}

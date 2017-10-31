@@ -31,9 +31,9 @@
 				<h2 itemprop="name headline"><a href="{{ data.permalink }}" title="{{ data.post_title }}" itemprop="url">{{{ data._highlightResult.post_title.value }}}</a></h2>
 				<div class="excerpt">
 					<p>
-            <# if ( data._snippetResult['content'] ) { #>
-              <span class="suggestion-post-content">{{{ data._snippetResult['content'].value }}}</span>
-            <# } #>
+			<# if ( data._snippetResult['content'] ) { #>
+			  <span class="suggestion-post-content">{{{ data._snippetResult['content'].value }}}</span>
+			<# } #>
 					</p>
 				</div>
 			</div>
@@ -61,8 +61,8 @@
 					},
 					searchParameters: {
 						facetingAfterDistinct: true,
-            highlightPreTag: '__ais-highlight__',
-            highlightPostTag: '__/ais-highlight__'
+			highlightPreTag: '__ais-highlight__',
+			highlightPostTag: '__/ais-highlight__'
 					}
 				});
 
@@ -92,30 +92,30 @@
 							empty: 'No results were found for "<strong>{{query}}</strong>".',
 							item: wp.template('instantsearch-hit')
 						},
-            transformData: {
+			transformData: {
 						  item: function (hit) {
-                for(var key in hit._highlightResult) {
-                  // We do not deal with arrays.
-                  if(typeof hit._highlightResult[key].value !== 'string') {
-                    continue;
-                  }
-                  hit._highlightResult[key].value = _.escape(hit._highlightResult[key].value);
-                  hit._highlightResult[key].value = hit._highlightResult[key].value.replace(/__ais-highlight__/g, '<em>').replace(/__\/ais-highlight__/g, '</em>');
-                }
+				for(var key in hit._highlightResult) {
+				  // We do not deal with arrays.
+				  if(typeof hit._highlightResult[key].value !== 'string') {
+					continue;
+				  }
+				  hit._highlightResult[key].value = _.escape(hit._highlightResult[key].value);
+				  hit._highlightResult[key].value = hit._highlightResult[key].value.replace(/__ais-highlight__/g, '<em>').replace(/__\/ais-highlight__/g, '</em>');
+				}
 
-                for(var key in hit._snippetResult) {
-                  // We do not deal with arrays.
-                  if(typeof hit._snippetResult[key].value !== 'string') {
-                    continue;
-                  }
+				for(var key in hit._snippetResult) {
+				  // We do not deal with arrays.
+				  if(typeof hit._snippetResult[key].value !== 'string') {
+					continue;
+				  }
 
-                  hit._snippetResult[key].value = _.escape(hit._snippetResult[key].value);
-                  hit._snippetResult[key].value = hit._snippetResult[key].value.replace(/__ais-highlight__/g, '<em>').replace(/__\/ais-highlight__/g, '</em>');
-                }
+				  hit._snippetResult[key].value = _.escape(hit._snippetResult[key].value);
+				  hit._snippetResult[key].value = hit._snippetResult[key].value.replace(/__ais-highlight__/g, '<em>').replace(/__\/ais-highlight__/g, '</em>');
+				}
 
-                return hit;
-              }
-            }
+				return hit;
+			  }
+			}
 					})
 				);
 

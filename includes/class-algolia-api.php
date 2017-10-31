@@ -4,13 +4,13 @@ use AlgoliaSearch\AlgoliaException;
 use AlgoliaSearch\Client;
 use AlgoliaSearch\Version;
 
-class Algolia_API
-{
+class Algolia_API {
+
 	/**
 	 * @var Client
 	 */
 	private $client;
-	
+
 	/**
 	 * @var Algolia_Settings
 	 */
@@ -22,7 +22,7 @@ class Algolia_API
 	public function __construct( Algolia_Settings $settings ) {
 		$this->settings = $settings;
 	}
-	
+
 	public function is_reachable() {
 		if ( ! $this->settings->get_api_is_reachable() ) {
 			return false;
@@ -45,21 +45,20 @@ class Algolia_API
 	public function get_client() {
 		global $wp_version;
 
-		$integration_name = (string) apply_filters( 'algolia_ua_integration_name', 'Wordpress' );
+		$integration_name = (string) apply_filters( 'algolia_ua_integration_name', 'WordPress' );
 		$integration_version = (string) apply_filters( 'algolia_ua_integration_version', ALGOLIA_VERSION );
-		
+
 		// Build the UserAgent.
 		$ua = '; ' . $integration_name . ' integration (' . $integration_version . ')'
 			. '; PHP (' . phpversion() . ')'
-			. '; Wordpress (' . $wp_version . ')';
-		
+			. '; WordPress (' . $wp_version . ')';
 
 		Version::$custom_value = $ua;
 
 		$application_id = $this->settings->get_application_id();
 		$api_key = $this->settings->get_api_key();
 		$search_api_key = $this->settings->get_search_api_key();
-		
+
 		if ( empty( $application_id ) || empty( $api_key ) || empty( $search_api_key ) ) {
 			return;
 		}
@@ -86,9 +85,9 @@ class Algolia_API
 			$client->listUserKeys();
 
 			return;
-		} catch ( Exception $exception ) {}
-		
-		
+		} catch ( Exception $exception ) {
+		}
+
 		// If this call does not succeed, then the application_ID or API_key is/are wrong.
 		// This will raise an exception.
 		$key = $client->getUserKeyACL( (string) $api_key );
@@ -108,12 +107,12 @@ class Algolia_API
 				$missing_acls[] = $required_acl;
 			}
 		}
-		
+
 		if ( ! empty( $missing_acls ) ) {
-			throw new Exception( 'Your admin API key is missing the following ACLs: ' . implode(', ', $missing_acls ) );
+			throw new Exception( 'Your admin API key is missing the following ACLs: ' . implode( ', ', $missing_acls ) );
 		}
 	}
-	
+
 	/**
 	 * @param string $application_id
 	 * @param string $api_key
@@ -151,7 +150,7 @@ class Algolia_API
 			if ( 0 !== $acl['validity'] ) {
 				return false;
 			}
-		} catch (AlgoliaException $e) {
+		} catch ( AlgoliaException $e ) {
 			return false;
 		}
 

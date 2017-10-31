@@ -1,0 +1,23 @@
+<?xml version="1.0"?>
+<ruleset name="PHP_CodeSniffer">
+ <description>The coding standard for the Algolia plugin for WordPress.</description>
+
+ <file>algolia.php</file>
+ <file>classmap.php</file>
+ <file>uninstall.php</file>
+ <file>index.php</file>
+ <file>includes</file>
+ <file>css</file>
+ <file>templates</file>
+ 
+ <exclude-pattern>includes/libraries</exclude-pattern>
+
+ <arg name="colors" />
+
+ <rule ref="WordPress-Core"></rule>
+ <rule ref="WordPress-Extra"></rule>
+
+ <config name="testVersion" value="5.3-"/>
+ <rule ref="PHPCompatibility"></rule>
+
+</ruleset>

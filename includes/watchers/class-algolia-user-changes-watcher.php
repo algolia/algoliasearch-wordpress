@@ -2,8 +2,8 @@
 
 use AlgoliaSearch\AlgoliaException;
 
-class Algolia_User_Changes_Watcher implements Algolia_Changes_Watcher
-{
+class Algolia_User_Changes_Watcher implements Algolia_Changes_Watcher {
+
 	/**
 	 * @var Algolia_Index
 	 */
@@ -42,39 +42,39 @@ class Algolia_User_Changes_Watcher implements Algolia_Changes_Watcher
 			return;
 		}
 
-        $user = get_user_by( 'id', $user_id );
+		$user = get_user_by( 'id', $user_id );
 
 		if ( ! $user || ! $this->index->supports( $user ) ) {
 			return;
 		}
 
-        try {
-            $this->index->sync( $user );
-        } catch ( AlgoliaException $exception ) {
-            error_log( $exception->getMessage() );
-        }
+		try {
+			$this->index->sync( $user );
+		} catch ( AlgoliaException $exception ) {
+			error_log( $exception->getMessage() );
+		}
 	}
 
-    /**
-     * @param int $user_id
-     */
+	/**
+	 * @param int $user_id
+	 */
 	public function delete_item( $user_id ) {
-        $user = get_user_by( 'id', $user_id );
+		$user = get_user_by( 'id', $user_id );
 
-        if ( ! $user || ! $this->index->supports( $user ) ) {
-            return;
-        }
+		if ( ! $user || ! $this->index->supports( $user ) ) {
+			return;
+		}
 
-        try {
-            $this->index->delete_item( $user );
-        } catch ( AlgoliaException $exception ) {
-            error_log( $exception->getMessage() );
-        }
-    }
+		try {
+			$this->index->delete_item( $user );
+		} catch ( AlgoliaException $exception ) {
+			error_log( $exception->getMessage() );
+		}
+	}
 
 	/**
 	 * Ensures that the user post count gets updated.
-	 * 
+	 *
 	 * @param int     $post_id
 	 * @param WP_Post $post
 	 */
@@ -98,11 +98,13 @@ class Algolia_User_Changes_Watcher implements Algolia_Changes_Watcher
 		$author_id = $post->post_author;
 
 		// We delay the sync until after the post was deleted to propagate the change
-        // posts count change for the author.
-        // Todo: this is not optimal given it would be triggered for every future triggered hook.
-        // Todo: needs to be changed.
-        add_action( 'after_delete_post', function() use ( $watcher, $author_id ) {
-            $watcher->sync_item( $author_id );
-        } );
+		// posts count change for the author.
+		// Todo: this is not optimal given it would be triggered for every future triggered hook.
+		// Todo: needs to be changed.
+		add_action(
+			'after_delete_post', function() use ( $watcher, $author_id ) {
+				$watcher->sync_item( $author_id );
+			}
+		);
 	}
 }
