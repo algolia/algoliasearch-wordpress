@@ -1,5 +1,39 @@
 ## Change Log
 
+### 1.23.0
+
+- feat: add a `requestHeaders` parameter to every method to allow passing custom HTTP headers on a per request basis
+- feat: add multi cluster management endpoints
+
+
+### 1.22.0
+
+- feat: Introduce SynonymIterator to easily export all synonyms
+- feat: Introduce RuleIterator to easily export all query rules
+
+### 1.21.0
+
+- feat: exclude disjunctive queries from analytics
+- fix: autoload Tests namespace only in dev
+- fix: remove usage of deprecated API key methods
+
+### 1.20.0
+
+- feat(places): add `getObject` support
+
+### 1.19.0
+
+- feat(query-rules): add query rules support
+- feat(delete-by): add `delete by` support
+- feat: add a dedicated `AlgoliaConnectionException`
+
+
+### 1.18.0
+
+- make API credentials optional for Client::initPlaces()
+- make API credentials optional if places enabled in ClientContext class
+- raise exception when unknown method is called on Index class
+
 ### 1.17.0
 
 - add a strategy to keep state between PHP requests
@@ -37,8 +71,8 @@
 
 ### 1.10.2
  - Fix of passing `$strategy` parameter to API in `Client::multipleQueries`
- - Follow new User-Agent header convention 
- 
+ - Follow new User-Agent header convention
+
 ### 1.10.1
  - Fix `Index::saveSynonym`
 
@@ -151,7 +185,7 @@
 ### 1.3.1
 - Added restrictSearchableAttributes
 
-### 1.3.0 
+### 1.3.0
 - Fix CA path
 - Code reorganization
 
