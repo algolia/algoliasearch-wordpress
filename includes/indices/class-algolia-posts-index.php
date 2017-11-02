@@ -237,48 +237,12 @@ final class Algolia_Posts_Index extends Algolia_Index {
 
 	/**
 	 * @param int $post_id
-	 * @param int $current_records_count
-	 * @param int $new_records_count
-	 */
-	private function remove_post_records( $post_id, $current_records_count, $new_records_count = 0 ) {
-		// Find out the records that are no longer needed.
-		$dirty_object_ids = array();
-		for ( $i = $new_records_count; $i < $current_records_count; $i++ ) {
-			$dirty_object_ids[] = $this->get_post_object_id( $post_id, $i );
-		}
-
-		// Remove the dirty records.
-		if ( ! empty( $dirty_object_ids ) ) {
-			$index = $this->get_index();
-			$index->deleteObjects( $dirty_object_ids );
-		}
-	}
-
-	/**
-	 * @param int $post_id
 	 * @param int $record_index
 	 *
 	 * @return string
 	 */
 	private function get_post_object_id( $post_id, $record_index ) {
 		return $post_id . '-' . $record_index;
-	}
-
-	/**
-	 * @param int $post_id
-	 *
-	 * @return int
-	 */
-	private function get_post_records_count( $post_id ) {
-		return (int) get_post_meta( (int) $post_id, 'algolia_' . $this->get_id() . '_records_count', true );
-	}
-
-	/**
-	 * @param WP_Post $post
-	 * @param int     $count
-	 */
-	private function set_post_records_count( WP_Post $post, $count ) {
-		update_post_meta( (int) $post->ID, 'algolia_' . $this->get_id() . '_records_count', (int) $count );
 	}
 
 	/**
@@ -294,17 +258,10 @@ final class Algolia_Posts_Index extends Algolia_Index {
 	 * @param array   $records
 	 */
 	private function update_post_records( WP_Post $post, array $records ) {
-		$current_records_count = $this->get_post_records_count( $post->ID );
-		$new_records_count = count( $records );
-
-		// Remove dirty records.
-		$this->remove_post_records( $post->ID, $current_records_count, $new_records_count );
+		$this->delete_item( $post );
 
 		// Update the other records.
 		parent::update_records( $post, $records );
-
-		// Keep track of the new record count for future updates relying on the objectID's naming convention .
-		$this->set_post_records_count( $post, $new_records_count );
 
 		do_action( 'algolia_posts_index_post_updated', $post, $records );
 		do_action( 'algolia_posts_index_post_' . $post->post_type . '_updated', $post, $records );
@@ -325,7 +282,7 @@ final class Algolia_Posts_Index extends Algolia_Index {
 			array(
 				'post_type'             => $this->post_type,
 				'post_status'           => 'any', // Let the `should_index` take care of the filtering.
-			'suppress_filters'      => true,
+				'suppress_filters'      => true,
 			)
 		);
 
@@ -354,19 +311,15 @@ final class Algolia_Posts_Index extends Algolia_Index {
 		return $query->posts;
 	}
 
-	public function de_index_items() {
-		parent::de_index_items();
-
-		// Remove all the records count for the post type in one call.
-		delete_post_meta_by_key( 'algolia_' . $this->get_id() . '_records_count' );
-	}
-
 	/**
 	 * @param mixed $item
 	 */
 	public function delete_item( $item ) {
 		$this->assert_is_supported( $item );
-		$this->update_records( $item, array() );
-		// $this->get_index()->deleteByQuery( '', array( 'filters' => 'post_id=' . $item->ID ) );
+		$this->get_index()->deleteBy(
+			array(
+				'filters' => 'post_id=' . $item->ID,
+			)
+		);
 	}
 }
