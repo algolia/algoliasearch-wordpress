@@ -61,8 +61,8 @@ Here is the list of all available Filters.
 | algolia_post_shared_attributes                           | array $shared_attributes, WP_Post $post                                                                     |
 | algolia\_post\_{$post_type}_shared_attributes            | array $shared_attributes, WP_Post $post                                                                     |
 | algolia_post_content                                     | string $content                                                                                             |
-| algolia_post_records                                     | array $record, WP_Post $post                                                                                |
-| algolia\_post\_{$post_type}_records                      | array $record, WP_Post                                                                                      |
+| algolia_post_records                                     | array $records, WP_Post $post                                                                               |
+| algolia\_post\_{$post_type}_records                      | array $records, WP_Post                                                                                     |
 | algolia_posts_index_settings                             | array $settings, string $post_type                                                                          |
 | algolia\_posts\_{$post_type}_index_settings              | array $settings                                                                                             |
 | algolia_posts_index_synonyms                             | array $synonyms, string $post_type                                                                          |

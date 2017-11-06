@@ -1,6 +1,6 @@
 <?php
 
-interface Algolia_Changes_Watcher
-{
+interface Algolia_Changes_Watcher {
+
 	public function watch();
 }

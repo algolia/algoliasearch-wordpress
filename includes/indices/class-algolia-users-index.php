@@ -1,7 +1,7 @@
 <?php
 
-final class Algolia_Users_Index extends Algolia_Index
-{
+final class Algolia_Users_Index extends Algolia_Index {
+
 	/**
 	 * @var string
 	 */
@@ -10,8 +10,7 @@ final class Algolia_Users_Index extends Algolia_Index
 	/**
 	 * @return string The name displayed in the admin UI.
 	 */
-	public function get_admin_name()
-	{
+	public function get_admin_name() {
 		return __( 'Users' );
 	}
 
@@ -20,8 +19,7 @@ final class Algolia_Users_Index extends Algolia_Index
 	 *
 	 * @return bool
 	 */
-	protected function should_index( $item )
-	{
+	protected function should_index( $item ) {
 		if ( function_exists( 'wpcom_vip_count_user_posts' ) ) {
 			$should_index = (int) wpcom_vip_count_user_posts( $item->ID ) > 0;
 		} else {
@@ -36,8 +34,7 @@ final class Algolia_Users_Index extends Algolia_Index
 	 *
 	 * @return array
 	 */
-	protected function get_records( $item )
-	{
+	protected function get_records( $item ) {
 		$record = array();
 		$record['objectID'] = $item->ID;
 		$record['user_id'] = $item->ID;
@@ -53,32 +50,34 @@ final class Algolia_Users_Index extends Algolia_Index
 
 		$avatar_size = 32;
 		if ( function_exists( 'get_avatar_url' ) ) {
-			$record['avatar_url'] = get_avatar_url( $item->ID, array( 'size' => $avatar_size ) );
+			$record['avatar_url'] = get_avatar_url(
+				$item->ID, array(
+					'size' => $avatar_size,
+				)
+			);
 		} else {
 			$email_hash = md5( strtolower( trim( $item->user_email ) ) );
 			$record['avatar_url'] = 'https://www.gravatar.com/avatar/' . $email_hash . '?s=' . $avatar_size;
 		}
 
 		$record = (array) apply_filters( 'algolia_user_record', $record, $item );
-		
+
 		return array( $record );
 	}
 
 	/**
 	 * @return int
 	 */
-	protected function get_re_index_items_count()
-	{
+	protected function get_re_index_items_count() {
 		$users_count = count_users();
-		
+
 		return (int) $users_count['total_users'];
 	}
 
 	/**
 	 * @return array
 	 */
-	protected function get_settings()
-	{
+	protected function get_settings() {
 		$settings = array(
 			'attributesToIndex' => array(
 				'unordered(display_name)',
@@ -94,53 +93,49 @@ final class Algolia_Users_Index extends Algolia_Index
 	/**
 	 * @return array
 	 */
-	protected function get_synonyms()
-	{
+	protected function get_synonyms() {
 		return (array) apply_filters( 'algolia_users_index_synonyms', array() );
 	}
 
 	/**
 	 * @return string
 	 */
-	public function get_id()
-	{
+	public function get_id() {
 		return 'users';
 	}
 
-	
+
 	/**
 	 * @param int $page
 	 * @param int $batch_size
 	 *
 	 * @return array
 	 */
-	protected function get_items( $page, $batch_size )
-	{
+	protected function get_items( $page, $batch_size ) {
 		$offset = $batch_size * ( $page - 1 );
 
 		$args = array(
 			'order'        => 'ASC',
 			'orderby'      => 'ID',
 			'offset'       => $offset,
-			'number'	      => $batch_size,
+			'number'          => $batch_size,
 		);
 
 		// We use prior to 4.5 syntax for BC purposes, no `paged` arg.
 		return get_users( $args );
 	}
 
-    /**
-     * A performing function that return true if the item can potentially
-     * be subject for indexation or not. This will be used to determine if an item is part of the index
-     * As this function will be called synchronously during other operations,
-     * it has to be as lightweight as possible. No db calls or huge loops.
-     *
-     * @param mixed $item
-     *
-     * @return bool
-     */
-	public function supports( $item )
-	{
+	/**
+	 * A performing function that return true if the item can potentially
+	 * be subject for indexation or not. This will be used to determine if an item is part of the index
+	 * As this function will be called synchronously during other operations,
+	 * it has to be as lightweight as possible. No db calls or huge loops.
+	 *
+	 * @param mixed $item
+	 *
+	 * @return bool
+	 */
+	public function supports( $item ) {
 		return $item instanceof WP_User;
 	}
 
@@ -158,7 +153,11 @@ final class Algolia_Users_Index extends Algolia_Index
 	 * @param mixed $item
 	 */
 	public function delete_item( $item ) {
-	    $this->assert_is_supported( $item );
-        $this->get_index()->deleteObject( $item->ID );
+		$this->assert_is_supported( $item );
+		$this->get_index()->deleteBy(
+			array(
+				'filters' => 'user_id=' . $item->ID,
+			)
+		);
 	}
 }

@@ -1,12 +1,11 @@
 <?php
 
-class Algolia_Settings
-{
+class Algolia_Settings {
+
 	/**
 	 * Algolia_Settings constructor.
 	 */
-	public function __construct()
-	{
+	public function __construct() {
 		add_option( 'algolia_application_id', '' );
 		add_option( 'algolia_search_api_key', '' );
 		add_option( 'algolia_api_key', '' );
@@ -80,7 +79,7 @@ class Algolia_Settings
 		$blacklist[] = 'deprecated_log';
 		$blacklist[] = 'async-scan-result';
 		$blacklist[] = 'scanresult';
-		
+
 		return array_unique( $blacklist );
 	}
 
@@ -88,23 +87,23 @@ class Algolia_Settings
 	 * @return array
 	 */
 	public function get_synced_indices_ids() {
-	    $ids = array();
+		$ids = array();
 
-	    // Gather indices used in autocomplete experience.
-        $config = $this->get_autocomplete_config();
-        foreach( $config as $index ) {
-            if( isset( $index['index_id'] ) ) {
-                $ids[] = $index['index_id'];
-            }
-        }
+		// Gather indices used in autocomplete experience.
+		$config = $this->get_autocomplete_config();
+		foreach ( $config as $index ) {
+			if ( isset( $index['index_id'] ) ) {
+				$ids[] = $index['index_id'];
+			}
+		}
 
-        // Push index used in instantsearch experience.
-        // Todo: we should allow users to index without using the shipped search UI or backend implementation.
-        if ( $this->should_override_search_in_backend() || $this->should_override_search_with_instantsearch() ) {
-            $ids[] = $this->get_native_search_index_id();
-        }
+		// Push index used in instantsearch experience.
+		// Todo: we should allow users to index without using the shipped search UI or backend implementation.
+		if ( $this->should_override_search_in_backend() || $this->should_override_search_with_instantsearch() ) {
+			$ids[] = $this->get_native_search_index_id();
+		}
 
-        return (array) apply_filters( 'algolia_get_synced_indices_ids', $ids );
+		return (array) apply_filters( 'algolia_get_synced_indices_ids', $ids );
 	}
 
 
@@ -163,7 +162,7 @@ class Algolia_Settings
 	 * @return string
 	 */
 	public function get_native_search_index_id() {
-	    return (string) apply_filters( 'algolia_native_search_index_id', 'searchable_posts' );
+		return (string) apply_filters( 'algolia_native_search_index_id', 'searchable_posts' );
 	}
 
 	/**
@@ -231,14 +230,14 @@ class Algolia_Settings
 	public function get_api_is_reachable() {
 		$enabled = get_option( 'algolia_api_is_reachable', 'no' );
 
-		return $enabled === 'yes';
+		return 'yes' === $enabled;
 	}
 
 	/**
 	 * @param bool $flag
 	 */
 	public function set_api_is_reachable( $flag ) {
-		$value = (bool) $flag === true ? 'yes' : 'no';
+		$value = (bool) true === $flag ? 'yes' : 'no';
 		update_option( 'algolia_api_is_reachable', $value );
 	}
 
@@ -248,7 +247,7 @@ class Algolia_Settings
 	public function is_powered_by_enabled() {
 		$enabled = get_option( 'algolia_powered_by_enabled', 'yes' );
 
-		return $enabled === 'yes';
+		return 'yes' === $enabled;
 	}
 
 	public function enable_powered_by() {

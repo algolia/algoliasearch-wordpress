@@ -1,17 +1,23 @@
 (function( $ ) {
 	'use strict';
 
-	$(function() {
+	$(
+		function() {
 
-		function updateAutocompletePositions () {
-      $('.table-autocomplete .position-input').each(function(index, value) {
-        $(value).val(index);
-      });
+			function updateAutocompletePositions () {
+				$( '.table-autocomplete .position-input' ).each(
+					function(index, value) {
+						$( value ).val( index );
+					}
+				);
+			}
+			$( '.table-autocomplete tbody' ).sortable(
+				{
+					update: function() {
+						updateAutocompletePositions();
+					}
+				}
+			);
 		}
-		$('.table-autocomplete tbody').sortable({
-      update: function() {
-        updateAutocompletePositions();
-      }
-		});
-	});
+	);
 })( jQuery );

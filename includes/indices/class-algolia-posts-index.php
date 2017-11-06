@@ -1,7 +1,7 @@
 <?php
 
-final class Algolia_Posts_Index extends Algolia_Index
-{
+final class Algolia_Posts_Index extends Algolia_Index {
+
 	/**
 	 * @var string
 	 */
@@ -22,7 +22,7 @@ final class Algolia_Posts_Index extends Algolia_Index
 	 * @return bool
 	 */
 	public function supports( $item ) {
-	    return $item instanceof WP_Post && $item->post_type === $this->post_type;
+		return $item instanceof WP_Post && $item->post_type === $this->post_type;
 	}
 
 	/**
@@ -30,7 +30,7 @@ final class Algolia_Posts_Index extends Algolia_Index
 	 */
 	public function get_admin_name() {
 		$post_type = get_post_type_object( $this->post_type );
-		
+
 		return null === $post_type ? $this->post_type : $post_type->labels->name;
 	}
 
@@ -92,12 +92,12 @@ final class Algolia_Posts_Index extends Algolia_Index
 		$post_content = apply_filters( 'algolia_post_content', $post->post_content );
 		$post_content = apply_filters( 'the_content', $post_content );
 
-		if ( $removed === true ) {
-            add_filter( 'the_content', 'wptexturize', 10 );
-        }
+		if ( true === $removed ) {
+			add_filter( 'the_content', 'wptexturize', 10 );
+		}
 
-        $post_content = Algolia_Utils::prepare_content( $post_content );
-        $parts = Algolia_Utils::explode_content( $post_content );
+		$post_content = Algolia_Utils::prepare_content( $post_content );
+		$parts = Algolia_Utils::explode_content( $post_content );
 
 		if ( defined( 'ALGOLIA_SPLIT_POSTS' ) && false === ALGOLIA_SPLIT_POSTS ) {
 			$parts = array( array_shift( $parts ) );
@@ -105,10 +105,10 @@ final class Algolia_Posts_Index extends Algolia_Index
 
 		$records = array();
 		foreach ( $parts as $i => $part ) {
-		    $record = $shared_attributes;
+			$record = $shared_attributes;
 			$record['objectID'] = $this->get_post_object_id( $post->ID, $i );
 			$record['content'] = $part;
-            $record['record_index'] = $i;
+			$record['record_index'] = $i;
 			$records[] = $record;
 		}
 
@@ -158,20 +158,20 @@ final class Algolia_Posts_Index extends Algolia_Index
 		$shared_attributes['taxonomies_hierarchical'] = array();
 		foreach ( $taxonomy_objects as $taxonomy ) {
 
-            $terms = wp_get_object_terms( $post->ID, $taxonomy->name );
+			$terms = wp_get_object_terms( $post->ID, $taxonomy->name );
 			$terms = is_array( $terms ) ? $terms : array();
 
 			if ( $taxonomy->hierarchical ) {
-			    $hierarchical_taxonomy_values = Algolia_Utils::get_taxonomy_tree( $terms, $taxonomy->name );
-                if ( ! empty( $hierarchical_taxonomy_values ) ) {
-                    $shared_attributes['taxonomies_hierarchical'][$taxonomy->name] = $hierarchical_taxonomy_values;
-                }
+				$hierarchical_taxonomy_values = Algolia_Utils::get_taxonomy_tree( $terms, $taxonomy->name );
+				if ( ! empty( $hierarchical_taxonomy_values ) ) {
+					$shared_attributes['taxonomies_hierarchical'][ $taxonomy->name ] = $hierarchical_taxonomy_values;
+				}
 			}
 
-            $taxonomy_values = wp_list_pluck( $terms, 'name' );
-            if ( ! empty( $taxonomy_values ) ) {
-                $shared_attributes['taxonomies'][ $taxonomy->name ] = $taxonomy_values;
-            }
+			$taxonomy_values = wp_list_pluck( $terms, 'name' );
+			if ( ! empty( $taxonomy_values ) ) {
+				$shared_attributes['taxonomies'][ $taxonomy->name ] = $taxonomy_values;
+			}
 		}
 
 		$shared_attributes['is_sticky'] = is_sticky( $post->ID ) ? 1 : 0;
@@ -190,7 +190,7 @@ final class Algolia_Posts_Index extends Algolia_Index
 
 		return $shared_attributes;
 	}
-	
+
 	/**
 	 * @return array
 	 */
@@ -204,7 +204,7 @@ final class Algolia_Posts_Index extends Algolia_Index
 			'customRanking' => array(
 				'desc(is_sticky)',
 				'desc(post_date)',
-                'asc(record_index)',
+				'asc(record_index)',
 			),
 			'attributeForDistinct'  => 'post_id',
 			'distinct'              => true,
@@ -238,48 +238,12 @@ final class Algolia_Posts_Index extends Algolia_Index
 
 	/**
 	 * @param int $post_id
-	 * @param int $current_records_count
-	 * @param int $new_records_count
-	 */
-	private function remove_post_records( $post_id, $current_records_count, $new_records_count = 0 ) {
-		// Find out the records that are no longer needed.
-		$dirty_object_ids = array();
-		for ( $i = $new_records_count; $i < $current_records_count; $i++ ) {
-			$dirty_object_ids[] = $this->get_post_object_id( $post_id, $i );
-		}
-
-		// Remove the dirty records.
-		if ( ! empty( $dirty_object_ids ) ) {
-			$index = $this->get_index();
-			$index->deleteObjects( $dirty_object_ids );
-		}
-	}
-
-	/**
-	 * @param int $post_id
 	 * @param int $record_index
 	 *
 	 * @return string
 	 */
 	private function get_post_object_id( $post_id, $record_index ) {
 		return $post_id . '-' . $record_index;
-	}
-
-	/**
-	 * @param int $post_id
-	 *
-	 * @return int
-	 */
-	private function get_post_records_count( $post_id ) {
-		return (int) get_post_meta( (int) $post_id, 'algolia_' . $this->get_id() . '_records_count', true );
-	}
-
-	/**
-	 * @param WP_Post $post
-	 * @param int $count
-	 */
-	private function set_post_records_count( WP_Post $post, $count ) {
-		update_post_meta( (int) $post->ID, 'algolia_' . $this->get_id() . '_records_count', (int) $count );
 	}
 
 	/**
@@ -295,17 +259,10 @@ final class Algolia_Posts_Index extends Algolia_Index
 	 * @param array   $records
 	 */
 	private function update_post_records( WP_Post $post, array $records ) {
-		$current_records_count = $this->get_post_records_count( $post->ID );
-		$new_records_count = count( $records );
-
-		// Remove dirty records.
-		$this->remove_post_records( $post->ID, $current_records_count, $new_records_count );
+		$this->delete_item( $post );
 
 		// Update the other records.
 		parent::update_records( $post, $records );
-
-		// Keep track of the new record count for future updates relying on the objectID's naming convention .
-		$this->set_post_records_count( $post, $new_records_count );
 
 		do_action( 'algolia_posts_index_post_updated', $post, $records );
 		do_action( 'algolia_posts_index_post_' . $post->post_type . '_updated', $post, $records );
@@ -322,15 +279,17 @@ final class Algolia_Posts_Index extends Algolia_Index
 	 * @return int
 	 */
 	protected function get_re_index_items_count() {
-		$query = new WP_Query( array(
-			'post_type'   		    => $this->post_type,
-			'post_status' 		    => 'any', // Let the `should_index` take care of the filtering.
-			'suppress_filters' 	    => true,
-		) );
+		$query = new WP_Query(
+			array(
+				'post_type'             => $this->post_type,
+				'post_status'           => 'any', // Let the `should_index` take care of the filtering.
+				'suppress_filters'      => true,
+			)
+		);
 
 		return (int) $query->found_posts;
 	}
-	
+
 	/**
 	 * @param int $page
 	 * @param int $batch_size
@@ -338,24 +297,19 @@ final class Algolia_Posts_Index extends Algolia_Index
 	 * @return array
 	 */
 	protected function get_items( $page, $batch_size ) {
-		$query = new WP_Query( array(
-			'post_type'      	  => $this->post_type,
-			'posts_per_page' 	  => $batch_size,
-			'post_status'    	  => 'any',
-			'order'          	  => 'ASC',
-			'orderby'        	  => 'ID',
-			'paged'			 	  => $page,
-			'suppress_filters' 	  => true,
-		) );
+		$query = new WP_Query(
+			array(
+				'post_type'           => $this->post_type,
+				'posts_per_page'      => $batch_size,
+				'post_status'         => 'any',
+				'order'               => 'ASC',
+				'orderby'             => 'ID',
+				'paged'               => $page,
+				'suppress_filters'    => true,
+			)
+		);
 
 		return $query->posts;
-	}
-
-	public function de_index_items() {
-		parent::de_index_items();
-
-		// Remove all the records count for the post type in one call.
-		delete_post_meta_by_key( 'algolia_' . $this->get_id() . '_records_count' );
 	}
 
 	/**
@@ -363,7 +317,10 @@ final class Algolia_Posts_Index extends Algolia_Index
 	 */
 	public function delete_item( $item ) {
 		$this->assert_is_supported( $item );
-        $this->update_records( $item, array() );
-        // $this->get_index()->deleteByQuery( '', array( 'filters' => 'post_id=' . $item->ID ) );
+		$this->get_index()->deleteBy(
+			array(
+				'filters' => 'post_id=' . $item->ID,
+			)
+		);
 	}
 }

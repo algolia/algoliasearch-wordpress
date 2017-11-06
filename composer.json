@@ -8,6 +8,12 @@
     "php": ">=5.3",
     "composer/installers": "~1.0"
   },
+  "require-dev": {
+    "dealerdirect/phpcodesniffer-composer-installer": "*",
+    "wimg/php-compatibility": "*",
+    "wp-coding-standards/wpcs": "*"
+  },
+  "prefer-stable": true,
   "extra": {
     "installer-name": "algolia"
   }

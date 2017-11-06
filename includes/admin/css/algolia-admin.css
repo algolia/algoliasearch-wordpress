@@ -3,60 +3,59 @@
  * included in this file.
  */
 .form-table .table-autocomplete th {
-    padding: 8px 10px !important;
+	padding: 8px 10px !important;
 
 }
 
 .form-table .table-autocomplete {
-    width: auto;
+	width: auto;
 }
 
 .table-autocomplete .dashicons-move {
-    cursor: pointer;
+	cursor: pointer;
 }
 
 /* Override admin menu styles for the algolia icon */
 @font-face {
-    font-family: 'algolia';
-    src:    url('../fonts/algolia.eot?nqrd9q');
-    src:    url('../fonts/algolia.eot?nqrd9q#iefix') format('embedded-opentype'),
-    url('../fonts/algolia.ttf?nqrd9q') format('truetype'),
-    url('../fonts/algolia.woff?nqrd9q') format('woff'),
-    url('../fonts/algolia.svg?nqrd9q#algolia') format('svg');
-    font-weight: normal;
-    font-style: normal;
+	font-family: 'algolia';
+	src:    url('../fonts/algolia.eot?nqrd9q');
+	src:    url('../fonts/algolia.eot?nqrd9q#iefix') format('embedded-opentype'),
+	url('../fonts/algolia.ttf?nqrd9q') format('truetype'),
+	url('../fonts/algolia.woff?nqrd9q') format('woff'),
+	url('../fonts/algolia.svg?nqrd9q#algolia') format('svg');
+	font-weight: normal;
+	font-style: normal;
 }
 
 #adminmenu #toplevel_page_algolia .menu-icon-generic div.wp-menu-image:before,
 #adminmenu #toplevel_page_algolia-account-settings .menu-icon-generic div.wp-menu-image:before {
-    font-family: algolia !important;
-    content: "\e900";
+	font-family: algolia !important;
+	content: "\e900";
 }
 
 /* Logs page */
 .log-details {
-    background-color: #32373c;
-    color: #FFF;
-    padding: 30px;
-    border-radius: 3px;
-    display: none;
+	background-color: #32373c;
+	color: #FFF;
+	padding: 30px;
+	border-radius: 3px;
+	display: none;
 }
 
 /* Native search page */
 form .input-radio label {
-    font-weight: bold;
+	font-weight: bold;
 }
 form .radio-info {
-    margin-bottom: 15px;
-    padding-left: 25px;
+	margin-bottom: 15px;
+	padding-left: 25px;
 }
 
 /* Indexing page */
 .failed-task, .status-running, .status-idle, #delete-pending-tasks, .current-task, .run-queue-link, .stop-queue-link {
-    display: none;
+	display: none;
 }
 
 #delete-pending-tasks {
-    display: none;
+	display: none;
 }
-
