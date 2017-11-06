@@ -89,7 +89,8 @@ final class Algolia_Posts_Index extends Algolia_Index {
 
 		$removed = remove_filter( 'the_content', 'wptexturize', 10 );
 
-		$post_content = apply_filters( 'the_content', $post->post_content );
+		$post_content = apply_filters( 'algolia_post_content', $post->post_content );
+		$post_content = apply_filters( 'the_content', $post_content );
 
 		if ( true === $removed ) {
 			add_filter( 'the_content', 'wptexturize', 10 );
