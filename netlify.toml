@@ -1,6 +1,6 @@
 [build]
   base    = "docs"
-  publish = "build"
+  publish = "docs/build"
   command = "node index.js"
 
 [context.production.environment]
