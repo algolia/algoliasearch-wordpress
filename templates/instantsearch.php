@@ -19,21 +19,21 @@
 
 	<script type="text/html" id="tmpl-instantsearch-hit">
 		<article itemtype="http://schema.org/Article">
-			<# if ( data.images.thumbnail ) { #>
+			{{#images.thumbnail}}
 			<div class="ais-hits--thumbnail">
-				<a href="{{ data.permalink }}" title="{{ data.post_title }}">
-					<img src="{{ data.images.thumbnail.url }}" alt="{{ data.post_title }}" title="{{ data.post_title }}" itemprop="image" />
+				<a href="{{ permalink }}" title="{{ post_title }}">
+					<img src="{{ images.thumbnail.url }}" alt="{{ post_title }}" title="{{ post_title }}" itemprop="image" />
 				</a>
 			</div>
-			<# } #>
+			{{/images.thumbnail}}
 
 			<div class="ais-hits--content">
-				<h2 itemprop="name headline"><a href="{{ data.permalink }}" title="{{ data.post_title }}" itemprop="url">{{{ data._highlightResult.post_title.value }}}</a></h2>
+				<h2 itemprop="name headline"><a href="{{ permalink }}" title="{{ post_title }}" itemprop="url">{{{ _highlightResult.post_title.value }}}</a></h2>
 				<div class="excerpt">
 					<p>
-			<# if ( data._snippetResult['content'] ) { #>
-			  <span class="suggestion-post-content">{{{ data._snippetResult['content'].value }}}</span>
-			<# } #>
+			{{#_snippetResult.content}}
+			  <span class="suggestion-post-content">{{{ _snippetResult['content'].value }}}</span>
+			{{/_snippetResult.content}}
 					</p>
 				</div>
 			</div>
@@ -90,7 +90,7 @@
 						hitsPerPage: 10,
 						templates: {
 							empty: 'No results were found for "<strong>{{query}}</strong>".',
-							item: wp.template('instantsearch-hit')
+							item: $('#tmpl-instantsearch-hit').html()
 						},
 			transformData: {
 						  item: function (hit) {
