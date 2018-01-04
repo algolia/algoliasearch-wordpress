@@ -45,7 +45,7 @@ class Algolia_API {
 	public function get_client() {
 		global $wp_version;
 
-		$integration_name = (string) apply_filters( 'algolia_ua_integration_name', 'WordPress' );
+		$integration_name    = (string) apply_filters( 'algolia_ua_integration_name', 'WordPress' );
 		$integration_version = (string) apply_filters( 'algolia_ua_integration_version', ALGOLIA_VERSION );
 
 		// Build the UserAgent.
@@ -56,7 +56,7 @@ class Algolia_API {
 		Version::$custom_value = $ua;
 
 		$application_id = $this->settings->get_application_id();
-		$api_key = $this->settings->get_api_key();
+		$api_key        = $this->settings->get_api_key();
 		$search_api_key = $this->settings->get_search_api_key();
 
 		if ( empty( $application_id ) || empty( $api_key ) || empty( $search_api_key ) ) {

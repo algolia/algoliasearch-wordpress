@@ -9,7 +9,7 @@
 
 	function handleButtonClick(e) {
 		$clickedButton = $( e.currentTarget );
-		var index = $clickedButton.data( 'index' );
+		var index      = $clickedButton.data( 'index' );
 		if ( ! index) {
 			throw new Error( 'Clicked button has no "data-index" set.' );
 		}

@@ -94,7 +94,7 @@ class Algolia_User_Changes_Watcher implements Algolia_Changes_Watcher {
 			return;
 		}
 
-		$watcher = $this;
+		$watcher   = $this;
 		$author_id = $post->post_author;
 
 		// We delay the sync until after the post was deleted to propagate the change

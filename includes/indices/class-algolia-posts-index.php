@@ -97,7 +97,7 @@ final class Algolia_Posts_Index extends Algolia_Index {
 		}
 
 		$post_content = Algolia_Utils::prepare_content( $post_content );
-		$parts = Algolia_Utils::explode_content( $post_content );
+		$parts        = Algolia_Utils::explode_content( $post_content );
 
 		if ( defined( 'ALGOLIA_SPLIT_POSTS' ) && false === ALGOLIA_SPLIT_POSTS ) {
 			$parts = array( array_shift( $parts ) );
@@ -105,11 +105,11 @@ final class Algolia_Posts_Index extends Algolia_Index {
 
 		$records = array();
 		foreach ( $parts as $i => $part ) {
-			$record = $shared_attributes;
-			$record['objectID'] = $this->get_post_object_id( $post->ID, $i );
-			$record['content'] = $part;
+			$record                 = $shared_attributes;
+			$record['objectID']     = $this->get_post_object_id( $post->ID, $i );
+			$record['content']      = $part;
 			$record['record_index'] = $i;
-			$records[] = $record;
+			$records[]              = $record;
 		}
 
 		$records = (array) apply_filters( 'algolia_post_records', $records, $post );
@@ -124,37 +124,37 @@ final class Algolia_Posts_Index extends Algolia_Index {
 	 * @return array
 	 */
 	private function get_post_shared_attributes( WP_Post $post ) {
-		$shared_attributes = array();
-		$shared_attributes['post_id'] = $post->ID;
-		$shared_attributes['post_type'] = $post->post_type;
-		$shared_attributes['post_type_label'] = $this->get_admin_name();
-		$shared_attributes['post_title'] = $post->post_title;
-		$shared_attributes['post_excerpt'] = apply_filters( 'the_excerpt', $post->post_excerpt );
-		$shared_attributes['post_date'] = get_post_time( 'U', false, $post );
+		$shared_attributes                        = array();
+		$shared_attributes['post_id']             = $post->ID;
+		$shared_attributes['post_type']           = $post->post_type;
+		$shared_attributes['post_type_label']     = $this->get_admin_name();
+		$shared_attributes['post_title']          = $post->post_title;
+		$shared_attributes['post_excerpt']        = apply_filters( 'the_excerpt', $post->post_excerpt );
+		$shared_attributes['post_date']           = get_post_time( 'U', false, $post );
 		$shared_attributes['post_date_formatted'] = get_the_date( '', $post );
-		$shared_attributes['post_modified'] = get_post_modified_time( 'U', false, $post );
-		$shared_attributes['comment_count'] = (int) $post->comment_count;
-		$shared_attributes['menu_order'] = (int) $post->menu_order;
+		$shared_attributes['post_modified']       = get_post_modified_time( 'U', false, $post );
+		$shared_attributes['comment_count']       = (int) $post->comment_count;
+		$shared_attributes['menu_order']          = (int) $post->menu_order;
 
 		$author = get_userdata( $post->post_author );
 		if ( $author ) {
 			$shared_attributes['post_author'] = array(
-				'user_id'       => (int) $post->post_author,
-				'display_name'  => $author->display_name,
-				'user_url'      => $author->user_url,
-				'user_login'    => $author->user_login,
+				'user_id'      => (int) $post->post_author,
+				'display_name' => $author->display_name,
+				'user_url'     => $author->user_url,
+				'user_login'   => $author->user_login,
 			);
 		}
 
 		$shared_attributes['images'] = Algolia_Utils::get_post_images( $post->ID );
 
-		$shared_attributes['permalink'] = get_permalink( $post );
+		$shared_attributes['permalink']      = get_permalink( $post );
 		$shared_attributes['post_mime_type'] = $post->post_mime_type;
 
 		// Push all taxonomies by default, including custom ones.
 		$taxonomy_objects = get_object_taxonomies( $post->post_type, 'objects' );
 
-		$shared_attributes['taxonomies'] = array();
+		$shared_attributes['taxonomies']              = array();
 		$shared_attributes['taxonomies_hierarchical'] = array();
 		foreach ( $taxonomy_objects as $taxonomy ) {
 
@@ -196,12 +196,12 @@ final class Algolia_Posts_Index extends Algolia_Index {
 	 */
 	protected function get_settings() {
 		$settings = array(
-			'attributesToIndex' => array(
+			'attributesToIndex'     => array(
 				'unordered(post_title)',
 				'unordered(taxonomies)',
 				'unordered(content)',
 			),
-			'customRanking' => array(
+			'customRanking'         => array(
 				'desc(is_sticky)',
 				'desc(post_date)',
 				'asc(record_index)',
@@ -213,11 +213,11 @@ final class Algolia_Posts_Index extends Algolia_Index {
 				'taxonomies_hierarchical',
 				'post_author.display_name',
 			),
-			'attributesToSnippet' => array(
+			'attributesToSnippet'   => array(
 				'post_title:30',
 				'content:30',
 			),
-			'snippetEllipsisText' => '…',
+			'snippetEllipsisText'   => '…',
 		);
 
 		$settings = (array) apply_filters( 'algolia_posts_index_settings', $settings, $this->post_type );
@@ -281,9 +281,9 @@ final class Algolia_Posts_Index extends Algolia_Index {
 	protected function get_re_index_items_count() {
 		$query = new WP_Query(
 			array(
-				'post_type'             => $this->post_type,
-				'post_status'           => 'any', // Let the `should_index` take care of the filtering.
-				'suppress_filters'      => true,
+				'post_type'        => $this->post_type,
+				'post_status'      => 'any', // Let the `should_index` take care of the filtering.
+				'suppress_filters' => true,
 			)
 		);
 
@@ -299,13 +299,13 @@ final class Algolia_Posts_Index extends Algolia_Index {
 	protected function get_items( $page, $batch_size ) {
 		$query = new WP_Query(
 			array(
-				'post_type'           => $this->post_type,
-				'posts_per_page'      => $batch_size,
-				'post_status'         => 'any',
-				'order'               => 'ASC',
-				'orderby'             => 'ID',
-				'paged'               => $page,
-				'suppress_filters'    => true,
+				'post_type'        => $this->post_type,
+				'posts_per_page'   => $batch_size,
+				'post_status'      => 'any',
+				'order'            => 'ASC',
+				'orderby'          => 'ID',
+				'paged'            => $page,
+				'suppress_filters' => true,
 			)
 		);
 

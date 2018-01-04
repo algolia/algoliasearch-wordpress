@@ -1,7 +1,7 @@
 <table class="widefat table-autocomplete">
 	<thead>
 		<tr>
-      <th style="width: 20px;"></th>
+	  <th style="width: 20px;"></th>
 			<th style="width: 75px;"><?php esc_html_e( 'Enable', 'algolia' ); ?></th>
 			<th><?php esc_html_e( 'Index', 'algolia' ); ?></th>
 			<th><?php esc_html_e( 'Label', 'algolia' ); ?></th>

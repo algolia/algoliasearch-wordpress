@@ -103,7 +103,7 @@ abstract class Algolia_Index {
 	 * @return array
 	 */
 	private function search_in_replica( $query, $args, $order_by, $order = 'desc' ) {
-		$replica = $this->get_replica( $order_by, $order );
+		$replica      = $this->get_replica( $order_by, $order );
 		$replica_name = $replica->get_replica_index_name( $this );
 
 		$index = $this->client->initIndex( $replica_name );
@@ -189,7 +189,7 @@ abstract class Algolia_Index {
 			return;
 		}
 
-		$index = $this->get_index();
+		$index   = $this->get_index();
 		$records = $this->sanitize_json_data( $records );
 		$index->addObjects( $records );
 	}
@@ -410,15 +410,15 @@ abstract class Algolia_Index {
 		$items = array();
 		foreach ( $replicas as $replica ) {
 			$items[] = array(
-				'name'         => $replica->get_replica_index_name( $this ),
+				'name' => $replica->get_replica_index_name( $this ),
 			);
 		}
 
 		return array(
-			'name'        => $this->get_name(),
-			'id'          => $this->get_id(),
-			'enabled'     => $this->enabled,
-			'replicas'    => $items,
+			'name'     => $this->get_name(),
+			'id'       => $this->get_id(),
+			'enabled'  => $this->enabled,
+			'replicas' => $items,
 		);
 	}
 
@@ -467,8 +467,8 @@ abstract class Algolia_Index {
 		foreach ( $replicas as $replica ) {
 			/** @var Algolia_Index_Replica $replica */
 			$settings['ranking'] = $replica->get_ranking();
-			$replica_index_name = $replica->get_replica_index_name( $this );
-			$index = $client->initIndex( $replica_index_name );
+			$replica_index_name  = $replica->get_replica_index_name( $this );
+			$index               = $client->initIndex( $replica_index_name );
 			$index->setSettings( $settings );
 		}
 	}

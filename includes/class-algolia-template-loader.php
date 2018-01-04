@@ -29,20 +29,20 @@ class Algolia_Template_Loader {
 	}
 
 	public function load_algolia_config() {
-		$settings = $this->plugin->get_settings();
+		$settings            = $this->plugin->get_settings();
 		$autocomplete_config = $this->plugin->get_autocomplete_config();
 
 		$config = array(
-			'debug'                => defined( 'WP_DEBUG' ) && WP_DEBUG,
-			'application_id'       => $settings->get_application_id(),
-			'search_api_key'       => $settings->get_search_api_key(),
-			'powered_by_enabled'   => $settings->is_powered_by_enabled(),
-			'query'                => isset( $_GET['s'] ) ? esc_html( $_GET['s'] ) : '',
-			'autocomplete'         => array(
+			'debug'              => defined( 'WP_DEBUG' ) && WP_DEBUG,
+			'application_id'     => $settings->get_application_id(),
+			'search_api_key'     => $settings->get_search_api_key(),
+			'powered_by_enabled' => $settings->is_powered_by_enabled(),
+			'query'              => isset( $_GET['s'] ) ? esc_html( $_GET['s'] ) : '',
+			'autocomplete'       => array(
 				'sources'        => $autocomplete_config->get_config(),
 				'input_selector' => (string) apply_filters( 'algolia_autocomplete_input_selector', "input[name='s']:not('.no-autocomplete')" ),
 			),
-			'indices' => array(),
+			'indices'            => array(),
 		);
 
 		// Inject all the indices into the config to ease instantsearch.js integrations.
@@ -62,7 +62,7 @@ class Algolia_Template_Loader {
 	}
 
 	private function should_load_autocomplete() {
-		$settings = $this->plugin->get_settings();
+		$settings     = $this->plugin->get_settings();
 		$autocomplete = $this->plugin->get_autocomplete_config();
 
 		if ( null === $autocomplete ) {

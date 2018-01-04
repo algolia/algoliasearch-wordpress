@@ -13,7 +13,7 @@ class Algolia_Utils {
 	 * @return string|WP_Error A list of terms parents on success, WP_Error on failure.
 	 */
 	public static function get_term_parents( $id, $taxonomy, $separator = '/', $nicename = false, $visited = array() ) {
-		$chain = '';
+		$chain  = '';
 		$parent = get_term( $id, $taxonomy );
 		if ( is_wp_error( $parent ) ) {
 			return $parent;
@@ -27,7 +27,7 @@ class Algolia_Utils {
 
 		if ( $parent->parent && ( $parent->parent != $parent->term_id ) && ! in_array( $parent->parent, $visited ) ) {
 			$visited[] = $parent->parent;
-			$chain .= self::get_term_parents( $parent->parent, $taxonomy, $separator, $nicename, $visited );
+			$chain    .= self::get_term_parents( $parent->parent, $taxonomy, $separator, $nicename, $visited );
 		}
 
 		$chain .= $name . $separator;
@@ -58,7 +58,7 @@ class Algolia_Utils {
 
 		$parents = array();
 		foreach ( $term_ids as $term_id ) {
-			$path = self::get_term_parents( $term_id, $taxonomy, $separator );
+			$path      = self::get_term_parents( $term_id, $taxonomy, $separator );
 			$parents[] = rtrim( $path, $separator );
 		}
 
@@ -69,7 +69,7 @@ class Algolia_Utils {
 			$previous_lvl = '';
 			foreach ( $levels as $index => $level ) {
 				$terms[ 'lvl' . $index ][] = $previous_lvl . $level;
-				$previous_lvl .= $level . $separator;
+				$previous_lvl             .= $level . $separator;
 
 				// Make sure we have not duplicate.
 				// The call to `array_values` ensures that we do not end up with an object in JSON.
@@ -103,9 +103,9 @@ class Algolia_Utils {
 				}
 
 				$images[ $size ] = array(
-					'url'         => $info[0],
-					'width'       => $info[1],
-					'height'      => $info[2],
+					'url'    => $info[0],
+					'width'  => $info[1],
+					'height' => $info[2],
 				);
 			}
 		}
@@ -165,7 +165,7 @@ class Algolia_Utils {
 			$max_size = (int) ALGOLIA_CONTENT_MAX_SIZE;
 		}
 
-		$parts = array();
+		$parts  = array();
 		$prefix = '';
 		while ( true ) {
 			$content = trim( (string) $content );
@@ -175,7 +175,7 @@ class Algolia_Utils {
 				break;
 			}
 
-			$offset = -( strlen( $content ) - $max_size );
+			$offset          = -( strlen( $content ) - $max_size );
 			$cut_at_position = strrpos( $content, ' ', $offset );
 
 			if ( false === $cut_at_position ) {

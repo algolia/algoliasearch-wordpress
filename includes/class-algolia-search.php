@@ -65,7 +65,7 @@ class Algolia_Search {
 		);
 
 		$order_by = apply_filters( 'algolia_search_order_by', null );
-		$order = apply_filters( 'algolia_search_order', 'desc' );
+		$order    = apply_filters( 'algolia_search_order', 'desc' );
 
 		try {
 			$results = $this->index->search( $query->query['s'], $params, $order_by, $order );

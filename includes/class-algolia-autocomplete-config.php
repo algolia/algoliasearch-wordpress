@@ -19,7 +19,7 @@ class Algolia_Autocomplete_Config {
 	 */
 	public function get_form_data() {
 		$indices = $this->plugin->get_indices();
-		$config = array();
+		$config  = array();
 
 		$existing_config = $this->get_config();
 		foreach ( $indices as $index ) {
@@ -31,7 +31,7 @@ class Algolia_Autocomplete_Config {
 				continue;
 			}
 
-			$default_config = $index->get_default_autocomplete_config();
+			$default_config            = $index->get_default_autocomplete_config();
 			$default_config['enabled'] = false;
 
 			$config[] = $default_config;
@@ -104,7 +104,7 @@ class Algolia_Autocomplete_Config {
 	 */
 	public function get_config() {
 		$settings = $this->plugin->get_settings();
-		$config = $settings->get_autocomplete_config();
+		$config   = $settings->get_autocomplete_config();
 		foreach ( $config as $key => &$entry ) {
 			if ( ! isset( $entry['index_id'] ) ) {
 				unset( $config[ $key ] );
@@ -117,7 +117,7 @@ class Algolia_Autocomplete_Config {
 				continue;
 			}
 			$entry['index_name'] = $index->get_name();
-			$entry['enabled'] = true;
+			$entry['enabled']    = true;
 		}
 
 		$config = (array) apply_filters( 'algolia_autocomplete_config', $config );

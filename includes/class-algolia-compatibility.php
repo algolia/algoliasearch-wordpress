@@ -29,7 +29,7 @@ class Algolia_Compatibility {
 		}
 
 		global $sitepress;
-		$lang_info = wpml_get_language_information( null, $post->ID );
+		$lang_info              = wpml_get_language_information( null, $post->ID );
 		$this->current_language = $sitepress->get_current_language();
 		$sitepress->switch_lang( $lang_info['language_code'] );
 	}
