@@ -37,7 +37,7 @@ class Algolia_Admin_Page_Autocomplete {
 	 * @param Algolia_Autocomplete_Config $autocomplete_config
 	 */
 	public function __construct( Algolia_Settings $settings, Algolia_Autocomplete_Config $autocomplete_config ) {
-		$this->settings = $settings;
+		$this->settings            = $settings;
 		$this->autocomplete_config = $autocomplete_config;
 
 		add_action( 'admin_menu', array( $this, 'add_page' ) );
@@ -98,9 +98,9 @@ class Algolia_Admin_Page_Autocomplete {
 	 *
 	 */
 	public function autocomplete_enabled_callback() {
-		$value = $this->settings->get_autocomplete_enabled();
-		$indices = $this->autocomplete_config->get_form_data();
-		$checked = 'yes' === $value ? 'checked ' : '';
+		$value    = $this->settings->get_autocomplete_enabled();
+		$indices  = $this->autocomplete_config->get_form_data();
+		$checked  = 'yes' === $value ? 'checked ' : '';
 		$disabled = empty( $indices ) ? 'disabled ' : '';
 ?>
 		<input type='checkbox' name='algolia_autocomplete_enabled' value='yes' <?php echo esc_html( $checked . ' ' . $disabled ); ?>/>
@@ -152,7 +152,7 @@ class Algolia_Admin_Page_Autocomplete {
 		}
 
 		$is_enabled = 'yes' === $this->settings->get_autocomplete_enabled();
-		$indices = $this->autocomplete_config->get_config();
+		$indices    = $this->autocomplete_config->get_config();
 
 		if ( true === $is_enabled && empty( $indices ) ) {
 			/* translators: placeholder contains the URL to the autocomplete configuration page. */

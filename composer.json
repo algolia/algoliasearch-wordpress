@@ -16,5 +16,9 @@
   "prefer-stable": true,
   "extra": {
     "installer-name": "algolia"
+  },
+  "scripts": {
+    "lint": "vendor/bin/phpcs",
+    "lint:fix": "vendor/bin/phpcbf"
   }
 }

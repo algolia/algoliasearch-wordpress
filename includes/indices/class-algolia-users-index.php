@@ -35,12 +35,12 @@ final class Algolia_Users_Index extends Algolia_Index {
 	 * @return array
 	 */
 	protected function get_records( $item ) {
-		$record = array();
-		$record['objectID'] = $item->ID;
-		$record['user_id'] = $item->ID;
+		$record                 = array();
+		$record['objectID']     = $item->ID;
+		$record['user_id']      = $item->ID;
 		$record['display_name'] = $item->display_name;
-		$record['posts_url'] = get_author_posts_url( $item->ID, $item->user_nicename );
-		$record['description'] = get_the_author_meta( 'description', $item->ID );
+		$record['posts_url']    = get_author_posts_url( $item->ID, $item->user_nicename );
+		$record['description']  = get_the_author_meta( 'description', $item->ID );
 
 		if ( function_exists( 'wpcom_vip_count_user_posts' ) ) {
 			$record['posts_count'] = (int) wpcom_vip_count_user_posts( $item->ID );
@@ -56,7 +56,7 @@ final class Algolia_Users_Index extends Algolia_Index {
 				)
 			);
 		} else {
-			$email_hash = md5( strtolower( trim( $item->user_email ) ) );
+			$email_hash           = md5( strtolower( trim( $item->user_email ) ) );
 			$record['avatar_url'] = 'https://www.gravatar.com/avatar/' . $email_hash . '?s=' . $avatar_size;
 		}
 
@@ -82,7 +82,7 @@ final class Algolia_Users_Index extends Algolia_Index {
 			'attributesToIndex' => array(
 				'unordered(display_name)',
 			),
-			'customRanking' => array(
+			'customRanking'     => array(
 				'desc(posts_count)',
 			),
 		);
@@ -115,10 +115,10 @@ final class Algolia_Users_Index extends Algolia_Index {
 		$offset = $batch_size * ( $page - 1 );
 
 		$args = array(
-			'order'        => 'ASC',
-			'orderby'      => 'ID',
-			'offset'       => $offset,
-			'number'          => $batch_size,
+			'order'   => 'ASC',
+			'orderby' => 'ID',
+			'offset'  => $offset,
+			'number'  => $batch_size,
 		);
 
 		// We use prior to 4.5 syntax for BC purposes, no `paged` arg.

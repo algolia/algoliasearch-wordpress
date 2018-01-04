@@ -48,13 +48,13 @@ final class Algolia_Terms_Index extends Algolia_Index {
 	 * @return array
 	 */
 	protected function get_records( $item ) {
-		$record = array();
-		$record['objectID'] = $item->term_id;
-		$record['term_id'] = $item->term_id;
-		$record['taxonomy'] = $item->taxonomy;
-		$record['name'] = html_entity_decode( $item->name );
+		$record                = array();
+		$record['objectID']    = $item->term_id;
+		$record['term_id']     = $item->term_id;
+		$record['taxonomy']    = $item->taxonomy;
+		$record['name']        = html_entity_decode( $item->name );
 		$record['description'] = $item->description;
-		$record['slug'] = $item->slug;
+		$record['slug']        = $item->slug;
 		$record['posts_count'] = (int) $item->count;
 		if ( function_exists( 'wpcom_vip_get_term_link' ) ) {
 			$record['permalink'] = wpcom_vip_get_term_link( $item );
@@ -84,7 +84,7 @@ final class Algolia_Terms_Index extends Algolia_Index {
 				'unordered(name)',
 				'unordered(description)',
 			),
-			'customRanking' => array(
+			'customRanking'     => array(
 				'desc(posts_count)',
 			),
 		);
@@ -120,11 +120,11 @@ final class Algolia_Terms_Index extends Algolia_Index {
 		$offset = $batch_size * ( $page - 1 );
 
 		$args = array(
-			'order'        => 'ASC',
-			'orderby'      => 'id',
-			'offset'       => $offset,
-			'number'       => $batch_size,
-			'hide_empty'   => false, // Let users choose what to index.
+			'order'      => 'ASC',
+			'orderby'    => 'id',
+			'offset'     => $offset,
+			'number'     => $batch_size,
+			'hide_empty' => false, // Let users choose what to index.
 		);
 
 		// We use prior to 4.5 syntax for BC purposes.
@@ -145,8 +145,7 @@ final class Algolia_Terms_Index extends Algolia_Index {
 		return isset( $item->term_id )
 			&& is_int( $item->term_id )
 			&& isset( $item->taxonomy )
-			&& $item->taxonomy === $this->taxonomy
-		;
+			&& $item->taxonomy === $this->taxonomy;
 	}
 
 	public function get_default_autocomplete_config() {

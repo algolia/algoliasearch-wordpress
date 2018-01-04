@@ -78,7 +78,7 @@ class Algolia_Plugin {
 			$this->load_indices();
 			$this->override_wordpress_search();
 			$this->autocomplete_config = new Algolia_Autocomplete_Config( $this );
-			$this->template_loader = new Algolia_Template_Loader( $this );
+			$this->template_loader     = new Algolia_Template_Loader( $this );
 		}
 
 		// Load admin or public part of the plugin.
@@ -132,7 +132,7 @@ class Algolia_Plugin {
 		}
 
 		$index_id = $this->settings->get_native_search_index_id();
-		$index = $this->get_index( $index_id );
+		$index    = $this->get_index( $index_id );
 
 		if ( null == $index ) {
 			return;
@@ -169,7 +169,7 @@ class Algolia_Plugin {
 	public function load_indices() {
 		$synced_indices_ids = $this->settings->get_synced_indices_ids();
 
-		$client = $this->get_api()->get_client();
+		$client            = $this->get_api()->get_client();
 		$index_name_prefix = $this->settings->get_index_name_prefix();
 
 		// Add a searchable posts index.
@@ -179,7 +179,7 @@ class Algolia_Plugin {
 			), 'names'
 		);
 		$searchable_post_types = (array) apply_filters( 'algolia_searchable_post_types', $searchable_post_types );
-		$this->indices[] = new Algolia_Searchable_Posts_Index( $searchable_post_types );
+		$this->indices[]       = new Algolia_Searchable_Posts_Index( $searchable_post_types );
 
 		// Add one posts index per post type.
 		$post_types = get_post_types();
@@ -195,7 +195,7 @@ class Algolia_Plugin {
 		}
 
 		// Add one terms index per taxonomy.
-		$taxonomies = get_taxonomies();
+		$taxonomies           = get_taxonomies();
 		$taxonomies_blacklist = $this->settings->get_taxonomies_blacklist();
 		foreach ( $taxonomies as $taxonomy ) {
 			// Skip blacklisted post types.
@@ -258,7 +258,7 @@ class Algolia_Plugin {
 
 		if ( isset( $args['contains'] ) ) {
 			$contains = (string) $args['contains'];
-			$indices = array_filter(
+			$indices  = array_filter(
 				$indices, function( $index ) use ( $contains ) {
 					return $index->contains_only( $contains );
 				}
