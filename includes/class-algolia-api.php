@@ -139,10 +139,25 @@ class Algolia_API {
 		$client = new Client( (string) $application_id, (string) $search_api_key );
 		try {
 			// If this call does not succeed, then the application_ID or API_key is/are wrong.
-			$acl = $client->getUserKeyACL( $search_api_key );
+			$acl = $client->getApiKey( $search_api_key );
 
 			// We expect a search only key for security reasons. Will be used in front.
-			if ( array( 'search' ) !== $acl['acl'] ) {
+			$scopes = array_flip( $acl['acl'] );
+			if ( ! isset( $scopes['search'] ) ) {
+				return false;
+			}
+			unset( $scopes['search'] );
+
+			if ( isset( $scopes['settings'] ) ) {
+				unset( $scopes['settings'] );
+			}
+
+			if ( isset( $scopes['listIndexes'] ) ) {
+				unset( $scopes['listIndexes'] );
+			}
+
+			if ( ! empty( $scopes ) ) {
+				// The API key has more permissions than allowed.
 				return false;
 			}
 
