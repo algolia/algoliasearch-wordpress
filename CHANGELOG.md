@@ -1,3 +1,9 @@
+<a name="2.9.1"></a>
+## [2.9.1](https://github.com/algolia/algoliasearch-wordpress/compare/2.9.0...2.9.1) (2018-01-08)
+
+ Bump tested WordPress version in readme.txt.
+
+
 <a name="2.9.0"></a>
 # [2.9.0](https://github.com/algolia/algoliasearch-wordpress/compare/2.8.1...2.9.0) (2018-01-08)
 
