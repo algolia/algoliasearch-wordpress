@@ -1,3 +1,24 @@
+<a name="2.9.0"></a>
+# [2.9.0](https://github.com/algolia/algoliasearch-wordpress/compare/2.8.1...2.9.0) (2018-01-08)
+
+
+### Bug Fixes
+
+* **admin:** avoid leaving the page when buttons clicked on autocomplete page ([49b3a5b](https://github.com/algolia/algoliasearch-wordpress/commit/49b3a5b))
+* **admin:** avoid leaving the page when buttons clicked on search page ([3b11848](https://github.com/algolia/algoliasearch-wordpress/commit/3b11848))
+* **admin:** be more permissive on search API key validation ([3c12df2](https://github.com/algolia/algoliasearch-wordpress/commit/3c12df2))
+* **admin-settings:** correct variable typo ([ca6ca62](https://github.com/algolia/algoliasearch-wordpress/commit/ca6ca62))
+* **i18n:** make sure we can load other languages ([854c1db](https://github.com/algolia/algoliasearch-wordpress/commit/854c1db))
+
+
+### Features
+
+* **i18n:** add italian language support ([86a240e](https://github.com/algolia/algoliasearch-wordpress/commit/86a240e))
+* **indexing:** allow to filter post content attribute ([f599054](https://github.com/algolia/algoliasearch-wordpress/commit/f599054))
+* **search:** allow to change native search index ([aff5e14](https://github.com/algolia/algoliasearch-wordpress/commit/aff5e14))
+
+
+
 <a name="2.8.1"></a>
 ## [2.8.1](https://github.com/algolia/algoliasearch-wordpress/compare/2.8.0...2.8.1) (2017-10-13)
 
