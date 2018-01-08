@@ -2,9 +2,9 @@
 **Contributors:** [algolia](https://profiles.wordpress.org/algolia), [rayrutjes](https://profiles.wordpress.org/rayrutjes)  
 **Tags:** Search, Algolia, Autocomplete, instant-search, relevant search, search highlight, faceted search, find-as-you-type search, suggest, search by category, ajax search, better search, custom search  
 **Requires at least:** 4.4  
-**Tested up to:** 4.8  
+**Tested up to:** 4.9  
 **Requires PHP:** 5.3  
-**Stable tag:** 2.9.0  
+**Stable tag:** 2.9.1  
 **License:** MIT License, GNU General Public License v2.0  
 
 Search by Algolia is the smartest way to improve search on your site. Autocomplete is included, along with full control over look, feel and relevance.
