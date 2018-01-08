@@ -1,14 +1,14 @@
-# Copyright (C) 2017 Algolia
+# Copyright (C) 2018 Algolia
 # This file is distributed under the MIT License, GNU General Public License v2.0.
 msgid ""
 msgstr ""
-"Project-Id-Version: Search by Algolia – Instant & Relevant results 2.8.1\n"
+"Project-Id-Version: Search by Algolia – Instant & Relevant results 2.9.0\n"
 "Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/algolia\n"
-"POT-Creation-Date: 2017-10-16 16:19:48+00:00\n"
+"POT-Creation-Date: 2018-01-08 12:58:33+00:00\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"PO-Revision-Date: 2017-MO-DA HO:MI+ZONE\n"
+"PO-Revision-Date: 2018-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "Language: en\n"
@@ -24,11 +24,13 @@ msgstr ""
 "X-Textdomain-Support: yes\n"
 "X-Generator: grunt-wp-i18n1.0.0\n"
 
-#: algolia.php:23
+#: algolia.php:24
+#. translators: the placeholder always contains the plugin version.
 msgid "Algolia plugin requires PHP 5.3 or higher. You’re still on %s."
 msgstr ""
 
-#: algolia.php:29
+#: algolia.php:31
+#. translators: the placeholder always contains the plugin version.
 msgid "Algolia plugin requires at least WordPress in version 3.7.14., You are on %s"
 msgstr ""
 
@@ -49,25 +51,27 @@ msgstr ""
 msgid "Configuration"
 msgstr ""
 
-#: includes/admin/class-algolia-admin-page-autocomplete.php:119
+#: includes/admin/class-algolia-admin-page-autocomplete.php:120
 msgid ""
 "Autocomplete configuration has been saved. Make sure to hit the "
 "\"re-index\" buttons of the different indices that are not indexed yet."
 msgstr ""
 
-#: includes/admin/class-algolia-admin-page-autocomplete.php:158
-msgid ""
-"You have enabled the Algolia Autocomplete feature but did not choose any "
-"index to search in."
-msgstr ""
-
 #: includes/admin/class-algolia-admin-page-autocomplete.php:159
+#. translators: placeholder contains the URL to the autocomplete configuration
+#. page.
 msgid ""
 "Please select one or multiple indices on the <a href=\"%s\">Algolia: "
 "Autocomplete configuration page</a>."
 msgstr ""
 
-#: includes/admin/class-algolia-admin-page-autocomplete.php:168
+#: includes/admin/class-algolia-admin-page-autocomplete.php:161
+msgid ""
+"You have enabled the Algolia Autocomplete feature but did not choose any "
+"index to search in."
+msgstr ""
+
+#: includes/admin/class-algolia-admin-page-autocomplete.php:171
 msgid ""
 "The autocomplete feature adds a find-as-you-type dropdown menu to your "
 "search bar(s)."
@@ -98,118 +102,134 @@ msgid ""
 msgstr ""
 
 #: includes/admin/class-algolia-admin-page-native-search.php:137
+#. translators: placeholder contains the link to the indexing page.
 msgid ""
 "Searchable posts index needs to be checked on the <a href=\"%s\">Algolia: "
 "Indexing page</a> for the search results to be powered by Algolia."
 msgstr ""
 
-#: includes/admin/class-algolia-admin-page-native-search.php:146
+#: includes/admin/class-algolia-admin-page-native-search.php:148
 msgid ""
 "By enabling this plugin to override the native WordPress search, your "
 "search results will be powered by Algolia's typo-tolerant & relevant search "
 "algorithms."
 msgstr ""
 
-#: includes/admin/class-algolia-admin-page-native-search.php:156
+#: includes/admin/class-algolia-admin-page-native-search.php:160
 msgid ""
 "You have no index containing only posts yet. Please index some content on "
 "the `Indexing` page."
 msgstr ""
 
-#: includes/admin/class-algolia-admin-page-settings.php:51
-#: includes/admin/class-algolia-admin-page-settings.php:71
-#: includes/admin/class-algolia-admin-page-settings.php:72
+#: includes/admin/class-algolia-admin-page-settings.php:52
+#: includes/admin/class-algolia-admin-page-settings.php:73
+#: includes/admin/class-algolia-admin-page-settings.php:74
 msgid "Settings"
 msgstr ""
 
-#: includes/admin/class-algolia-admin-page-settings.php:61
+#: includes/admin/class-algolia-admin-page-settings.php:63
 msgid "Algolia search"
 msgstr ""
 
-#: includes/admin/class-algolia-admin-page-settings.php:89
+#: includes/admin/class-algolia-admin-page-settings.php:91
 msgid "Application ID"
 msgstr ""
 
-#: includes/admin/class-algolia-admin-page-settings.php:97
+#: includes/admin/class-algolia-admin-page-settings.php:99
 msgid "Search-only API key"
 msgstr ""
 
-#: includes/admin/class-algolia-admin-page-settings.php:105
+#: includes/admin/class-algolia-admin-page-settings.php:107
 msgid "Admin API key"
 msgstr ""
 
-#: includes/admin/class-algolia-admin-page-settings.php:113
+#: includes/admin/class-algolia-admin-page-settings.php:115
 msgid "Index name prefix"
 msgstr ""
 
-#: includes/admin/class-algolia-admin-page-settings.php:121
+#: includes/admin/class-algolia-admin-page-settings.php:123
 msgid "Remove Algolia powered by logo"
 msgstr ""
 
-#: includes/admin/class-algolia-admin-page-settings.php:141
+#: includes/admin/class-algolia-admin-page-settings.php:143
 msgid "Your Algolia Application ID."
 msgstr ""
 
-#: includes/admin/class-algolia-admin-page-settings.php:150
+#: includes/admin/class-algolia-admin-page-settings.php:154
 msgid "Your Algolia Search-only API key (public)."
 msgstr ""
 
-#: includes/admin/class-algolia-admin-page-settings.php:159
+#: includes/admin/class-algolia-admin-page-settings.php:164
 msgid "Your Algolia ADMIN API key (kept private)."
 msgstr ""
 
-#: includes/admin/class-algolia-admin-page-settings.php:169
+#: includes/admin/class-algolia-admin-page-settings.php:174
 msgid "This prefix will be prepended to your index names."
 msgstr ""
 
-#: includes/admin/class-algolia-admin-page-settings.php:179
+#: includes/admin/class-algolia-admin-page-settings.php:185
 msgid ""
 "This will remove the Algolia logo from the autocomplete and the search "
 "page. We require that you keep the Algolia logo if you are using a free "
 "plan."
 msgstr ""
 
-#: includes/admin/class-algolia-admin-page-settings.php:192
+#: includes/admin/class-algolia-admin-page-settings.php:198
 msgid "Application ID should not be empty."
 msgstr ""
 
-#: includes/admin/class-algolia-admin-page-settings.php:210
+#: includes/admin/class-algolia-admin-page-settings.php:216
 msgid "Search-only API key should not be empty."
 msgstr ""
 
-#: includes/admin/class-algolia-admin-page-settings.php:227
+#: includes/admin/class-algolia-admin-page-settings.php:233
 msgid "API key should not be empty"
 msgstr ""
 
-#: includes/admin/class-algolia-admin-page-settings.php:276
+#: includes/admin/class-algolia-admin-page-settings.php:259
+msgid ""
+"We were unable to authenticate you against the Algolia servers with the "
+"provided information. Please ensure that you used an the Admin API key and "
+"a valid Application ID."
+msgstr ""
+
+#: includes/admin/class-algolia-admin-page-settings.php:270
+msgid ""
+"It looks like your search API key is wrong. Ensure that the key you entered "
+"has only the search capability and nothing else. Also ensure that the key "
+"has no limited time validity."
+msgstr ""
+
+#: includes/admin/class-algolia-admin-page-settings.php:280
 msgid ""
 "We succesfully managed to connect to the Algolia servers with the provided "
 "information. Your search API key has also been checked and is OK."
 msgstr ""
 
-#: includes/admin/class-algolia-admin-page-settings.php:314
+#: includes/admin/class-algolia-admin-page-settings.php:318
 msgid "Indices prefix can only contain alphanumeric characters and underscores."
 msgstr ""
 
-#: includes/admin/class-algolia-admin-page-settings.php:343
+#: includes/admin/class-algolia-admin-page-settings.php:347
 msgid ""
 "Configure here your Algolia credentials. You can find them in the \"API "
 "Keys\" section of your Algolia dashboard."
 msgstr ""
 
-#: includes/admin/class-algolia-admin-page-settings.php:344
+#: includes/admin/class-algolia-admin-page-settings.php:348
 msgid ""
 "Once you provide your Algolia Application ID and API key, this plugin will "
 "be able to securely communicate with Algolia servers."
 msgstr ""
 
-#: includes/admin/class-algolia-admin-page-settings.php:344
+#: includes/admin/class-algolia-admin-page-settings.php:348
 msgid ""
 "We ensure your information is correct by testing them against the Algolia "
 "servers upon save."
 msgstr ""
 
-#: includes/admin/class-algolia-admin-page-settings.php:345
+#: includes/admin/class-algolia-admin-page-settings.php:350
+#. translators: the placeholder contains the URL to Algolia's website.
 msgid ""
 "No Algolia account yet? <a href=\"%s\">Follow this link</a> to create one "
 "for free in a couple of minutes!."
@@ -233,22 +253,24 @@ msgid ""
 "contact your hosting provider."
 msgstr ""
 
-#: includes/admin/class-algolia-admin.php:90
+#: includes/admin/class-algolia-admin.php:89
+#. translators: placeholder contains the URL to the caching plugin's config
+#. page.
 msgid ""
 "In order for <strong>database caching</strong> to work with Algolia you "
 "must add <code>algolia_</code> to the \"Ignored Query Stems\" option in W3 "
 "Total Cache settings <a href=\"%s\">here</a>."
 msgstr ""
 
-#: includes/admin/partials/form-override-search-option.php:5
+#: includes/admin/partials/form-override-search-option.php:6
 msgid "Do not use Algolia"
 msgstr ""
 
-#: includes/admin/partials/form-override-search-option.php:14
+#: includes/admin/partials/form-override-search-option.php:19
 msgid "Use Algolia in the backend"
 msgstr ""
 
-#: includes/admin/partials/form-override-search-option.php:24
+#: includes/admin/partials/form-override-search-option.php:33
 msgid "Use Algolia with Instantsearch.js"
 msgstr ""
 
@@ -301,11 +323,13 @@ msgstr ""
 msgid "Re-index search page records"
 msgstr ""
 
-#: includes/class-algolia-cli.php:72
+#: includes/class-algolia-cli.php:77
+#. translators: the placeholder will contain the name of the index.
 msgid "About to clear index %s..."
 msgstr ""
 
-#: includes/class-algolia-cli.php:74
+#: includes/class-algolia-cli.php:80
+#. translators: the placeholder will contain the name of the index.
 msgid "Correctly cleared index \"%s\"."
 msgstr ""
 
@@ -313,7 +337,7 @@ msgstr ""
 msgid "All posts"
 msgstr ""
 
-#: includes/indices/class-algolia-users-index.php:15
+#: includes/indices/class-algolia-users-index.php:14
 msgid "Users"
 msgstr ""
 
