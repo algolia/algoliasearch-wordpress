@@ -160,7 +160,8 @@ abstract class Algolia_Index {
 			$records = $this->get_records( $item );
 			do_action( 'algolia_after_get_records', $item );
 
-			return $this->update_records( $item, $records );
+			$this->update_records( $item, $records );
+			return;
 		}
 
 		$this->delete_item( $item );
@@ -186,6 +187,7 @@ abstract class Algolia_Index {
 	 */
 	protected function update_records( $item, array $records ) {
 		if ( empty( $records ) ) {
+			$this->delete_item( $item );
 			return;
 		}
 
@@ -239,6 +241,9 @@ abstract class Algolia_Index {
 
 		$items = $this->get_items( $page, $batch_size );
 
+		// Give an opportunity to do some work before actual re-indexing takes place.
+		$this->before_re_index_items( $items );
+
 		$records = array();
 		foreach ( $items as $item ) {
 			if ( ! $this->should_index( $item ) ) {
@@ -259,6 +264,16 @@ abstract class Algolia_Index {
 
 		if ( $page === $max_num_pages ) {
 			do_action( 'algolia_re_indexed_items', $this->get_id() );
+		}
+	}
+
+	protected function before_re_index_items( array $items ) {
+		foreach ( $items as $item ) {
+			if ( ! $this->should_index( $item ) ) {
+				// Always try to delete items that should not be indexed.
+				$this->delete_item( $item );
+				continue;
+			}
 		}
 	}
 

@@ -259,9 +259,12 @@ final class Algolia_Posts_Index extends Algolia_Index {
 	 * @param array   $records
 	 */
 	private function update_post_records( WP_Post $post, array $records ) {
-		$this->delete_item( $post );
+		// If there are no records, parent `update_records` will take care of the deletion.
+		// I case of posts, we ALWAYS need to delete existing records.
+		if ( ! empty( $records ) ) {
+			$this->delete_item( $post );
+		}
 
-		// Update the other records.
 		parent::update_records( $post, $records );
 
 		do_action( 'algolia_posts_index_post_updated', $post, $records );
@@ -322,5 +325,32 @@ final class Algolia_Posts_Index extends Algolia_Index {
 				'filters' => 'post_id=' . $item->ID,
 			)
 		);
+	}
+
+	private function delete_posts( array $post_ids ) {
+		if ( empty( $post_ids ) ) {
+			return;
+		}
+
+		$filters = array();
+		foreach ( $post_ids as $post_id ) {
+			$filters[] = 'post_id=' . $post_id;
+		}
+
+		$this->get_index()->deleteBy(
+			array(
+				'filters' => implode( ' OR ', $filters ),
+			)
+		);
+	}
+
+	/**
+	 * Delete all post records for the current batch being re-indexed.
+	 *
+	 * @param array $items
+	 */
+	protected function before_re_index_items( array $items ) {
+		$post_ids = wp_list_pluck( $items, 'ID' );
+		$this->delete_posts( $post_ids );
 	}
 }
