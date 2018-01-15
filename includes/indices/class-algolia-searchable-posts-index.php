@@ -243,14 +243,17 @@ final class Algolia_Searchable_Posts_Index extends Algolia_Index {
 	 * @param array   $records
 	 */
 	private function update_post_records( WP_Post $post, array $records ) {
-        // If there are no records, parent `update_records` will take care of the deletion.
-        // I case of posts, we ALWAYS need to delete existing records.
-        if ( ! empty( $records ) ) {
-            $this->delete_item( $post );
-        }
+		// If there are no records, parent `update_records` will take care of the deletion.
+		// In case of posts, we ALWAYS need to delete existing records.
+		if ( ! empty( $records ) ) {
+			$this->delete_item( $post );
+		}
 
-		// Update the other records.
 		parent::update_records( $post, $records );
+
+		// Keep track of the new record count for future updates relying on the objectID's naming convention .
+		$new_records_count = count( $records );
+		$this->set_post_records_count( $post, $new_records_count );
 
 		do_action( 'algolia_searchable_posts_index_post_updated', $post, $records );
 		do_action( 'algolia_searchable_posts_index_post_' . $post->post_type . '_updated', $post, $records );
@@ -311,37 +314,31 @@ final class Algolia_Searchable_Posts_Index extends Algolia_Index {
 	 */
 	public function delete_item( $item ) {
 		$this->assert_is_supported( $item );
-		$this->get_index()->deleteBy(
-			array(
-				'filters' => 'post_id=' . $item->ID,
-			)
-		);
+
+		$records_count = $this->get_post_records_count( $item->ID );
+		$object_ids    = array();
+		for ( $i = 0; $i < $records_count; $i++ ) {
+			$object_ids[] = $this->get_post_object_id( $item->ID, $i );
+		}
+
+		if ( ! empty( $object_ids ) ) {
+			$this->get_index()->deleteObjects( $object_ids );
+		}
 	}
 
-    private function delete_posts( array $post_ids ) {
-        if ( empty( $post_ids ) ) {
-            return;
-        }
-
-        $filters = array();
-        foreach ( $post_ids as $post_id ) {
-            $filters[] = 'post_id=' . $post_id;
-        }
-
-        $this->get_index()->deleteBy(
-            array(
-                'filters' => implode( ' OR ', $filters ),
-            )
-        );
-    }
-
-    /**
-     * Delete all post records for the current batch being re-indexed.
-     *
-     * @param array $items
-     */
-    protected function before_re_index_items( array $items ) {
-        $post_ids = wp_list_pluck( $items, 'ID' );
-        $this->delete_posts( $post_ids );
-    }
+	/**
+	 * @param int $post_id
+	 *
+	 * @return int
+	 */
+	private function get_post_records_count( $post_id ) {
+		return (int) get_post_meta( (int) $post_id, 'algolia_' . $this->get_id() . '_records_count', true );
+	}
+	/**
+	 * @param WP_Post $post
+	 * @param int     $count
+	 */
+	private function set_post_records_count( WP_Post $post, $count ) {
+		update_post_meta( (int) $post->ID, 'algolia_' . $this->get_id() . '_records_count', (int) $count );
+	}
 }
