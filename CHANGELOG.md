@@ -1,3 +1,13 @@
+<a name="2.9.3"></a>
+## [2.9.3](https://github.com/algolia/algoliasearch-wordpress/compare/2.9.2...2.9.3) (2018-01-15)
+
+
+### Bug Fixes
+
+* remove usage of deleteby to avoid delaying indexing ([6296fab](https://github.com/algolia/algoliasearch-wordpress/commit/6296fab))
+
+
+
 <a name="2.9.2"></a>
 ## [2.9.2](https://github.com/algolia/algoliasearch-wordpress/compare/2.9.1...2.9.2) (2018-01-15)
 
