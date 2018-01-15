@@ -1,3 +1,15 @@
+<a name="2.9.2"></a>
+## [2.9.2](https://github.com/algolia/algoliasearch-wordpress/compare/2.9.1...2.9.2) (2018-01-15)
+
+
+### Performance Improvements
+
+* **terms-index:** use deleteObject instead of deleteBy ([504821b](https://github.com/algolia/algoliasearch-wordpress/commit/504821b))
+* **users-index:** use deleteObject instead of deleteBy ([39625f6](https://github.com/algolia/algoliasearch-wordpress/commit/39625f6))
+* merge deleteBy requests when re-indexing ([32599dd](https://github.com/algolia/algoliasearch-wordpress/commit/32599dd))
+
+
+
 <a name="2.9.1"></a>
 ## [2.9.1](https://github.com/algolia/algoliasearch-wordpress/compare/2.9.0...2.9.1) (2018-01-08)
 
