@@ -97,6 +97,7 @@
 
 								function replace_highlights_recursive (item) {
 								  if( item instanceof Object && item.hasOwnProperty('value')) {
+									  item.value = _.escape(item.value);
 									  item.value = item.value.replace(/__ais-highlight__/g, '<em>').replace(/__\/ais-highlight__/g, '</em>');
 								  } else {
 									  for (var key in item) {
