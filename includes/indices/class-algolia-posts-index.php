@@ -1,6 +1,6 @@
 <?php
 
-final class Algolia_Posts_Index extends Algolia_Index {
+class Algolia_Posts_Index extends Algolia_Index {
 
 	/**
 	 * @var string
