@@ -13,6 +13,8 @@ if ! git diff-index --quiet HEAD --; then
   exit 1
 fi
 
+rm -rf tmp
+
 yarn
 
 yarn run changelog:unreleased
