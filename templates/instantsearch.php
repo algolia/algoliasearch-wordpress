@@ -92,30 +92,27 @@
 							empty: 'No results were found for "<strong>{{query}}</strong>".',
 							item: wp.template('instantsearch-hit')
 						},
-			transformData: {
-						  item: function (hit) {
-				for(var key in hit._highlightResult) {
-				  // We do not deal with arrays.
-				  if(typeof hit._highlightResult[key].value !== 'string') {
-					continue;
-				  }
-				  hit._highlightResult[key].value = _.escape(hit._highlightResult[key].value);
-				  hit._highlightResult[key].value = hit._highlightResult[key].value.replace(/__ais-highlight__/g, '<em>').replace(/__\/ais-highlight__/g, '</em>');
-				}
+						transformData: {
+							item: function (hit) {
 
-				for(var key in hit._snippetResult) {
-				  // We do not deal with arrays.
-				  if(typeof hit._snippetResult[key].value !== 'string') {
-					continue;
-				  }
+								function replace_highlights_recursive (item) {
+								  if( item instanceof Object && item.hasOwnProperty('value')) {
+									  item.value = _.escape(item.value);
+									  item.value = item.value.replace(/__ais-highlight__/g, '<em>').replace(/__\/ais-highlight__/g, '</em>');
+								  } else {
+									  for (var key in item) {
+										  item[key] = replace_highlights_recursive(item[key]);
+									  }
+								  }
+								  return item;
+								}
 
-				  hit._snippetResult[key].value = _.escape(hit._snippetResult[key].value);
-				  hit._snippetResult[key].value = hit._snippetResult[key].value.replace(/__ais-highlight__/g, '<em>').replace(/__\/ais-highlight__/g, '</em>');
-				}
+								hit._highlightResult = replace_highlights_recursive(hit._highlightResult);
+								hit._snippetResult = replace_highlights_recursive(hit._snippetResult);
 
-				return hit;
-			  }
-			}
+								return hit;
+							}
+						}
 					})
 				);
 
