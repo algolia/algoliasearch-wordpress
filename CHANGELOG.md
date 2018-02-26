@@ -1,3 +1,15 @@
+<a name="2.10.0"></a>
+# [2.10.0](https://github.com/algolia/algoliasearch-wordpress/compare/2.9.3...2.10.0) (2018-02-26)
+
+
+### Features
+
+* pass post object to algolia_post_content filter ([deb1a00](https://github.com/algolia/algoliasearch-wordpress/commit/deb1a00))
+* recursively replace highlights in snippetResult and highlightResult ([d777f78](https://github.com/algolia/algoliasearch-wordpress/commit/d777f78))
+* update JS dependencies ([b1f53a1](https://github.com/algolia/algoliasearch-wordpress/commit/b1f53a1))
+
+
+
 <a name="2.9.3"></a>
 ## [2.9.3](https://github.com/algolia/algoliasearch-wordpress/compare/2.9.2...2.9.3) (2018-01-15)
 
