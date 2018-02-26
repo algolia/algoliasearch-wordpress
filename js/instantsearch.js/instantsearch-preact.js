@@ -1,4 +1,4 @@
-/*! instantsearch.js 1.11.7 | © Algolia Inc. and other contributors; Licensed MIT | github.com/algolia/instantsearch.js */(function webpackUniversalModuleDefinition(root, factory) {
+/*! instantsearch.js 1.11.15 | © Algolia Inc. and other contributors; Licensed MIT | github.com/algolia/instantsearch.js */(function webpackUniversalModuleDefinition(root, factory) {
 	if(typeof exports === 'object' && typeof module === 'object')
 		module.exports = factory();
 	else if(typeof define === 'function' && define.amd)
@@ -21443,7 +21443,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	
 	var AlgoliaSearchHelper = _algoliasearchHelper2.default.AlgoliaSearchHelper;
 	var majorVersionNumber = _version2.default.split('.')[0];
-	var firstRender = true;
 	
 	function timerMaker(t0) {
 	  var t = t0;
@@ -21548,6 +21547,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    };
 	    this.threshold = options.threshold || 700;
 	    this.trackedParameters = options.trackedParameters || ['query', 'attribute:*', 'index', 'page', 'hitsPerPage'];
+	    this.firstRender = true;
 	
 	    this.searchParametersFromUrl = AlgoliaSearchHelper.getConfigurationFromQueryString(this.urlUtils.readUrl(), { mapping: this.mapping });
 	  }
@@ -21570,10 +21570,10 @@ return /******/ (function(modules) { // webpackBootstrap
 	
 	      var helper = _ref2.helper;
 	
-	      if (firstRender) {
-	        firstRender = false;
+	      if (this.firstRender) {
+	        this.firstRender = false;
 	        this.onHistoryChange(this.onPopState.bind(this, helper));
-	        helper.on('search', function (state) {
+	        helper.on('change', function (state) {
 	          return _this2.renderURLFromState(state);
 	        });
 	      }
@@ -21686,7 +21686,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	Object.defineProperty(exports, "__esModule", {
 	  value: true
 	});
-	exports.default = '1.11.7';
+	exports.default = '1.11.15';
 
 /***/ },
 /* 345 */
@@ -26084,6 +26084,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	        templateKey: 'show-more-' + (this.state.isShowMoreOpen ? 'active' : 'inactive')
 	      }, this.props.templateProps)) : undefined;
 	
+	      var shouldDisableSearchInput = this.props.searchIsAlwaysActive !== true && !(this.props.isFromSearch || displayedFacetValues.length >= limit);
 	      var searchInput = this.props.searchFacetValues ? _react2.default.createElement(_SearchBox2.default, { ref: function ref(i) {
 	          _this2.searchbox = i;
 	        },
@@ -26092,7 +26093,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	        onValidate: function onValidate() {
 	          return _this2.refineFirstValue();
 	        },
-	        disabled: !this.props.isFromSearch && displayedFacetValues.length < limit }) : null;
+	        disabled: shouldDisableSearchInput }) : null;
 	
 	      var noResults = this.props.searchFacetValues && this.props.isFromSearch && this.props.facetValues.length === 0 ? _react2.default.createElement(_Template2.default, _extends({
 	        templateKey: 'noResults'
@@ -27523,6 +27524,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	 * @param  {string} [options.limit=10] How much facet values to get. When the show more feature is activated this is the minimum number of facets requested (the show more button is not in active state). [*]
 	 * @param  {object|boolean} [options.searchForFacetValues=false] Add a search input to let the user search for more facet values
 	 * @param  {string} [options.searchForFacetValues.placeholder] Value of the search field placeholder
+	 * @param  {boolean} [options.searchForFacetValues.isAlwaysActive=false] When `false` the search field will become disabled if
+	 * there are less items to display than the `options.limit`, otherwise the search field is always usable.
 	 * @param  {string} [options.searchForFacetValues.templates] Templates to use for search for facet values
 	 * @param  {string} [options.searchForFacetValues.templates.noResults] Templates to use for search for facet values
 	 * @param  {object|boolean} [options.showMore=false] Limit the number of results and display a showMore button
@@ -27551,7 +27554,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	 * @param  {boolean} [options.collapsible.collapsed] Initial collapsed state of a collapsible widget
 	 * @return {Object}
 	 */
-	var usage = 'Usage:\nrefinementList({\n  container,\n  attributeName,\n  [ operator=\'or\' ],\n  [ sortBy=[\'count:desc\', \'name:asc\'] ],\n  [ limit=10 ],\n  [ cssClasses.{root, header, body, footer, list, item, active, label, checkbox, count}],\n  [ templates.{header,item,footer} ],\n  [ transformData.{item} ],\n  [ autoHideContainer=true ],\n  [ collapsible=false ],\n  [ showMore.{templates: {active, inactive}, limit} ],\n  [ collapsible=false ],\n  [ searchForFacetValues.{placeholder, templates: {noResults}}],\n})';
+	var usage = 'Usage:\nrefinementList({\n  container,\n  attributeName,\n  [ operator=\'or\' ],\n  [ sortBy=[\'count:desc\', \'name:asc\'] ],\n  [ limit=10 ],\n  [ cssClasses.{root, header, body, footer, list, item, active, label, checkbox, count}],\n  [ templates.{header,item,footer} ],\n  [ transformData.{item} ],\n  [ autoHideContainer=true ],\n  [ collapsible=false ],\n  [ showMore.{templates: {active, inactive}, limit} ],\n  [ collapsible=false ],\n  [ searchForFacetValues.{placeholder, templates: {noResults}, isAlwaysActive}],\n})';
 	function refinementList(_ref) {
 	  var container = _ref.container,
 	      attributeName = _ref.attributeName,
@@ -27648,6 +27651,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	      toggleRefinement: toggleRefinement,
 	      searchFacetValues: searchFacetValues,
 	      searchPlaceholder: searchForFacetValues.placeholder || 'Search for other...',
+	      searchIsAlwaysActive: searchForFacetValues.isAlwaysActive || false,
 	      isFromSearch: isFromSearch
 	    }), containerNode);
 	  };
@@ -27971,6 +27975,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	      resolvedState = resolvedState.addNumericRefinement(attributeName, '<=', refinedOption.end);
 	    }
 	  }
+	
+	  resolvedState.page = 0;
 	
 	  return resolvedState;
 	}
