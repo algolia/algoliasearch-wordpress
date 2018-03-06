@@ -1,3 +1,13 @@
+<a name="2.10.1"></a>
+## [2.10.1](https://github.com/algolia/algoliasearch-wordpress/compare/2.10.0...2.10.1) (2018-03-06)
+
+
+### Bug Fixes
+
+* **autocomplete:** only escape suggestion attributes once ([7eef8fe](https://github.com/algolia/algoliasearch-wordpress/commit/7eef8fe)), closes [#724](https://github.com/algolia/algoliasearch-wordpress/issues/724)
+
+
+
 <a name="2.10.0"></a>
 # [2.10.0](https://github.com/algolia/algoliasearch-wordpress/compare/2.9.3...2.10.0) (2018-02-26)
 
