@@ -106,6 +106,11 @@
 			});
 		  },
 		  suggestion: function (hit) {
+      if(hit.escaped === true) {
+        return suggestion_template(hit);
+      }
+      hit.escaped = true;
+
 			for (var key in hit._highlightResult) {
 			  /* We do not deal with arrays. */
 			  if (typeof hit._highlightResult[key].value !== 'string') {
