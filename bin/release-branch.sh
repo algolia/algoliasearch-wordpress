@@ -36,7 +36,7 @@ readonly PACKAGE_VERSION=$(< package.json grep version \
   | tr -d '[:space:]')
 
 # Here we need to update versions in files
-readonly SEMVER_REGEX=[[:digit:]]\.[[:digit:]]\.[[:digit:]]
+readonly SEMVER_REGEX=[[:digit:]]+\.[[:digit:]]+\.[[:digit:]]+
 sed -i "s/\(Version:           \)$SEMVER_REGEX/\1$PACKAGE_VERSION/g" ./algolia.php
 sed -i "s/\('ALGOLIA_VERSION', '\)$SEMVER_REGEX/\1$PACKAGE_VERSION/g" ./algolia.php
 sed -i "s/\(Stable tag: \)$SEMVER_REGEX/\1$PACKAGE_VERSION/" ./readme.txt
