@@ -1,3 +1,8 @@
+<a name="2.10.2"></a>
+## [2.10.2](https://github.com/algolia/algoliasearch-wordpress/compare/2.10.1...2.10.2) (2018-03-06)
+
+
+
 <a name="2.10.1"></a>
 ## [2.10.1](https://github.com/algolia/algoliasearch-wordpress/compare/2.10.0...2.10.1) (2018-03-06)
 
