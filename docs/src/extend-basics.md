@@ -31,6 +31,6 @@ You can now hook into the Algolia Search for WordPress plugin!
 Every theme contains a `functions.php` file where you can also extend the Algolia Search plugin.
 
 If you choose to use your theme files to extend the plugin, please consider creating a child theme so that you can update your theme
-without loosing your changes.
+without losing your changes.
 
 You can read more about [child themes in the official documentation](https://codex.wordpress.org/Child_Themes).
