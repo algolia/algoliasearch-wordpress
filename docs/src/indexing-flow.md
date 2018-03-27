@@ -148,6 +148,28 @@ add_filter( 'algolia_searchable_post_types', function( $post_types ) {
 } );
 ```
 
+**Exclude a post by it's ID**
+
+The following snippets skips the post with ID `18517`.
+
+```php
+<?php
+
+function filter_post( $should_index, WP_Post $post )
+{
+    if ( 18517 === $post->ID ) {
+        return false;
+    }
+
+    return $should_index;
+}
+
+// Hook into Algolia to manipulate the post that should be indexed.
+add_filter( 'algolia_should_index_searchable_post', 'filter_post', 10, 2 );
+add_filter( 'algolia_should_index_post', 'filter_post', 10, 2 );
+```
+
+
 ## Queue processing
 
 Every time a change of your content is detected, see [previous section](#triggers), we synchronize the item.
