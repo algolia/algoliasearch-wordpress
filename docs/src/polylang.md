@@ -95,4 +95,20 @@ Now your results on the dedicated search page should be properly filtered.
 
 For the autocomplete dropdown experience, you need to do a similar change.
 
-First copy the autocomplete.php file to your own theme
+First [copy the autocomplete.php file to your own theme](https://community.algolia.com/wordpress/customize-autocomplete.html#customization), 
+and then do the following change to your file:
+
+```js
+source: algoliaAutocomplete.sources.hits(client.initIndex(config['index_name']), {
+  hitsPerPage: config['max_suggestions'],
+  attributesToSnippet: [
+	'content:10'
+  ],
+  highlightPreTag: '__ais-highlight__',
+  highlightPostTag: '__/ais-highlight__',
+  filters: 'locale:"' + current_locale + '"', // This is the added line.
+
+}),
+```
+
+After this change your autocomplete dropdown results should now also be filtered by the current locale.
