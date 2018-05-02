@@ -29,7 +29,7 @@ class Algolia_Search {
 	 * @return bool
 	 */
 	private function should_filter_query( WP_Query $query ) {
-		return ! apply_filters('algolia_should_filter_query', $query->is_admin && $query->is_search() && $query->is_main_query(), $query);
+		return ! $query->is_admin && $query->is_search() && $query->is_main_query();
 	}
 
 	/**
@@ -38,7 +38,7 @@ class Algolia_Search {
 	 * @param WP_Query $query
 	 */
 	public function pre_get_posts( WP_Query $query ) {
-		if ( ! $this->should_filter_query( $query ) ) {
+		if ( ! apply_filters('algolia_should_filter_query', $this->should_filter_query( $query ), $query) ) {
 			return;
 		}
 
