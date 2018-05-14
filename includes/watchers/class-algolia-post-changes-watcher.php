@@ -77,7 +77,10 @@ class Algolia_Post_Changes_Watcher implements Algolia_Changes_Watcher {
 	 * @param string       $meta_key
 	 */
 	public function on_meta_change( $meta_id, $object_id, $meta_key ) {
-		if ( '_thumbnail_id' !== $meta_key ) {
+		$keys = array( '_thumbnail_id' );
+		$keys = (array) apply_filters( 'algolia_watch_post_meta_keys', $keys, $object_id );
+
+		if ( !in_array( $meta_key, $keys ) ) {
 			return;
 		}
 
