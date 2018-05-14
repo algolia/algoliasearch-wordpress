@@ -1,3 +1,13 @@
+<a name="2.10.3"></a>
+## [2.10.3](https://github.com/algolia/algoliasearch-wordpress/compare/2.10.2...2.10.3) (2018-05-14)
+
+
+### Bug Fixes
+
+* do not escape query passed to frontend ([e8ff424](https://github.com/algolia/algoliasearch-wordpress/commit/e8ff424)), closes [#734](https://github.com/algolia/algoliasearch-wordpress/issues/734)
+
+
+
 <a name="2.10.2"></a>
 ## [2.10.2](https://github.com/algolia/algoliasearch-wordpress/compare/2.10.1...2.10.2) (2018-03-06)
 
