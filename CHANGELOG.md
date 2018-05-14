@@ -1,3 +1,13 @@
+<a name="2.11.0"></a>
+# [2.11.0](https://github.com/algolia/algoliasearch-wordpress/compare/2.10.3...2.11.0) (2018-05-14)
+
+
+### Features
+
+* add algolia_watch_post_meta_keys filter ([38d9db4](https://github.com/algolia/algoliasearch-wordpress/commit/38d9db4))
+
+
+
 <a name="2.10.3"></a>
 ## [2.10.3](https://github.com/algolia/algoliasearch-wordpress/compare/2.10.2...2.10.3) (2018-05-14)
 
