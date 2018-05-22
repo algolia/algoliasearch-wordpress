@@ -4,7 +4,7 @@
 **Requires at least:** 4.4  
 **Tested up to:** 4.9  
 **Requires PHP:** 5.3  
-**Stable tag:** 2.11.0  
+**Stable tag:** 2.11.1  
 **License:** MIT License, GNU General Public License v2.0  
 
 Search by Algolia is the smartest way to improve search on your site. Autocomplete is included, along with full control over look, feel and relevance.

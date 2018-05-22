@@ -1,3 +1,13 @@
+<a name="2.11.1"></a>
+## [2.11.1](https://github.com/algolia/algoliasearch-wordpress/compare/2.11.0...2.11.1) (2018-05-22)
+
+
+### Bug Fixes
+
+* remove backslashes from quotes coming from URL params ([65f8235](https://github.com/algolia/algoliasearch-wordpress/commit/65f8235)), closes [#734](https://github.com/algolia/algoliasearch-wordpress/issues/734) [#751](https://github.com/algolia/algoliasearch-wordpress/issues/751)
+
+
+
 <a name="2.11.0"></a>
 # [2.11.0](https://github.com/algolia/algoliasearch-wordpress/compare/2.10.3...2.11.0) (2018-05-14)
 
