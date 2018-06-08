@@ -52,7 +52,7 @@ final class Algolia_Posts_Index extends Algolia_Index {
 		$post_status = $post->post_status;
 
 		if ( 'inherit' === $post_status ) {
-			$parent_post = get_post( $post->post_parent );
+			$parent_post = ( $post->post_parent ) ? get_post( $post->post_parent ) : null;
 			if ( null !== $parent_post ) {
 				$post_status = $parent_post->post_status;
 			} else {
