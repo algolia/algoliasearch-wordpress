@@ -151,7 +151,7 @@ class Algolia_Utils {
 			$content = preg_replace( $pattern, '', $content );
 		}
 
-		return $content;
+		return html_entity_decode( $content );
 	}
 
 	/**
