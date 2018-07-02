@@ -1,3 +1,14 @@
+<a name="2.11.2"></a>
+## [2.11.2](https://github.com/algolia/algoliasearch-wordpress/compare/2.11.1...2.11.2) (2018-07-02)
+
+
+### Bug Fixes
+
+* Broken Algolia Logo  ([d80ffe6](https://github.com/algolia/algoliasearch-wordpress/commit/d80ffe6)), closes [#735](https://github.com/algolia/algoliasearch-wordpress/issues/735)
+* decode HTML entities before sending them to Algolia ([#768](https://github.com/algolia/algoliasearch-wordpress/issues/768)) ([cfa0b23](https://github.com/algolia/algoliasearch-wordpress/commit/cfa0b23)), closes [#656](https://github.com/algolia/algoliasearch-wordpress/issues/656)
+
+
+
 <a name="2.11.1"></a>
 ## [2.11.1](https://github.com/algolia/algoliasearch-wordpress/compare/2.11.0...2.11.1) (2018-05-22)
 
