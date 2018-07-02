@@ -50,7 +50,6 @@ class Algolia_API {
 
 		// Build the UserAgent.
 		$ua = '; ' . $integration_name . ' integration (' . $integration_version . ')'
-			. '; PHP (' . phpversion() . ')'
 			. '; WordPress (' . $wp_version . ')';
 
 		Version::$custom_value = $ua;
