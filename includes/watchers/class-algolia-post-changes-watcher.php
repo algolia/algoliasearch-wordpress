@@ -25,7 +25,7 @@ class Algolia_Post_Changes_Watcher implements Algolia_Changes_Watcher {
 		add_action( 'before_delete_post', array( $this, 'delete_item' ) );
 
         // Create global to check if post is being deleted
-		add_action( 'before_delete_post', array( $this, 'before_delete' ), 9 );
+        add_action( 'before_delete_post', array( $this, 'before_delete' ), 9 );
         add_action( 'after_delete_post', array( $this, 'after_delete' ), 9 );
 
 		// Handle meta changes after the change occurred.
@@ -84,7 +84,6 @@ class Algolia_Post_Changes_Watcher implements Algolia_Changes_Watcher {
 	    global $doing_post_delete;
 		if ( '_thumbnail_id' === $meta_key && $doing_post_delete !==  $object_id ) {
 		    $this->sync_item( $object_id );
-			return;
 		}
 
         return;
