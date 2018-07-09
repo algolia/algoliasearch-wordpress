@@ -24,6 +24,10 @@ class Algolia_Post_Changes_Watcher implements Algolia_Changes_Watcher {
 		// At this stage the post metas are still available, and we need them.
 		add_action( 'before_delete_post', array( $this, 'delete_item' ) );
 
+        // Create global to check if post is being deleted
+		add_action( 'before_delete_post', array( $this, 'before_delete' ), 9 );
+        add_action( 'after_delete_post', array( $this, 'after_delete' ), 9 );
+
 		// Handle meta changes after the change occurred.
 		add_action( 'added_post_meta', array( $this, 'on_meta_change' ), 10, 4 );
 		add_action( 'updated_post_meta', array( $this, 'on_meta_change' ), 10, 4 );
@@ -77,10 +81,29 @@ class Algolia_Post_Changes_Watcher implements Algolia_Changes_Watcher {
 	 * @param string       $meta_key
 	 */
 	public function on_meta_change( $meta_id, $object_id, $meta_key ) {
-		if ( '_thumbnail_id' !== $meta_key ) {
+	    global $doing_post_delete;
+		if ( '_thumbnail_id' === $meta_key && $doing_post_delete !==  $object_id ) {
+		    $this->sync_item( $object_id );
 			return;
 		}
 
-		$this->sync_item( $object_id );
+        return;
 	}
+
+    /**
+     * @param $post_id
+     */
+	public function before_delete($post_id)
+    {
+        $GLOBALS['doing_post_delete'] = $post_id;
+    }
+
+    /**
+     * @param $post_id
+     */
+    public function after_delete($post_id)
+    {
+        $GLOBALS['doing_post_delete'] = null;
+    }
+
 }
