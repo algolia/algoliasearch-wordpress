@@ -89,7 +89,7 @@ class Algolia_Search {
 			$post_ids = array( 0 );
 		}
 
-		$query->set( 'posts_per_page', $posts_per_page );
+		$query->set( 'posts_per_page', $params['hitsPerPage'] );
 		$query->set( 'offset', 0 );
 
 		$post_types = 'any';
