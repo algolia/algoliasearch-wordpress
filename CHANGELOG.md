@@ -1,3 +1,44 @@
+<a name="2.11.2"></a>
+## [2.11.2](https://github.com/algolia/algoliasearch-wordpress/compare/2.11.1...2.11.2) (2018-07-02)
+
+
+### Bug Fixes
+
+* Broken Algolia Logo  ([d80ffe6](https://github.com/algolia/algoliasearch-wordpress/commit/d80ffe6)), closes [#735](https://github.com/algolia/algoliasearch-wordpress/issues/735)
+* decode HTML entities before sending them to Algolia ([#768](https://github.com/algolia/algoliasearch-wordpress/issues/768)) ([cfa0b23](https://github.com/algolia/algoliasearch-wordpress/commit/cfa0b23)), closes [#656](https://github.com/algolia/algoliasearch-wordpress/issues/656)
+
+
+
+<a name="2.11.1"></a>
+## [2.11.1](https://github.com/algolia/algoliasearch-wordpress/compare/2.11.0...2.11.1) (2018-05-22)
+
+
+### Bug Fixes
+
+* remove backslashes from quotes coming from URL params ([65f8235](https://github.com/algolia/algoliasearch-wordpress/commit/65f8235)), closes [#734](https://github.com/algolia/algoliasearch-wordpress/issues/734) [#751](https://github.com/algolia/algoliasearch-wordpress/issues/751)
+
+
+
+<a name="2.11.0"></a>
+# [2.11.0](https://github.com/algolia/algoliasearch-wordpress/compare/2.10.3...2.11.0) (2018-05-14)
+
+
+### Features
+
+* add algolia_watch_post_meta_keys filter ([38d9db4](https://github.com/algolia/algoliasearch-wordpress/commit/38d9db4))
+
+
+
+<a name="2.10.3"></a>
+## [2.10.3](https://github.com/algolia/algoliasearch-wordpress/compare/2.10.2...2.10.3) (2018-05-14)
+
+
+### Bug Fixes
+
+* do not escape query passed to frontend ([e8ff424](https://github.com/algolia/algoliasearch-wordpress/commit/e8ff424)), closes [#734](https://github.com/algolia/algoliasearch-wordpress/issues/734)
+
+
+
 <a name="2.10.2"></a>
 ## [2.10.2](https://github.com/algolia/algoliasearch-wordpress/compare/2.10.1...2.10.2) (2018-03-06)
 

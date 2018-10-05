@@ -464,3 +464,14 @@ table thead tr, #content table tbody tr {
     display: none;
   }
 }
+
+// WooCommerce
+
+#woocommerce a {
+  color: white;
+  text-decoration: underline;
+}
+
+#woocommerce .content {
+  margin-top: 85px;
+}

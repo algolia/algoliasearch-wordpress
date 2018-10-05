@@ -81,12 +81,16 @@ class Algolia_Post_Changes_Watcher implements Algolia_Changes_Watcher {
 	 * @param string       $meta_key
 	 */
 	public function on_meta_change( $meta_id, $object_id, $meta_key ) {
-	    global $doing_post_delete;
-		if ( '_thumbnail_id' === $meta_key && $doing_post_delete !==  $object_id ) {
-		    $this->sync_item( $object_id );
+        global $doing_post_delete;
+
+        $keys = array( '_thumbnail_id' );
+		$keys = (array) apply_filters( 'algolia_watch_post_meta_keys', $keys, $object_id );
+
+		if ( !in_array( $meta_key, $keys ) || ( '_thumbnail_id' === $meta_key && $doing_post_delete == $object_id ) ) {
+			return;
 		}
 
-        return;
+		$this->sync_item( $object_id );
 	}
 
     /**
