@@ -41,8 +41,8 @@ class Algolia_Admin_Page_Native_Search {
 	public function add_page() {
 		add_submenu_page(
 			'algolia',
-			__( 'Search Page', 'algolia' ),
-			__( 'Search Page', 'algolia' ),
+			esc_html__( 'Search Page', 'algolia' ),
+			esc_html__( 'Search Page', 'algolia' ),
 			$this->capability,
 			$this->slug,
 			array( $this, 'display_page' )
@@ -59,7 +59,7 @@ class Algolia_Admin_Page_Native_Search {
 
 		add_settings_field(
 			'algolia_override_native_search',
-			__( 'Search results', 'algolia' ),
+			esc_html__( 'Search results', 'algolia' ),
 			array( $this, 'override_native_search_callback' ),
 			$this->slug,
 			$this->section
@@ -85,14 +85,14 @@ class Algolia_Admin_Page_Native_Search {
 			add_settings_error(
 				$this->option_group,
 				'native_search_enabled',
-				__( 'WordPress search is now based on Algolia!', 'algolia' ),
+				esc_html__( 'WordPress search is now based on Algolia!', 'algolia' ),
 				'updated'
 			);
 		} elseif ( 'instantsearch' === $value ) {
 			add_settings_error(
 				$this->option_group,
 				'native_search_enabled',
-				__( 'WordPress search is now based on Algolia instantsearch.js!', 'algolia' ),
+				esc_html__( 'WordPress search is now based on Algolia instantsearch.js!', 'algolia' ),
 				'updated'
 			);
 		} else {
@@ -100,7 +100,7 @@ class Algolia_Admin_Page_Native_Search {
 			add_settings_error(
 				$this->option_group,
 				'native_search_disabled',
-				__( 'You chose to keep the WordPress native search instead of Algolia. If you are using the autocomplete feature of the plugin we highly recommend you turn Algolia search on instead of the WordPress native search.', 'algolia' ),
+				esc_html__( 'You chose to keep the WordPress native search instead of Algolia. If you are using the autocomplete feature of the plugin we highly recommend you turn Algolia search on instead of the WordPress native search.', 'algolia' ),
 				'updated'
 			);
 		}
