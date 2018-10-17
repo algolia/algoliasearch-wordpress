@@ -49,7 +49,7 @@ class Algolia_Admin_Page_Settings {
 	public function add_action_links( array $links ) {
 		return array_merge(
 			$links, array(
-				'<a href="' . esc_url( admin_url( 'admin.php?page=' . $this->slug ) ) . '">' . esc_html__( 'Settings' ) . '</a>',
+span class="pl-s1"> 				'<a href="' . esc_url( admin_url( 'admin.php?page=' . $this->slug ) ) . '">' . esc_html__( 'Settings', 'algolia' ) . '</a>',
 			)
 		);
 	}
