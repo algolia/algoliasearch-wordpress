@@ -112,7 +112,7 @@ span class="pl-s1"> 				'<a href="' . esc_url( admin_url( 'admin.php?page=' . $t
 
 		add_settings_field(
 			'algolia_index_name_prefix',
-			esc_html__( 'Index name prefix' ),
+span class="pl-s1"> 			esc_html__( 'Index name prefix', 'algolia' ),
 			array( $this, 'index_name_prefix_callback' ),
 			$this->slug,
 			$this->section
