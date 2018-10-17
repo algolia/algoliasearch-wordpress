@@ -49,7 +49,7 @@ class Algolia_Admin_Page_Settings {
 	public function add_action_links( array $links ) {
 		return array_merge(
 			$links, array(
-span class="pl-s1"> 				'<a href="' . esc_url( admin_url( 'admin.php?page=' . $this->slug ) ) . '">' . esc_html__( 'Settings', 'algolia' ) . '</a>',
+				'<a href="' . esc_url( admin_url( 'admin.php?page=' . $this->slug ) ) . '">' . esc_html__( 'Settings', 'algolia' ) . '</a>',
 			)
 		);
 	}
@@ -112,7 +112,7 @@ span class="pl-s1"> 				'<a href="' . esc_url( admin_url( 'admin.php?page=' . $t
 
 		add_settings_field(
 			'algolia_index_name_prefix',
-span class="pl-s1"> 			esc_html__( 'Index name prefix', 'algolia' ),
+			esc_html__( 'Index name prefix', 'algolia' ),
 			array( $this, 'index_name_prefix_callback' ),
 			$this->slug,
 			$this->section
