@@ -63,7 +63,7 @@ class Algolia_Search {
 		$order    = apply_filters( 'algolia_search_order', 'desc' );
 
 		try {
-			$results = $this->index->search( $query->query['s'], $params, $order_by, $order );
+			$results = $this->index->search( urldecode($query->query['s']), $params, $order_by, $order );
 		} catch ( \AlgoliaSearch\AlgoliaException $exception ) {
 			error_log( $exception->getMessage() );
 
