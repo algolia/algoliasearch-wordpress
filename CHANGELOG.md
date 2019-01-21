@@ -1,3 +1,18 @@
+<a name="2.11.3"></a>
+## [2.11.3](https://github.com/algolia/algoliasearch-wordpress/compare/2.11.2...2.11.3) (2019-01-21)
+
+
+### Bug Fixes
+
+* post attachment behaviour ([#767](https://github.com/algolia/algoliasearch-wordpress/issues/767)) ([97e1d3e](https://github.com/algolia/algoliasearch-wordpress/commit/97e1d3e))
+
+
+### Features
+
+* add filter to avoid requiring Algolia client ([b5c614f](https://github.com/algolia/algoliasearch-wordpress/commit/b5c614f))
+
+
+
 <a name="2.11.2"></a>
 ## [2.11.2](https://github.com/algolia/algoliasearch-wordpress/compare/2.11.1...2.11.2) (2018-07-02)
 
