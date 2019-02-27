@@ -29,7 +29,9 @@ class Algolia_Search {
 	 * @return bool
 	 */
 	private function should_filter_query( WP_Query $query ) {
-		return ! $query->is_admin && $query->is_search() && $query->is_main_query();
+		$should_filter = ! $query->is_admin && $query->is_search() && $query->is_main_query();
+		
+		return (bool) apply_filters( 'algolia_should_filter_query', $should_filter, $query );
 	}
 
 	/**
