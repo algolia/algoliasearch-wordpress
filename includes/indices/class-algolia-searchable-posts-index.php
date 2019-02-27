@@ -227,7 +227,7 @@ final class Algolia_Searchable_Posts_Index extends Algolia_Index {
 	 * @return string
 	 */
 	private function get_post_object_id( $post_id, $record_index ) {
-		return $post_id . '-' . $record_index;
+		return (string) apply_filters( 'algolia_get_post_object_id', $post_id . '-' . $record_index, $post_id, $record_index );
 	}
 
 	/**
