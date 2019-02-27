@@ -49,7 +49,7 @@ class Algolia_Admin_Page_Settings {
 	public function add_action_links( array $links ) {
 		return array_merge(
 			$links, array(
-				'<a href="' . admin_url( 'admin.php?page=' . $this->slug ) . '">' . __( 'Settings' ) . '</a>',
+				'<a href="' . esc_url( admin_url( 'admin.php?page=' . $this->slug ) ) . '">' . esc_html__( 'Settings', 'algolia' ) . '</a>',
 			)
 		);
 	}
@@ -60,7 +60,7 @@ class Algolia_Admin_Page_Settings {
 			// Means this is the only reachable admin page, so make it the default one!
 			return add_menu_page(
 				'Algolia Search',
-				__( 'Algolia search', 'algolia' ),
+				esc_html__( 'Algolia search', 'algolia' ),
 				'manage_options',
 				$this->slug,
 				array( $this, 'display_page' ),
@@ -70,8 +70,8 @@ class Algolia_Admin_Page_Settings {
 
 		add_submenu_page(
 			'algolia',
-			__( 'Settings', 'algolia' ),
-			__( 'Settings', 'algolia' ),
+			esc_html__( 'Settings', 'algolia' ),
+			esc_html__( 'Settings', 'algolia' ),
 			$this->capability,
 			$this->slug,
 			array( $this, 'display_page' )
@@ -88,7 +88,7 @@ class Algolia_Admin_Page_Settings {
 
 		add_settings_field(
 			'algolia_application_id',
-			__( 'Application ID', 'algolia' ),
+			esc_html__( 'Application ID', 'algolia' ),
 			array( $this, 'application_id_callback' ),
 			$this->slug,
 			$this->section
@@ -96,7 +96,7 @@ class Algolia_Admin_Page_Settings {
 
 		add_settings_field(
 			'algolia_search_api_key',
-			__( 'Search-only API key', 'algolia' ),
+			esc_html__( 'Search-only API key', 'algolia' ),
 			array( $this, 'search_api_key_callback' ),
 			$this->slug,
 			$this->section
@@ -104,7 +104,7 @@ class Algolia_Admin_Page_Settings {
 
 		add_settings_field(
 			'algolia_api_key',
-			__( 'Admin API key', 'algolia' ),
+			esc_html__( 'Admin API key', 'algolia' ),
 			array( $this, 'api_key_callback' ),
 			$this->slug,
 			$this->section
@@ -112,7 +112,7 @@ class Algolia_Admin_Page_Settings {
 
 		add_settings_field(
 			'algolia_index_name_prefix',
-			__( 'Index name prefix' ),
+			esc_html__( 'Index name prefix', 'algolia' ),
 			array( $this, 'index_name_prefix_callback' ),
 			$this->slug,
 			$this->section
@@ -120,7 +120,7 @@ class Algolia_Admin_Page_Settings {
 
 		add_settings_field(
 			'algolia_powered_by_enabled',
-			__( 'Remove Algolia powered by logo', 'algolia' ),
+			esc_html__( 'Remove Algolia powered by logo', 'algolia' ),
 			array( $this, 'powered_by_enabled_callback' ),
 			$this->slug,
 			$this->section
@@ -195,7 +195,7 @@ class Algolia_Admin_Page_Settings {
 			add_settings_error(
 				$this->option_group,
 				'empty',
-				__( 'Application ID should not be empty.', 'algolia' )
+				esc_html__( 'Application ID should not be empty.', 'algolia' )
 			);
 
 		}
@@ -213,7 +213,7 @@ class Algolia_Admin_Page_Settings {
 			add_settings_error(
 				$this->option_group,
 				'empty',
-				__( 'Search-only API key should not be empty.', 'algolia' )
+				esc_html__( 'Search-only API key should not be empty.', 'algolia' )
 			);
 		}
 
@@ -230,7 +230,7 @@ class Algolia_Admin_Page_Settings {
 			add_settings_error(
 				$this->option_group,
 				'empty',
-				__( 'API key should not be empty', 'algolia' )
+				esc_html__( 'API key should not be empty', 'algolia' )
 			);
 		}
 		$errors = get_settings_errors( $this->option_group );
@@ -256,7 +256,7 @@ class Algolia_Admin_Page_Settings {
 			add_settings_error(
 				$this->option_group,
 				'no_connection',
-				__(
+				esc_html__(
 					'We were unable to authenticate you against the Algolia servers with the provided information. Please ensure that you used an the Admin API key and a valid Application ID.',
 					'algolia'
 				)
@@ -267,7 +267,7 @@ class Algolia_Admin_Page_Settings {
 				add_settings_error(
 					$this->option_group,
 					'wrong_search_API_key',
-					__(
+					esc_html__(
 						'It looks like your search API key is wrong. Ensure that the key you entered has only the search capability and nothing else. Also ensure that the key has no limited time validity.',
 						'algolia'
 					)
@@ -277,7 +277,7 @@ class Algolia_Admin_Page_Settings {
 				add_settings_error(
 					$this->option_group,
 					'connection_success',
-					__( 'We succesfully managed to connect to the Algolia servers with the provided information. Your search API key has also been checked and is OK.', 'algolia' ),
+					esc_html__( 'We succesfully managed to connect to the Algolia servers with the provided information. Your search API key has also been checked and is OK.', 'algolia' ),
 					'updated'
 				);
 				$settings->set_api_is_reachable( true );
@@ -315,7 +315,7 @@ class Algolia_Admin_Page_Settings {
 		add_settings_error(
 			$this->option_group,
 			'wrong_prefix',
-			__( 'Indices prefix can only contain alphanumeric characters and underscores.', 'algolia' )
+			esc_html__( 'Indices prefix can only contain alphanumeric characters and underscores.', 'algolia' )
 		);
 
 		$value = get_option( 'algolia_index_name_prefix' );

@@ -50,7 +50,7 @@ class Algolia_Admin_Page_Autocomplete {
 	public function add_page() {
 		add_menu_page(
 			'Algolia Search',
-			__( 'Algolia Search', 'algolia' ),
+			esc_html__( 'Algolia Search', 'algolia' ),
 			'manage_options',
 			'algolia',
 			array( $this, 'display_page' ),
@@ -58,8 +58,8 @@ class Algolia_Admin_Page_Autocomplete {
 		);
 		add_submenu_page(
 			'algolia',
-			__( 'Autocomplete', 'algolia' ),
-			__( 'Autocomplete', 'algolia' ),
+			esc_html__( 'Autocomplete', 'algolia' ),
+			esc_html__( 'Autocomplete', 'algolia' ),
 			$this->capability,
 			$this->slug,
 			array( $this, 'display_page' )
@@ -76,7 +76,7 @@ class Algolia_Admin_Page_Autocomplete {
 
 		add_settings_field(
 			'algolia_autocomplete_enabled',
-			__( 'Enable autocomplete', 'algolia' ),
+			esc_html__( 'Enable autocomplete', 'algolia' ),
 			array( $this, 'autocomplete_enabled_callback' ),
 			$this->slug,
 			$this->section
@@ -84,7 +84,7 @@ class Algolia_Admin_Page_Autocomplete {
 
 		add_settings_field(
 			'algolia_autocomplete_config',
-			__( 'Configuration', 'algolia' ),
+			esc_html__( 'Configuration', 'algolia' ),
 			array( $this, 'autocomplete_config_callback' ),
 			$this->slug,
 			$this->section
@@ -117,7 +117,7 @@ class Algolia_Admin_Page_Autocomplete {
 		add_settings_error(
 			$this->option_group,
 			'autocomplete_enabled',
-			__( 'Autocomplete configuration has been saved. Make sure to hit the "re-index" buttons of the different indices that are not indexed yet.', 'algolia' ),
+			esc_html__( 'Autocomplete configuration has been saved. Make sure to hit the "re-index" buttons of the different indices that are not indexed yet.', 'algolia' ),
 			'updated'
 		);
 

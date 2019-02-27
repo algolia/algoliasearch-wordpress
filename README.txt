@@ -2,9 +2,9 @@
 Contributors: algolia, rayrutjes
 Tags: Search, Algolia, Autocomplete, instant-search, relevant search, search highlight, faceted search, find-as-you-type search, suggest, search by category, ajax search, better search, custom search
 Requires at least: 4.4
-Tested up to: 4.9
+Tested up to: 5.0
 Requires PHP: 5.3
-Stable tag: 2.11.2
+Stable tag: 2.11.3
 License: MIT License, GNU General Public License v2.0
 
 Search by Algolia is the smartest way to improve search on your site. Autocomplete is included, along with full control over look, feel and relevance.
@@ -16,11 +16,11 @@ The plugin provides relevant search results in milliseconds, ensuring that your 
 = About pricing =
 
 This plugin relies on the [Algolia service](https://www.algolia.com/) which requires you to [create an account here](https://www.algolia.com/users/sign_up).
-Algolia offers its Search as a Service provider on a incremental payment program, including a free Community Plan which includes 10,000 records & 100,000 indexing operations per month. 
-Beyond that, plans start at $35/month.
+Algolia offers its Search as a Service provider on a incremental payment program, including a free Community Plan which includes 10,000 records & 50,000 operations per month.
+Beyond that, plans start at $29/month.
 
 Note that there isn’t a direct correlation between the number of posts in WordPress and the number of records in Algolia.
-Also note that we only offer support to paying plans.
+Also note that we only offer support starting from the PRO plan.
 On average, you can expect to have about 10 times more records than you have posts, though this is not a golden rule and you could end up with more records.
 
 = Getting started guide =
@@ -74,7 +74,7 @@ It will also give you guidance about where to ask support if your question is no
 * PHP version 5.3 or greater (PHP 5.6 or greater is recommended)
 * MySQL version 5.0 or greater (MySQL 5.6 or greater is recommended)
 * Some payment gateways require fsockopen support (for IPN access)
-* Requires WordPress 3.7+ (WordPress 4.4+ is recommended because we will drop support below it in upcoming releases)
+* Requires WordPress 4.4+
 
 Visit the [Search by Algolia server requirements documentation](https://community.algolia.com/wordpress/installation.html) for a detailed list of server requirements.
 

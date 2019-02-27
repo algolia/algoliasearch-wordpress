@@ -96,3 +96,4 @@ Here is the list of all available Filters.
 | algolia_strip_patterns                                   | array $noise_patterns (default: regular expressions to strip comments, cdata, script, style, code, and pre) |
 | algolia_searchable_post_types                            | array $post_types                                                                                           |
 | algolia_native_search_index_id                           | string $index_id                                                                                            |
+| algolia_should_require_search_client                     | bool $bool, (default: true, loads the included Algolia search client library)                               |
