@@ -277,6 +277,7 @@ abstract class Algolia_Index {
 
 		if ( true === $index_exists ) {
 
+			$clear_if_existing = (bool) apply_filters( 'algolia_clear_index_if_existing', $clear_if_existing );
 			if ( true === $clear_if_existing ) {
 				$index->clearIndex();
 			}
