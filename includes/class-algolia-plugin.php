@@ -69,7 +69,7 @@ class Algolia_Plugin {
 
 		$this->compatibility = new Algolia_Compatibility();
 
-		add_action( 'init', array( $this, 'load' ), 5 );
+		add_action( 'init', array( $this, 'load' ), ALGOLIA_LOAD_PRIORITY ); // Default priority 20
 	}
 
 
