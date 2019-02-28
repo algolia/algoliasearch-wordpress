@@ -10,6 +10,11 @@ class Algolia_Post_Changes_Watcher implements Algolia_Changes_Watcher {
 	private $index;
 
 	/**
+	 * @var Array
+	 */
+	private $postsDeleted = array();
+
+	/**
 	 * @param Algolia_Index $index
 	 */
 	public function __construct( Algolia_Index $index ) {
@@ -39,7 +44,12 @@ class Algolia_Post_Changes_Watcher implements Algolia_Changes_Watcher {
 	 * @param int $post_id
 	 */
 	public function sync_item( $post_id ) {
+
 		if ( defined( 'DOING_AUTOSAVE' ) && DOING_AUTOSAVE ) {
+			return;
+		}
+
+		if(in_array($post_id, $this->postsDeleted)) {
 			return;
 		}
 
@@ -59,6 +69,7 @@ class Algolia_Post_Changes_Watcher implements Algolia_Changes_Watcher {
 	 * @param int $post_id
 	 */
 	public function delete_item( $post_id ) {
+
 		$post = get_post( (int) $post_id );
 		if ( ! $post || ! $this->index->supports( $post ) ) {
 			return;
@@ -66,6 +77,7 @@ class Algolia_Post_Changes_Watcher implements Algolia_Changes_Watcher {
 
 		try {
 			$this->index->delete_item( $post );
+			$this->postsDeleted[] = $post->ID; 
 		} catch ( AlgoliaException $exception ) {
 			error_log( $exception->getMessage() );
 		}
