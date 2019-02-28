@@ -69,7 +69,7 @@ class Algolia_Plugin {
 
 		$this->compatibility = new Algolia_Compatibility();
 
-		add_action( 'init', array( $this, 'load' ), 20 );
+		add_action( 'init', array( $this, 'load' ), 5 );
 	}
 
 
