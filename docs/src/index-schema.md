@@ -47,7 +47,7 @@ Each record of a same post would have the same shared attributes and the content
 
 | Attribute Name | Description                                                       |
 |:---------------|:------------------------------------------------------------------|
-| content        | Content found it the bottom most hierarchical level in your post. |
+| content        | Content found in the bottom most hierarchical level in your post. |
 
 
 ## Terms
