@@ -94,6 +94,18 @@ class Algolia_Utils {
 			$post_thumbnail_id = get_post_thumbnail_id( (int) $post_id );
 		}
 
+		/**
+		 * Filter the post thumbnail ID.
+		 * 
+		 * @since 2.11.4
+		 * 
+		 * @param int $post_thumbnail_id 	The post thumbnail ID.
+		 * @param int $post_id 				The post ID.
+		 * 
+		 * @return int
+		 */
+		$post_thumbnail_id = (int) apply_filters( 'algolia_post_thumbnail_id', $post_thumbnail_id, (int) $post_id );
+
 		if ( $post_thumbnail_id ) {
 			$sizes = (array) apply_filters( 'algolia_post_images_sizes', array( 'thumbnail' ) );
 			foreach ( $sizes as $size ) {
