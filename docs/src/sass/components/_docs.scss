@@ -53,6 +53,17 @@ article {
       color: darken($blue, 30%);
     }
   }
+
+  &.alert-error {
+    border-color: $red-pink;
+    color: darken($red-pink, 40%);
+    background: lighten($red-pink, 38%);
+
+    &::before {
+      content: 'ERROR';
+      color: darken($red-pink, 30%);
+    }
+  }
 }
 
 .wp-btn {
