@@ -1,340 +1,62 @@
 {{> head }}
 
-
 <section class="community-content-wrapper">
+  <div class="sunset-message">
+    <h1>Dear Algolia X Wordpress users</h1>
+    <p>
+      After discussing with a lot of you, we've realized that our Wordpress
+      plugin, while being easy to implement and use, did not provide the room
+      for customization necessary to build satisfying, advanced search and
+      discovery experiences on Wordpress websites.
+    </p>
 
-  <!-- Header section -->
-  <div class="cm--header">
-    <div class="header--content">
-      <div class="al-badge">
-        <a href="https://algolia.com">
-          <img src="img/algolia-mark-white.svg" alt="Algolia">
-        </a>
-      </div>
-      <div class="header--content__page-title">
-        <h1 class="f2">Algolia Search <span>for</span> WordPress</h1>
-      </div>
-      <div class="header--content__page-subtitle">
-        <h3 class="f4">Enhance your WordPress with a Search plugin that helps users find your best content</h3>
-      </div>
-      <a href="https://wordpress.org/plugins/search-by-algolia-instant-relevant-results/" class="header--content__cta btn dib"> <img src="img/icons/wp-icon.svg" alt="" width="16"> INSTALL THE PLUGIN</a>
-    </div>
-    <div class="header--graphic">
-      <img src="img/preview-full.png">
-    </div>
+    <p>
+      That's why we have decided to double down on our new PHP API client
+      instead. We created a
+      <a
+        href="https://www.algolia.com/doc/integration/wordpress/getting-started/quick-start/"
+        >comprehensive documentation</a
+      >
+      to guide you to index your Wordpress content, optimize your relevance, and
+      build state-of-the art front end experiences relying on the API client.
+    </p>
+    <p>
+      We believe this approach is the most robust, satisfying and future-proof
+      way to build great experiences for Wordpress websites. We will therefore
+      stop supporting our Wordpress plugin following this timeline:
+    </p>
 
-    <div class="diagonal-white-tr"></div>
+    <ul>
+      <li>
+        From <b>05/02/19</b>: we won't add any new feature or fix any new
+        functional bug in our Wordpress plugin
+      </li>
+      <li>
+        From <b>31/12/19</b>: we won't provide any security fix to our Wordpress
+        plugin
+      </li>
+    </ul>
+
+    <p>
+      Please note that if you already have the plugin set up and are satisfied
+      with your current integration, you can keep using the plugin forever,
+      knowing that it won't be supported according to the timeline above.
+    </p>
+    <p>
+      It will still work as is, in its current state, on your website. Happy
+      coding,
+    </p>
+
+    <h4>The Algolia Team</h4>
+
+    <a
+      href="https://www.algolia.com/doc/integration/wordpress/getting-started/quick-start/"
+      target="_blank"
+      rel="noopener"
+      class="btn"
+      >Switch to the PHP API Client</a
+    >
   </div>
+</section>
 
-  <!-- section -->
-  <div class="cm--section">
-    <div class="cm--container zi-50 relative flex">
-      <div class="section--graphic tr">
-        <img src="img/autocomplete-illus.svg" alt="">
-      </div>
-      <div class="section--content ph4">
-        <header>
-          <span class="icon">
-            <svg width="45" height="47" viewBox="0 0 45 47" xmlns="http://www.w3.org/2000/svg"><g stroke-width="1.3" fill="none" fill-rule="evenodd" opacity=".7"><path d="M10.727 39.858s2.428-6.678-1.565-11.184c-.218-.246-.216-.617.006-.86 1.378-1.507 3.826-1.475 7.342 4.974.918 1.683 2.833 1.593 4.498.643 3.167-1.807 7.737-7.567 12.53-6.165.218.064.386.238.442.458.056.22-.008.453-.17.614L17.154 45l-6.426-5.142z" stroke="#2897C5" fill="#FFF"/><path d="M44 26.25c0 .414-.294.75-.656.75H2.656C2.294 27 2 26.664 2 26.25v-1.5c0-.414.294-.75.656-.75h40.688c.362 0 .656.336.656.75v1.5z" stroke="#3178D4" fill="#FCFCFD"/><path d="M23 3.916c.695 0 1.356.034 2 .084V1.73c0-.403-.3-.73-.667-.73h-2.666C21.3 1 21 1.327 21 1.73V4c.644-.05 1.305-.084 2-.084M5.003 22S4.36 4 23 4s17.997 18 17.997 18" stroke="#3178D4" fill="#FFF"/><path d="M14.265 43.005L17.51 46H2l8.236-6.71.563.52c.408-1.357 1.84-7.08-1.662-11.104-.218-.25-.216-.63.006-.876 1.38-1.536 3.83-1.503 7.35 5.07.918 1.714 2.835 1.623 4.502.654 3.17-1.843 7.743-7.713 12.542-6.283.218.065.386.243.442.467.056.224-.008.462-.17.626L17.137 45.345l-2.87-2.34z" stroke="#3178D4" fill="#FAFBFC"/></g></svg>
-          </span>
-          <h4 class="f4 content-title">Out-of-the-box autocomplete</h4>
-        </header>
-        <article class="content-article">
-          <p>Serve up your latest posts, pages, tags and categories from a drop-down menu which displays relevant results even before your users finish typing their queries.</p>
-        </article>
-      </div>
-    </div>
-  </div>
-
-  <!-- section -->
-  <div class="cm--section light-blue-bg realtime-search">
-    <div class="cm--container flex">
-      <div class="section--content tr ph4 ml-4">
-        <header>
-          <span class="icon">
-            <svg width="39" height="47" viewBox="0 0 39 47" xmlns="http://www.w3.org/2000/svg"><title>feature-icons/illus-feat-rocket</title><g stroke="#3272D8" fill="none" fill-rule="evenodd" opacity=".7"><path d="M10.292 12.632c0-.267-.075-.53-.217-.756L7.93 7.228c-.26-.417-.72-.67-1.212-.67s-.95.253-1.212.67L3.36 11.876c-.14.227-.216.49-.216.756v30.99h7.148v-30.99zM34.985 12.632c0-.267-.075-.53-.217-.756l-2.145-4.648c-.26-.417-.72-.67-1.212-.67s-.95.253-1.21.67l-2.146 4.648c-.142.227-.217.49-.217.756v30.99h7.148v-30.99zM27.187 14.296c0-1.8-3.71-13.59-8.447-13.59-4.808 0-8.448 12.028-8.448 13.59v29.327h16.895V14.296z" fill="#FFF"/><path d="M27.187 14.296c0-1.8-3.71-13.59-8.447-13.59-4.808 0-8.448 12.028-8.448 13.59v29.327h16.895V14.296z" fill="#FAFBFC"/><path d="M36.945 37.5c-4.975-3.296-8.98-7.396-12.226-12.125-.898-1.307-1.382-2.858-1.382-4.444v-6.87c0-.256-.07-.506-.206-.734L21.287 9.39l-1.005-2.14c-.256-.43-.72-.693-1.218-.693s-.96.264-1.218.692l-1.004 2.14-1.845 3.936c-.13.22-.206.47-.206.734v6.87c0 1.594-.48 3.132-1.38 4.445-3.246 4.73-7.252 8.83-12.226 12.126-.398.265-.64.713-.64 1.192v3.505c0 .787.638 1.426 1.425 1.426h34.189c.786 0 1.424-.64 1.424-1.426v-3.505c0-.48-.24-.927-.64-1.19" fill="#FFF"/><path d="M36.945 37.5c-4.975-3.296-8.98-7.396-12.226-12.125-.898-1.307-1.382-2.858-1.382-4.444v-6.87c0-.256-.07-.506-.206-.734L21.287 9.39l-1.005-2.14c-.256-.43-.72-.693-1.218-.693s-.96.264-1.218.692l-1.004 2.14-1.845 3.936c-.13.22-.206.47-.206.734v6.87c0 1.594-.48 3.132-1.38 4.445-3.246 4.73-7.252 8.83-12.226 12.126-.398.265-.64.713-.64 1.192v3.505c0 .787.638 1.426 1.425 1.426h34.189c.786 0 1.424-.64 1.424-1.426v-3.505c0-.48-.24-.927-.64-1.19" fill="#FCFCFD"/><path d="M36.945 37.5c-4.975-3.296-8.98-7.396-12.226-12.125-.898-1.307-1.382-2.858-1.382-4.444v-6.87c0-.256-.07-.506-.206-.734L21.287 9.39l-1.005-2.14c-.256-.43-.72-.693-1.218-.693s-.96.264-1.218.692l-1.004 2.14-1.845 3.936c-.13.22-.206.47-.206.734v6.87c0 1.594-.48 3.132-1.38 4.445-3.246 4.73-7.252 8.83-12.226 12.126-.398.265-.64.713-.64 1.192v3.505c0 .787.638 1.426 1.425 1.426h34.189c.786 0 1.424-.64 1.424-1.426v-3.505c0-.48-.24-.927-.64-1.19" fill="#FFF"/><path d="M25.845 44.49c-.15-.563.046.187-1.17-4.516-.327-1.24-1.483-2.11-2.806-2.11h-1.464c-.314-.826-.746-1.394-1.342-1.394-.597 0-1.03.57-1.343 1.393h-1.46c-1.323 0-2.48.87-2.805 2.11-1.217 4.704-1.022 3.954-1.17 4.516-.11.417-.008.863.267 1.198.267.34.694.536 1.134.536h10.756c.44 0 .868-.195 1.135-.536.275-.335.376-.78.268-1.2" fill="#FCFCFD"/><path d="M18.74 36.47c-.57 0-.98.568-1.28 1.393h-1.392c-1.26 0-2.36.87-2.67 2.11-1.16 4.704-.974 3.954-1.116 4.516-.103.417-.007.863.255 1.198.255.34.66.536 1.08.536h5.123V36.47zM19.064 11.11c-1.614 0-2.924 1.164-2.924 2.6h5.85c0-1.436-1.31-2.6-2.926-2.6" fill="#FCFCFD"/><path d="M25.577 45.723c-.267.32-.694.5-1.135.5H13.686c-.44 0-.867-.18-1.134-.5-.275-.312-.376-.728-.268-1.118l.094-.332H25.75l.095.332c.108.39.007.806-.268 1.118" fill="#FCFCFD"/></g></svg>
-          </span>
-          <h4 class="f4 content-title">Realtime search Experience</h4>
-        </header>
-        <article class="content-article fr">
-          <p>Have your search results page, facets, navigation and pagination updated in realtime, after each keystroke.</p>
-        </article>
-      </div>
-
-      <div class="section--graphic">
-        <img src="img/facets-illus.svg" alt="">
-      </div>
-    </div>
-  </div>
-
-  <!-- section -->
-  <div class="cm--section relevant-search-result">
-    <div class="cm--container flex">
-
-      <div class="section--graphic tr">
-        <img src="https://www.algolia.com/lp/img/features/illus-iphone.png" class="iphone-screen">
-      </div>
-
-      <div class="section--content pr5">
-        <header>
-          <span class="icon">
-            <svg width="44" height="44" viewBox="0 0 44 44" xmlns="http://www.w3.org/2000/svg"><title>Combined Shape</title><path d="M6.512 11.115c-.543-1.053-.91-2.12-1.15-3.006h3.473v1.43c0 1.947.437 3.79 1.21 5.444-1.432-.783-2.602-2.067-3.533-3.87M34.827 9.54V8.11H38.3c-.24.886-.606 1.952-1.15 3.005-.93 1.802-2.1 3.086-3.532 3.87.772-1.655 1.21-3.498 1.21-5.445m7.788-3.194c.053-.547-.128-1.092-.497-1.5-.37-.406-.895-.64-1.444-.64h-5.85v-2.6H8.837v2.6H2.987c-.55 0-1.075.234-1.444.64-.37.408-.55.953-.497 1.5.985 10.19 7.472 13.024 17.368 15.64 2.27 4.62.3 9.893-3.367 10.722-.593.134-1.014.658-1.014 1.268v1.445H29.63v-1.444c0-.61-.422-1.134-1.015-1.268-3.667-.83-5.638-6.103-3.367-10.722 9.896-2.616 16.383-5.45 17.368-15.64zm-7.79 35.577c0 .718-.58 1.3-1.3 1.3H10.135c-.717 0-1.3-.582-1.3-1.3V36.72c0-.717.583-1.3 1.3-1.3h23.393c.718 0 1.3.583 1.3 1.3v5.203zm3.195-14.233c.032-.005.056-.032.056-.065v-.016c0-.033-.024-.06-.055-.065-1.808-.272-2.85-1.313-3.12-3.123-.005-.032-.032-.056-.065-.056h-.016c-.033 0-.06.024-.065.056-.272 1.81-1.312 2.85-3.122 3.123-.032.005-.055.032-.055.064v.015c0 .033.023.06.056.065 1.81.272 2.85 1.313 3.12 3.124.005.032.033.055.065.055h.022c.028 0 .052-.022.057-.05.27-1.815 1.31-2.858 3.12-3.13zm-26.025-.907c.05-.008.09-.052.09-.103v-.027c0-.05-.04-.094-.09-.102-2.895-.434-4.56-2.1-4.994-4.997-.006-.05-.05-.09-.102-.09h-.026c-.05 0-.095.04-.103.09-.435 2.897-2.1 4.563-4.995 4.998-.05.01-.088.052-.088.103v.027c0 .05.037.095.088.103 2.896.434 4.56 2.1 4.994 4.998.007.052.05.09.102.09h.038c.045 0 .083-.034.09-.08.432-2.902 2.096-4.572 4.995-5.007z" stroke="#2E86D8" stroke-width="1.3" fill="#FAFBFC" fill-rule="evenodd" opacity=".7"/></svg>
-          </span>
-          <h4 class="f4 content-title">Relevant search results, always and anywhere</h4>
-        </header>
-
-        <article class="content-article">
-          <p>Get your relevance game on point with the addition of features like typo-tolerance, custom ranking and a completely language agnostic search solution. In other words say goodbye to the fat-finger effect!</p>
-        </article>
-      </div>
-    </div>
-  </div>
-
-  <!-- section showcase -->
-  <div class="cm--section cm-showcase" style="box-sizing: content-box;">
-    <div class="cm--container">
-      <div class="section--content tc">
-        <header>
-          <h3 class="f3 content-title">Intuitive and powerful configuration</h3>
-        </header>
-        <article>
-          <p>Implement in just a few minutes, without a single line of code.</p>
-        </article>
-        <a href="https://wordpress.org/plugins/search-by-algolia-instant-relevant-results/" class="btn btn-cta btn-green dib ph5">Get Started</a>
-      </div>
-    </div>
-
-    <div class="section--graphic">
-      <img src="img/placeholder.png" alt="">
-    </div>
-  </div>
-
-  <!-- section Get started -->
-  <div class="cm--section get-started tc">
-    <div class="diagonal-white-br"></div>
-
-    <div class="cm--container">
-      <div class="section--content__full ">
-        <header>
-          <h3 class="f3 cm--title">Get Started Today</h3>
-        </header>
-
-          <div class="item-holder pv4">
-            <div class="item">
-              <div class="item--graphic cm--item-block block-green">
-                <img src="img/icons/sync-icon.svg" alt="sync-icon">
-              </div>
-              <span class="item--mention">Automatic Sync</span>
-              <p class="item--description">Sync your docs on auto-pilot with our plug-in. <span class="cf"></span>Latest additions searchable in real-time.</p>
-            </div>
-            <div class="item">
-              <div class="item--graphic cm--item-block block-blue">
-                <img src="img/icons/realtime-icon.svg" alt="realtime-icon">
-              </div>
-              <span class="item--mention">Realtime Experience</span>
-              <p class="item--description">Search results update as users type in realtime, helping users find exactly what they're looking for.</p>
-            </div>
-            <div class="item">
-              <div class="item--graphic cm--item-block block-orange">
-                <img src="img/icons/analytics-icon.svg" alt="analytics-icon">
-              </div>
-              <span class="item--mention">Analytics</span>
-              <p class="item--description">Optimize your content with valuable insights into user  behaviour with the help of simple analytics.</p>
-            </div>
-          </div>
-
-          <div class="row">
-            <a href="https://wordpress.org/plugins/search-by-algolia-instant-relevant-results/" class="btn btn-cta ">INSTALL THE PLUGIN</a>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <!-- section Brands showcase -->
-    <div class="cm--section brands-showcase">
-      <div class="diagonal-white-br"></div>
-
-      <div class="section--content__full">
-        <div class="content--graphic">
-          <img src="img/algolia-mark-white.svg" alt="Algolia">
-        </div>
-        <div class="content--text mt4 pl4">
-          <h2 class="f2"><a href="https://algolia.com">Algolia</a> is a leading on-site search SaaS</h2>
-          <h3 class="f4 mb4">Join 2,000+ customers powering their search experience</h3>
-
-          <ul class="trust-us">
-            <li> <a class="" href="https://algolia.com/customers"><img src="https://www.algolia.com/static_assets/images/flat2/logos/svg/mono-white_producthunt-61e77cc9.svg"> </a> </li>
-            <li> <a class="" href="https://algolia.com/customers"><img src="https://www.algolia.com/static_assets/images/flat2/logos/svg/mono-white_crunchbase-b8241684.svg"> </a> </li>
-            <li> <a class="" href="https://algolia.com/customers"><img src="https://www.algolia.com/static_assets/images/flat2/logos/svg/mono-white_digital-ocean-1413fb26.svg"> </a> </li>
-            <li> <a class="" href="https://algolia.com/customers"><img src="https://www.algolia.com/static_assets/images/flat2/logos/svg/mono-white_periscope-1b8e0aa4.svg"> </a> </li>
-            <li> <a class="" href="https://algolia.com/customers"><img src="https://www.algolia.com/static_assets/images/flat2/logos/svg/mono-white_vevo-5e4816b1.svg"> </a> </li>
-            <li> <a class="" href="https://algolia.com/customers"><img src="https://www.algolia.com/static_assets/images/flat2/logos/svg/mono-white_medium-5c3b3de1.svg"> </a> </li>
-            <li> <a class="" href="https://algolia.com/customers"><img src="https://www.algolia.com/static_assets/images/flat2/logos/svg/mono-white_birchbox-4900e849.svg"> </a> </li>
-            <li> <a class="" href="https://algolia.com/customers"><img src="https://www.algolia.com/static_assets/images/flat2/logos/svg/mono-white_twitch-5903baf5.svg"> </a> </li></ul>
-          </div>
-        </div>
-      </div>
-
-
-      <!-- section What they say -->
-      <div class="cm--section relative what-they-say tc pv5 z-999">
-        <div class="diagonal-white-br"></div>
-
-        <div class="section--content__full">
-
-          <h2 class="f2 cm--title press__title">What they say</h2>
-          <div class="text-center press__tweets">
-            <ul class="press__tweets press__tweets--loading text-center">
-              {{#each tweets}}
-              <li class="press__tweet" data-tweet-id="{{this}}">
-                <span class="press__tweet__arrow press__tweet__arrow--prev">
-                  <img src="img/icons/arrow.svg">
-                </span>
-                <span class="press__tweet__arrow press__tweet__arrow--next">
-                  <img src="img/icons/arrow.svg">
-                </span>
-              </li>
-              {{/each}}
-            </ul>
-          </div>
-        </div>
-      </div>
-
-      <!-- section -->
-      <div class="cm--section grey-bg">
-        <div class="cm--container">
-
-          <div class="section--content__full relative z-999">
-            <header class="tc">
-              <h2 class="f2 cm--title big-title">Algolia's infra and features</h2>
-            </header>
-
-            <div class="cm--feature-list mt6">
-              <div class="list-item">
-                <svg viewBox="0 0 44 44" width="40" height="40"><use xlink:href="#feat-icon-speed"></use></svg>
-                <span>Unparalleled speed</span>
-              </div>
-              <div class="list-item">
-                <svg viewBox="0 0 44 44" width="40" height="40"><use xlink:href="#feat-icon-indexing"></use></svg>
-                <span>Seamless indexing</span>
-              </div>
-              <div class="list-item">
-                <svg viewBox="0 0 44 44" width="40" height="40"><use xlink:href="#feat-icon-typo"></use></svg>
-                <span>Typo tolerance</span>
-              </div>
-              <div class="list-item">
-                <svg viewBox="0 0 44 44" width="40" height="40"><use xlink:href="#feat-icon-highlighting"></use></svg>
-                <span>Smart highlighting</span>
-              </div>
-              <div class="list-item">
-                <svg viewBox="0 0 44 44" width="40" height="40"><use xlink:href="#feat-icon-facets"></use></svg>
-                <span>Instant faceting</span>
-              </div>
-              <div class="list-item">
-                <svg viewBox="0 0 44 44" width="40" height="40"><use xlink:href="#feat-icon-sla"></use></svg>
-                <span>99.99% SLA</span>
-              </div>
-              <div class="list-item">
-                <svg viewBox="0 0 44 44" width="40" height="40"><use xlink:href="#feat-icon-security"></use></svg>
-                <span>First class hosting &amp; security</span>
-              </div>
-              <div class="list-item">
-                <svg viewBox="0 0 44 44" width="40" height="40"><use xlink:href="#feat-icon-analytics"></use></svg>
-                <span>Comprehensive analytics</span>
-              </div>
-              <div class="list-item list-item_muted">
-                <a href="https://algolia.com">
-                  <svg width="35" height="40" viewBox="0 0 35 40" xmlns="http://www.w3.org/2000/svg"><path d="M20.63 14.624l-2.422 8.572 7.798-4.27a8.925 8.925 0 0 0-5.376-4.302zm-19.136 8.75C1.494 32.554 8.944 40 18.138 40c9.194 0 16.645-7.445 16.645-16.627 0-9.182-7.45-16.628-16.645-16.628-9.193 0-16.644 7.446-16.644 16.628zm16.644-11.878c6.555 0 11.89 5.328 11.89 11.877 0 6.548-5.335 11.876-11.89 11.876-6.555 0-11.89-5.33-11.89-11.878 0-6.55 5.335-11.877 11.89-11.877zm5.745-6.807c.005-.067.02-.128.02-.194v-1.5A2.994 2.994 0 0 0 20.913 0h-5.23a2.993 2.993 0 0 0-2.986 2.998V4.47a19.298 19.298 0 0 1 11.185.22zM5.63 7.62a2.982 2.982 0 0 0-4.227 0l-.528.53a3.006 3.006 0 0 0 0 4.24l.562.563a19.602 19.602 0 0 1 4.494-5.03l-.3-.303z" fill="#697782" fill-rule="evenodd"/></svg>
-
-                  <span>Learn more about Algolia</span>
-                </a>
-              </div>
-            </div>
-
-          </div>
-        </div>
-      </div>
-
-
-      <!-- section Developer friendly -->
-      <div class="cm--section developer-friendly">
-        <div class="cm--container z-999 pt6 w100 relative">
-
-          <div class="section--content w-40 ph5">
-            <header class="tl">
-              <h3 class="f3">
-                <svg viewBox="0 0 50 30" width="50" height="30"><use xlink:href="#icon-dev-friendly"></use></svg>
-                Developer Friendly </h3>
-            </header>
-            <article>
-              <p>Implement our plugin with just a few lines of code in order to build custom faceted search experiences, incorporate business metrics in your search results and even customize the data pushed to Algolia.</p>
-
-              <ul>
-                <li>Easy to customize template</li>
-                <li>30+ Action and filter hooks</li>
-                <li>Built in log to help debugging</li>
-                <li>Friction less plugin update</li>
-                <li>Thouroughly documented</li>
-              </ul>
-
-            </article>
-          </div>
-
-          <div class="section--content w-60 code-block">
-            <img src="img/code-block.png">
-          </div>
-
-
-          <div class="cm--h-center tc b-0">
-            <span class='ac-icon ac-icon-github'></span>
-
-            <h3>Raise your voice </h3>
-            <p>This plugin is open sourced on GitHub.</p>
-            <a class="github-button" href="https://github.com/algolia/algoliasearch-wordpress" data-style="mega" data-count-href="/algolia/algoliasearch-wordpress/stargazers" data-count-api="/repos/algolia/algoliasearch-wordpress#stargazers_count" data-count-aria-label="# stargazers on GitHub" aria-label="Star algolia/algoliasearch-wordpress on GitHub">Star</a>
-
-          </div>
-        </div>
-      </div>
-
-
-
-      <!-- section Recall -->
-      <div class="cm--section pv5 recall-section fl">
-        <div class="cm--container z-999 pt6 w100 relative">
-          <div class="section--content w-80">
-            <p class="f4">Algolia Search for WordPress brings you state of the art search without the setup hassle. <r/>Includes autocomplete, full control over look & feel, and relevance tuning.</p>
-          </div>
-          <div class="section--content w-20">
-            <a href="https://wordpress.org/plugins/search-by-algolia-instant-relevant-results/" class="btn btn-green">GET THE PLUGIN</a>
-          </div>
-        </div>
-      </div>
-
-
-      <!-- section Woocommerce -->
-      <div id="woocommerce" class="cm--section woocommerce-section relative purple-bg">
-        <div class="section--content">
-          <div class="content relative z-999">
-            
-            <div class="brand">
-            <img src="img/algolia-mark-blue.svg" alt="Algolia" class="algolia-logo">
-Algolia Search <span>for</span></div>
-            <img class="woocommerce-logo" src="img/logo-woocommerce@2x.png" alt="">
-          </div>
-        </div>
-        <div class="section--content">
-          <ul>
-            <li>Index all WooCommerce fields in Algolia</li>
-            <li>Store-focused templates for autocomplete dropdown / search results page</li>
-            <li><a href="https://github.com/algolia/algoliasearch-woocommerce">Checkout the GitHub respository now!</a></li>
-          </ul>
-
-          <img src="img/ninja-joy.svg" width="40px">
-        </div>
-      </div>
-
-    </section>
-
-
-
-    {{> footer }}
+{{> footer }}
